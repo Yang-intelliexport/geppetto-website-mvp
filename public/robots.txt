@@ -1,0 +1,53 @@
+# Geppetto AI Manufacturing Platform
+# 允许所有搜索引擎访问
+
+User-agent: *
+Allow: /
+
+# 重要页面优先爬取
+Allow: /ai-quote
+Allow: /services
+Allow: /precision-capability
+Allow: /platform-comparison
+Allow: /why-geppetto
+
+# 语言版本页面
+Allow: /zh/
+Allow: /en/
+
+# 限制访问的页面
+Disallow: /api/
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /temp/
+Disallow: /drafts/
+
+# 延迟爬取间隔 (毫秒)
+Crawl-delay: 1
+
+# Sitemap位置
+Sitemap: https://geppetto.com/sitemap-index.xml
+Sitemap: https://geppetto.com/sitemap-0.xml
+
+# 特定搜索引擎优化设置
+User-agent: Googlebot
+Crawl-delay: 0
+Allow: /
+
+User-agent: Bingbot
+Crawl-delay: 1
+Allow: /
+
+User-agent: Baiduspider
+Crawl-delay: 2
+Allow: /
+
+# 阻止恶意爬虫
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /

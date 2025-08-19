@@ -1,0 +1,138 @@
+---
+import { languages, getLanguageFromUrl, getLocalizedPath, removeLanguagePrefix, type Language } from '../../utils/i18n';
+
+const currentLang = getLanguageFromUrl(Astro.url);
+const currentPath = removeLanguagePrefix(Astro.url.pathname);
+---
+
+<div class="language-switcher relative inline-block">
+  <button 
+    id="language-button" 
+    class="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors duration-200"
+    aria-expanded="false"
+    aria-haspopup="true"
+  >
+    <span class="text-2xl">
+      {currentLang === 'zh' ? '🇨🇳' : '🇺🇸'}
+    </span>
+    <span class="font-medium text-gray-700">
+      {languages[currentLang]}
+    </span>
+    <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" id="language-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+    </svg>
+  </button>
+
+  <div 
+    id="language-dropdown" 
+    class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 hidden"
+  >
+    {Object.entries(languages).map(([langCode, langName]) => {
+      const lang = langCode as Language;
+      const href = getLocalizedPath(currentPath, lang);
+      const isActive = lang === currentLang;
+      
+      return (
+        <a 
+          href={href}
+          class={`flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 ${
+            isActive ? 'bg-purple-50 text-purple-700 font-medium' : 'text-gray-700'
+          }`}
+        >
+          <span class="text-xl">
+            {lang === 'zh' ? '🇨🇳' : '🇺🇸'}
+          </span>
+          <span>{langName}</span>
+          {lang === 'zh' && (
+            <span class="text-xs text-gray-500">中国市场</span>
+          )}
+          {lang === 'en' && (
+            <span class="text-xs text-gray-500">Global</span>
+          )}
+          {isActive && (
+            <svg class="w-4 h-4 text-purple-600 ml-auto" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+          )}
+        </a>
+      );
+    })}
+    
+    <!-- Additional Info -->
+    <div class="border-t border-gray-200 mt-2 pt-2 px-4 py-2">
+      <div class="text-xs text-gray-500 space-y-1">
+        <div class="flex items-center space-x-2">
+          <span>🇺🇸</span>
+          <span>US & Global Markets</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span>🇨🇳</span>
+          <span>中国大陆市场</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Language switcher functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const button = document.getElementById('language-button');
+    const dropdown = document.getElementById('language-dropdown');
+    const chevron = document.getElementById('language-chevron');
+
+    if (button && dropdown && chevron) {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !dropdown.classList.contains('hidden');
+        
+        if (isOpen) {
+          dropdown.classList.add('hidden');
+          chevron.style.transform = 'rotate(0deg)';
+          button.setAttribute('aria-expanded', 'false');
+        } else {
+          dropdown.classList.remove('hidden');
+          chevron.style.transform = 'rotate(180deg)';
+          button.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!button.contains(e.target as Node) && !dropdown.contains(e.target as Node)) {
+          dropdown.classList.add('hidden');
+          chevron.style.transform = 'rotate(0deg)';
+          button.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Close dropdown on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          dropdown.classList.add('hidden');
+          chevron.style.transform = 'rotate(0deg)';
+          button.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  .language-switcher {
+    user-select: none;
+  }
+  
+  .language-switcher button:focus {
+    outline: 2px solid #7C3AED;
+    outline-offset: 2px;
+  }
+  
+  @media (max-width: 640px) {
+    .language-switcher .absolute {
+      right: 0;
+      left: auto;
+      transform: none;
+    }
+  }
+</style>

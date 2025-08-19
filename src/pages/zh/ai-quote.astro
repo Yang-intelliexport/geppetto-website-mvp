@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AIQuoteHero from '../../components/calculators/AIQuoteHero.astro';
+import FileUploadSection from '../../components/calculators/FileUploadSection.astro';
+import SmartPromiseSection from '../../components/calculators/SmartPromiseSection.astro';
+import QuoteResults from '../../components/calculators/QuoteResults.astro';
+---
+
+<BaseLayout 
+  title="AI智能报价 | Geppetto - 秒级精准报价" 
+  description="Geppetto AI智能报价系统 - 上传CAD图纸，秒级获得精准报价。24小时极速交付，±0.05mm精度保证，价格比传统供应商低30-50%。"
+  keywords={["AI智能报价", "CNC报价", "制造报价", "精密加工报价", "快速报价", "在线报价"]}
+>
+  <main class="min-h-screen bg-gradient-to-b from-purple-50 to-white">
+    <!-- AI Quote Hero Section -->
+    <AIQuoteHero language="zh" />
+
+    <!-- File Upload Section -->
+    <FileUploadSection language="zh" />
+
+    <!-- Smart Promise Section -->
+    <SmartPromiseSection language="zh" />
+
+    <!-- Quote Results Section (hidden by default, shown after quote generation) -->
+    <div id="quote-results" class="hidden">
+      <QuoteResults language="zh" />
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  // AI Quote page functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('AI智能报价页面已加载');
+    
+    // 文件上传模拟
+    const uploadButtons = document.querySelectorAll('button');
+    uploadButtons.forEach(button => {
+      if (button.textContent?.includes('选择CAD文件') || button.textContent?.includes('上传文件')) {
+        button.addEventListener('click', () => {
+          // 模拟文件上传
+          alert('文件上传功能将在后端集成时实现');
+        });
+      }
+    });
+  });
+</script>

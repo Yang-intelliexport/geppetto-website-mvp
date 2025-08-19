@@ -1,0 +1,343 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import AdvantagesGrid from '../components/marketing/AdvantagesGrid.astro'
+---
+
+<BaseLayout 
+  title="Manufacturing Quote | Instant AI-Powered Manufacturing Quotes | Geppetto"
+  description="Get instant manufacturing quotes with AI analysis. Expert validation in 4-8 hours. Precision manufacturing, rapid delivery, no MOQ. Leading manufacturing quote service."
+  keywords={["manufacturing quote", "instant manufacturing quote", "precision manufacturing", "rapid manufacturing", "online manufacturing quote", "AI manufacturing quote"]}
+>
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-blue-900 via-blue-700 to-purple-600 text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+          Instant <span class="text-cyan-300">Manufacturing Quote</span><br>
+          <span class="text-2xl lg:text-4xl font-normal text-blue-200">AI-Powered Precision Manufacturing</span>
+        </h1>
+        <p class="text-xl lg:text-2xl text-blue-100 mb-8 max-w-4xl mx-auto">
+          Revolutionary manufacturing quote system with AI instant analysis<br>
+          <strong>±0.05mm precision • 24-hour delivery • No MOQ • AS9100 certified</strong>
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+          <a 
+            href="#quote-form" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-cyan-400 text-blue-900 font-bold text-lg rounded-lg hover:bg-cyan-300 transition-colors duration-200 shadow-lg"
+          >
+            🚀 Get Manufacturing Quote Now
+          </a>
+          <a 
+            href="tel:+1-800-XXX-XXXX" 
+            class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-colors duration-200"
+          >
+            📞 Manufacturing Expert
+          </a>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center max-w-3xl mx-auto">
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-cyan-300">4-8hrs</div>
+            <div class="text-sm text-blue-200">Quote Ready</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-cyan-300">±0.05mm</div>
+            <div class="text-sm text-blue-200">Precision</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-cyan-300">24hrs</div>
+            <div class="text-sm text-blue-200">Rush Order</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-cyan-300">AS9100</div>
+            <div class="text-sm text-blue-200">Certified</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manufacturing Quote Form -->
+  <section id="quote-form" class="py-16 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Get Your Manufacturing Quote in Minutes
+        </h2>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Upload your specifications and get instant AI analysis for any manufacturing process
+        </p>
+      </div>
+      
+      <!-- Quote Form -->
+      <div class="bg-white rounded-2xl shadow-xl p-8">
+        <form class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Manufacturing Process</label>
+              <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <option>CNC Machining</option>
+                <option>3D Printing</option>
+                <option>Sheet Metal Fabrication</option>
+                <option>Injection Molding</option>
+                <option>Rapid Prototyping</option>
+                <option>Custom Manufacturing</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Material Type</label>
+              <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <option>Aluminum</option>
+                <option>Steel</option>
+                <option>Plastic</option>
+                <option>Titanium</option>
+                <option>Brass</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+              <input type="number" placeholder="1" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Timeline</label>
+              <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <option>Rush Order (24-48 hours)</option>
+                <option>Standard (3-5 days)</option>
+                <option>Extended (1-2 weeks)</option>
+                <option>Flexible</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- File Upload -->
+          <div class="border-2 border-dashed border-blue-300 rounded-xl p-8 text-center hover:border-blue-500 transition-colors duration-200">
+            <div class="text-4xl mb-4">📁</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Upload Your Files</h3>
+            <p class="text-gray-600 mb-4">CAD files, drawings, specifications • .step, .stp, .dwg, .pdf</p>
+            <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200">
+              Choose Files
+            </button>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Additional Requirements</label>
+            <textarea rows="4" placeholder="Special tolerances, surface finishes, certifications needed..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+          </div>
+          
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-200 text-lg">
+            🚀 Get Instant Manufacturing Quote
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manufacturing Capabilities -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Complete Manufacturing Quote Coverage
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Get accurate manufacturing quotes for any process, material, or industry requirement
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- CNC Machining -->
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+          <div class="text-3xl mb-4">⚙️</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">CNC Machining Quote</h3>
+          <p class="text-gray-600 mb-4">Precision milling, turning, multi-axis machining for metals and plastics</p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• ±0.05mm tolerance</li>
+            <li>• 3, 4, 5-axis capabilities</li>
+            <li>• Aluminum, steel, titanium</li>
+            <li>• Single part to production</li>
+          </ul>
+        </div>
+
+        <!-- 3D Printing -->
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+          <div class="text-3xl mb-4">🖨️</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">3D Printing Quote</h3>
+          <p class="text-gray-600 mb-4">SLA, SLS, FDM, metal 3D printing for rapid prototyping</p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Same-day turnaround</li>
+            <li>• High-resolution prints</li>
+            <li>• Multiple materials</li>
+            <li>• Complex geometries</li>
+          </ul>
+        </div>
+
+        <!-- Sheet Metal -->
+        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+          <div class="text-3xl mb-4">📐</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Sheet Metal Quote</h3>
+          <p class="text-gray-600 mb-4">Laser cutting, bending, welding, and finishing services</p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Precision laser cutting</li>
+            <li>• Complex bending</li>
+            <li>• Welding & assembly</li>
+            <li>• Custom finishes</li>
+          </ul>
+        </div>
+
+        <!-- Injection Molding -->
+        <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+          <div class="text-3xl mb-4">🏭</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Injection Molding Quote</h3>
+          <p class="text-gray-600 mb-4">Rapid tooling and production molding for plastic parts</p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Prototype to production</li>
+            <li>• Multiple plastic materials</li>
+            <li>• Overmolding capabilities</li>
+            <li>• Assembly services</li>
+          </ul>
+        </div>
+
+        <!-- Custom Manufacturing -->
+        <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+          <div class="text-3xl mb-4">🔧</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Custom Manufacturing</h3>
+          <p class="text-gray-600 mb-4">Specialized processes for unique requirements</p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Multi-process assembly</li>
+            <li>• Special materials</li>
+            <li>• Custom tooling</li>
+            <li>• Unique applications</li>
+          </ul>
+        </div>
+
+        <!-- Quality & Certification -->
+        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg p-6 hover:shadow-lg transition-shadow duration-200">
+          <div class="text-3xl mb-4">🏆</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Certified Manufacturing</h3>
+          <p class="text-gray-600 mb-4">AS9100, ISO, FDA certified manufacturing quotes</p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• AS9100 aerospace</li>
+            <li>• ISO 13485 medical</li>
+            <li>• IATF 16949 automotive</li>
+            <li>• Full traceability</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Our Manufacturing Quotes -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Why Our Manufacturing Quotes Are Different
+        </h2>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="space-y-8">
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xl flex-shrink-0">⚡</div>
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">AI-Powered Speed</h3>
+                <p class="text-gray-600">Our AI analyzes your requirements instantly, providing preliminary manufacturing quotes in seconds instead of days.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xl flex-shrink-0">🎯</div>
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Expert Validation</h3>
+                <p class="text-gray-600">Manufacturing experts review every quote to ensure accuracy, feasibility, and optimal cost-effectiveness.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xl flex-shrink-0">💰</div>
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Transparent Pricing</h3>
+                <p class="text-gray-600">No hidden costs, no setup fees. Our manufacturing quotes include all costs upfront with detailed breakdowns.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xl flex-shrink-0">🏆</div>
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Quality Guaranteed</h3>
+                <p class="text-gray-600">AS9100 and ISO certified processes ensure every manufactured part meets or exceeds specifications.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-8 shadow-lg">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Manufacturing Quote Advantages</h3>
+          <div class="space-y-4">
+            <div class="flex justify-between items-center py-2 border-b border-gray-200">
+              <span class="font-medium text-gray-700">Quote Speed</span>
+              <span class="text-green-600 font-bold">4-8 hours</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-200">
+              <span class="font-medium text-gray-700">Minimum Order</span>
+              <span class="text-green-600 font-bold">1 piece</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-200">
+              <span class="font-medium text-gray-700">Precision</span>
+              <span class="text-green-600 font-bold">±0.05mm</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-200">
+              <span class="font-medium text-gray-700">Rush Orders</span>
+              <span class="text-green-600 font-bold">24-48 hours</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-200">
+              <span class="font-medium text-gray-700">Cost Savings</span>
+              <span class="text-green-600 font-bold">50-70%</span>
+            </div>
+            <div class="flex justify-between items-center py-2">
+              <span class="font-medium text-gray-700">Certifications</span>
+              <span class="text-green-600 font-bold">AS9100, ISO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-20 bg-gradient-to-r from-blue-600 to-purple-500">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+        Get Your Manufacturing Quote Today
+      </h2>
+      <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+        Join hundreds of companies who trust us for fast, accurate, and competitive manufacturing quotes
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="#quote-form" 
+          class="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200 shadow-lg"
+        >
+          🚀 Start Manufacturing Quote
+        </a>
+        <a 
+          href="tel:+1-800-XXX-XXXX" 
+          class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-colors duration-200"
+        >
+          📞 Talk to Expert
+        </a>
+      </div>
+      
+      <div class="mt-8 text-blue-100 text-sm">
+        💫 No Risk • Fast Response • Expert Support
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geppetto 管理后台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        /* 自定义样式 */
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-bold text-gray-900">Geppetto 管理后台</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="refresh-btn" class="text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                    </button>
+                    <span class="text-sm text-gray-500" id="last-update">最后更新：--</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 统计卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="flex items-center">
+                    <div class="p-3 bg-blue-100 rounded-full">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-2-2V10a2 2 0 012-2h2V6a2 2 0 012-2h6a2 2 0 012 2v2z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">总提交数</p>
+                        <p class="text-2xl font-bold text-gray-900" id="total-submissions">--</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="flex items-center">
+                    <div class="p-3 bg-yellow-100 rounded-full">
+                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">待处理报价</p>
+                        <p class="text-2xl font-bold text-gray-900" id="pending-quotes">--</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="flex items-center">
+                    <div class="p-3 bg-green-100 rounded-full">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">已完成报价</p>
+                        <p class="text-2xl font-bold text-gray-900" id="completed-quotes">--</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="flex items-center">
+                    <div class="p-3 bg-purple-100 rounded-full">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">平均响应时间</p>
+                        <p class="text-2xl font-bold text-gray-900" id="avg-response-time">--</p>
+                        <p class="text-xs text-gray-500">小时</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- 待处理报价列表 -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-lg font-semibold text-gray-900">待处理报价请求</h2>
+                            <button id="export-quotes" class="text-sm text-blue-600 hover:text-blue-800">导出数据</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div id="pending-quotes-list" class="space-y-4">
+                            <!-- 动态加载待处理报价 -->
+                        </div>
+                        <div id="no-pending-quotes" class="hidden text-center py-8 text-gray-500">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p>暂无待处理的报价请求</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最近活动 -->
+            <div>
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-semibold text-gray-900">最近活动</h2>
+                    </div>
+                    <div class="p-6">
+                        <div id="recent-activity" class="space-y-4">
+                            <!-- 动态加载最近活动 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 报价处理模态框 -->
+    <div id="quote-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">处理报价请求</h3>
+                    <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="quote-form" class="space-y-4">
+                    <input type="hidden" id="quote-id">
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">客户姓名</label>
+                            <input type="text" id="customer-name" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">联系邮箱</label>
+                            <input type="email" id="customer-email" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">材料</label>
+                            <input type="text" id="material" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">数量</label>
+                            <input type="text" id="quantity" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">特殊要求</label>
+                        <textarea id="requirements" readonly rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50"></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="final-quote" class="block text-sm font-medium text-gray-700 mb-1">最终报价 (元) *</label>
+                            <input type="number" id="final-quote" required step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="delivery-days" class="block text-sm font-medium text-gray-700 mb-1">交期 (天) *</label>
+                            <input type="number" id="delivery-days" required min="1" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="expert-notes" class="block text-sm font-medium text-gray-700 mb-1">技术说明</label>
+                        <textarea id="expert-notes" rows="4" placeholder="请输入工艺说明、注意事项等..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" id="cancel-quote" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">取消</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">提交报价</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载提示 -->
+    <div id="loading" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <div class="flex items-center space-x-3">
+                <div class="loading-spinner w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                <span class="text-gray-700">加载中...</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // 从环境变量或配置文件获取Supabase配置
+        const getSupabaseConfig = () => {
+            // 检查是否有环境变量可用（在部署环境中）
+            const url = import.meta.env?.PUBLIC_SUPABASE_URL || 
+                       window.ENV?.PUBLIC_SUPABASE_URL ||
+                       prompt('请输入Supabase URL:');
+            const key = import.meta.env?.PUBLIC_SUPABASE_ANON_KEY || 
+                       window.ENV?.PUBLIC_SUPABASE_ANON_KEY ||
+                       prompt('请输入Supabase Anon Key:');
+            
+            if (!url || !key) {
+                throw new Error('Supabase配置不完整，请检查环境变量或手动输入');
+            }
+            
+            return { url, key };
+        };
+
+        let supabase;
+        try {
+            const config = getSupabaseConfig();
+            supabase = window.supabase.createClient(config.url, config.key);
+        } catch (error) {
+            console.error('Supabase初始化失败:', error);
+            document.body.innerHTML = `
+                <div class="min-h-screen flex items-center justify-center bg-gray-50">
+                    <div class="max-w-md mx-auto text-center">
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                            <svg class="w-12 h-12 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                            <h2 class="text-lg font-semibold text-gray-900 mb-2">配置错误</h2>
+                            <p class="text-gray-600 mb-4">无法连接到Supabase，请检查配置文件</p>
+                            <button onclick="location.reload()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                重新加载
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 管理后台类
+        class AdminDashboard {
+            constructor() {
+                this.currentQuoteId = null;
+                this.initializeEventListeners();
+                this.loadDashboard();
+            }
+
+            initializeEventListeners() {
+                // 刷新按钮
+                document.getElementById('refresh-btn').addEventListener('click', () => this.loadDashboard());
+                
+                // 模态框控制
+                document.getElementById('close-modal').addEventListener('click', () => this.closeModal());
+                document.getElementById('cancel-quote').addEventListener('click', () => this.closeModal());
+                
+                // 表单提交
+                document.getElementById('quote-form').addEventListener('submit', (e) => this.handleQuoteSubmit(e));
+                
+                // 导出数据
+                document.getElementById('export-quotes').addEventListener('click', () => this.exportData());
+            }
+
+            async loadDashboard() {
+                this.showLoading(true);
+                
+                try {
+                    await Promise.all([
+                        this.loadStats(),
+                        this.loadPendingQuotes(),
+                        this.loadRecentActivity()
+                    ]);
+                    
+                    this.updateLastUpdateTime();
+                } catch (error) {
+                    console.error('Error loading dashboard:', error);
+                    this.showNotification('加载数据失败', 'error');
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            async loadStats() {
+                // 获取统计数据
+                const [contactStats, quoteStats, calcStats] = await Promise.all([
+                    this.getContactStats(),
+                    this.getQuoteStats(),
+                    this.getCalculationStats()
+                ]);
+
+                // 更新统计卡片
+                document.getElementById('total-submissions').textContent = contactStats.total + quoteStats.total;
+                document.getElementById('pending-quotes').textContent = quoteStats.pending;
+                document.getElementById('completed-quotes').textContent = quoteStats.completed;
+                document.getElementById('avg-response-time').textContent = quoteStats.avgResponseTime.toFixed(1);
+            }
+
+            async getContactStats() {
+                const { data, error } = await supabase
+                    .from('contact_submissions')
+                    .select('id, created_at');
+                
+                if (error) throw error;
+                return { total: data?.length || 0 };
+            }
+
+            async getQuoteStats() {
+                const { data, error } = await supabase
+                    .from('quote_requests')
+                    .select('id, status, created_at, updated_at');
+                
+                if (error) throw error;
+
+                const pending = data?.filter(item => item.status === 'pending').length || 0;
+                const completed = data?.filter(item => item.status === 'completed').length || 0;
+                
+                // 计算平均响应时间
+                const completedItems = data?.filter(item => item.status === 'completed' && item.updated_at) || [];
+                let avgResponseTime = 0;
+                
+                if (completedItems.length > 0) {
+                    const totalResponseTime = completedItems.reduce((sum, item) => {
+                        const created = new Date(item.created_at);
+                        const updated = new Date(item.updated_at);
+                        return sum + (updated.getTime() - created.getTime());
+                    }, 0);
+                    
+                    avgResponseTime = totalResponseTime / completedItems.length / (1000 * 60 * 60);
+                }
+
+                return {
+                    total: data?.length || 0,
+                    pending,
+                    completed,
+                    avgResponseTime
+                };
+            }
+
+            async getCalculationStats() {
+                const { data, error } = await supabase
+                    .from('cost_calculations')
+                    .select('id, created_at');
+                
+                if (error) throw error;
+                return { total: data?.length || 0 };
+            }
+
+            async loadPendingQuotes() {
+                const { data, error } = await supabase
+                    .from('quote_requests')
+                    .select('*')
+                    .eq('status', 'pending')
+                    .order('created_at', { ascending: true });
+
+                if (error) throw error;
+
+                const container = document.getElementById('pending-quotes-list');
+                const noQuotes = document.getElementById('no-pending-quotes');
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = '';
+                    noQuotes.classList.remove('hidden');
+                    return;
+                }
+
+                noQuotes.classList.add('hidden');
+                container.innerHTML = data.map(quote => this.renderQuoteCard(quote)).join('');
+            }
+
+            renderQuoteCard(quote) {
+                const timeAgo = this.formatTimeAgo(quote.created_at);
+                const hasFiles = quote.file_urls && quote.file_urls.length > 0;
+                
+                return `
+                    <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 fade-in">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">${quote.name}</h3>
+                                <p class="text-sm text-gray-600">${quote.email}</p>
+                                ${quote.company ? `<p class="text-sm text-gray-500">${quote.company}</p>` : ''}
+                            </div>
+                            <div class="text-right">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    待处理
+                                </span>
+                                <p class="text-xs text-gray-500 mt-1">${timeAgo}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-3 text-sm">
+                            <div>
+                                <span class="text-gray-500">材料:</span>
+                                <span class="ml-1 font-medium">${quote.material || '--'}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">数量:</span>
+                                <span class="ml-1 font-medium">${quote.quantity} 件</span>
+                            </div>
+                        </div>
+                        
+                        ${quote.requirements ? `
+                            <p class="text-sm text-gray-600 mb-3 line-clamp-2">${quote.requirements}</p>
+                        ` : ''}
+                        
+                        ${hasFiles ? `
+                            <div class="mb-3">
+                                <span class="text-xs text-gray-500">附件: ${quote.file_urls.length} 个文件</span>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="flex justify-end">
+                            <button onclick="dashboard.openQuoteModal('${quote.id}')" 
+                                    class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
+                                处理报价
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            async loadRecentActivity() {
+                // 获取最近的活动（联系表单、报价请求、计算记录）
+                const activities = [];
+
+                try {
+                    // 最近的联系表单
+                    const { data: contacts } = await supabase
+                        .from('contact_submissions')
+                        .select('id, name, email, created_at, source')
+                        .order('created_at', { ascending: false })
+                        .limit(5);
+
+                    contacts?.forEach(contact => {
+                        activities.push({
+                            type: 'contact',
+                            title: '新的咨询提交',
+                            description: `${contact.name} 提交了咨询`,
+                            timestamp: contact.created_at
+                        });
+                    });
+
+                    // 最近的报价请求
+                    const { data: quotes } = await supabase
+                        .from('quote_requests')
+                        .select('id, name, status, created_at')
+                        .order('created_at', { ascending: false })
+                        .limit(5);
+
+                    quotes?.forEach(quote => {
+                        activities.push({
+                            type: 'quote',
+                            title: '新的报价请求',
+                            description: `${quote.name} 请求报价`,
+                            timestamp: quote.created_at
+                        });
+                    });
+
+                    // 排序并显示
+                    activities.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    
+                    const container = document.getElementById('recent-activity');
+                    container.innerHTML = activities.slice(0, 10).map(activity => this.renderActivityItem(activity)).join('');
+
+                } catch (error) {
+                    console.error('Error loading activity:', error);
+                }
+            }
+
+            renderActivityItem(activity) {
+                const timeAgo = this.formatTimeAgo(activity.timestamp);
+                const iconClass = activity.type === 'contact' ? 'text-blue-600' : 'text-purple-600';
+                
+                return `
+                    <div class="flex items-start space-x-3">
+                        <div class="p-2 rounded-full bg-gray-100">
+                            <svg class="w-4 h-4 ${iconClass}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-2-2V10a2 2 0 012-2h2V6a2 2 0 012-2h6a2 2 0 012 2v2z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900">${activity.title}</p>
+                            <p class="text-sm text-gray-500">${activity.description}</p>
+                            <p class="text-xs text-gray-400 mt-1">${timeAgo}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            async openQuoteModal(quoteId) {
+                try {
+                    const { data, error } = await supabase
+                        .from('quote_requests')
+                        .select('*')
+                        .eq('id', quoteId)
+                        .single();
+
+                    if (error) throw error;
+
+                    this.currentQuoteId = quoteId;
+                    
+                    // 填充表单
+                    document.getElementById('quote-id').value = quoteId;
+                    document.getElementById('customer-name').value = data.name;
+                    document.getElementById('customer-email').value = data.email;
+                    document.getElementById('material').value = data.material || '';
+                    document.getElementById('quantity').value = data.quantity;
+                    document.getElementById('requirements').value = data.requirements || '';
+                    
+                    // 显示模态框
+                    document.getElementById('quote-modal').classList.remove('hidden');
+                } catch (error) {
+                    console.error('Error loading quote:', error);
+                    this.showNotification('加载报价信息失败', 'error');
+                }
+            }
+
+            closeModal() {
+                document.getElementById('quote-modal').classList.add('hidden');
+                document.getElementById('quote-form').reset();
+                this.currentQuoteId = null;
+            }
+
+            async handleQuoteSubmit(e) {
+                e.preventDefault();
+                
+                if (!this.currentQuoteId) return;
+
+                const formData = new FormData(e.target);
+                const finalQuote = parseFloat(formData.get('final-quote'));
+                const deliveryDays = parseInt(formData.get('delivery-days'));
+                const expertNotes = formData.get('expert-notes');
+
+                try {
+                    // 更新报价状态
+                    const { error } = await supabase
+                        .from('quote_requests')
+                        .update({
+                            status: 'quoted',
+                            final_quote: finalQuote,
+                            delivery_days: deliveryDays,
+                            expert_notes: expertNotes,
+                            updated_at: new Date().toISOString()
+                        })
+                        .eq('id', this.currentQuoteId);
+
+                    if (error) throw error;
+
+                    this.showNotification('报价提交成功', 'success');
+                    this.closeModal();
+                    this.loadDashboard();
+
+                } catch (error) {
+                    console.error('Error submitting quote:', error);
+                    this.showNotification('提交报价失败', 'error');
+                }
+            }
+
+            async exportData() {
+                try {
+                    const { data, error } = await supabase
+                        .from('quote_requests')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+
+                    if (error) throw error;
+
+                    this.exportToCSV(data, 'quote_requests');
+                    this.showNotification('数据导出成功', 'success');
+                } catch (error) {
+                    console.error('Error exporting data:', error);
+                    this.showNotification('导出数据失败', 'error');
+                }
+            }
+
+            exportToCSV(data, filename) {
+                if (!data || data.length === 0) return;
+
+                const headers = Object.keys(data[0]);
+                const csvContent = [
+                    headers.join(','),
+                    ...data.map(row => headers.map(header => {
+                        const value = row[header];
+                        if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+                            return `"${value.replace(/"/g, '""')}"`;
+                        }
+                        return value;
+                    }).join(','))
+                ].join('\n');
+
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${filename}_${new Date().toISOString().split('T')[0]}.csv`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+
+            formatTimeAgo(dateString) {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffMs = now.getTime() - date.getTime();
+                const diffMins = Math.floor(diffMs / (1000 * 60));
+                const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+                if (diffMins < 1) return '刚刚';
+                if (diffMins < 60) return `${diffMins}分钟前`;
+                if (diffHours < 24) return `${diffHours}小时前`;
+                if (diffDays < 7) return `${diffDays}天前`;
+                
+                return date.toLocaleDateString('zh-CN');
+            }
+
+            updateLastUpdateTime() {
+                const now = new Date();
+                document.getElementById('last-update').textContent = 
+                    `最后更新：${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            }
+
+            showLoading(show) {
+                const loading = document.getElementById('loading');
+                if (show) {
+                    loading.classList.remove('hidden');
+                } else {
+                    loading.classList.add('hidden');
+                }
+            }
+
+            showNotification(message, type = 'info') {
+                const colors = {
+                    success: 'bg-green-500',
+                    error: 'bg-red-500',
+                    info: 'bg-blue-500'
+                };
+
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        }
+
+        // 初始化管理后台
+        const dashboard = new AdminDashboard();
+        window.dashboard = dashboard; // 供HTML中的onclick使用
+    </script>
+</body>
+</html>

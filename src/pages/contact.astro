@@ -1,0 +1,250 @@
+---
+// Redirect to appropriate language version
+const response = Astro.redirect('/zh/contact');
+return response;
+---
+
+<BaseLayout title="Contact Us | Geppetto AI Manufacturing | Get Quote" description="Contact Geppetto's expert team for AI-powered quotes and manufacturing solutions. 24/7 online support with professional engineers at your service.">
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-20">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="text-5xl font-bold mb-6">
+            Contact Geppetto Expert Team
+          </h1>
+          <p class="text-2xl text-blue-100 mb-8">
+            24/7 Support • AI-Powered Quotes • Professional Engineering Services
+          </p>
+          
+          <!-- Quick Contact Methods -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl mb-4">📞</div>
+              <h3 class="text-xl font-bold mb-2">Call Us Now</h3>
+              <p class="text-blue-100">+1-800-XXX-XXXX</p>
+              <p class="text-sm text-blue-200">Business Hours: 8AM-6PM EST</p>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl mb-4">📧</div>
+              <h3 class="text-xl font-bold mb-2">Email Support</h3>
+              <p class="text-blue-100">quotes@geppetto.com</p>
+              <p class="text-sm text-blue-200">Response within 4 hours</p>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl mb-4">🚀</div>
+              <h3 class="text-xl font-bold mb-2">AI Instant Quote</h3>
+              <a href="/ai-quote" class="text-yellow-300 hover:text-yellow-200 transition-colors">
+                Get Quote Now →
+              </a>
+              <p class="text-sm text-blue-200">Results in seconds</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 主要内容区域 -->
+    <section class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          
+          <!-- 联系表单 -->
+          <div class="bg-white rounded-3xl shadow-2xl p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">
+              📝 获取专业咨询
+            </h2>
+            <ContactForm />
+          </div>
+
+          <!-- 联系信息 -->
+          <div>
+            <ContactInfo />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 三种报价方式 -->
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">
+              ⚡ 三种获取报价方式
+            </h2>
+            <p class="text-xl text-gray-600">
+              选择最适合您的咨询方式，我们为您提供专业服务
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- AI智能报价 -->
+            <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-3xl p-8 border-2 border-purple-200 hover:border-purple-400 transition-all duration-300 group">
+              <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <span class="text-3xl text-white">🤖</span>
+                </div>
+                
+                <h3 class="text-2xl font-bold text-purple-800 mb-4">AI智能报价</h3>
+                <p class="text-purple-600 mb-6">
+                  上传CAD图纸，3秒获得精准报价
+                </p>
+                
+                <div class="space-y-2 text-left mb-8">
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-gray-700">秒级响应</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-gray-700">专家复核</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-gray-700">24小时交付</span>
+                  </div>
+                </div>
+                
+                <a href="/ai-quote" class="block w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-2xl font-semibold text-center hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105">
+                  立即体验 →
+                </a>
+              </div>
+            </div>
+
+            <!-- 专家热线 -->
+            <div class="bg-gradient-to-br from-blue-50 to-green-50 rounded-3xl p-8 border-2 border-blue-200 hover:border-blue-400 transition-all duration-300 group">
+              <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-blue-600 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <span class="text-3xl text-white">👨‍🔧</span>
+                </div>
+                
+                <h3 class="text-2xl font-bold text-blue-800 mb-4">专家热线咨询</h3>
+                <p class="text-blue-600 mb-6">
+                  直接对话技术专家，深度沟通
+                </p>
+                
+                <div class="space-y-2 text-left mb-8">
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-gray-700">复杂项目沟通</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-gray-700">个性化方案</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-gray-700">技术难题解答</span>
+                  </div>
+                </div>
+                
+                <div class="bg-blue-100 rounded-2xl p-4 mb-6">
+                  <div class="text-2xl font-bold text-blue-800">400-XXX-XXXX</div>
+                  <div class="text-sm text-blue-600">工作时间: 9:00-18:00</div>
+                </div>
+                
+                <a href="tel:400-XXX-XXXX" class="block w-full bg-gradient-to-r from-blue-600 to-green-600 text-white py-3 rounded-2xl font-semibold text-center hover:from-blue-700 hover:to-green-700 transition-all duration-300 transform hover:scale-105">
+                  立即致电 📞
+                </a>
+              </div>
+            </div>
+
+            <!-- 在线表单 -->
+            <div class="bg-gradient-to-br from-green-50 to-yellow-50 rounded-3xl p-8 border-2 border-green-200 hover:border-green-400 transition-all duration-300 group">
+              <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-green-600 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <span class="text-3xl text-white">📝</span>
+                </div>
+                
+                <h3 class="text-2xl font-bold text-green-800 mb-4">在线表单咨询</h3>
+                <p class="text-green-600 mb-6">
+                  详细需求一次性提交，专家回复
+                </p>
+                
+                <div class="space-y-2 text-left mb-8">
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-gray-700">详细需求描述</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-gray-700">4小时内回复</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-gray-700">专业方案建议</span>
+                  </div>
+                </div>
+                
+                <button onclick="document.getElementById('contact-form').scrollIntoView({behavior: 'smooth'})" class="block w-full bg-gradient-to-r from-green-600 to-yellow-600 text-white py-3 rounded-2xl font-semibold text-center hover:from-green-700 hover:to-yellow-700 transition-all duration-300 transform hover:scale-105">
+                  填写表单 ✍️
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 服务覆盖区域 -->
+    <ServiceAreas />
+
+    <!-- CTA区域 -->
+    <section class="py-20 bg-gradient-to-r from-purple-900 to-blue-900 text-white">
+      <div class="container mx-auto px-6 text-center">
+        <h2 class="text-4xl font-bold mb-6">
+          🎯 现在联系我们，享受专属优惠
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+            <div class="text-yellow-300 font-bold">首单免费</div>
+            <div class="text-blue-200 text-sm">打样费全免</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+            <div class="text-yellow-300 font-bold">极速交付</div>
+            <div class="text-blue-200 text-sm">24小时内完成</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+            <div class="text-yellow-300 font-bold">质量保证</div>
+            <div class="text-blue-200 text-sm">不合格100%重做</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+            <div class="text-yellow-300 font-bold">技术支持</div>
+            <div class="text-blue-200 text-sm">专家团队指导</div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <p class="text-2xl font-bold text-yellow-300">
+            选择Geppetto，选择AI驱动的制造未来！
+          </p>
+          <p class="text-xl text-blue-100">
+            让我们一起重新定义制造业的速度、精度和成本标准
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

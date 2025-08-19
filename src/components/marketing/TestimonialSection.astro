@@ -1,0 +1,261 @@
+---
+export interface Props {
+  testimonials: Array<{
+    name: string
+    company: string
+    content: string
+    avatar?: string
+    stats?: {
+      precision?: string
+      cost_saving?: string
+      delivery_time?: string
+      quality_rate?: string
+    }
+  }>
+  title?: string
+  subtitle?: string
+  language?: 'zh' | 'en'
+}
+
+const { 
+  testimonials, 
+  title,
+  subtitle,
+  language = 'zh'
+} = Astro.props
+
+// 多语言文本配置
+const text = {
+  zh: {
+    defaultTitle: '客户成功案例',
+    defaultSubtitle: '真实客户反馈，见证Geppetto的价值创造',
+    successLabel: '✅ 客户成功案例',
+    breakthrough: '的突破性合作',
+    actualPrecision: '实际精度',
+    precisionNote: '（要求±0.05mm）',
+    costReduction: '成本降低',
+    costNote: '(vs传统供应商)',
+    deliveryTime: '交付时间',
+    deliveryNote: '(vs传统15天)',
+    qualityRate: '质量合格率',
+    qualityNote: '(连续6个月)',
+    showcaseTitle: '精密制造成果展示',
+    precisionTools: '精密刀具',
+    machiningProcess: '加工过程',
+    projectDetails: '项目详情',
+    productType: '产品类型',
+    material: '材料',
+    precisionReq: '精度要求',
+    quantity: '批量',
+    deliveryReq: '交期要求',
+    customerFeedback: '客户反馈',
+    products: {
+      robotJoint: '机器人关节零件',
+      aluminum: '6061-T6铝合金',
+      pieces: '件',
+      withinDays: '天内'
+    }
+  },
+  en: {
+    defaultTitle: 'Customer Success Stories',
+    defaultSubtitle: 'Real customer feedback showcasing Geppetto\'s value creation',
+    successLabel: '✅ Customer Success Story',
+    breakthrough: ' Breakthrough Partnership',
+    actualPrecision: 'Actual Precision',
+    precisionNote: '(Required ±0.05mm)',
+    costReduction: 'Cost Savings',
+    costNote: '(vs Traditional Suppliers)',
+    deliveryTime: 'Delivery Time',
+    deliveryNote: '(vs Traditional 15 days)',
+    qualityRate: 'Quality Rate',
+    qualityNote: '(6 months consecutive)',
+    showcaseTitle: 'Precision Manufacturing Results',
+    precisionTools: 'Precision Tools',
+    machiningProcess: 'Machining Process',
+    projectDetails: 'Project Details',
+    productType: 'Product Type',
+    material: 'Material',
+    precisionReq: 'Precision Requirement',
+    quantity: 'Quantity',
+    deliveryReq: 'Delivery Requirement',
+    customerFeedback: 'Customer Feedback',
+    products: {
+      robotJoint: 'Robotic Joint Components',
+      aluminum: '6061-T6 Aluminum',
+      pieces: ' pieces',
+      withinDays: ' days'
+    }
+  }
+}
+
+const currentText = text[language]
+const finalTitle = title || currentText.defaultTitle
+const finalSubtitle = subtitle || currentText.defaultSubtitle
+---
+
+<section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {(title || subtitle) && (
+      <div class="text-center mb-16">
+        {finalTitle && (
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            {finalTitle}
+          </h2>
+        )}
+        {finalSubtitle && (
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            {finalSubtitle}
+          </p>
+        )}
+      </div>
+    )}
+    
+    <div class="space-y-12">
+      {testimonials.map((testimonial, index) => (
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+          <div class="grid lg:grid-cols-2 gap-0">
+            <!-- Content -->
+            <div class="p-12 lg:p-16">
+              <div class="mb-8">
+                <div class="inline-flex items-center px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium mb-4">
+                  {currentText.successLabel}
+                </div>
+                
+                <h3 class="text-3xl font-bold text-gray-900 mb-4">
+                  {testimonial.company}{currentText.breakthrough}
+                </h3>
+                
+                <blockquote class="text-lg text-gray-600 leading-relaxed">
+                  "{testimonial.content}"
+                </blockquote>
+                
+                <cite class="block mt-6 text-sm text-gray-500">
+                  — {testimonial.name}, {testimonial.company}
+                </cite>
+              </div>
+              
+              <!-- Stats -->
+              {testimonial.stats && (
+                <div class="grid grid-cols-2 gap-6">
+                  {testimonial.stats.precision && (
+                    <div>
+                      <div class="text-3xl font-bold text-purple-600 mb-2">
+                        {testimonial.stats.precision}
+                      </div>
+                      <div class="text-sm text-gray-600">
+                        {currentText.actualPrecision}<br/>
+                        {testimonial.stats.precision.includes(language === 'zh' ? '要求' : 'Required') ? '' : currentText.precisionNote}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {testimonial.stats.cost_saving && (
+                    <div>
+                      <div class="text-3xl font-bold text-green-600 mb-2">
+                        {testimonial.stats.cost_saving}
+                      </div>
+                      <div class="text-sm text-gray-600">
+                        {currentText.costReduction}<br/>
+                        {testimonial.stats.cost_saving.includes('vs') ? '' : currentText.costNote}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {testimonial.stats.delivery_time && (
+                    <div>
+                      <div class="text-3xl font-bold text-blue-600 mb-2">
+                        {testimonial.stats.delivery_time}
+                      </div>
+                      <div class="text-sm text-gray-600">
+                        {currentText.deliveryTime}<br/>
+                        {testimonial.stats.delivery_time.includes('vs') ? '' : currentText.deliveryNote}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {testimonial.stats.quality_rate && (
+                    <div>
+                      <div class="text-3xl font-bold text-orange-600 mb-2">
+                        {testimonial.stats.quality_rate}
+                      </div>
+                      <div class="text-sm text-gray-600">
+                        {currentText.qualityRate}<br/>
+                        {testimonial.stats.quality_rate.includes(language === 'zh' ? '连续' : 'consecutive') ? '' : currentText.qualityNote}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            
+            <!-- Visual -->
+            <div class="bg-gradient-to-br from-purple-600 to-blue-500 p-8 lg:p-12 text-white">
+              <div class="space-y-6">
+                <!-- Product Images -->
+                <div class="mb-6">
+                  <h4 class="text-xl font-bold mb-4">{currentText.showcaseTitle}</h4>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div class="relative rounded-lg overflow-hidden">
+                      <img 
+                        src="/images/manufacturing/precision-tools.jpg" 
+                        alt={currentText.precisionTools} 
+                        class="w-full h-32 object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                      <div class="absolute bottom-2 left-2 text-xs font-medium">{currentText.precisionTools}</div>
+                    </div>
+                    <div class="relative rounded-lg overflow-hidden">
+                      <img 
+                        src="/images/manufacturing/machining-process-1.jpg" 
+                        alt={currentText.machiningProcess} 
+                        class="w-full h-32 object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                      <div class="absolute bottom-2 left-2 text-xs font-medium">{currentText.machiningProcess}</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 class="text-xl font-bold mb-4">{currentText.projectDetails}</h4>
+                  <div class="space-y-3">
+                    <div class="flex justify-between">
+                      <span class="text-purple-100">{currentText.productType}</span>
+                      <span class="font-semibold">{currentText.products.robotJoint}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-purple-100">{currentText.material}</span>
+                      <span class="font-semibold">{currentText.products.aluminum}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-purple-100">{currentText.precisionReq}</span>
+                      <span class="font-semibold">±0.05mm</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-purple-100">{currentText.quantity}</span>
+                      <span class="font-semibold">50{currentText.products.pieces}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-purple-100">{currentText.deliveryReq}</span>
+                      <span class="font-semibold">3{currentText.products.withinDays}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="border-t border-purple-400 pt-4">
+                  <h5 class="font-semibold mb-2">{currentText.customerFeedback}</h5>
+                  <p class="text-purple-100 text-sm">
+                    {language === 'zh' ? 
+                      '"Geppetto不仅在价格和质量上超出预期，更重要的是让我们的产品开发周期缩短了50%。这种合作模式让我们能够更快地推出新产品。"' : 
+                      '"Beyond price and quality expectations, Geppetto shortened our product development cycle by 50%. This partnership model enables us to launch new products faster."'
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

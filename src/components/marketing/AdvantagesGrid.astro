@@ -1,0 +1,118 @@
+---
+export interface Props {
+  advantages: Array<{
+    id: string
+    title: string
+    description: string
+    icon: string
+    stats?: string
+    details?: string
+    color?: string
+  }>
+  layout?: 'grid' | 'list' | 'carousel'
+  theme?: 'light' | 'dark'
+  showDetails?: boolean
+  language?: 'zh' | 'en'
+}
+
+const { advantages, layout = 'grid', theme = 'light', showDetails = false, language = 'zh' } = Astro.props
+
+// 多语言文本配置
+const text = {
+  zh: {
+    title: '四大核心优势',
+    subtitle: '颠覆传统制造业的技术创新，为您提供前所未有的制造体验'
+  },
+  en: {
+    title: 'Four Core Advantages',
+    subtitle: 'Revolutionary manufacturing technology innovation that provides unprecedented manufacturing experience'
+  }
+}
+
+const currentText = text[language]
+
+const getColorClasses = (color: string) => {
+  const colorMap = {
+    purple: {
+      bg: 'from-purple-50 to-purple-100',
+      icon: 'bg-purple-600',
+      text: 'text-purple-600',
+      detail: 'bg-purple-50 text-purple-800'
+    },
+    blue: {
+      bg: 'from-blue-50 to-blue-100', 
+      icon: 'bg-blue-500',
+      text: 'text-blue-600',
+      detail: 'bg-blue-50 text-blue-800'
+    },
+    green: {
+      bg: 'from-green-50 to-green-100',
+      icon: 'bg-green-500', 
+      text: 'text-green-600',
+      detail: 'bg-green-50 text-green-800'
+    },
+    orange: {
+      bg: 'from-orange-50 to-orange-100',
+      icon: 'bg-orange-500',
+      text: 'text-orange-600', 
+      detail: 'bg-orange-50 text-orange-800'
+    }
+  }
+  return colorMap[color] || colorMap.purple
+}
+---
+
+<section class={`py-20 ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class={`text-3xl lg:text-4xl font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+        {currentText.title}
+      </h2>
+      <p class={`text-xl max-w-3xl mx-auto ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+        {currentText.subtitle}
+      </p>
+    </div>
+    
+    <div class={`grid gap-8 ${
+      layout === 'grid' ? 'lg:grid-cols-4 md:grid-cols-2' : 
+      layout === 'list' ? 'grid-cols-1 max-w-4xl mx-auto' : 
+      'grid-cols-1'
+    }`}>
+      {advantages.map((advantage) => {
+        const colors = getColorClasses(advantage.color || 'purple')
+        
+        return (
+          <div class={`bg-gradient-to-br ${colors.bg} rounded-2xl p-8 hover:shadow-lg transition-all duration-200 hover:-translate-y-2 ${layout === 'list' ? 'flex items-start space-x-6' : ''}`}>
+            <div class={`${layout === 'list' ? 'flex-shrink-0' : ''}`}>
+              <div class={`w-12 h-12 ${colors.icon} rounded-lg flex items-center justify-center mb-6 ${layout === 'list' ? 'mb-0' : ''}`}>
+                <span class="text-white text-2xl">{advantage.icon}</span>
+              </div>
+            </div>
+            
+            <div class={`${layout === 'list' ? 'flex-1' : ''}`}>
+              <h3 class={`text-xl font-bold text-gray-900 mb-4 ${layout === 'list' ? 'mb-2' : ''}`}>
+                {advantage.title}
+              </h3>
+              
+              <p class={`text-gray-600 mb-4 ${layout === 'list' ? 'mb-3' : ''}`}>
+                {advantage.description}
+              </p>
+              
+              {advantage.stats && (
+                <div class={`text-sm ${colors.text} font-semibold ${layout === 'list' ? 'mb-3' : ''}`}>
+                  {advantage.stats}
+                </div>
+              )}
+              
+              {showDetails && advantage.details && (
+                <div class={`${colors.detail} p-4 rounded-lg text-sm mt-4`}>
+                  <div class="prose prose-sm" set:html={advantage.details.replace(/### /g, '<h4 class="font-semibold mb-2 text-sm">').replace(/\n/g, '<br/>')} />
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,236 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import AIQuoteHero from '../components/calculators/AIQuoteHero.astro'
+import AdvantagesGrid from '../components/marketing/AdvantagesGrid.astro'
+import ComparisonTable from '../components/marketing/ComparisonTable.astro'
+---
+
+<BaseLayout 
+  title="CNC Quote | Instant AI-Powered CNC Machining Quotes | Geppetto"
+  description="Get instant CNC quotes with AI analysis in seconds. Expert validation in 4-8 hours. ±0.05mm precision, 24-hour delivery, no MOQ. Leading CNC quote service in USA."
+  keywords={["CNC quote", "instant CNC quote", "manufacturing quote", "cnc machining quote", "rapid CNC quote", "online CNC quote", "AI CNC quote"]}
+>
+  <!-- Hero Section with CNC Quote Focus -->
+  <section class="bg-gradient-to-br from-purple-900 via-purple-700 to-blue-600 text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+          Get Instant <span class="text-yellow-300">CNC Quote</span><br>
+          <span class="text-2xl lg:text-4xl font-normal text-purple-200">AI Analysis in Seconds</span>
+        </h1>
+        <p class="text-xl lg:text-2xl text-purple-100 mb-8 max-w-4xl mx-auto">
+          Revolutionary CNC quote system: AI instant analysis + Expert validation in 4-8 hours<br>
+          <strong>±0.05mm precision • 24-hour delivery • No MOQ limits • 50-70% cost savings</strong>
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+          <a 
+            href="#upload-section" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-yellow-400 text-purple-900 font-bold text-lg rounded-lg hover:bg-yellow-300 transition-colors duration-200 shadow-lg"
+          >
+            🚀 Upload Files for Instant CNC Quote
+          </a>
+          <a 
+            href="tel:+1-800-XXX-XXXX" 
+            class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-purple-600 transition-colors duration-200"
+          >
+            📞 Talk to CNC Expert
+          </a>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center max-w-3xl mx-auto">
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-yellow-300">4-8hrs</div>
+            <div class="text-sm text-purple-200">CNC Quote Ready</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-yellow-300">±0.05mm</div>
+            <div class="text-sm text-purple-200">High Precision</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-yellow-300">24hrs</div>
+            <div class="text-sm text-purple-200">Rush Delivery</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-yellow-300">No MOQ</div>
+            <div class="text-sm text-purple-200">1 Piece Min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Quote Upload Section -->
+  <section id="upload-section" class="py-16 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Get Your CNC Quote in 3 Simple Steps
+        </h2>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Upload your CAD files and get instant AI analysis, followed by expert validation
+        </p>
+      </div>
+      
+      <!-- File Upload Component -->
+      <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+        <div class="border-2 border-dashed border-purple-300 rounded-xl p-12 text-center hover:border-purple-500 transition-colors duration-200">
+          <div class="text-6xl mb-4">📁</div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">Upload Your CAD Files</h3>
+          <p class="text-gray-600 mb-6">Drag & drop or click to upload • Supports .step, .stp, .iges, .dwg, .pdf</p>
+          <button class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200">
+            Choose Files to Upload
+          </button>
+          <div class="mt-4 text-sm text-gray-500">
+            Maximum file size: 50MB • Multiple files supported
+          </div>
+        </div>
+      </div>
+      
+      <!-- Steps -->
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-purple-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">AI Instant Analysis</h3>
+          <p class="text-gray-600">AI analyzes your CAD files in seconds, identifying materials, processes, and initial cost estimates</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-purple-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Expert Validation</h3>
+          <p class="text-gray-600">Manufacturing experts review AI analysis and provide precise CNC quote within 4-8 hours</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-purple-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Detailed CNC Quote</h3>
+          <p class="text-gray-600">Receive comprehensive quote with pricing, timeline, materials, and production details</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CNC Quote vs Traditional Comparison -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Why Choose Geppetto for CNC Quotes?
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          See how our AI-powered CNC quote system outperforms traditional manufacturing quotes
+        </p>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full bg-white rounded-lg shadow-lg overflow-hidden">
+          <thead class="bg-purple-600 text-white">
+            <tr>
+              <th class="px-6 py-4 text-left font-semibold">Feature</th>
+              <th class="px-6 py-4 text-center font-semibold">Geppetto CNC Quote</th>
+              <th class="px-6 py-4 text-center font-semibold">Traditional Suppliers</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr>
+              <td class="px-6 py-4 font-medium text-gray-900">Quote Speed</td>
+              <td class="px-6 py-4 text-center text-green-600 font-semibold">4-8 hours</td>
+              <td class="px-6 py-4 text-center text-red-600">3-7 days</td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="px-6 py-4 font-medium text-gray-900">AI Analysis</td>
+              <td class="px-6 py-4 text-center text-green-600 font-semibold">✓ Instant</td>
+              <td class="px-6 py-4 text-center text-red-600">✗ Manual only</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 font-medium text-gray-900">Minimum Order</td>
+              <td class="px-6 py-4 text-center text-green-600 font-semibold">1 piece</td>
+              <td class="px-6 py-4 text-center text-red-600">50-100 pieces</td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="px-6 py-4 font-medium text-gray-900">Precision</td>
+              <td class="px-6 py-4 text-center text-green-600 font-semibold">±0.05mm</td>
+              <td class="px-6 py-4 text-center text-yellow-600">±0.1mm</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 font-medium text-gray-900">Rush Orders</td>
+              <td class="px-6 py-4 text-center text-green-600 font-semibold">24-48 hours</td>
+              <td class="px-6 py-4 text-center text-red-600">7-15 days</td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="px-6 py-4 font-medium text-gray-900">Cost Savings</td>
+              <td class="px-6 py-4 text-center text-green-600 font-semibold">50-70% lower</td>
+              <td class="px-6 py-4 text-center text-red-600">Standard pricing</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries We Serve -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          CNC Quotes for Every Industry
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Our AI-powered CNC quote system serves diverse industries with precision and speed
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+          <div class="text-4xl mb-4">🚀</div>
+          <h3 class="font-semibold text-gray-900 mb-2">Aerospace</h3>
+          <p class="text-sm text-gray-600">AS9100 certified CNC quotes for aviation components</p>
+        </div>
+        <div class="text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+          <div class="text-4xl mb-4">🤖</div>
+          <h3 class="font-semibold text-gray-900 mb-2">Robotics</h3>
+          <p class="text-sm text-gray-600">High-precision CNC quotes for robotic components</p>
+        </div>
+        <div class="text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+          <div class="text-4xl mb-4">🚗</div>
+          <h3 class="font-semibold text-gray-900 mb-2">Automotive</h3>
+          <p class="text-sm text-gray-600">IATF 16949 certified quotes for auto parts</p>
+        </div>
+        <div class="text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+          <div class="text-4xl mb-4">🏥</div>
+          <h3 class="font-semibold text-gray-900 mb-2">Medical</h3>
+          <p class="text-sm text-gray-600">FDA approved CNC quotes for medical devices</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-20 bg-gradient-to-r from-purple-600 to-blue-500">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+        Ready for Your Instant CNC Quote?
+      </h2>
+      <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+        Join 500+ companies who trust Geppetto for fast, accurate, and cost-effective CNC quotes
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="#upload-section" 
+          class="inline-flex items-center justify-center px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200 shadow-lg"
+        >
+          🚀 Get Instant CNC Quote Now
+        </a>
+        <a 
+          href="tel:+1-800-XXX-XXXX" 
+          class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-purple-600 transition-colors duration-200"
+        >
+          📞 Speak with CNC Expert
+        </a>
+      </div>
+      
+      <div class="mt-8 text-purple-100 text-sm">
+        💫 No Risk Trial • Quality Guarantee • 24/7 Technical Support
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,931 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="具身智能与机器人制造 | Geppetto - AI+学徒制造的专业解决方案" description="Geppetto专为具身智能和机器人行业提供精密制造服务。从概念验证到批量生产，AI+学徒制造模式确保每个组件完美匹配您的创新需求。">
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800 text-white py-20">
+      <div class="container mx-auto px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div class="flex items-center space-x-3 mb-6">
+                <div class="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center">
+                  <span class="text-2xl">🤖</span>
+                </div>
+                <span class="text-purple-200 text-lg font-semibold">具身智能 × 精密制造</span>
+              </div>
+              
+              <h1 class="text-5xl font-bold mb-6 leading-tight">
+                为具身智能时代<br/>
+                <span class="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">重新定义制造</span>
+              </h1>
+              
+              <p class="text-2xl text-blue-100 mb-8 leading-relaxed">
+                当AI拥有了身体，制造业的游戏规则彻底改变。Geppetto AI+学徒制造，专为具身智能和机器人创新者打造的极速制造解决方案。
+              </p>
+              
+              <div class="grid grid-cols-2 gap-6 mb-8">
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
+                  <div class="text-3xl font-bold text-yellow-300 mb-2">±0.008mm</div>
+                  <div class="text-sm text-blue-200">机器人关节精度</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
+                  <div class="text-3xl font-bold text-yellow-300 mb-2">24小时</div>
+                  <div class="text-sm text-blue-200">原型到成品</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
+                  <div class="text-3xl font-bold text-yellow-300 mb-2">1件起</div>
+                  <div class="text-sm text-blue-200">无MOQ限制</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
+                  <div class="text-3xl font-bold text-yellow-300 mb-2">50%↓</div>
+                  <div class="text-sm text-blue-200">成本降低</div>
+                </div>
+              </div>
+              
+              <div class="flex flex-col sm:flex-row gap-4">
+                <a href="/ai-quote" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-purple-900 px-8 py-4 rounded-full text-lg font-bold hover:from-yellow-300 hover:to-orange-400 transform hover:scale-105 transition-all duration-300 shadow-2xl text-center">
+                  🚀 立即获取AI报价
+                </a>
+                <a href="#case-studies" class="border-2 border-white text-white px-6 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-purple-900 transition-all duration-300 text-center">
+                  💡 查看成功案例
+                </a>
+              </div>
+            </div>
+            
+            <div class="relative">
+              <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8">
+                <h3 class="text-2xl font-bold mb-6 text-center">🎯 专业服务领域</h3>
+                <div class="space-y-4">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">人形机器人关节与传动系统</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">工业机器人精密部件</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">服务机器人外壳与结构件</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">自动驾驶传感器支架</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">无人机与飞行器组件</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">AI硬件散热与保护壳</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 行业痛点与解决方案 -->
+    <section class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">
+              🔥 具身智能制造的核心挑战
+            </h2>
+            <p class="text-xl text-gray-600">
+              传统制造业无法跟上AI创新的速度，Geppetto重新定义游戏规则
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+            <!-- 传统制造痛点 -->
+            <div class="bg-red-50 border-l-4 border-red-500 rounded-xl p-8">
+              <h3 class="text-2xl font-bold text-red-800 mb-6 flex items-center">
+                <span class="mr-3">❌</span>传统制造困境
+              </h3>
+              <div class="space-y-4">
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-red-700">创新速度跟不上</div>
+                    <div class="text-red-600 text-sm">3-6个月交期，错过最佳产品窗口期</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-red-700">高昂的小批量成本</div>
+                    <div class="text-red-600 text-sm">MOQ 100+，样品阶段就需要10万+投入</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-red-700">精度无法保证</div>
+                    <div class="text-red-600 text-sm">±0.1mm误差导致机器人关节卡死</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-red-700">沟通成本巨大</div>
+                    <div class="text-red-600 text-sm">技术要求理解偏差，反复修改</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-red-700">供应链不稳定</div>
+                    <div class="text-red-600 text-sm">关键时刻掉链子，影响整体项目</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Geppetto解决方案 -->
+            <div class="bg-green-50 border-l-4 border-green-500 rounded-xl p-8">
+              <h3 class="text-2xl font-bold text-green-800 mb-6 flex items-center">
+                <span class="mr-3">✅</span>Geppetto解决方案
+              </h3>
+              <div class="space-y-4">
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-green-700">AI秒级响应</div>
+                    <div class="text-green-600 text-sm">3秒AI分析 + 24小时交付，跟上创新节奏</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-green-700">单件起做，成本最优</div>
+                    <div class="text-green-600 text-sm">无MOQ限制，原型阶段节省80%成本</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-green-700">±0.008mm极致精度</div>
+                    <div class="text-green-600 text-sm">AI+学徒制造确保每个细节完美</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-green-700">零沟通障碍</div>
+                    <div class="text-green-600 text-sm">AI理解技术需求，专家确保执行</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-green-700">智能供应链</div>
+                    <div class="text-green-600 text-sm">AI预测需求，提前布局，零延误</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 价值对比表 -->
+          <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6">
+              <h3 class="text-2xl font-bold text-center">⚡ 效率对比：传统制造 vs Geppetto AI+学徒</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-4 text-left font-semibold text-gray-800">对比维度</th>
+                    <th class="px-6 py-4 text-center font-semibold text-red-600">传统制造商</th>
+                    <th class="px-6 py-4 text-center font-semibold text-green-600">Geppetto AI+学徒</th>
+                    <th class="px-6 py-4 text-center font-semibold text-purple-600">提升幅度</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                  <tr>
+                    <td class="px-6 py-4 font-medium text-gray-800">报价响应时间</td>
+                    <td class="px-6 py-4 text-center text-red-600">3-7天</td>
+                    <td class="px-6 py-4 text-center text-green-600 font-bold">3秒</td>
+                    <td class="px-6 py-4 text-center text-purple-600 font-bold">2000倍提升</td>
+                  </tr>
+                  <tr class="bg-gray-50">
+                    <td class="px-6 py-4 font-medium text-gray-800">原型交付周期</td>
+                    <td class="px-6 py-4 text-center text-red-600">2-4周</td>
+                    <td class="px-6 py-4 text-center text-green-600 font-bold">24小时</td>
+                    <td class="px-6 py-4 text-center text-purple-600 font-bold">14-28倍提升</td>
+                  </tr>
+                  <tr>
+                    <td class="px-6 py-4 font-medium text-gray-800">最小起订量</td>
+                    <td class="px-6 py-4 text-center text-red-600">100-1000件</td>
+                    <td class="px-6 py-4 text-center text-green-600 font-bold">1件</td>
+                    <td class="px-6 py-4 text-center text-purple-600 font-bold">100-1000倍灵活</td>
+                  </tr>
+                  <tr class="bg-gray-50">
+                    <td class="px-6 py-4 font-medium text-gray-800">加工精度</td>
+                    <td class="px-6 py-4 text-center text-red-600">±0.05-0.1mm</td>
+                    <td class="px-6 py-4 text-center text-green-600 font-bold">±0.008mm</td>
+                    <td class="px-6 py-4 text-center text-purple-600 font-bold">6-12倍精确</td>
+                  </tr>
+                  <tr>
+                    <td class="px-6 py-4 font-medium text-gray-800">小批量成本</td>
+                    <td class="px-6 py-4 text-center text-red-600">市场价</td>
+                    <td class="px-6 py-4 text-center text-green-600 font-bold">市场价50%</td>
+                    <td class="px-6 py-4 text-center text-purple-600 font-bold">50%成本节省</td>
+                  </tr>
+                  <tr class="bg-gray-50">
+                    <td class="px-6 py-4 font-medium text-gray-800">设计修改响应</td>
+                    <td class="px-6 py-4 text-center text-red-600">1-2周</td>
+                    <td class="px-6 py-4 text-center text-green-600 font-bold">6-12小时</td>
+                    <td class="px-6 py-4 text-center text-purple-600 font-bold">10-28倍提升</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 技术能力展示 -->
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">
+              🔬 具身智能专用技术栈
+            </h2>
+            <p class="text-xl text-gray-600">
+              为机器人和AI硬件量身定制的制造技术组合
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <!-- 精密机械加工 -->
+            <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">⚙️</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">精密机械加工</h3>
+              </div>
+              <div class="space-y-3 text-sm text-gray-600">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span>5轴联动CNC加工中心</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span>±0.008mm重复定位精度</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span>复杂曲面一次成形</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span>机器人关节专用工艺</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 增材制造 -->
+            <div class="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">🖨️</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">增材制造技术</h3>
+              </div>
+              <div class="space-y-3 text-sm text-gray-600">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>金属3D打印 (SLM/EBM)</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>高分子材料3D打印</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>复杂内部结构制造</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>轻量化拓扑优化</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 表面处理 -->
+            <div class="bg-gradient-to-br from-green-50 to-yellow-50 rounded-2xl p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">✨</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">表面处理工艺</h3>
+              </div>
+              <div class="space-y-3 text-sm text-gray-600">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>阳极氧化与电镀</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>PVD/CVD涂层技术</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>抗磨损表面改性</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>导电/绝缘涂层</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 装配集成 -->
+            <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">🔧</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">精密装配服务</h3>
+              </div>
+              <div class="space-y-3 text-sm text-gray-600">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span>无尘车间装配</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span>力矩控制装配</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span>电子集成测试</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span>功能性能验证</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 质量检测 -->
+            <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">🔍</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">智能质量检测</h3>
+              </div>
+              <div class="space-y-3 text-sm text-gray-600">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span>三坐标测量机</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span>激光扫描检测</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span>AI视觉检测系统</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span>实时质量追溯</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 快速原型 -->
+            <div class="bg-gradient-to-br from-red-50 to-purple-50 rounded-2xl p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">⚡</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">极速原型验证</h3>
+              </div>
+              <div class="space-y-3 text-sm text-gray-600">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>24小时原型交付</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>多材料混合制造</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>功能性原型验证</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>迭代设计支持</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 材料支持 -->
+          <div class="bg-gradient-to-r from-purple-100 to-blue-100 rounded-3xl p-12">
+            <h3 class="text-3xl font-bold text-center text-gray-800 mb-8">🧪 机器人专用材料库</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div class="text-center">
+                <div class="text-4xl font-bold text-purple-600 mb-2">20+</div>
+                <div class="text-lg font-medium text-gray-700">航空铝合金</div>
+                <div class="text-sm text-gray-500">轻量化结构件</div>
+              </div>
+              <div class="text-center">
+                <div class="text-4xl font-bold text-blue-600 mb-2">15+</div>
+                <div class="text-lg font-medium text-gray-700">工程塑料</div>
+                <div class="text-sm text-gray-500">功能性外壳</div>
+              </div>
+              <div class="text-center">
+                <div class="text-4xl font-bold text-green-600 mb-2">8+</div>
+                <div class="text-lg font-medium text-gray-700">钛合金</div>
+                <div class="text-sm text-gray-500">高强度关节</div>
+              </div>
+              <div class="text-center">
+                <div class="text-4xl font-bold text-yellow-600 mb-2">12+</div>
+                <div class="text-lg font-medium text-gray-700">特种钢材</div>
+                <div class="text-sm text-gray-500">传动机构</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 成功案例 -->
+    <section id="case-studies" class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">
+              🏆 具身智能制造成功案例
+            </h2>
+            <p class="text-xl text-gray-600">
+              与行业领先企业共同推动具身智能时代
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- 案例1：人形机器人 -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div class="bg-gradient-to-r from-purple-500 to-blue-500 p-6">
+                <h3 class="text-2xl font-bold text-white mb-2">人形机器人关节系统</h3>
+                <p class="text-purple-100">某独角兽公司 × Geppetto</p>
+              </div>
+              <div class="p-8">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                  <div class="text-center p-4 bg-purple-50 rounded-xl">
+                    <div class="text-2xl font-bold text-purple-600">22个</div>
+                    <div class="text-sm text-gray-600">自由度关节</div>
+                  </div>
+                  <div class="text-center p-4 bg-blue-50 rounded-xl">
+                    <div class="text-2xl font-bold text-blue-600">±0.005mm</div>
+                    <div class="text-sm text-gray-600">装配精度</div>
+                  </div>
+                  <div class="text-center p-4 bg-green-50 rounded-xl">
+                    <div class="text-2xl font-bold text-green-600">18小时</div>
+                    <div class="text-sm text-gray-600">原型交付</div>
+                  </div>
+                  <div class="text-center p-4 bg-yellow-50 rounded-xl">
+                    <div class="text-2xl font-bold text-yellow-600">65%↓</div>
+                    <div class="text-sm text-gray-600">成本降低</div>
+                  </div>
+                </div>
+                
+                <div class="space-y-4">
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">🎯 项目挑战</h4>
+                    <p class="text-gray-600 text-sm">
+                      人形机器人需要22个自由度关节，每个关节要求±0.005mm装配精度，传统制造商无法在合理成本内达到要求。
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">💡 Geppetto解决方案</h4>
+                    <p class="text-gray-600 text-sm">
+                      AI分析关节运动学要求，自动优化加工路径。学徒工匠精密装配，确保每个关节都达到设计标准。
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">🚀 项目成果</h4>
+                    <p class="text-gray-600 text-sm">
+                      18小时完成原型交付，关节运动精度超出预期。客户产品成功融资2亿元，现已进入量产阶段。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 案例2：工业机器人 -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div class="bg-gradient-to-r from-green-500 to-blue-500 p-6">
+                <h3 class="text-2xl font-bold text-white mb-2">工业机器人末端执行器</h3>
+                <p class="text-green-100">某制造业龙头 × Geppetto</p>
+              </div>
+              <div class="p-8">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                  <div class="text-center p-4 bg-green-50 rounded-xl">
+                    <div class="text-2xl font-bold text-green-600">50kg</div>
+                    <div class="text-sm text-gray-600">负载能力</div>
+                  </div>
+                  <div class="text-center p-4 bg-blue-50 rounded-xl">
+                    <div class="text-2xl font-bold text-blue-600">0.02mm</div>
+                    <div class="text-sm text-gray-600">重复精度</div>
+                  </div>
+                  <div class="text-center p-4 bg-yellow-50 rounded-xl">
+                    <div class="text-2xl font-bold text-yellow-600">36小时</div>
+                    <div class="text-sm text-gray-600">设计到样品</div>
+                  </div>
+                  <div class="text-center p-4 bg-red-50 rounded-xl">
+                    <div class="text-2xl font-bold text-red-600">40%↓</div>
+                    <div class="text-sm text-gray-600">重量减轻</div>
+                  </div>
+                </div>
+                
+                <div class="space-y-4">
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">🎯 项目挑战</h4>
+                    <p class="text-gray-600 text-sm">
+                      需要设计轻量化但高强度的末端执行器，要求50kg负载下仍保持0.02mm重复精度。
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">💡 Geppetto解决方案</h4>
+                    <p class="text-gray-600 text-sm">
+                      AI拓扑优化结构设计，钛合金3D打印制造，CNC精加工关键配合面，实现轻量化与高精度兼得。
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">🚀 项目成果</h4>
+                    <p class="text-gray-600 text-sm">
+                      36小时完成从设计优化到样品交付，重量减轻40%，精度提升3倍，为客户节省研发时间2个月。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 案例3：服务机器人 -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div class="bg-gradient-to-r from-yellow-500 to-orange-500 p-6">
+                <h3 class="text-2xl font-bold text-white mb-2">服务机器人外壳系统</h3>
+                <p class="text-yellow-100">某AI独角兽 × Geppetto</p>
+              </div>
+              <div class="p-8">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                  <div class="text-center p-4 bg-yellow-50 rounded-xl">
+                    <div class="text-2xl font-bold text-yellow-600">IPX4</div>
+                    <div class="text-sm text-gray-600">防护等级</div>
+                  </div>
+                  <div class="text-center p-4 bg-orange-50 rounded-xl">
+                    <div class="text-2xl font-bold text-orange-600">-40°C~60°C</div>
+                    <div class="text-sm text-gray-600">工作温度</div>
+                  </div>
+                  <div class="text-center p-4 bg-red-50 rounded-xl">
+                    <div class="text-2xl font-bold text-red-600">30%↓</div>
+                    <div class="text-sm text-gray-600">材料成本</div>
+                  </div>
+                  <div class="text-center p-4 bg-purple-50 rounded-xl">
+                    <div class="text-2xl font-bold text-purple-600">72小时</div>
+                    <div class="text-sm text-gray-600">批量交付</div>
+                  </div>
+                </div>
+                
+                <div class="space-y-4">
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">🎯 项目挑战</h4>
+                    <p class="text-gray-600 text-sm">
+                      服务机器人需要IPX4防护等级，在-40°C~60°C环境下稳定工作，同时要求外观美观、成本可控。
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">💡 Geppetto解决方案</h4>
+                    <p class="text-gray-600 text-sm">
+                      AI材料选择算法推荐最优材料组合，模块化设计降低制造复杂度，表面处理工艺确保防护性能。
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">🚀 项目成果</h4>
+                    <p class="text-gray-600 text-sm">
+                      通过所有环境测试，材料成本降低30%，72小时完成50台原型机外壳交付，助力客户快速抢占市场。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 案例4：自动驾驶 -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div class="bg-gradient-to-r from-blue-500 to-purple-500 p-6">
+                <h3 class="text-2xl font-bold text-white mb-2">自动驾驶传感器支架</h3>
+                <p class="text-blue-100">某自动驾驶公司 × Geppetto</p>
+              </div>
+              <div class="p-8">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                  <div class="text-center p-4 bg-blue-50 rounded-xl">
+                    <div class="text-2xl font-bold text-blue-600">±0.01mm</div>
+                    <div class="text-sm text-gray-600">传感器定位精度</div>
+                  </div>
+                  <div class="text-center p-4 bg-purple-50 rounded-xl">
+                    <div class="text-2xl font-bold text-purple-600">200万次</div>
+                    <div class="text-sm text-gray-600">振动疲劳测试</div>
+                  </div>
+                  <div class="text-center p-4 bg-green-50 rounded-xl">
+                    <div class="text-2xl font-bold text-green-600">48小时</div>
+                    <div class="text-sm text-gray-600">紧急响应</div>
+                  </div>
+                  <div class="text-center p-4 bg-yellow-50 rounded-xl">
+                    <div class="text-2xl font-bold text-yellow-600">45%↓</div>
+                    <div class="text-sm text-gray-600">重量优化</div>
+                  </div>
+                </div>
+                
+                <div class="space-y-4">
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">🎯 项目挑战</h4>
+                    <p class="text-gray-600 text-sm">
+                      激光雷达支架要求±0.01mm定位精度，通过200万次振动疲劳测试，客户急需48小时内交付样品参展。
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">💡 Geppetto解决方案</h4>
+                    <p class="text-gray-600 text-sm">
+                      AI有限元分析优化结构，航空铝合金精密加工，专用夹具确保加工精度，24小时赶制完成。
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-2">🚀 项目成果</h4>
+                    <p class="text-gray-600 text-sm">
+                      48小时完成紧急交付，传感器定位精度达到±0.008mm，重量减轻45%，帮助客户成功参展获得大单。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 技术实力与行业影响力 -->
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">
+              🚀 技术实力与行业影响力
+            </h2>
+            <p class="text-xl text-gray-600">
+              凭借AI+学徒制造创新模式，快速获得行业认可和客户信赖
+            </p>
+          </div>
+
+          <!-- 技术突破展示 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow duration-300">
+              <div class="text-4xl mb-4">🧠</div>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">AI算法自研</h3>
+              <p class="text-gray-600 text-sm">3秒CAD智能分析，行业领先</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow duration-300">
+              <div class="text-4xl mb-4">⚙️</div>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">±0.008mm精度</h3>
+              <p class="text-gray-600 text-sm">超越行业标准的制造精度</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-green-50 to-yellow-50 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow duration-300">
+              <div class="text-4xl mb-4">⚡</div>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">24小时交付</h3>
+              <p class="text-gray-600 text-sm">颠覆传统制造交期</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow duration-300">
+              <div class="text-4xl mb-4">🎯</div>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">1件起做</h3>
+              <p class="text-gray-600 text-sm">无MOQ限制创新服务</p>
+            </div>
+          </div>
+
+          <!-- 团队背景实力 -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+            <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8">
+              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="mr-3">👥</span>顶尖团队背景
+              </h3>
+              <div class="space-y-4">
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-purple-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">清华、MIT、斯坦福</div>
+                    <div class="text-gray-600 text-sm">核心团队来自全球顶级院校</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-purple-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">特斯拉、Google、华为</div>
+                    <div class="text-gray-600 text-sm">来自顶级科技公司的实战经验</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-purple-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">15年+行业经验</div>
+                    <div class="text-gray-600 text-sm">深耕AI和制造业的复合型人才</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-purple-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">50+专业团队</div>
+                    <div class="text-gray-600 text-sm">AI工程师+制造专家的黄金组合</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-green-50 to-yellow-50 rounded-2xl p-8">
+              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="mr-3">🏆</span>行业影响力
+              </h3>
+              <div class="space-y-4">
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">多项技术专利</div>
+                    <div class="text-gray-600 text-sm">AI+制造领域核心技术专利布局</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">行业白皮书</div>
+                    <div class="text-gray-600 text-sm">参与制定AI制造行业标准</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">顶级投资机构</div>
+                    <div class="text-gray-600 text-sm">获得知名投资机构A轮融资</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">媒体报道</div>
+                    <div class="text-gray-600 text-sm">36氪、钛媒体等权威媒体深度报道</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 客户认可与合作伙伴 -->
+          <div class="bg-gradient-to-r from-purple-100 to-blue-100 rounded-3xl p-12">
+            <h3 class="text-3xl font-bold text-center text-gray-800 mb-8">🤝 客户认可与合作生态</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-white text-2xl font-bold">🚀</span>
+                </div>
+                <h4 class="text-xl font-bold text-gray-800 mb-2">AI独角兽企业</h4>
+                <p class="text-gray-600">为5家估值10亿+的AI公司提供制造服务</p>
+                <div class="mt-4 text-sm text-purple-600 font-semibold">客户复购率 95%</div>
+              </div>
+              
+              <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-white text-2xl font-bold">🏭</span>
+                </div>
+                <h4 class="text-xl font-bold text-gray-800 mb-2">制造业龙头</h4>
+                <p class="text-gray-600">与20+家制造业领军企业建立合作</p>
+                <div class="mt-4 text-sm text-blue-600 font-semibold">平均项目时间缩短 70%</div>
+              </div>
+              
+              <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-white text-2xl font-bold">🎯</span>
+                </div>
+                <h4 class="text-xl font-bold text-gray-800 mb-2">行业创新者</h4>
+                <p class="text-gray-600">服务15+家自动驾驶和机器人公司</p>
+                <div class="mt-4 text-sm text-green-600 font-semibold">成本节省 40-60%</div>
+              </div>
+            </div>
+
+            <!-- 客户满意度数据 -->
+            <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div class="text-center">
+                <div class="text-3xl font-bold text-purple-600 mb-2">98%</div>
+                <div class="text-sm text-gray-600">客户满意度</div>
+              </div>
+              <div class="text-center">
+                <div class="text-3xl font-bold text-blue-600 mb-2">95%</div>
+                <div class="text-sm text-gray-600">按时交付率</div>
+              </div>
+              <div class="text-center">
+                <div class="text-3xl font-bold text-green-600 mb-2">99.5%</div>
+                <div class="text-sm text-gray-600">质量合格率</div>
+              </div>
+              <div class="text-center">
+                <div class="text-3xl font-bold text-yellow-600 mb-2">90%</div>
+                <div class="text-sm text-gray-600">客户推荐率</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 立即开始 -->
+    <section class="py-20 bg-gradient-to-r from-purple-900 to-blue-900 text-white">
+      <div class="container mx-auto px-6 text-center">
+        <h2 class="text-4xl font-bold mb-6">
+          🚀 开启您的具身智能制造之旅
+        </h2>
+        <p class="text-2xl text-blue-100 mb-12">
+          无论您是AI创业者还是机器人工程师，Geppetto都能加速您的创新
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div class="text-4xl mb-4">⚡</div>
+            <h3 class="text-xl font-semibold mb-2">3秒AI报价</h3>
+            <p class="text-blue-100 mb-3">上传CAD，立即获得精准报价</p>
+            <p class="text-sm text-blue-200">免费试用，无需注册</p>
+          </div>
+          
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div class="text-4xl mb-4">🎯</div>
+            <h3 class="text-xl font-semibold mb-2">专家咨询</h3>
+            <p class="text-blue-100 mb-3">一对一技术方案讨论</p>
+            <p class="text-sm text-blue-200">预约30分钟免费咨询</p>
+          </div>
+          
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div class="text-4xl mb-4">🏭</div>
+            <h3 class="text-xl font-semibold mb-2">工厂参观</h3>
+            <p class="text-blue-100 mb-3">实地考察智能制造产线</p>
+            <p class="text-sm text-blue-200">苏州、深圳工厂开放参观</p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <a href="/ai-quote" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-purple-900 px-12 py-4 rounded-full text-xl font-bold hover:from-yellow-300 hover:to-orange-400 transform hover:scale-105 transition-all duration-300 shadow-2xl">
+            🤖 立即AI报价
+          </a>
+          
+          <a href="/contact" class="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-purple-900 transition-all duration-300">
+            📞 预约专家咨询
+          </a>
+        </div>
+
+        <div class="mt-8 text-blue-100">
+          <p class="text-lg">
+            💡 具身智能时代已来，让Geppetto成为您创新路上的制造伙伴
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  /* 添加特定样式 */
+  .hover\:shadow-xl:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  /* 背景动画 */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+</style>

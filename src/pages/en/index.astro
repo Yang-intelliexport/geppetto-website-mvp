@@ -1,0 +1,236 @@
+---
+import { getEntry } from 'astro:content'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import HeroSection from '../../components/marketing/HeroSection.astro'
+import AdvantagesGrid from '../../components/marketing/AdvantagesGrid.astro'
+import TestimonialSection from '../../components/marketing/TestimonialSection.astro'
+import TrustIndicators from '../../components/sections/TrustIndicators.astro'
+import { t } from '../../utils/i18n'
+
+const currentLang = 'en'
+
+// English market optimized content
+const data = {
+  seo: {
+    title: 'CNC Quote | Instant Manufacturing Quote | AI-Powered Precision | Geppetto',
+    description: 'Get instant CNC quotes with AI analysis in seconds, expert validation in 4-8 hours. ±0.05mm precision, 24-hour delivery, no MOQ limits. Leading US precision manufacturing service.',
+    keywords: ['CNC quote', 'manufacturing quote', 'instant CNC quote', 'precision manufacturing', 'rapid manufacturing', 'online CNC', 'rush order', 'high precision', 'plastic machining', 'steel machining']
+  },
+  hero: {
+    title: 'Get Instant CNC Quotes',
+    subtitle: '🚀 AI-Powered Manufacturing Revolution',
+    description: 'AI analysis in seconds, expert validation in 4-8 hours with precise quotes.\n±0.05mm precision • 24-hour delivery • No MOQ limits • 50-70% cost savings',
+    cta: {
+      primary: {
+        text: '🎯 Get Instant CNC Quote',
+        href: '/en/ai-quote'
+      },
+      secondary: {
+        text: '🔍 Learn Our Advantages',
+        href: '/en/why-geppetto'
+      }
+    }
+  },
+  advantages: [
+    {
+      id: 'smart-quote',
+      title: 'Instant CNC Quote Promise',
+      description: 'AI analysis in seconds, expert technical validation within 4-8 hours with precise quotes',
+      icon: '🧠',
+      stats: '4-8 hours vs traditional 3-7 days',
+      color: 'purple'
+    },
+    {
+      id: 'fast-delivery',
+      title: '24-Hour Rush Order Delivery',
+      description: 'AI-optimized production scheduling and intelligent process planning for industry-leading delivery speed',
+      icon: '⚡',
+      stats: '24-48 hours vs traditional 7-15 days',
+      color: 'blue'
+    },
+    {
+      id: 'no-moq',
+      title: 'No MOQ - Single Part Manufacturing',
+      description: 'AI-driven smart manufacturing makes small-batch production economically viable',
+      icon: '🎯',
+      stats: '1 piece minimum vs traditional 50-100 MOQ',
+      color: 'green'
+    },
+    {
+      id: 'cost-efficiency',
+      title: 'Maximum Cost Efficiency',
+      description: 'AI+expert model dramatically reduces labor costs, direct supply chain eliminates middlemen',
+      icon: '💰',
+      stats: '50-70% cost savings',
+      color: 'orange'
+    }
+  ],
+  testimonials: [
+    {
+      name: 'Mike Chen, Engineering Manager',
+      company: 'Advanced Robotics Corp.',
+      content: 'We were amazed by Geppetto\'s quote - they achieved ±0.03mm precision when we only required ±0.05mm, and the price was 60% lower than our previous supplier. They\'re now our primary manufacturing partner.',
+      stats: {
+        precision: '±0.03mm',
+        cost_saving: '60%',
+        delivery_time: '2 days',
+        quality_rate: '100%'
+      }
+    }
+  ],
+  features: [
+    {
+      title: 'Advanced AI Technology',
+      description: 'Proprietary AI system for instant CAD analysis and precision manufacturing',
+      icon: '✓'
+    },
+    {
+      title: '500+ Success Stories',
+      description: 'Serving robotics, electronics, automotive, and aerospace industries',
+      icon: '✓'
+    },
+    {
+      title: '24/7 Technical Support',
+      description: 'Expert engineering team available around the clock',
+      icon: '✓'
+    }
+  ]
+}
+---
+
+<BaseLayout 
+  title={data.seo.title}
+  description={data.seo.description}
+  keywords={data.seo.keywords}
+>
+  <!-- Hero Section -->
+  <HeroSection hero={data.hero} features={data.features} language="en" />
+
+  <!-- Four Core Advantages -->
+  <AdvantagesGrid advantages={data.advantages} language="en" />
+
+  <!-- Customer Success Story -->
+  <TestimonialSection testimonials={data.testimonials} language="en" />
+
+  <!-- Trust Indicators for US Market -->
+  <TrustIndicators />
+
+  <!-- US Market Advantages -->
+  <section class="py-16 bg-gradient-to-br from-blue-50 to-purple-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          🇺🇸 Built for American Manufacturing Excellence
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Combining AI innovation with deep understanding of US manufacturing requirements
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8 mb-12">
+        <div class="bg-white rounded-xl p-6 shadow-lg text-center">
+          <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">🏛️</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">US Standards Compliance</h3>
+          <p class="text-gray-600 mb-4">Full compliance with ANSI, ASTM, ASME standards. AS9100D, ISO 13485, ITAR registered for aerospace and medical applications.</p>
+          <div class="text-sm text-blue-600 font-medium">✓ FDA Registered ✓ ITAR Compliant ✓ AS9100D Certified</div>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 shadow-lg text-center">
+          <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">⚡</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">US Time Zone Coverage</h3>
+          <p class="text-gray-600 mb-4">Extended business hours from West Coast to East Coast. Real-time support during all US business hours with dedicated US team.</p>
+          <div class="text-sm text-green-600 font-medium">6AM PST - 9PM EST Coverage</div>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 shadow-lg text-center">
+          <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">🚚</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Express US Logistics</h3>
+          <p class="text-gray-600 mb-4">FedEx/UPS partnerships for rapid delivery. Same-day delivery in Bay Area, 1-2 day shipping nationwide for rush orders.</p>
+          <div class="text-sm text-purple-600 font-medium">Same-Day Bay Area • 24-48h US-Wide</div>
+        </div>
+      </div>
+      
+      <!-- Competitive Advantage over US Competitors -->
+      <div class="bg-white rounded-2xl p-8 shadow-xl">
+        <div class="text-center mb-8">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">🏆 Why US Companies Choose Geppetto</h3>
+          <p class="text-gray-600">Direct comparison with leading US manufacturing platforms</p>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b-2 border-gray-200">
+                <th class="text-left py-4 px-4 font-semibold text-gray-900">Feature</th>
+                <th class="text-center py-4 px-4 font-semibold text-blue-600">Geppetto</th>
+                <th class="text-center py-4 px-4 font-semibold text-gray-500">Xometry</th>
+                <th class="text-center py-4 px-4 font-semibold text-gray-500">Protolabs</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <td class="py-4 px-4 font-medium">Quote Time</td>
+                <td class="text-center py-4 px-4 text-blue-600 font-bold">3 seconds</td>
+                <td class="text-center py-4 px-4 text-gray-500">24-48 hours</td>
+                <td class="text-center py-4 px-4 text-gray-500">12-24 hours</td>
+              </tr>
+              <tr class="bg-gray-50">
+                <td class="py-4 px-4 font-medium">Delivery Time</td>
+                <td class="text-center py-4 px-4 text-blue-600 font-bold">24-48 hours</td>
+                <td class="text-center py-4 px-4 text-gray-500">5-15 days</td>
+                <td class="text-center py-4 px-4 text-gray-500">3-10 days</td>
+              </tr>
+              <tr>
+                <td class="py-4 px-4 font-medium">Minimum Order</td>
+                <td class="text-center py-4 px-4 text-blue-600 font-bold">1 piece</td>
+                <td class="text-center py-4 px-4 text-gray-500">5 pieces</td>
+                <td class="text-center py-4 px-4 text-gray-500">1 piece*</td>
+              </tr>
+              <tr class="bg-gray-50">
+                <td class="py-4 px-4 font-medium">Cost Savings</td>
+                <td class="text-center py-4 px-4 text-blue-600 font-bold">40-60%</td>
+                <td class="text-center py-4 px-4 text-gray-500">Baseline</td>
+                <td class="text-center py-4 px-4 text-gray-500">+50% premium</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="mt-6 text-center">
+          <p class="text-sm text-gray-500">*Protolabs single piece pricing significantly higher</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-gradient-to-r from-purple-600 to-blue-500">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+        Ready to Experience Geppetto's AI Quote Promise?
+      </h2>
+      <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+        Upload your drawings, get AI analysis in seconds, expert technical validation and precise quotes in 4-8 hours
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/en/ai-quote" 
+          class="inline-flex items-center justify-center px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200 shadow-lg"
+        >
+          🚀 Get Instant AI Quote
+        </a>
+        <a 
+          href="tel:+1-800-GEPPETTO" 
+          class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-purple-600 transition-colors duration-200"
+        >
+          📞 Call US Team
+        </a>
+      </div>
+      
+      <div class="mt-8 text-purple-100 text-sm">
+        💫 Risk-Free Trial • Quality Guarantee • 24/7 Technical Support
+      </div>
+    </div>
+  </section>
+</BaseLayout>

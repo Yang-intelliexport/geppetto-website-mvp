@@ -1,0 +1,431 @@
+---
+// 联系表单组件
+---
+
+<form id="contact-form" class="space-y-6">
+  <!-- 基本信息 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
+        姓名 *
+      </label>
+      <input 
+        type="text" 
+        id="name" 
+        name="name" 
+        required
+        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+        placeholder="请输入您的姓名"
+      >
+    </div>
+    
+    <div>
+      <label for="company" class="block text-sm font-semibold text-gray-700 mb-2">
+        公司名称 *
+      </label>
+      <input 
+        type="text" 
+        id="company" 
+        name="company" 
+        required
+        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+        placeholder="请输入公司名称"
+      >
+    </div>
+  </div>
+
+  <!-- 联系方式 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+        邮箱地址 *
+      </label>
+      <input 
+        type="email" 
+        id="email" 
+        name="email" 
+        required
+        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+        placeholder="your.email@company.com"
+      >
+    </div>
+    
+    <div>
+      <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">
+        联系电话 *
+      </label>
+      <input 
+        type="tel" 
+        id="phone" 
+        name="phone" 
+        required
+        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+        placeholder="138 xxxx xxxx"
+      >
+    </div>
+  </div>
+
+  <!-- 项目信息 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label for="service" class="block text-sm font-semibold text-gray-700 mb-2">
+        所需服务 *
+      </label>
+      <select 
+        id="service" 
+        name="service" 
+        required
+        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+      >
+        <option value="">请选择服务类型</option>
+        <option value="cnc-machining">CNC精密加工</option>
+        <option value="3d-printing">3D打印服务</option>
+        <option value="sheet-metal">钣金加工</option>
+        <option value="surface-treatment">表面处理</option>
+        <option value="rapid-prototyping">快速原型</option>
+        <option value="batch-production">批量生产</option>
+        <option value="technical-consulting">技术咨询</option>
+        <option value="other">其他服务</option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="quantity" class="block text-sm font-semibold text-gray-700 mb-2">
+        预计数量
+      </label>
+      <select 
+        id="quantity" 
+        name="quantity"
+        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+      >
+        <option value="">请选择数量范围</option>
+        <option value="1-10">1-10件 (样品/小批量)</option>
+        <option value="11-100">11-100件 (中小批量)</option>
+        <option value="101-1000">101-1000件 (中批量)</option>
+        <option value="1000+">1000件以上 (大批量)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 项目描述 -->
+  <div>
+    <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
+      项目详细描述 *
+    </label>
+    <textarea 
+      id="description" 
+      name="description" 
+      rows="5" 
+      required
+      class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 resize-none"
+      placeholder="请详细描述您的项目需求，包括：&#10;• 零件用途和应用场景&#10;• 材料要求（如铝合金、不锈钢等）&#10;• 精度要求和关键尺寸&#10;• 表面处理需求&#10;• 预期交期&#10;• 其他特殊要求"
+    ></textarea>
+  </div>
+
+  <!-- 文件上传 -->
+  <div>
+    <label for="files" class="block text-sm font-semibold text-gray-700 mb-2">
+      上传图纸文件 (可选)
+    </label>
+    <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-purple-400 transition-colors duration-300">
+      <input 
+        type="file" 
+        id="files" 
+        name="files" 
+        multiple 
+        accept=".step,.stp,.stl,.iges,.igs,.dwg,.dxf,.pdf,.jpg,.jpeg,.png"
+        class="hidden"
+      >
+      <label for="files" class="cursor-pointer">
+        <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 48 48">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"></path>
+        </svg>
+        <div class="text-gray-600 mb-2">
+          <span class="font-semibold text-purple-600">点击上传文件</span> 或拖拽文件到此处
+        </div>
+        <div class="text-sm text-gray-500">
+          支持: STEP, STL, IGES, DWG, DXF, PDF, JPG, PNG (最大10MB)
+        </div>
+      </label>
+    </div>
+    <div id="file-list" class="mt-4 space-y-2 hidden">
+      <!-- 文件列表将在这里显示 -->
+    </div>
+  </div>
+
+  <!-- 联系偏好 -->
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-3">
+      首选联系方式 *
+    </label>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <label class="flex items-center space-x-3 p-3 border border-gray-300 rounded-xl cursor-pointer hover:bg-purple-50 transition-colors duration-300">
+        <input type="radio" name="contact_preference" value="email" required class="text-purple-600 focus:ring-purple-500">
+        <div>
+          <div class="font-medium text-gray-700">📧 邮箱回复</div>
+          <div class="text-sm text-gray-500">4小时内回复</div>
+        </div>
+      </label>
+      
+      <label class="flex items-center space-x-3 p-3 border border-gray-300 rounded-xl cursor-pointer hover:bg-purple-50 transition-colors duration-300">
+        <input type="radio" name="contact_preference" value="phone" required class="text-purple-600 focus:ring-purple-500">
+        <div>
+          <div class="font-medium text-gray-700">📞 电话沟通</div>
+          <div class="text-sm text-gray-500">专家直接联系</div>
+        </div>
+      </label>
+      
+      <label class="flex items-center space-x-3 p-3 border border-gray-300 rounded-xl cursor-pointer hover:bg-purple-50 transition-colors duration-300">
+        <input type="radio" name="contact_preference" value="wechat" required class="text-purple-600 focus:ring-purple-500">
+        <div>
+          <div class="font-medium text-gray-700">💬 微信联系</div>
+          <div class="text-sm text-gray-500">实时在线沟通</div>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <!-- 隐私协议 -->
+  <div class="flex items-start space-x-3">
+    <input 
+      type="checkbox" 
+      id="privacy" 
+      name="privacy" 
+      required
+      class="mt-1 text-purple-600 focus:ring-purple-500 rounded"
+    >
+    <label for="privacy" class="text-sm text-gray-600">
+      我已阅读并同意 
+      <a href="/privacy" class="text-purple-600 hover:text-purple-800 underline">《隐私政策》</a> 
+      和 
+      <a href="/terms" class="text-purple-600 hover:text-purple-800 underline">《服务条款》</a>，
+      同意Geppetto收集和使用我的个人信息以提供相关服务。
+    </label>
+  </div>
+
+  <!-- 提交按钮 -->
+  <div class="pt-4">
+    <button 
+      type="submit" 
+      id="submit-btn"
+      class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-2xl font-bold text-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300"
+    >
+      <span id="submit-text">🚀 提交咨询 • 获取专业方案</span>
+      <span id="loading-text" class="hidden">📤 正在提交...</span>
+    </button>
+  </div>
+
+  <!-- 提交后的提示信息 -->
+  <div id="success-message" class="hidden bg-green-50 border border-green-200 rounded-xl p-6">
+    <div class="flex items-start space-x-3">
+      <svg class="w-6 h-6 text-green-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+      </svg>
+      <div>
+        <h4 class="text-green-800 font-semibold mb-2">✅ 咨询提交成功！</h4>
+        <p class="text-green-700 mb-4">
+          我们已收到您的咨询信息，专业工程师将在4小时内与您联系。
+        </p>
+        <div class="space-y-2 text-sm text-green-600">
+          <div>• 紧急项目请直接致电：<strong>400-XXX-XXXX</strong></div>
+          <div>• 同时体验我们的 <a href="/ai-quote" class="text-purple-600 hover:text-purple-800 underline font-semibold">AI智能报价系统</a></div>
+          <div>• 查看更多 <a href="/case-studies" class="text-purple-600 hover:text-purple-800 underline font-semibold">客户成功案例</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="error-message" class="hidden bg-red-50 border border-red-200 rounded-xl p-6">
+    <div class="flex items-start space-x-3">
+      <svg class="w-6 h-6 text-red-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+      </svg>
+      <div>
+        <h4 class="text-red-800 font-semibold mb-2">❌ 提交失败</h4>
+        <p class="text-red-700 mb-2">
+          抱歉，提交过程中出现了问题。请重试或直接联系我们：
+        </p>
+        <div class="space-y-1 text-sm text-red-600">
+          <div>• 电话：<strong>400-XXX-XXXX</strong></div>
+          <div>• 邮箱：<strong>business@geppetto.com</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  import { submitContactForm, uploadFile } from '../../utils/supabase.js';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form');
+    const fileInput = document.getElementById('files');
+    const fileList = document.getElementById('file-list');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const loadingText = document.getElementById('loading-text');
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('error-message');
+
+    // 文件上传处理
+    fileInput.addEventListener('change', (e) => {
+      const files = e.target.files;
+      displayFileList(files);
+    });
+
+    // 拖拽上传
+    const uploadArea = fileInput.parentElement;
+    
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('border-purple-400', 'bg-purple-50');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('border-purple-400', 'bg-purple-50');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('border-purple-400', 'bg-purple-50');
+      
+      const files = e.dataTransfer.files;
+      fileInput.files = files;
+      displayFileList(files);
+    });
+
+    // 表单提交处理
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // 显示加载状态
+      submitBtn.disabled = true;
+      submitText.classList.add('hidden');
+      loadingText.classList.remove('hidden');
+      
+      // 隐藏之前的消息
+      successMessage.classList.add('hidden');
+      errorMessage.classList.add('hidden');
+
+      try {
+        const formData = new FormData(form);
+        let fileUrls = [];
+
+        // 先上传文件（如果有的话）
+        const files = fileInput.files;
+        if (files && files.length > 0) {
+          const uploadPromises = Array.from(files).map(file => uploadFile(file));
+          const uploadResults = await Promise.all(uploadPromises);
+          fileUrls = uploadResults.map(result => result.url);
+        }
+
+        // 准备提交数据
+        const contactData = {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          company: formData.get('company'),
+          phone: formData.get('phone'),
+          message: `服务类型: ${formData.get('service') || '未选择'}
+数量范围: ${formData.get('quantity') || '未选择'}
+联系偏好: ${formData.get('contact_preference')}
+
+项目描述:
+${formData.get('description')}
+
+${fileUrls.length > 0 ? `上传文件: ${fileUrls.join(', ')}` : ''}`,
+          source: 'contact_form'
+        };
+
+        // 提交到Supabase
+        await submitContactForm(contactData);
+
+        // 成功
+        successMessage.classList.remove('hidden');
+        form.reset();
+        fileList.classList.add('hidden');
+        fileList.innerHTML = '';
+        
+        // 追踪转化事件
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'contact_form_submit', {
+            'event_category': 'engagement',
+            'event_label': 'contact_page'
+          });
+        }
+
+      } catch (error) {
+        console.error('表单提交错误:', error);
+        errorMessage.classList.remove('hidden');
+        
+        // 显示具体错误信息
+        const errorText = errorMessage.querySelector('p');
+        if (errorText) {
+          errorText.textContent = error.message || '提交过程中出现了问题，请重试或直接联系我们。';
+        }
+      } finally {
+        // 恢复按钮状态
+        submitBtn.disabled = false;
+        submitText.classList.remove('hidden');
+        loadingText.classList.add('hidden');
+      }
+    });
+
+    function displayFileList(files) {
+      if (files.length === 0) {
+        fileList.classList.add('hidden');
+        return;
+      }
+
+      fileList.classList.remove('hidden');
+      fileList.innerHTML = '';
+
+      Array.from(files).forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg';
+        
+        const fileSize = formatFileSize(file.size);
+        const fileExtension = file.name.split('.').pop().toUpperCase();
+        
+        fileItem.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+              <span class="text-xs font-bold text-purple-600">${fileExtension}</span>
+            </div>
+            <div>
+              <div class="font-medium text-gray-800">${file.name}</div>
+              <div class="text-sm text-gray-500">${fileSize}</div>
+            </div>
+          </div>
+          <button type="button" onclick="removeFile(${index})" class="text-red-500 hover:text-red-700 p-1">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        `;
+        
+        fileList.appendChild(fileItem);
+      });
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // 全局函数用于删除文件
+    window.removeFile = (index) => {
+      const dt = new DataTransfer();
+      const files = Array.from(fileInput.files);
+      
+      files.splice(index, 1);
+      
+      files.forEach(file => dt.items.add(file));
+      fileInput.files = dt.files;
+      
+      displayFileList(fileInput.files);
+    };
+  });
+</script>

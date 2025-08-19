@@ -1,0 +1,425 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TrustIndicators from '../../components/sections/TrustIndicators.astro';
+---
+
+<BaseLayout 
+  title="Why Choose Geppetto | AI Manufacturing Advantages | Superior Quality" 
+  description="Discover why Geppetto is the leading choice for AI-powered precision manufacturing. 24-hour delivery, ±0.05mm precision, 50-70% cost savings, and industry certifications."
+>
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-20">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="text-5xl font-bold mb-6">
+            Why Choose Geppetto?
+          </h1>
+          <p class="text-2xl text-blue-100 mb-8">
+            Revolutionary AI-Powered Manufacturing • Industry-Leading Performance • Unmatched Value
+          </p>
+          
+          <!-- Key Stats -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl font-bold text-yellow-300 mb-2">500+</div>
+              <div class="text-lg">Happy Customers</div>
+              <div class="text-sm text-blue-200">From Startups to Fortune 500</div>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl font-bold text-yellow-300 mb-2">99.8%</div>
+              <div class="text-lg">On-Time Delivery</div>
+              <div class="text-sm text-blue-200">Guaranteed Performance</div>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl font-bold text-yellow-300 mb-2">50-70%</div>
+              <div class="text-lg">Cost Savings</div>
+              <div class="text-sm text-blue-200">vs Traditional Suppliers</div>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl font-bold text-yellow-300 mb-2">±0.05mm</div>
+              <div class="text-lg">Precision</div>
+              <div class="text-sm text-blue-200">Beyond Industry Standards</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Advantages -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-gray-900 mb-4">
+            Our Competitive Advantages
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            See how Geppetto outperforms traditional manufacturing suppliers in every key metric
+          </p>
+        </div>
+        
+        <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+          <div>
+            <h3 class="text-3xl font-bold text-gray-900 mb-6">🚀 AI-Powered Speed Revolution</h3>
+            <div class="space-y-6">
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center font-bold flex-shrink-0">4-8hrs</div>
+                <div>
+                  <h4 class="text-lg font-bold text-gray-900 mb-2">Instant Quote Promise</h4>
+                  <p class="text-gray-600">AI analyzes your CAD files in seconds, expert validation in 4-8 hours vs. traditional 3-7 days</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center font-bold flex-shrink-0">24hrs</div>
+                <div>
+                  <h4 class="text-lg font-bold text-gray-900 mb-2">Rush Order Delivery</h4>
+                  <p class="text-gray-600">AI-optimized production scheduling enables 24-48 hour delivery vs. traditional 7-15 days</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center font-bold flex-shrink-0">1pc</div>
+                <div>
+                  <h4 class="text-lg font-bold text-gray-900 mb-2">No MOQ Flexibility</h4>
+                  <p class="text-gray-600">Single piece manufacturing vs. traditional 50-100 piece minimum orders</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8">
+            <h4 class="text-2xl font-bold text-gray-900 mb-6 text-center">Speed Comparison</h4>
+            <div class="space-y-4">
+              <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                <span class="font-medium text-gray-700">Quote Time</span>
+                <div class="flex items-center space-x-4">
+                  <span class="text-green-600 font-bold">4-8 hours</span>
+                  <span class="text-gray-400">vs</span>
+                  <span class="text-red-600">3-7 days</span>
+                </div>
+              </div>
+              <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                <span class="font-medium text-gray-700">Production Time</span>
+                <div class="flex items-center space-x-4">
+                  <span class="text-green-600 font-bold">24-48 hours</span>
+                  <span class="text-gray-400">vs</span>
+                  <span class="text-red-600">7-15 days</span>
+                </div>
+              </div>
+              <div class="flex justify-between items-center py-3">
+                <span class="font-medium text-gray-700">Minimum Order</span>
+                <div class="flex items-center space-x-4">
+                  <span class="text-green-600 font-bold">1 piece</span>
+                  <span class="text-gray-400">vs</span>
+                  <span class="text-red-600">50-100 pcs</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div class="order-2 lg:order-1">
+            <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8">
+              <h4 class="text-2xl font-bold text-gray-900 mb-6 text-center">Quality & Cost Comparison</h4>
+              <div class="space-y-4">
+                <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                  <span class="font-medium text-gray-700">Precision</span>
+                  <div class="flex items-center space-x-4">
+                    <span class="text-green-600 font-bold">±0.05mm</span>
+                    <span class="text-gray-400">vs</span>
+                    <span class="text-yellow-600">±0.1mm</span>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                  <span class="font-medium text-gray-700">Cost Savings</span>
+                  <div class="flex items-center space-x-4">
+                    <span class="text-green-600 font-bold">50-70% lower</span>
+                    <span class="text-gray-400">vs</span>
+                    <span class="text-red-600">Standard pricing</span>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center py-3">
+                  <span class="font-medium text-gray-700">Quality Rate</span>
+                  <div class="flex items-center space-x-4">
+                    <span class="text-green-600 font-bold">99.8%</span>
+                    <span class="text-gray-400">vs</span>
+                    <span class="text-yellow-600">95-98%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="order-1 lg:order-2">
+            <h3 class="text-3xl font-bold text-gray-900 mb-6">💰 Unmatched Cost Efficiency</h3>
+            <div class="space-y-6">
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center font-bold flex-shrink-0">AI</div>
+                <div>
+                  <h4 class="text-lg font-bold text-gray-900 mb-2">AI Optimization</h4>
+                  <p class="text-gray-600">Automated processes reduce material waste by 30% and labor costs by 50%</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center font-bold flex-shrink-0">±0.05</div>
+                <div>
+                  <h4 class="text-lg font-bold text-gray-900 mb-2">Superior Precision</h4>
+                  <p class="text-gray-600">±0.05mm precision guarantee exceeds industry standards, reducing rework</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center font-bold flex-shrink-0">$0</div>
+                <div>
+                  <h4 class="text-lg font-bold text-gray-900 mb-2">No Hidden Costs</h4>
+                  <p class="text-gray-600">Transparent pricing with no setup fees, tooling costs, or surprise charges</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Indicators -->
+    <TrustIndicators />
+
+    <!-- Technology Innovation -->
+    <section class="py-20 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-gray-900 mb-4">
+            🤖 Technology Innovation
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Our proprietary AI system revolutionizes traditional manufacturing processes
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-2xl mb-6">🧠</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Smart CAD Analysis</h3>
+            <p class="text-gray-600 mb-4">AI instantly recognizes geometry, materials, tolerances, and manufacturing requirements from your CAD files.</p>
+            <ul class="text-sm text-gray-600 space-y-2">
+              <li>• Automatic feature recognition</li>
+              <li>• Material optimization suggestions</li>
+              <li>• Tolerance analysis</li>
+              <li>• Manufacturing feasibility check</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-2xl mb-6">⚙️</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Intelligent Process Planning</h3>
+            <p class="text-gray-600 mb-4">AI optimizes machining strategies, tool selection, and cutting parameters for maximum efficiency.</p>
+            <ul class="text-sm text-gray-600 space-y-2">
+              <li>• Optimal toolpath generation</li>
+              <li>• Smart tool selection</li>
+              <li>• Parameter optimization</li>
+              <li>• Time estimation accuracy</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div class="w-16 h-16 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-2xl mb-6">📊</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Real-time Quality Control</h3>
+            <p class="text-gray-600 mb-4">AI monitors production in real-time, ensuring consistent quality and preventing defects.</p>
+            <ul class="text-sm text-gray-600 space-y-2">
+              <li>• Live process monitoring</li>
+              <li>• Predictive quality analytics</li>
+              <li>• Automatic adjustments</li>
+              <li>• Quality reporting</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Customer Success Stories -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-gray-900 mb-4">
+            Customer Success Stories
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Real results from companies who chose Geppetto for their manufacturing needs
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-12">
+          <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-8">
+            <div class="flex items-center mb-6">
+              <div class="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl">AC</div>
+              <div class="ml-4">
+                <h4 class="text-lg font-bold text-gray-900">Advanced Robotics Corp.</h4>
+                <p class="text-gray-600">Robotics Manufacturing</p>
+              </div>
+            </div>
+            <blockquote class="text-gray-700 italic mb-6">
+              "Geppetto exceeded our expectations in every way. Their AI-powered system achieved ±0.03mm precision when we only required ±0.05mm, delivered 60% cost savings, and became our trusted manufacturing partner."
+            </blockquote>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-green-600">±0.03mm</div>
+                <div class="text-sm text-gray-600">Precision Achieved</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-green-600">60%</div>
+                <div class="text-sm text-gray-600">Cost Reduction</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-8">
+            <div class="flex items-center mb-6">
+              <div class="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl">MI</div>
+              <div class="ml-4">
+                <h4 class="text-lg font-bold text-gray-900">MedDevice Innovation</h4>
+                <p class="text-gray-600">Medical Device Manufacturing</p>
+              </div>
+            </div>
+            <blockquote class="text-gray-700 italic mb-6">
+              "Quality and traceability are non-negotiable for us. Geppetto's advanced manufacturing technology delivers both consistently, along with competitive pricing and exceptional support."
+            </blockquote>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-blue-600">100%</div>
+                <div class="text-sm text-gray-600">Quality Rate</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-blue-600">48hrs</div>
+                <div class="text-sm text-gray-600">Average Delivery</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- US Market Focus -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            🇺🇸 Designed for American Manufacturing Success
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Deep understanding of US market requirements, regulations, and business practices
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">Why US Companies Trust Geppetto</h3>
+            <div class="space-y-4">
+              <div class="flex items-start space-x-4">
+                <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  🛡️
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-1">US Legal Framework</h4>
+                  <p class="text-gray-600">US-based contracts, IP protection under US law, and compliance with American business practices.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-4">
+                <div class="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  📋
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-1">Industry Standards</h4>
+                  <p class="text-gray-600">Full compliance with ANSI, ASTM, ASME, FDA, ITAR, and other US regulatory requirements.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-4">
+                <div class="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  🌎
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-1">US Business Hours</h4>
+                  <p class="text-gray-600">Extended coverage from 6AM PST to 9PM EST with dedicated US support team.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-4">
+                <div class="w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  💳
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-1">US Payment Systems</h4>
+                  <p class="text-gray-600">Corporate credit cards, ACH transfers, PayPal Business, and Net30 terms for qualified accounts.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">US vs International Comparison</h3>
+            <div class="space-y-4">
+              <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                <span class="text-gray-600">Business Hours Coverage</span>
+                <span class="text-green-600 font-medium">15+ hours/day</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                <span class="text-gray-600">Response Time (US hours)</span>
+                <span class="text-green-600 font-medium">&lt; 2 hours</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                <span class="text-gray-600">US Standards Knowledge</span>
+                <span class="text-green-600 font-medium">Native expertise</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                <span class="text-gray-600">US Logistics Network</span>
+                <span class="text-green-600 font-medium">FedEx/UPS direct</span>
+              </div>
+              <div class="flex justify-between items-center py-2">
+                <span class="text-gray-600">US Payment Methods</span>
+                <span class="text-green-600 font-medium">Full support</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-purple-600 to-blue-500">
+      <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+          Ready to Experience the Geppetto Advantage?
+        </h2>
+        <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+          Join 500+ companies who have revolutionized their manufacturing with Geppetto's AI-powered solutions
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/en/ai-quote" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200 shadow-lg"
+          >
+            🚀 Get Instant AI Quote
+          </a>
+          <a 
+            href="tel:+1-800-GEPPETTO" 
+            class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-purple-600 transition-colors duration-200"
+          >
+            📞 Call US Team
+          </a>
+        </div>
+        
+        <div class="mt-8 text-purple-100 text-sm">
+          💫 Risk-Free Trial • Quality Guarantee • 24/7 Technical Support
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

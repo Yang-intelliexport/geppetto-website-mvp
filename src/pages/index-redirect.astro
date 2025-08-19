@@ -1,0 +1,187 @@
+---
+// Redirect logic for root page
+---
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geppetto - AI-Powered Manufacturing</title>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      text-align: center;
+      background: white;
+      padding: 3rem;
+      border-radius: 1rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: 1rem;
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #7F00FF, #00BFFF);
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+      font-size: 2rem;
+      font-weight: bold;
+      color: white;
+    }
+    
+    h1 {
+      color: #1f2937;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      color: #6b7280;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+    
+    .language-options {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .language-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      color: #374151;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+      background: white;
+    }
+    
+    .language-btn:hover {
+      border-color: #7F00FF;
+      background: #f9fafb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(127, 0, 255, 0.15);
+    }
+    
+    .flag {
+      font-size: 1.5rem;
+      margin-right: 0.75rem;
+    }
+    
+    .market-info {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-top: 0.25rem;
+    }
+    
+    .auto-redirect {
+      color: #6b7280;
+      font-size: 0.9rem;
+      margin-top: 1.5rem;
+    }
+    
+    .countdown {
+      font-weight: bold;
+      color: #7F00FF;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo">G</div>
+    
+    <h1>Welcome to Geppetto</h1>
+    <p class="subtitle">AI-Powered Precision Manufacturing</p>
+    
+    <div class="language-options">
+      <a href="/en" class="language-btn" id="english-btn">
+        <span class="flag">🇺🇸</span>
+        <div>
+          <div>English</div>
+          <div class="market-info">Global & US Market</div>
+        </div>
+      </a>
+      
+      <a href="/zh" class="language-btn" id="chinese-btn">
+        <span class="flag">🇨🇳</span>
+        <div>
+          <div>中文</div>
+          <div class="market-info">中国大陆市场</div>
+        </div>
+      </a>
+    </div>
+    
+    <div class="auto-redirect">
+      Auto-redirecting to English in <span class="countdown" id="countdown">5</span> seconds
+    </div>
+  </div>
+
+  <script>
+    // Auto-detect language and redirect
+    let countdown = 5;
+    const countdownElement = document.getElementById('countdown');
+    
+    // Update countdown
+    const timer = setInterval(() => {
+      countdown--;
+      if (countdownElement) {
+        countdownElement.textContent = countdown.toString();
+      }
+      
+      if (countdown <= 0) {
+        clearInterval(timer);
+        // Detect browser language
+        const browserLang = navigator.language || navigator.languages[0];
+        
+        if (browserLang.startsWith('zh')) {
+          window.location.href = '/zh';
+        } else {
+          window.location.href = '/en';
+        }
+      }
+    }, 1000);
+    
+    // Manual selection stops auto-redirect
+    document.getElementById('english-btn')?.addEventListener('click', () => {
+      clearInterval(timer);
+    });
+    
+    document.getElementById('chinese-btn')?.addEventListener('click', () => {
+      clearInterval(timer);
+    });
+    
+    // Also detect browser language preference immediately
+    const browserLang = navigator.language || navigator.languages[0];
+    if (browserLang.startsWith('zh')) {
+      // Highlight Chinese option
+      document.getElementById('chinese-btn')?.style.setProperty('border-color', '#7F00FF');
+    } else {
+      // Highlight English option  
+      document.getElementById('english-btn')?.style.setProperty('border-color', '#7F00FF');
+    }
+  </script>
+</body>
+</html>

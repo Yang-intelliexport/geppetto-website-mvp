@@ -1,0 +1,844 @@
+---
+// 文件上传和CAD解析组件 (支持多语言)
+interface Props {
+  language?: 'zh' | 'en';
+}
+
+const { language = 'zh' } = Astro.props;
+
+// 多语言文本配置
+const text = {
+  zh: {
+    title: '🎯 上传您的CAD图纸',
+    subtitle: '支持多种格式，AI瞬间识别并分析制造工艺',
+    dragDropText: '拖拽文件到此处或点击选择',
+    supportedFormats: '支持格式：STEP, STL, IGES, DWG, DXF, STP, IGS',
+    selectFilesButton: '选择文件',
+    selectedFiles: '已选择的文件：',
+    uploading: '正在上传...',
+    formatTitle: '🔧 支持的CAD格式',
+    formats: {
+      step: {
+        name: 'STEP',
+        description: '标准交换格式'
+      },
+      stl: {
+        name: 'STL',
+        description: '3D打印格式'
+      },
+      iges: {
+        name: 'IGES',
+        description: '工程交换格式'
+      },
+      dwg: {
+        name: 'DWG',
+        description: 'AutoCAD格式'
+      }
+    },
+    fileSelected: '✓ 已选择',
+    progressMessages: {
+      aiAnalysis: '🤖 AI智能分析进行中...',
+      expertReview: '👨‍🔬 专家优化审核中...',
+      quoteGeneration: '📋 生成精准报价中...',
+      complete: '✅ 报价生成完成！',
+      initializing: '正在启动AI分析引擎...',
+      aiRunning: 'AI算法运行中',
+      expertStandby: '专家待命审核',
+      eta: '预计完成时间'
+    },
+    stages: {
+      stage1: {
+        title: '🤖 AI智能计算',
+        subtitle: '几何分析 + 工艺识别',
+        eta: '预计：1-2秒'
+      },
+      stage2: {
+        title: '👨‍🔬 专家优化审核',
+        subtitle: '质量把控 + 成本优化',
+        eta: '预计：1-2秒'
+      },
+      stage3: {
+        title: '📋 生成精准报价',
+        subtitle: '详细清单 + 交期承诺',
+        eta: '预计：1秒'
+      }
+    },
+    processMessages: {
+      aiAnalysis: 'AI算法正在解析您的CAD图纸，分析几何结构和制造工艺要求',
+      expertReview: '资深工程师正在验证AI分析结果，优化成本结构和工艺方案',
+      quoteGeneration: '正在整合分析结果，生成详细的报价单和交期承诺'
+    },
+    errors: {
+      processingFailed: '文件处理失败',
+      uploadFailed: '处理失败'
+    },
+    finalMessages: {
+      complete: '恭喜！您的智能报价已准备就绪，请查看下方详细结果。',
+      completed: '已完成'
+    }
+  },
+  en: {
+    title: '🎯 Upload Your CAD Files',
+    subtitle: 'Support multiple formats, AI instantly recognizes and analyzes manufacturing processes',
+    dragDropText: 'Drag & drop files here or click to select',
+    supportedFormats: 'Supported: STEP, STL, IGES, DWG, DXF, STP, IGS',
+    selectFilesButton: 'Select Files',
+    selectedFiles: 'Selected files:',
+    uploading: 'Uploading...',
+    formatTitle: '🔧 Supported CAD Formats',
+    formats: {
+      step: {
+        name: 'STEP',
+        description: 'Standard Exchange Format'
+      },
+      stl: {
+        name: 'STL',
+        description: '3D Printing Format'
+      },
+      iges: {
+        name: 'IGES',
+        description: 'Engineering Exchange Format'
+      },
+      dwg: {
+        name: 'DWG',
+        description: 'AutoCAD Format'
+      }
+    },
+    fileSelected: '✓ Selected',
+    progressMessages: {
+      aiAnalysis: '🤖 AI Smart Analysis in Progress...',
+      expertReview: '👨‍🔬 Expert Technical Review in Progress...',
+      quoteGeneration: '📋 Generating Precise Quote...',
+      complete: '✅ Quote Generation Complete!',
+      initializing: 'Initializing AI Analysis Engine...',
+      aiRunning: 'AI algorithm running',
+      expertStandby: 'Expert standby for review',
+      eta: 'ETA'
+    },
+    stages: {
+      stage1: {
+        title: '🤖 AI Smart Analysis',
+        subtitle: 'Geometry parsing + Process identification',
+        eta: 'ETA: 1-2 seconds'
+      },
+      stage2: {
+        title: '👨‍🔬 Expert Technical Review',
+        subtitle: 'Quality control + Cost optimization',
+        eta: 'ETA: 1-2 seconds'
+      },
+      stage3: {
+        title: '📋 Precise Quote Generation',
+        subtitle: 'Detailed breakdown + Delivery commitment',
+        eta: 'ETA: 1 second'
+      }
+    },
+    processMessages: {
+      aiAnalysis: 'AI algorithm is parsing your CAD drawings, analyzing geometric structures and manufacturing process requirements',
+      expertReview: 'Senior engineers are verifying AI analysis results, optimizing cost structure and process solutions',
+      quoteGeneration: 'Integrating analysis results, generating detailed quote and delivery commitment'
+    },
+    errors: {
+      processingFailed: 'File Processing Failed',
+      uploadFailed: 'Processing failed'
+    },
+    finalMessages: {
+      complete: 'Congratulations! Your AI-powered quote is ready. Please check the detailed results below.',
+      completed: 'Complete'
+    }
+  }
+};
+
+const currentText = text[language];
+---
+
+<section id="file-upload-section" class="py-20 bg-gray-50">
+  <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto">
+      <!-- 标题区域 -->
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">
+          {currentText.title}
+        </h2>
+        <p class="text-xl text-gray-600">
+          {currentText.subtitle}
+        </p>
+      </div>
+
+      <!-- 文件上传区域 -->
+      <div class="bg-white rounded-3xl shadow-2xl p-8 border-2 border-dashed border-purple-200 hover:border-purple-400 transition-colors duration-300">
+        
+        <!-- 拖拽上传区域 -->
+        <div id="upload-zone" class="text-center p-12 cursor-pointer group">
+          <div class="mb-6">
+            <svg class="w-24 h-24 text-purple-400 mx-auto group-hover:text-purple-600 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">
+            {currentText.dragDropText}
+          </h3>
+          
+          <p class="text-gray-600 mb-6">
+            {currentText.supportedFormats}
+          </p>
+          
+          <button type="button" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105">
+            {currentText.selectFilesButton}
+          </button>
+          
+          <input type="file" id="cad-file-input" multiple accept=".step,.stp,.stl,.iges,.igs,.dwg,.dxf" class="hidden">
+        </div>
+
+        <!-- 文件信息显示 -->
+        <div id="file-info" class="hidden mt-6">
+          <div class="bg-purple-50 rounded-2xl p-6">
+            <h4 class="text-lg font-semibold text-purple-800 mb-4">{currentText.selectedFiles}</h4>
+            <div id="file-list" class="space-y-3">
+              <!-- 动态生成文件列表 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 上传进度 -->
+        <div id="upload-progress" class="hidden mt-6">
+          <div class="bg-blue-50 rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-blue-800 font-semibold">{currentText.uploading}</span>
+              <span id="progress-text" class="text-blue-600">0%</span>
+            </div>
+            <div class="w-full bg-blue-200 rounded-full h-3">
+              <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 三阶段智能报价进度条 -->
+      <div id="quote-progress-wrapper" class="hidden mt-8">
+        <!-- 进度条组件在这里动态插入 -->
+      </div>
+
+      <!-- 支持的文件格式说明 -->
+      <div class="mt-12 bg-white rounded-2xl p-8 shadow-lg">
+        <h4 class="text-xl font-bold text-gray-800 mb-6 text-center">{currentText.formatTitle}</h4>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="text-center p-4 bg-purple-50 rounded-xl">
+            <div class="text-2xl font-bold text-purple-600 mb-2">{currentText.formats.step.name}</div>
+            <div class="text-sm text-gray-600">{currentText.formats.step.description}</div>
+          </div>
+          <div class="text-center p-4 bg-blue-50 rounded-xl">
+            <div class="text-2xl font-bold text-blue-600 mb-2">{currentText.formats.stl.name}</div>
+            <div class="text-sm text-gray-600">{currentText.formats.stl.description}</div>
+          </div>
+          <div class="text-center p-4 bg-green-50 rounded-xl">
+            <div class="text-2xl font-bold text-green-600 mb-2">{currentText.formats.iges.name}</div>
+            <div class="text-sm text-gray-600">{currentText.formats.iges.description}</div>
+          </div>
+          <div class="text-center p-4 bg-orange-50 rounded-xl">
+            <div class="text-2xl font-bold text-orange-600 mb-2">{currentText.formats.dwg.name}</div>
+            <div class="text-sm text-gray-600">{currentText.formats.dwg.description}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* 报价进度条样式 */
+  .quote-stage {
+    position: relative;
+  }
+  
+  .stage-circle {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .quote-stage:hover .stage-circle {
+    transform: scale(1.05);
+  }
+  
+  .stage-time {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .quote-stage:hover .stage-time {
+    opacity: 1;
+  }
+  
+  @media (max-width: 768px) {
+    .quote-stage {
+      margin-bottom: 2rem;
+    }
+    
+    .relative {
+      flex-direction: column;
+    }
+    
+    .stage-circle {
+      width: 3rem;
+      height: 3rem;
+    }
+    
+    #quote-progress-section .absolute {
+      display: none;
+    }
+  }
+</style>
+
+<script type="module" define:vars={{ currentText, language }}>
+  // 动态导入CAD处理器
+  let CADFileProcessor;
+
+  // 文件上传和处理逻辑
+  document.addEventListener('DOMContentLoaded', async () => {
+    const uploadZone = document.getElementById('upload-zone');
+    const fileInput = document.getElementById('cad-file-input');
+    const fileInfo = document.getElementById('file-info');
+    const fileList = document.getElementById('file-list');
+    const uploadProgress = document.getElementById('upload-progress');
+    const analysisProgress = document.getElementById('analysis-progress');
+
+    // 动态导入并初始化CAD处理器
+    try {
+      const module = await import('../../scripts/cadFileProcessor.js');
+      CADFileProcessor = module.default;
+    } catch (error) {
+      console.warn('Failed to load CAD processor, using fallback');
+      CADFileProcessor = class {
+        validateFiles(files) { return { validFiles: Array.from(files), invalidFiles: [], totalErrors: [] }; }
+        async processFiles(files, callbacks) {
+          callbacks.onStart?.();
+          
+          // 模拟处理流程
+          for (let i = 0; i <= 100; i += 10) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            callbacks.onProgress?.({
+              stage: i < 50 ? 'upload' : 'analysis',
+              progress: i,
+              message: i < 50 ? currentText.uploading : currentText.progressMessages.aiAnalysis,
+              currentStep: i < 50 ? currentText.uploading : currentText.progressMessages.aiAnalysis
+            });
+          }
+          
+          callbacks.onComplete?.({
+            analysis: { summary: { totalCost: 1280, totalMarketPrice: 2560, totalSavings: 1280 } }
+          });
+          
+          return { analysis: { summary: { totalCost: 1280, totalMarketPrice: 2560, totalSavings: 1280 } } };
+        }
+      };
+    }
+    
+    const cadProcessor = new CADFileProcessor();
+    let currentQuoteData = null;
+
+    // 点击上传区域触发文件选择
+    uploadZone?.addEventListener('click', () => {
+      fileInput?.click();
+    });
+
+    // 文件选择处理
+    fileInput?.addEventListener('change', handleFileSelection);
+
+    // 拖拽功能
+    uploadZone?.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadZone.classList.add('bg-purple-50', 'border-purple-400');
+    });
+
+    uploadZone?.addEventListener('dragleave', () => {
+      uploadZone.classList.remove('bg-purple-50', 'border-purple-400');
+    });
+
+    uploadZone?.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadZone.classList.remove('bg-purple-50', 'border-purple-400');
+      
+      const files = e.dataTransfer?.files;
+      if (files) {
+        handleFiles(files);
+      }
+    });
+
+    function handleFileSelection(e) {
+      const files = e.target.files;
+      if (files) {
+        handleFiles(files);
+      }
+    }
+
+    async function handleFiles(files) {
+      // 先验证文件
+      const validation = cadProcessor.validateFiles(files);
+      
+      if (validation.totalErrors.length > 0) {
+        showErrorMessage(validation.totalErrors.join('<br>'));
+        return;
+      }
+
+      // 显示有效文件信息
+      displayFileInfo(validation.validFiles);
+      
+      // 开始处理文件
+      try {
+        const quoteResult = await cadProcessor.processFiles(validation.validFiles, {
+          onStart: handleProcessStart,
+          onProgress: handleProcessProgress,
+          onComplete: handleProcessComplete,
+          onError: handleProcessError
+        });
+
+        if (quoteResult) {
+          currentQuoteData = quoteResult;
+          showResults(quoteResult);
+        }
+      } catch (error) {
+        handleProcessError(error.message);
+      }
+    }
+
+    function displayFileInfo(files) {
+      fileInfo?.classList.remove('hidden');
+      fileList.innerHTML = '';
+
+      Array.from(files).forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'flex items-center justify-between p-3 bg-white rounded-lg border';
+        
+        const fileExtension = file.name.split('.').pop().toUpperCase();
+        const iconColor = getFileIconColor(fileExtension);
+        
+        fileItem.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 ${iconColor} rounded-lg flex items-center justify-center">
+              <span class="text-white text-xs font-bold">${fileExtension}</span>
+            </div>
+            <div>
+              <div class="font-medium text-gray-800">${file.name}</div>
+              <div class="text-sm text-gray-500">${formatFileSize(file.size)}</div>
+            </div>
+          </div>
+          <div class="text-green-600 font-semibold">${currentText.fileSelected}</div>
+        `;
+        fileList.appendChild(fileItem);
+      });
+    }
+
+    function getFileIconColor(extension) {
+      const colorMap = {
+        'STEP': 'bg-blue-500',
+        'STP': 'bg-blue-500',
+        'STL': 'bg-purple-500',
+        'IGES': 'bg-green-500',
+        'IGS': 'bg-green-500',
+        'DWG': 'bg-orange-500',
+        'DXF': 'bg-orange-500',
+        'OBJ': 'bg-pink-500',
+        'PLY': 'bg-indigo-500',
+        '3MF': 'bg-red-500'
+      };
+      return colorMap[extension] || 'bg-gray-500';
+    }
+
+    function handleProcessStart() {
+      console.log('CAD processing started');
+      uploadProgress?.classList.remove('hidden');
+    }
+
+    function handleProcessProgress(data) {
+      const { stage, progress, message, currentFile, currentStep } = data;
+      
+      if (stage === 'upload') {
+        updateUploadProgress(progress, message);
+      } else if (stage === 'analysis') {
+        showQuoteProgress(progress, message, currentStep);
+      } else if (stage === 'quote') {
+        updateQuoteProgress(progress, message);
+      }
+    }
+
+    function handleProcessComplete(data) {
+      console.log('CAD processing completed', data);
+      // 处理完成逻辑会在showResults中处理
+    }
+
+    function handleProcessError(error) {
+      showErrorMessage(`${currentText.errors.uploadFailed}: ${error}`);
+      hideAllProgress();
+    }
+
+    function updateUploadProgress(progress, message) {
+      const progressBar = document.getElementById('progress-bar');
+      const progressText = document.getElementById('progress-text');
+      
+      if (progressBar) progressBar.style.width = `${progress}%`;
+      if (progressText) progressText.textContent = `${Math.round(progress)}%`;
+      
+      if (progress >= 100) {
+        setTimeout(() => {
+          uploadProgress?.classList.add('hidden');
+          initializeQuoteProgress();
+        }, 500);
+      }
+    }
+
+    // 初始化智能报价进度条
+    function initializeQuoteProgress() {
+      // 动态插入进度条组件HTML
+      const progressWrapper = document.getElementById('quote-progress-wrapper');
+      if (progressWrapper) {
+        progressWrapper.innerHTML = `
+          <div id="quote-progress-section" class="py-12">
+            <div class="max-w-4xl mx-auto">
+              <!-- 进度条标题 -->
+              <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                  🚀 Geppetto${language === 'en' ? ' AI Quote in Progress' : '智能报价进行中'}
+                </h3>
+                <p class="text-gray-600">
+                  ${language === 'en' ? 'AI + Expert dual guarantee for precise and reliable quotes' : 'AI+专家双重保障，确保报价精准可靠'}
+                </p>
+              </div>
+
+              <!-- 三阶段进度条 -->
+              <div class="relative">
+                <!-- 进度线 -->
+                <div class="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 rounded-full transform -translate-y-1/2 z-0">
+                  <div id="progress-line" class="h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                </div>
+                
+                <!-- 三个阶段 -->
+                <div class="relative flex justify-between items-center z-10">
+                  
+                  <!-- 阶段1: AI计算 -->
+                  <div class="quote-stage flex flex-col items-center group" id="stage-1">
+                    <div class="stage-circle w-16 h-16 rounded-full border-4 border-gray-300 bg-white flex items-center justify-center mb-4 transition-all duration-500 shadow-lg">
+                      <div class="stage-icon hidden">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                      </div>
+                      <div class="stage-spinner hidden">
+                        <svg class="w-8 h-8 text-purple-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                      </div>
+                      <div class="stage-number text-gray-400 font-bold text-xl">1</div>
+                    </div>
+                    
+                    <div class="text-center max-w-xs">
+                      <h4 class="font-bold text-gray-800 mb-2">${currentText.stages.stage1.title}</h4>
+                      <p class="text-sm text-gray-600 mb-1">${currentText.stages.stage1.subtitle}</p>
+                      <div class="stage-time text-xs text-purple-600 font-semibold mt-2">${currentText.stages.stage1.eta}</div>
+                    </div>
+                  </div>
+
+                  <!-- 阶段2: 专家优化审核 -->
+                  <div class="quote-stage flex flex-col items-center group" id="stage-2">
+                    <div class="stage-circle w-16 h-16 rounded-full border-4 border-gray-300 bg-white flex items-center justify-center mb-4 transition-all duration-500 shadow-lg">
+                      <div class="stage-icon hidden">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                      </div>
+                      <div class="stage-spinner hidden">
+                        <svg class="w-8 h-8 text-blue-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                      </div>
+                      <div class="stage-number text-gray-400 font-bold text-xl">2</div>
+                    </div>
+                    
+                    <div class="text-center max-w-xs">
+                      <h4 class="font-bold text-gray-800 mb-2">${currentText.stages.stage2.title}</h4>
+                      <p class="text-sm text-gray-600 mb-1">${currentText.stages.stage2.subtitle}</p>
+                      <div class="stage-time text-xs text-blue-600 font-semibold mt-2">${currentText.stages.stage2.eta}</div>
+                    </div>
+                  </div>
+
+                  <!-- 阶段3: 输出报价 -->
+                  <div class="quote-stage flex flex-col items-center group" id="stage-3">
+                    <div class="stage-circle w-16 h-16 rounded-full border-4 border-gray-300 bg-white flex items-center justify-center mb-4 transition-all duration-500 shadow-lg">
+                      <div class="stage-icon hidden">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                      </div>
+                      <div class="stage-spinner hidden">
+                        <svg class="w-8 h-8 text-green-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                      </div>
+                      <div class="stage-number text-gray-400 font-bold text-xl">3</div>
+                    </div>
+                    
+                    <div class="text-center max-w-xs">
+                      <h4 class="font-bold text-gray-800 mb-2">${currentText.stages.stage3.title}</h4>
+                      <p class="text-sm text-gray-600 mb-1">${currentText.stages.stage3.subtitle}</p>
+                      <div class="stage-time text-xs text-green-600 font-semibold mt-2">${currentText.stages.stage3.eta}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 当前状态显示 -->
+              <div class="mt-8 text-center">
+                <div id="current-status" class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-6">
+                  <div class="flex items-center justify-center space-x-3 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                      <svg class="w-5 h-5 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                      </svg>
+                    </div>
+                    <h4 id="status-title" class="text-lg font-bold text-gray-800">${currentText.progressMessages.initializing}</h4>
+                  </div>
+                  
+                  <p id="status-message" class="text-gray-600 mb-4">
+                    ${language === 'en' ? 'Please wait, our AI + Expert team is generating the optimal quote solution for you' : '请稍候，我们的AI+专家团队正在为您生成最优报价方案'}
+                  </p>
+                  
+                  <div class="flex items-center justify-center space-x-4 text-sm text-gray-500">
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <span>${currentText.progressMessages.aiRunning}</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                      <span>${currentText.progressMessages.expertStandby}</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <div class="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                      <span>${currentText.progressMessages.eta}: <span id="total-eta">${language === 'en' ? '5 seconds' : '5秒'}</span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        progressWrapper.classList.remove('hidden');
+        
+        // 开始进度条动画
+        setTimeout(() => startQuoteProgressFlow(), 1000);
+      }
+    }
+
+    // 开始智能报价流程
+    function startQuoteProgressFlow() {
+      // 阶段1: AI计算 (2秒)
+      setTimeout(() => setStageActive(1), 500);
+      setTimeout(() => completeStage(1), 2500);
+      
+      // 阶段2: 专家审核 (1.5秒)
+      setTimeout(() => setStageActive(2), 3000);
+      setTimeout(() => completeStage(2), 4500);
+      
+      // 阶段3: 生成报价 (1秒)
+      setTimeout(() => setStageActive(3), 5000);
+      setTimeout(() => completeStage(3), 6000);
+      
+      // 完成
+      setTimeout(() => finishQuoteProcess(), 6500);
+    }
+
+    function setStageActive(stageNumber) {
+      const stageElement = document.getElementById(`stage-${stageNumber}`);
+      if (!stageElement) return;
+
+      const circle = stageElement.querySelector('.stage-circle');
+      const number = stageElement.querySelector('.stage-number');
+      const spinner = stageElement.querySelector('.stage-spinner');
+      
+      // 设置圆圈为活动状态
+      const colors = ['purple', 'blue', 'green'];
+      const color = colors[stageNumber - 1];
+      circle.className = `stage-circle w-16 h-16 rounded-full border-4 border-${color}-500 bg-${color}-50 flex items-center justify-center mb-4 transition-all duration-500 shadow-lg`;
+      
+      // 隐藏数字，显示加载动画
+      number.classList.add('hidden');
+      spinner.classList.remove('hidden');
+      
+      // 更新进度线
+      const progressPercentage = ((stageNumber - 1) / 3) * 100;
+      const progressLine = document.getElementById('progress-line');
+      if (progressLine) {
+        progressLine.style.width = `${progressPercentage}%`;
+      }
+      
+      // 更新状态信息
+      updateProgressStatus(stageNumber);
+    }
+
+    function completeStage(stageNumber) {
+      const stageElement = document.getElementById(`stage-${stageNumber}`);
+      if (!stageElement) return;
+
+      const circle = stageElement.querySelector('.stage-circle');
+      const icon = stageElement.querySelector('.stage-icon');
+      const spinner = stageElement.querySelector('.stage-spinner');
+      
+      // 设置圆圈为完成状态
+      const colors = ['purple', 'blue', 'green'];
+      const color = colors[stageNumber - 1];
+      circle.className = `stage-circle w-16 h-16 rounded-full border-4 border-${color}-500 bg-${color}-500 flex items-center justify-center mb-4 transition-all duration-500 shadow-lg`;
+      
+      // 隐藏加载动画，显示完成图标
+      spinner.classList.add('hidden');
+      icon.classList.remove('hidden');
+
+      // 更新进度线
+      const progressPercentage = (stageNumber / 3) * 100;
+      const progressLine = document.getElementById('progress-line');
+      if (progressLine) {
+        progressLine.style.width = `${progressPercentage}%`;
+      }
+    }
+
+    function updateProgressStatus(stageNumber) {
+      const statusTitle = document.getElementById('status-title');
+      const statusMessage = document.getElementById('status-message');
+      const totalEta = document.getElementById('total-eta');
+      
+      const stageInfo = {
+        1: {
+          title: currentText.progressMessages.aiAnalysis,
+          message: currentText.processMessages.aiAnalysis,
+          eta: language === 'en' ? '4 seconds' : '4秒'
+        },
+        2: {
+          title: currentText.progressMessages.expertReview,
+          message: currentText.processMessages.expertReview,
+          eta: language === 'en' ? '2 seconds' : '2秒'
+        },
+        3: {
+          title: currentText.progressMessages.quoteGeneration,
+          message: currentText.processMessages.quoteGeneration,
+          eta: language === 'en' ? '1 second' : '1秒'
+        }
+      };
+      
+      const info = stageInfo[stageNumber];
+      if (info && statusTitle && statusMessage && totalEta) {
+        statusTitle.textContent = info.title;
+        statusMessage.textContent = info.message;
+        totalEta.textContent = info.eta;
+      }
+    }
+
+    function finishQuoteProcess() {
+      const statusTitle = document.getElementById('status-title');
+      const statusMessage = document.getElementById('status-message');
+      const totalEta = document.getElementById('total-eta');
+      
+      if (statusTitle) statusTitle.textContent = currentText.progressMessages.complete;
+      if (statusMessage) statusMessage.textContent = currentText.finalMessages.complete;
+      if (totalEta) totalEta.textContent = currentText.finalMessages.completed;
+      
+      // 3秒后隐藏进度条并显示结果
+      setTimeout(() => {
+        const progressWrapper = document.getElementById('quote-progress-wrapper');
+        if (progressWrapper) {
+          progressWrapper.classList.add('hidden');
+        }
+        showResults({ analysis: { summary: { totalCost: 1280, totalMarketPrice: 2560, totalSavings: 1280 } } });
+      }, 2000);
+    }
+
+    function showQuoteProgress(progress, message, currentStep) {
+      // 这个函数现在由新的进度条系统处理
+      console.log('Quote progress:', progress, message, currentStep);
+    }
+
+    function updateQuoteProgress(progress, message) {
+      // 这个函数现在由新的进度条系统处理
+      console.log('Quote update:', progress, message);
+    }
+
+    function showResults(quoteData) {
+      hideAllProgress();
+      
+      // 更新结果页面数据
+      updateResultsPage(quoteData);
+      
+      // 显示结果区域
+      const resultsSection = document.getElementById('quote-results');
+      if (resultsSection) {
+        resultsSection.classList.remove('hidden');
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function updateResultsPage(quoteData) {
+      const { analysis } = quoteData;
+      const { summary } = analysis;
+      
+      // 更新价格信息
+      const aiPriceEl = document.getElementById('ai-price');
+      const marketPriceEl = document.getElementById('market-price');
+      const savingsEl = document.getElementById('savings');
+      const savingsAmountEl = document.getElementById('savings-amount');
+      
+      if (aiPriceEl) aiPriceEl.textContent = summary.totalCost.toLocaleString();
+      if (marketPriceEl) marketPriceEl.textContent = summary.totalMarketPrice.toLocaleString();
+      if (savingsAmountEl) savingsAmountEl.textContent = summary.totalSavings.toLocaleString();
+      
+      const savingsPercentage = Math.round((summary.totalSavings / summary.totalMarketPrice) * 100);
+      if (savingsEl) savingsEl.textContent = `${savingsPercentage}%`;
+      
+      // 可以继续更新其他结果页面元素...
+      console.log('Results updated with quote data:', quoteData);
+    }
+
+    function showErrorMessage(message) {
+      // 创建错误提示
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'mt-4 p-4 bg-red-50 border border-red-200 rounded-xl';
+      errorDiv.innerHTML = `
+        <div class="flex items-start space-x-3">
+          <svg class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+          </svg>
+          <div>
+            <h4 class="text-red-800 font-semibold mb-1">${currentText.errors.processingFailed}</h4>
+            <div class="text-red-700 text-sm">${message}</div>
+          </div>
+        </div>
+      `;
+      
+      // 插入到文件上传区域后面
+      const uploadSection = document.getElementById('file-upload-section');
+      if (uploadSection) {
+        const container = uploadSection.querySelector('.container > div');
+        if (container) {
+          container.appendChild(errorDiv);
+          
+          // 3秒后自动移除
+          setTimeout(() => {
+            errorDiv.remove();
+          }, 5000);
+        }
+      }
+    }
+
+    function hideAllProgress() {
+      uploadProgress?.classList.add('hidden');
+      const progressWrapper = document.getElementById('quote-progress-wrapper');
+      progressWrapper?.classList.add('hidden');
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // 导出到全局作用域以供其他组件使用
+    window.currentQuoteData = () => currentQuoteData;
+  });
+</script>

@@ -1,0 +1,827 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="±0.05mm精度技术能力证明 | Geppetto智能制造" description="深度解析Geppetto如何实现±0.05mm超高精度制造，包含技术原理、设备配置、工艺流程和质量数据验证">
+
+<div class="min-h-screen bg-white">
+  <!-- Hero区域 -->
+  <section class="relative bg-gradient-to-r from-purple-600 to-blue-600 text-white overflow-hidden">
+    <div class="absolute inset-0 bg-black/20"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="text-center">
+        <h1 class="text-5xl font-bold mb-6 leading-tight">
+          ±0.05mm精度技术<br/>
+          <span class="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">完整能力证明</span>
+        </h1>
+        <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+          从设备配置到工艺流程，从AI算法到质量控制，全方位解析Geppetto超高精度制造的技术实力
+        </p>
+        <div class="flex justify-center space-x-4">
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-4">
+            <div class="text-2xl font-bold text-yellow-300">±0.03mm</div>
+            <div class="text-sm text-blue-200">实际平均精度</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-4">
+            <div class="text-2xl font-bold text-yellow-300">±0.008mm</div>
+            <div class="text-sm text-blue-200">最高精度记录</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-4">
+            <div class="text-2xl font-bold text-yellow-300">99.5%</div>
+            <div class="text-sm text-blue-200">一次合格率</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技术体系概览 -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6">
+          🏗️ 四维精度保障体系
+        </h2>
+        <p class="text-xl text-gray-600">
+          设备精度 × AI优化 × 工艺控制 × 质量监控 = 超越行业的精度水平
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- 设备维度 -->
+        <div class="bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 group">
+          <div class="text-center">
+            <div class="w-20 h-20 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <span class="text-3xl">🔧</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4">设备精度</h3>
+            <div class="space-y-2 text-sm text-gray-600">
+              <div>• 德/日进口5轴联动机床</div>
+              <div>• 机床重复定位精度±0.002mm</div>
+              <div>• 恒温车间±1℃控制</div>
+              <div>• 独立防震基础系统</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI维度 -->
+        <div class="bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 group">
+          <div class="text-center">
+            <div class="w-20 h-20 bg-gradient-to-r from-green-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <span class="text-3xl">🤖</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4">AI优化</h3>
+            <div class="space-y-2 text-sm text-gray-600">
+              <div>• 加工路径智能优化</div>
+              <div>• 热变形AI预测补偿</div>
+              <div>• 刀具磨损动态补偿</div>
+              <div>• 参数自适应调整</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 工艺维度 -->
+        <div class="bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 group">
+          <div class="text-center">
+            <div class="w-20 h-20 bg-gradient-to-r from-orange-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <span class="text-3xl">⚙️</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4">工艺控制</h3>
+            <div class="space-y-2 text-sm text-gray-600">
+              <div>• 精密装夹变形控制</div>
+              <div>• 切削参数精确计算</div>
+              <div>• 冷却系统温度管控</div>
+              <div>• 多道次精加工策略</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 质量维度 -->
+        <div class="bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 group">
+          <div class="text-center">
+            <div class="w-20 h-20 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <span class="text-3xl">🔍</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4">质量监控</h3>
+            <div class="space-y-2 text-sm text-gray-600">
+              <div>• 在机实时检测</div>
+              <div>• 三坐标全尺寸检验</div>
+              <div>• SPC统计过程控制</div>
+              <div>• 100%出厂检测</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 核心设备配置 -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6">
+          🏭 核心设备配置详解
+        </h2>
+        <p class="text-xl text-gray-600">
+          每一台设备都是精度保障的基石
+        </p>
+      </div>
+
+      <!-- 主要加工设备 -->
+      <div class="mb-16">
+        <h3 class="text-3xl font-bold text-center text-gray-800 mb-12">主要加工设备</h3>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <!-- DMG MORI -->
+          <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-8">
+            <div class="flex items-center mb-6">
+              <div class="text-4xl mr-4">🇩🇪</div>
+              <div>
+                <h4 class="text-2xl font-bold text-gray-800">DMG MORI DMU 50 eco</h4>
+                <p class="text-gray-600">德国原装5轴联动加工中心</p>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="bg-white rounded-xl p-4">
+                <div class="text-lg font-bold text-blue-600">±0.004mm</div>
+                <div class="text-sm text-gray-600">重复定位精度</div>
+              </div>
+              <div class="bg-white rounded-xl p-4">
+                <div class="text-lg font-bold text-blue-600">24000rpm</div>
+                <div class="text-sm text-gray-600">主轴最高转速</div>
+              </div>
+              <div class="bg-white rounded-xl p-4">
+                <div class="text-lg font-bold text-blue-600">630×500×460mm</div>
+                <div class="text-sm text-gray-600">加工范围</div>
+              </div>
+              <div class="bg-white rounded-xl p-4">
+                <div class="text-lg font-bold text-blue-600">0.001°</div>
+                <div class="text-sm text-gray-600">回转轴分度精度</div>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="flex items-center">
+                <span class="text-green-600 mr-2">✓</span>
+                <span class="text-gray-700">Heidenhain iTNC530数控系统</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-green-600 mr-2">✓</span>
+                <span class="text-gray-700">热变形补偿功能(TCP)</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-green-600 mr-2">✓</span>
+                <span class="text-gray-700">雷尼绍测头在机测量</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MAZAK -->
+          <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-3xl p-8">
+            <div class="flex items-center mb-6">
+              <div class="text-4xl mr-4">🇯🇵</div>
+              <div>
+                <h4 class="text-2xl font-bold text-gray-800">MAZAK VARIAXIS i-500</h4>
+                <p class="text-gray-600">日本马扎克5轴复合加工中心</p>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="bg-white rounded-xl p-4">
+                <div class="text-lg font-bold text-green-600">±0.003mm</div>
+                <div class="text-sm text-gray-600">重复定位精度</div>
+              </div>
+              <div class="bg-white rounded-xl p-4">
+                <div class="text-lg font-bold text-green-600">20000rpm</div>
+                <div class="text-sm text-gray-600">主轴最高转速</div>
+              </div>
+              <div class="bg-white rounded-xl p-4">
+                <div class="text-lg font-bold text-green-600">500×400×350mm</div>
+                <div class="text-sm text-gray-600">加工范围</div>
+              </div>
+              <div class="bg-white rounded-xl p-4">
+                <div class="text-lg font-bold text-green-600">0.0001°</div>
+                <div class="text-sm text-gray-600">回转轴分度精度</div>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="flex items-center">
+                <span class="text-green-600 mr-2">✓</span>
+                <span class="text-gray-700">MAZATROL SmoothG数控系统</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-green-600 mr-2">✓</span>
+                <span class="text-gray-700">Intelligent Thermal Shield技术</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-green-600 mr-2">✓</span>
+                <span class="text-gray-700">车铣复合一体化加工</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 检测设备 -->
+      <div class="mb-16">
+        <h3 class="text-3xl font-bold text-center text-gray-800 mb-12">精密检测设备</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- 三坐标 -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+            <div class="text-center mb-4">
+              <div class="text-3xl mb-2">📐</div>
+              <h4 class="text-lg font-bold text-gray-800">Zeiss CONTURA G2</h4>
+              <p class="text-sm text-gray-600">德国蔡司三坐标测量机</p>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span>测量精度</span>
+                <span class="font-bold text-blue-600">±0.5+L/1000μm</span>
+              </div>
+              <div class="flex justify-between">
+                <span>测量范围</span>
+                <span class="font-medium">700×1000×600mm</span>
+              </div>
+              <div class="flex justify-between">
+                <span>探测系统</span>
+                <span class="font-medium">RDS关节式测头</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 轮廓仪 -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+            <div class="text-center mb-4">
+              <div class="text-3xl mb-2">📊</div>
+              <h4 class="text-lg font-bold text-gray-800">Taylor Hobson PGI 1240</h4>
+              <p class="text-sm text-gray-600">英国泰勒霍普森轮廓仪</p>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span>垂直精度</span>
+                <span class="font-bold text-green-600">1.2nm</span>
+              </div>
+              <div class="flex justify-between">
+                <span>水平精度</span>
+                <span class="font-medium">±0.1μm</span>
+              </div>
+              <div class="flex justify-between">
+                <span>测量长度</span>
+                <span class="font-medium">120mm</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 激光干涉仪 -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+            <div class="text-center mb-4">
+              <div class="text-3xl mb-2">🔬</div>
+              <h4 class="text-lg font-bold text-gray-800">Renishaw XL-80</h4>
+              <p class="text-sm text-gray-600">英国雷尼绍激光干涉仪</p>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span>线性精度</span>
+                <span class="font-bold text-purple-600">±0.5ppm</span>
+              </div>
+              <div class="flex justify-between">
+                <span>测量距离</span>
+                <span class="font-medium">最大80m</span>
+              </div>
+              <div class="flex justify-between">
+                <span>应用</span>
+                <span class="font-medium">机床校准/补偿</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI技术实现 -->
+  <section class="py-20 bg-gradient-to-br from-purple-50 to-blue-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6">
+          🤖 AI精度增强技术
+        </h2>
+        <p class="text-xl text-gray-600">
+          人工智能如何将机床精度推向极限
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- AI算法架构 -->
+        <div class="bg-white rounded-3xl shadow-lg p-8">
+          <h3 class="text-2xl font-bold text-gray-800 mb-6">🧠 AI算法架构</h3>
+          
+          <div class="space-y-6">
+            <!-- 热变形预测 -->
+            <div class="border-l-4 border-blue-500 pl-6">
+              <h4 class="font-bold text-gray-800 mb-2">热变形AI预测模型</h4>
+              <p class="text-gray-600 mb-3">基于深度学习的机床热变形预测与实时补偿</p>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <div class="text-sm font-mono text-gray-700">
+                  Input: 温度传感器数据(25点) + 加工参数<br/>
+                  Model: LSTM神经网络 + 物理约束<br/>
+                  Output: 3轴变形预测值 (精度±0.003mm)
+                </div>
+              </div>
+            </div>
+
+            <!-- 刀具补偿 -->
+            <div class="border-l-4 border-green-500 pl-6">
+              <h4 class="font-bold text-gray-800 mb-2">刀具磨损智能补偿</h4>
+              <p class="text-gray-600 mb-3">实时监控刀具状态，动态调整加工参数</p>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <div class="text-sm font-mono text-gray-700">
+                  监控: 切削力 + 振动 + 声发射<br/>
+                  算法: 随机森林 + 卡尔曼滤波<br/>
+                  响应: 自动刀补 + 参数优化
+                </div>
+              </div>
+            </div>
+
+            <!-- 路径优化 -->
+            <div class="border-l-4 border-purple-500 pl-6">
+              <h4 class="font-bold text-gray-800 mb-2">加工路径智能优化</h4>
+              <p class="text-gray-600 mb-3">最小化装夹变形和加工误差的路径规划</p>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <div class="text-sm font-mono text-gray-700">
+                  输入: CAD模型 + 材料特性 + 装夹方案<br/>
+                  算法: 遗传算法 + 有限元分析<br/>
+                  优化: 变形≤0.01mm + 效率提升30%
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 精度数据 -->
+        <div class="bg-white rounded-3xl shadow-lg p-8">
+          <h3 class="text-2xl font-bold text-gray-800 mb-6">📊 AI优化效果数据</h3>
+          
+          <!-- 精度对比 -->
+          <div class="mb-8">
+            <h4 class="font-bold text-gray-800 mb-4">加工精度对比</h4>
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="text-gray-700">传统加工</span>
+                <div class="flex-1 mx-4 bg-gray-200 rounded-full h-2">
+                  <div class="bg-gray-400 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+                <span class="text-gray-600 font-medium">±0.08mm</span>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <span class="text-gray-700">设备精度</span>
+                <div class="flex-1 mx-4 bg-gray-200 rounded-full h-2">
+                  <div class="bg-blue-500 h-2 rounded-full" style="width: 80%"></div>
+                </div>
+                <span class="text-blue-600 font-medium">±0.05mm</span>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <span class="text-gray-700">AI增强</span>
+                <div class="flex-1 mx-4 bg-gray-200 rounded-full h-2">
+                  <div class="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full" style="width: 95%"></div>
+                </div>
+                <span class="text-purple-600 font-bold">±0.03mm</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 技术指标 -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-4 text-center">
+              <div class="text-2xl font-bold text-blue-600">60%</div>
+              <div class="text-sm text-gray-600">精度提升</div>
+            </div>
+            <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-4 text-center">
+              <div class="text-2xl font-bold text-green-600">85%</div>
+              <div class="text-sm text-gray-600">缺陷预防率</div>
+            </div>
+            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 text-center">
+              <div class="text-2xl font-bold text-purple-600">30%</div>
+              <div class="text-sm text-gray-600">效率提升</div>
+            </div>
+            <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4 text-center">
+              <div class="text-2xl font-bold text-orange-600">90%</div>
+              <div class="text-sm text-gray-600">参数自动优化</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 质量控制流程 -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6">
+          🔍 全程质量控制流程
+        </h2>
+        <p class="text-xl text-gray-600">
+          从原材料到成品，每一步都有精度保障
+        </p>
+      </div>
+
+      <!-- 质量控制时间线 -->
+      <div class="relative">
+        <!-- 时间线 -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-purple-500 to-blue-500 rounded-full"></div>
+        
+        <div class="space-y-12">
+          <!-- 第1步：原材料检验 -->
+          <div class="flex items-center">
+            <div class="flex-1 pr-8 text-right">
+              <div class="bg-white border-2 border-purple-200 rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-3">🔬 原材料检验</h3>
+                <div class="space-y-2 text-sm text-gray-600">
+                  <div>• 材料成分光谱分析</div>
+                  <div>• 硬度分布检测</div>
+                  <div>• 内应力测量</div>
+                  <div>• 尺寸预检验</div>
+                </div>
+                <div class="mt-4 text-xs text-purple-600 font-medium">
+                  ✓ 确保原材料符合精度要求
+                </div>
+              </div>
+            </div>
+            <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold z-10">1</div>
+            <div class="flex-1 pl-8"></div>
+          </div>
+
+          <!-- 第2步：工艺规划 -->
+          <div class="flex items-center">
+            <div class="flex-1 pr-8"></div>
+            <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold z-10">2</div>
+            <div class="flex-1 pl-8">
+              <div class="bg-white border-2 border-blue-200 rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-3">⚙️ AI工艺规划</h3>
+                <div class="space-y-2 text-sm text-gray-600">
+                  <div>• AI优化加工路径</div>
+                  <div>• 装夹变形仿真</div>
+                  <div>• 切削参数计算</div>
+                  <div>• 热变形预测补偿</div>
+                </div>
+                <div class="mt-4 text-xs text-blue-600 font-medium">
+                  ✓ AI算法优化精度潜力
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 第3步：首件检验 -->
+          <div class="flex items-center">
+            <div class="flex-1 pr-8 text-right">
+              <div class="bg-white border-2 border-green-200 rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-3">🎯 首件检验</h3>
+                <div class="space-y-2 text-sm text-gray-600">
+                  <div>• 100%尺寸检测</div>
+                  <div>• 形位公差验证</div>
+                  <div>• 表面粗糙度测量</div>
+                  <div>• 工艺参数确认</div>
+                </div>
+                <div class="mt-4 text-xs text-green-600 font-medium">
+                  ✓ 确保批量生产精度一致性
+                </div>
+              </div>
+            </div>
+            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold z-10">3</div>
+            <div class="flex-1 pl-8"></div>
+          </div>
+
+          <!-- 第4步：过程监控 -->
+          <div class="flex items-center">
+            <div class="flex-1 pr-8"></div>
+            <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold z-10">4</div>
+            <div class="flex-1 pl-8">
+              <div class="bg-white border-2 border-orange-200 rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-3">📊 实时监控</h3>
+                <div class="space-y-2 text-sm text-gray-600">
+                  <div>• 在机测量系统</div>
+                  <div>• SPC统计过程控制</div>
+                  <div>• 每5件抽检</div>
+                  <div>• 异常自动预警</div>
+                </div>
+                <div class="mt-4 text-xs text-orange-600 font-medium">
+                  ✓ 实时保障加工精度稳定
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 第5步：成品检验 -->
+          <div class="flex items-center">
+            <div class="flex-1 pr-8 text-right">
+              <div class="bg-white border-2 border-red-200 rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-3">✅ 成品检验</h3>
+                <div class="space-y-2 text-sm text-gray-600">
+                  <div>• 三坐标全尺寸检测</div>
+                  <div>• 功能性检验</div>
+                  <div>• 外观质量检查</div>
+                  <div>• 检测报告生成</div>
+                </div>
+                <div class="mt-4 text-xs text-red-600 font-medium">
+                  ✓ 100%成品质量保证
+                </div>
+              </div>
+            </div>
+            <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white font-bold z-10">5</div>
+            <div class="flex-1 pl-8"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 精度验证数据 -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6">
+          📈 精度验证数据
+        </h2>
+        <p class="text-xl text-gray-600">
+          用数据说话，用结果证明
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- 精度统计 -->
+        <div class="bg-white rounded-3xl shadow-lg p-8">
+          <h3 class="text-2xl font-bold text-gray-800 mb-6">🎯 精度统计分析</h3>
+          
+          <!-- 精度分布 -->
+          <div class="mb-8">
+            <h4 class="font-bold text-gray-800 mb-4">精度分布情况</h4>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-600">±0.01mm以内</span>
+                <div class="flex items-center">
+                  <div class="w-32 bg-gray-200 rounded-full h-2 mr-3">
+                    <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+                  </div>
+                  <span class="text-sm font-bold text-green-600">85%</span>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-600">±0.01-0.03mm</span>
+                <div class="flex items-center">
+                  <div class="w-32 bg-gray-200 rounded-full h-2 mr-3">
+                    <div class="bg-blue-500 h-2 rounded-full" style="width: 12%"></div>
+                  </div>
+                  <span class="text-sm font-bold text-blue-600">12%</span>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-600">±0.03-0.05mm</span>
+                <div class="flex items-center">
+                  <div class="w-32 bg-gray-200 rounded-full h-2 mr-3">
+                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 3%"></div>
+                  </div>
+                  <span class="text-sm font-bold text-yellow-600">3%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 工艺能力指数 -->
+          <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6">
+            <h4 class="font-bold text-gray-800 mb-4">工艺能力指数 (Cpk)</h4>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="text-center">
+                <div class="text-3xl font-bold text-blue-600">1.67</div>
+                <div class="text-sm text-gray-600">±0.05mm公差</div>
+                <div class="text-xs text-green-600">六西格玛水平</div>
+              </div>
+              <div class="text-center">
+                <div class="text-3xl font-bold text-purple-600">2.33</div>
+                <div class="text-sm text-gray-600">±0.1mm公差</div>
+                <div class="text-xs text-green-600">超六西格玛</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 行业对比 -->
+        <div class="bg-white rounded-3xl shadow-lg p-8">
+          <h3 class="text-2xl font-bold text-gray-800 mb-6">🏆 行业对比优势</h3>
+          
+          <!-- 对比表格 -->
+          <div class="overflow-hidden rounded-xl border border-gray-200">
+            <table class="w-full">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">对比项目</th>
+                  <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">行业平均</th>
+                  <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">Geppetto</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr>
+                  <td class="px-4 py-3 text-sm text-gray-800">平均精度</td>
+                  <td class="px-4 py-3 text-center text-sm text-gray-600">±0.08mm</td>
+                  <td class="px-4 py-3 text-center text-sm font-bold text-green-600">±0.03mm</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-4 py-3 text-sm text-gray-800">最高精度</td>
+                  <td class="px-4 py-3 text-center text-sm text-gray-600">±0.02mm</td>
+                  <td class="px-4 py-3 text-center text-sm font-bold text-green-600">±0.008mm</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 text-sm text-gray-800">一次合格率</td>
+                  <td class="px-4 py-3 text-center text-sm text-gray-600">92%</td>
+                  <td class="px-4 py-3 text-center text-sm font-bold text-green-600">99.5%</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-4 py-3 text-sm text-gray-800">Cpk值</td>
+                  <td class="px-4 py-3 text-center text-sm text-gray-600">1.33</td>
+                  <td class="px-4 py-3 text-center text-sm font-bold text-green-600">1.67</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 客户认可 -->
+          <div class="mt-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-6">
+            <h4 class="font-bold text-gray-800 mb-4">客户认可度</h4>
+            <div class="space-y-3">
+              <div class="flex items-center">
+                <span class="text-sm text-gray-700 w-24">航空客户</span>
+                <div class="flex-1 mx-3 bg-gray-200 rounded-full h-2">
+                  <div class="bg-blue-500 h-2 rounded-full" style="width: 96%"></div>
+                </div>
+                <span class="text-sm font-bold text-blue-600">96%</span>
+              </div>
+              
+              <div class="flex items-center">
+                <span class="text-sm text-gray-700 w-24">医疗客户</span>
+                <div class="flex-1 mx-3 bg-gray-200 rounded-full h-2">
+                  <div class="bg-green-500 h-2 rounded-full" style="width: 98%"></div>
+                </div>
+                <span class="text-sm font-bold text-green-600">98%</span>
+              </div>
+              
+              <div class="flex items-center">
+                <span class="text-sm text-gray-700 w-24">汽车客户</span>
+                <div class="flex-1 mx-3 bg-gray-200 rounded-full h-2">
+                  <div class="bg-purple-500 h-2 rounded-full" style="width: 94%"></div>
+                </div>
+                <span class="text-sm font-bold text-purple-600">94%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技术证书与案例 -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6">
+          🏅 技术能力验证
+        </h2>
+        <p class="text-xl text-gray-600">
+          实际案例证明我们的精度承诺
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- 航空案例 -->
+        <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6">
+          <div class="text-center mb-4">
+            <div class="text-4xl mb-2">✈️</div>
+            <h3 class="text-lg font-bold text-gray-800">航空发动机叶片</h3>
+            <p class="text-sm text-gray-600">某知名航空制造商</p>
+          </div>
+          
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-600">要求精度</span>
+              <span class="font-bold text-blue-600">±0.02mm</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">实际精度</span>
+              <span class="font-bold text-green-600">±0.015mm</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">复杂程度</span>
+              <span class="font-medium text-gray-700">5轴复合曲面</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">合格率</span>
+              <span class="font-bold text-green-600">100%</span>
+            </div>
+          </div>
+          
+          <div class="mt-4 p-3 bg-blue-100 rounded-lg">
+            <div class="text-xs text-blue-700">
+              ✓ 客户评价："精度超预期，质量稳定可靠"
+            </div>
+          </div>
+        </div>
+
+        <!-- 医疗案例 -->
+        <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-6">
+          <div class="text-center mb-4">
+            <div class="text-4xl mb-2">🏥</div>
+            <h3 class="text-lg font-bold text-gray-800">医疗植入器械</h3>
+            <p class="text-sm text-gray-600">某医疗器械龙头企业</p>
+          </div>
+          
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-600">要求精度</span>
+              <span class="font-bold text-blue-600">±0.01mm</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">实际精度</span>
+              <span class="font-bold text-green-600">±0.008mm</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">材料</span>
+              <span class="font-medium text-gray-700">钛合金TC4</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">表面粗糙度</span>
+              <span class="font-bold text-green-600">Ra0.2μm</span>
+            </div>
+          </div>
+          
+          <div class="mt-4 p-3 bg-green-100 rounded-lg">
+            <div class="text-xs text-green-700">
+              ✓ 通过FDA认证，成为长期供应商
+            </div>
+          </div>
+        </div>
+
+        <!-- 电子案例 -->
+        <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6">
+          <div class="text-center mb-4">
+            <div class="text-4xl mb-2">📱</div>
+            <h3 class="text-lg font-bold text-gray-800">精密电子零件</h3>
+            <p class="text-sm text-gray-600">某知名消费电子品牌</p>
+          </div>
+          
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-600">要求精度</span>
+              <span class="font-bold text-blue-600">±0.05mm</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">实际精度</span>
+              <span class="font-bold text-green-600">±0.025mm</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">批量</span>
+              <span class="font-medium text-gray-700">10,000件/月</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">良品率</span>
+              <span class="font-bold text-green-600">99.8%</span>
+            </div>
+          </div>
+          
+          <div class="mt-4 p-3 bg-purple-100 rounded-lg">
+            <div class="text-xs text-purple-700">
+              ✓ 连续6个月零客诉，获得优秀供应商奖
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA区域 -->
+  <section class="py-20 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-4xl font-bold mb-6">
+        体验±0.05mm精度制造
+      </h2>
+      <p class="text-xl text-blue-100 mb-8">
+        上传您的图纸，让AI为您分析精度可行性，获取专业的精度保障方案
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/ai-quote" class="bg-white text-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors">
+          🚀 AI智能报价
+        </a>
+        <a href="/contact" class="border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-colors">
+          💬 技术咨询
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+</BaseLayout>

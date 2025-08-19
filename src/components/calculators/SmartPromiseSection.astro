@@ -1,0 +1,468 @@
+---
+// Geppetto智能承诺流程组件 (支持多语言)
+interface Props {
+  language?: 'zh' | 'en';
+}
+
+const { language = 'zh' } = Astro.props;
+
+// 多语言文本配置
+const text = {
+  zh: {
+    title: '🤖 Geppetto智能承诺',
+    subtitle: '不只是报价，更是全程智能制造承诺',
+    description: 'AI驱动的端到端质量保证体系',
+    promises: [
+      {
+        icon: 'lightning',
+        title: '秒级智能报价',
+        description: 'AI瞬间分析CAD图纸\n3秒生成精准报价',
+        commitment: '承诺',
+        guarantee: '报价误差 < 5%',
+        color: 'yellow'
+      },
+      {
+        icon: 'dollar',
+        title: '极致成本优势',
+        description: 'AI+学徒制造模式\n比市场价低30-50%',
+        commitment: '承诺',
+        guarantee: '价格不是最低退差价',
+        color: 'green'
+      },
+      {
+        icon: 'clock',
+        title: '24小时闪电交付',
+        description: '智能排产调度\n从下单到收货24小时',
+        commitment: '承诺',
+        guarantee: '延期赔付10%',
+        color: 'blue'
+      },
+      {
+        icon: 'check',
+        title: '±0.05mm精度',
+        description: 'AI质检全程监控\n每道工序精度验证',
+        commitment: '承诺',
+        guarantee: '不合格100%重做',
+        color: 'purple'
+      }
+    ],
+    processTitle: '🔬 AI驱动的智能制造全流程',
+    aiSection: {
+      title: '🤖 AI智能分析引擎',
+      steps: [
+        {
+          title: '几何特征识别',
+          description: '深度学习识别复杂几何特征，自动选择最优加工方案'
+        },
+        {
+          title: '工艺路径优化',
+          description: 'AI规划最优加工路径，减少换刀次数，提升效率'
+        },
+        {
+          title: '成本智能预测',
+          description: '基于历史数据和市场行情，精准预测制造成本'
+        }
+      ]
+    },
+    executionSection: {
+      title: '⚡ 智能制造执行',
+      steps: [
+        {
+          title: '智能排产调度',
+          description: 'AI实时调度生产资源，确保24小时极速交付'
+        },
+        {
+          title: '实时质量监控',
+          description: 'AI视觉检测，每道工序实时监控，确保±0.05mm精度'
+        },
+        {
+          title: '智能物流配送',
+          description: 'AI优化配送路径，确保准时送达客户手中'
+        }
+      ]
+    },
+    whyChooseTitle: '🚀 为什么选择Geppetto？',
+    advantages: [
+      {
+        icon: '🧠',
+        title: 'AI原生制造',
+        description: '从设计到交付全程AI驱动，传统制造的降维打击'
+      },
+      {
+        icon: '💎',
+        title: '学徒制造革命',
+        description: 'AI+资深师傅+年轻学徒，质量不减成本骤降'
+      },
+      {
+        icon: '⚡',
+        title: '极速响应能力',
+        description: '24小时极速交付，应急项目的最佳选择'
+      }
+    ],
+    ctaTitle: '🎯 准备好体验制造业的未来了吗？',
+    ctaSubtitle: '立即下单，享受AI驱动的极致制造体验',
+    confirmButton: '确认下单 • 开始制造 🚀',
+    consultButton: '联系专家咨询 💬',
+    features: [
+      '质量保证',
+      '极速交付',
+      '超低价格'
+    ]
+  },
+  en: {
+    title: '🤖 Geppetto Smart Promise',
+    subtitle: 'More than quotes - complete intelligent manufacturing commitment',
+    description: 'AI-driven end-to-end quality assurance system',
+    promises: [
+      {
+        icon: 'lightning',
+        title: 'Lightning Smart Quote',
+        description: 'AI instant CAD analysis\n3-second precise quotes',
+        commitment: 'Promise',
+        guarantee: 'Quote error < 5%',
+        color: 'yellow'
+      },
+      {
+        icon: 'dollar',
+        title: 'Ultimate Cost Advantage',
+        description: 'AI+Apprentice manufacturing\n30-50% below market price',
+        commitment: 'Promise',
+        guarantee: 'Price match guarantee',
+        color: 'green'
+      },
+      {
+        icon: 'clock',
+        title: '24-Hour Lightning Delivery',
+        description: 'Smart production scheduling\nOrder to delivery in 24 hours',
+        commitment: 'Promise',
+        guarantee: '10% compensation for delays',
+        color: 'blue'
+      },
+      {
+        icon: 'check',
+        title: '±0.05mm Precision',
+        description: 'AI quality control monitoring\nEvery process precision verified',
+        commitment: 'Promise',
+        guarantee: '100% remake if unqualified',
+        color: 'purple'
+      }
+    ],
+    processTitle: '🔬 AI-Driven Smart Manufacturing Process',
+    aiSection: {
+      title: '🤖 AI Smart Analysis Engine',
+      steps: [
+        {
+          title: 'Geometry Feature Recognition',
+          description: 'Deep learning identifies complex geometric features, auto-selects optimal machining solutions'
+        },
+        {
+          title: 'Process Path Optimization',
+          description: 'AI plans optimal machining paths, reduces tool changes, improves efficiency'
+        },
+        {
+          title: 'Smart Cost Prediction',
+          description: 'Based on historical data and market trends, precisely predicts manufacturing costs'
+        }
+      ]
+    },
+    executionSection: {
+      title: '⚡ Smart Manufacturing Execution',
+      steps: [
+        {
+          title: 'Smart Production Scheduling',
+          description: 'AI real-time resource scheduling ensures 24-hour lightning delivery'
+        },
+        {
+          title: 'Real-time Quality Monitoring',
+          description: 'AI vision inspection, real-time monitoring of every process, ensures ±0.05mm precision'
+        },
+        {
+          title: 'Smart Logistics Delivery',
+          description: 'AI optimizes delivery routes, ensures on-time delivery to customers'
+        }
+      ]
+    },
+    whyChooseTitle: '🚀 Why Choose Geppetto?',
+    advantages: [
+      {
+        icon: '🧠',
+        title: 'AI-Native Manufacturing',
+        description: 'Full AI-driven process from design to delivery, disrupting traditional manufacturing'
+      },
+      {
+        icon: '💎',
+        title: 'Apprentice Manufacturing Revolution',
+        description: 'AI + Master craftsmen + Young apprentices = Quality maintained, costs dramatically reduced'
+      },
+      {
+        icon: '⚡',
+        title: 'Lightning Response Capability',
+        description: '24-hour lightning delivery, best choice for urgent projects'
+      }
+    ],
+    ctaTitle: '🎯 Ready to Experience the Future of Manufacturing?',
+    ctaSubtitle: 'Order now and enjoy the ultimate AI-driven manufacturing experience',
+    confirmButton: 'Confirm Order • Start Manufacturing 🚀',
+    consultButton: 'Contact Expert • Consult 💬',
+    features: [
+      'Quality Assurance',
+      'Lightning Delivery',
+      'Lowest Prices'
+    ]
+  }
+};
+
+const currentText = text[language];
+---
+
+<section id="smart-promise-section" class="py-20 bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800 text-white relative overflow-hidden">
+  <!-- 背景装饰 -->
+  <div class="absolute inset-0 opacity-10">
+    <div class="absolute top-1/4 left-1/6 w-72 h-72 bg-purple-300 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-1/4 right-1/6 w-96 h-96 bg-blue-300 rounded-full blur-3xl animate-pulse"></div>
+  </div>
+
+  <div class="container mx-auto px-6 relative z-10">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- 标题区域 -->
+      <div class="text-center mb-16">
+        <h2 class="text-5xl font-bold mb-6">
+          <span class="bg-gradient-to-r from-yellow-300 to-white bg-clip-text text-transparent">
+            {currentText.title}
+          </span>
+        </h2>
+        <p class="text-2xl text-blue-100 mb-4">
+          {currentText.subtitle}
+        </p>
+        <p class="text-xl text-purple-200">
+          {currentText.description}
+        </p>
+      </div>
+
+      <!-- 智能承诺流程 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        {currentText.promises.map((promise, index) => (
+          <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20 text-center group hover:bg-white/15 transition-all duration-300">
+            <div class={`w-20 h-20 bg-gradient-to-r ${
+              promise.color === 'yellow' ? 'from-yellow-400 to-orange-500' :
+              promise.color === 'green' ? 'from-green-400 to-emerald-500' :
+              promise.color === 'blue' ? 'from-blue-400 to-cyan-500' :
+              'from-purple-400 to-pink-500'
+            } rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`}>
+              {promise.icon === 'lightning' && (
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              )}
+              {promise.icon === 'dollar' && (
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                </svg>
+              )}
+              {promise.icon === 'clock' && (
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              )}
+              {promise.icon === 'check' && (
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              )}
+            </div>
+            
+            <h3 class={`text-2xl font-bold mb-4 ${
+              promise.color === 'yellow' ? 'text-yellow-300' :
+              promise.color === 'green' ? 'text-green-300' :
+              promise.color === 'blue' ? 'text-blue-300' :
+              'text-purple-300'
+            }`}>{promise.title}</h3>
+            <p class="text-blue-100 mb-4 whitespace-pre-line">
+              {promise.description}
+            </p>
+            
+            <div class={`${
+              promise.color === 'yellow' ? 'bg-yellow-400/20' :
+              promise.color === 'green' ? 'bg-green-400/20' :
+              promise.color === 'blue' ? 'bg-blue-400/20' :
+              'bg-purple-400/20'
+            } rounded-xl p-3`}>
+              <div class={`font-bold text-lg ${
+                promise.color === 'yellow' ? 'text-yellow-300' :
+                promise.color === 'green' ? 'text-green-300' :
+                promise.color === 'blue' ? 'text-blue-300' :
+                'text-purple-300'
+              }`}>{promise.commitment}</div>
+              <div class="text-white text-sm">{promise.guarantee}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- 智能制造全流程 -->
+      <div class="bg-white/5 backdrop-blur-sm rounded-3xl p-12 border border-white/10 mb-16">
+        <h3 class="text-3xl font-bold text-center mb-12">
+          {currentText.processTitle}
+        </h3>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          
+          <!-- 左侧：AI智能分析 -->
+          <div>
+            <h4 class="text-2xl font-bold text-yellow-300 mb-6">{currentText.aiSection.title}</h4>
+            
+            <div class="space-y-4">
+              {currentText.aiSection.steps.map((step, index) => (
+                <div class="flex items-start space-x-4 p-4 bg-white/10 rounded-2xl">
+                  <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <span class="text-purple-900 font-bold text-sm">{index + 1}</span>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-white mb-1">{step.title}</div>
+                    <div class="text-blue-200 text-sm">{step.description}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- 右侧：智能制造执行 -->
+          <div>
+            <h4 class="text-2xl font-bold text-blue-300 mb-6">{currentText.executionSection.title}</h4>
+            
+            <div class="space-y-4">
+              {currentText.executionSection.steps.map((step, index) => (
+                <div class="flex items-start space-x-4 p-4 bg-white/10 rounded-2xl">
+                  <div class="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <span class="text-white font-bold text-sm">{index + 4}</span>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-white mb-1">{step.title}</div>
+                    <div class="text-blue-200 text-sm">{step.description}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 核心竞争优势 -->
+      <div class="text-center mb-16">
+        <h3 class="text-3xl font-bold mb-8">
+          {currentText.whyChooseTitle}
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {currentText.advantages.map((advantage) => (
+            <div class="bg-gradient-to-br from-purple-600/20 to-blue-600/20 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+              <div class="text-4xl mb-4">{advantage.icon}</div>
+              <h4 class="text-xl font-bold text-yellow-300 mb-3">{advantage.title}</h4>
+              <p class="text-blue-100">
+                {advantage.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- 立即行动CTA -->
+      <div class="text-center">
+        <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-3xl p-12">
+          <h3 class="text-3xl font-bold text-purple-900 mb-6">
+            {currentText.ctaTitle}
+          </h3>
+          
+          <p class="text-purple-800 text-xl mb-8">
+            {currentText.ctaSubtitle}
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <button 
+              data-action="confirm-order"
+              class="bg-purple-700 text-white px-12 py-4 rounded-full text-xl font-bold hover:bg-purple-800 transform hover:scale-105 transition-all duration-300 shadow-2xl">
+              {currentText.confirmButton}
+            </button>
+            
+            <button 
+              data-action="consult"
+              class="border-2 border-purple-700 text-purple-700 px-8 py-4 rounded-full text-lg font-semibold hover:bg-purple-700 hover:text-white transition-all duration-300">
+              {currentText.consultButton}
+            </button>
+          </div>
+          
+          <div class="mt-8 flex items-center justify-center space-x-6 text-purple-800">
+            {currentText.features.map((feature) => (
+              <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-sm">{feature}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* 动画效果 */
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+    50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.4); }
+  }
+  
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite;
+  }
+</style>
+
+<script define:vars={{ language }}>
+  // 智能承诺交互逻辑
+  document.addEventListener('DOMContentLoaded', () => {
+    // 添加滚动触发动画
+    setupScrollAnimations();
+    
+    // CTA按钮处理
+    setupCTAButtons();
+  });
+
+  function setupScrollAnimations() {
+    const cards = document.querySelectorAll('[class*="group"]');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => observer.observe(card));
+  }
+
+  function setupCTAButtons() {
+    // 下单按钮
+    const orderButton = document.querySelector('[data-action="confirm-order"]');
+    orderButton?.addEventListener('click', () => {
+      console.log('Confirm order clicked');
+      // 滚动到文件上传区域
+      const uploadSection = document.getElementById('file-upload-section');
+      if (uploadSection) {
+        uploadSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    // 咨询按钮
+    const consultButton = document.querySelector('[data-action="consult"]');
+    consultButton?.addEventListener('click', () => {
+      console.log('Consult expert clicked');
+      // 根据语言跳转到联系页面
+      const contactPath = language === 'en' ? '/en/contact' : '/zh/contact';
+      window.location.href = contactPath;
+    });
+  }
+</script>

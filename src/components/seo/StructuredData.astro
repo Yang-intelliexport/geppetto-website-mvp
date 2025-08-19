@@ -1,0 +1,196 @@
+---
+export interface Props {
+  type: 'organization' | 'service' | 'article' | 'faq' | 'product' | 'breadcrumb'
+  data: Record<string, any>
+}
+
+const { type, data } = Astro.props
+
+function generateStructuredData(type: string, data: Record<string, any>) {
+  const baseUrl = 'https://geppetto.com'
+  
+  switch (type) {
+    case 'organization':
+      return {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "奇塑科技(深圳)有限公司",
+        "alternateName": "Geppetto",
+        "url": baseUrl,
+        "logo": `${baseUrl}/logo.png`,
+        "description": "AI驱动的精密制造服务商，提供CNC加工、AI智能报价、±0.05mm精度制造、24小时极速交付服务",
+        "foundingDate": "2024",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "CN",
+          "addressRegion": "广东省",
+          "addressLocality": "深圳市"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+86-400-XXX-XXXX",
+          "contactType": "customer service",
+          "email": "hello@geppetto.com",
+          "availableLanguage": ["zh-CN", "en"]
+        },
+        "sameAs": [
+          "https://www.linkedin.com/company/geppetto-ai",
+          "https://weibo.com/geppetto"
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "制造服务",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "CNC精密加工",
+                "description": "±0.05mm精度CNC加工服务"
+              }
+            },
+            {
+              "@type": "Offer", 
+              "itemOffered": {
+                "@type": "Service",
+                "name": "AI智能报价",
+                "description": "30秒AI分析CAD文件自动报价"
+              }
+            }
+          ]
+        },
+        ...data
+      }
+
+    case 'service':
+      return {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": data.name || "CNC精密加工服务",
+        "provider": {
+          "@type": "Organization",
+          "name": "Geppetto",
+          "url": baseUrl
+        },
+        "description": data.description || "AI驱动的CNC精密加工服务，±0.05mm精度，24小时交付",
+        "serviceType": "制造服务",
+        "areaServed": {
+          "@type": "Country",
+          "name": "中国"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "加工服务目录",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "name": "CNC铣削加工",
+              "description": "高精度CNC铣削服务"
+            },
+            {
+              "@type": "Offer", 
+              "name": "五轴联动加工",
+              "description": "复杂曲面五轴加工"
+            }
+          ]
+        },
+        "audience": {
+          "@type": "BusinessAudience",
+          "audienceType": "制造企业"
+        },
+        ...data
+      }
+
+    case 'article':
+      return {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": data.title,
+        "description": data.description,
+        "author": {
+          "@type": "Organization",
+          "name": "Geppetto技术团队"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Geppetto",
+          "logo": {
+            "@type": "ImageObject", 
+            "url": `${baseUrl}/logo.png`
+          }
+        },
+        "datePublished": data.publishDate || new Date().toISOString(),
+        "dateModified": data.modifiedDate || new Date().toISOString(),
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": data.url || baseUrl
+        },
+        "image": data.image || `${baseUrl}/og-default.jpg`,
+        ...data
+      }
+
+    case 'faq':
+      return {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "name": data.title || "常见问题",
+        "mainEntity": data.faqs?.map((faq: any) => ({
+          "@type": "Question",
+          "name": faq.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": faq.answer
+          }
+        })) || [],
+        ...data
+      }
+
+    case 'product':
+      return {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": data.name,
+        "description": data.description,
+        "brand": {
+          "@type": "Brand",
+          "name": "Geppetto"
+        },
+        "manufacturer": {
+          "@type": "Organization",
+          "name": "奇塑科技(深圳)有限公司"
+        },
+        "category": data.category || "制造服务",
+        "offers": {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "priceCurrency": "CNY",
+          "seller": {
+            "@type": "Organization",
+            "name": "Geppetto"
+          }
+        },
+        ...data
+      }
+
+    case 'breadcrumb':
+      return {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": data.items?.map((item: any, index: number) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "name": item.name,
+          "item": item.url
+        })) || [],
+        ...data
+      }
+
+    default:
+      return data
+  }
+}
+
+const structuredData = generateStructuredData(type, data)
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

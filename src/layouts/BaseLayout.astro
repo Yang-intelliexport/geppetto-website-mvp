@@ -1,0 +1,216 @@
+---
+import '../styles/global.css'
+import LanguageSwitcher from '../components/ui/LanguageSwitcher.astro'
+import StructuredData from '../components/seo/StructuredData.astro'
+import { getLanguageFromUrl, getTranslations, t } from '../utils/i18n'
+
+export interface Props {
+  title: string
+  description?: string
+  keywords?: string[]
+  ogImage?: string
+  structuredData?: { type: string; data: Record<string, any> }
+}
+
+const currentLang = getLanguageFromUrl(Astro.url)
+const translations = getTranslations(currentLang)
+
+const { 
+  title,
+  description,
+  keywords = [],
+  ogImage = '/images/og-default.jpg',
+  structuredData
+} = Astro.props
+
+// Set language-specific defaults if not provided
+const defaultTitle = currentLang === 'zh' 
+  ? 'Geppetto - AI驱动的精密制造革命'
+  : 'CNC Quote | AI-Powered Precision Manufacturing | Geppetto'
+
+const defaultDescription = currentLang === 'zh'
+  ? 'AI智能报价，24小时交付，±0.05mm精度，无MOQ限制。体验Geppetto智能报价承诺，革命性的制造服务。'
+  : 'Get instant CNC quotes with AI analysis in seconds, expert validation in 4-8 hours. ±0.05mm precision, 24-hour delivery, no MOQ limits.'
+
+const finalTitle = title || defaultTitle
+const finalDescription = description || defaultDescription
+---
+
+<!DOCTYPE html>
+<html lang={currentLang === 'zh' ? 'zh-CN' : 'en-US'}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="generator" content={Astro.generator} />
+  
+  <!-- SEO Meta Tags -->
+  <title>{finalTitle}</title>
+  <meta name="description" content={finalDescription} />
+  <meta name="keywords" content={keywords.join(', ')} />
+  
+  <!-- Language alternates -->
+  <link rel="alternate" hreflang="en" href={`${Astro.site}en${Astro.url.pathname.replace(/^\/(en|zh)/, '') || '/'}`} />
+  <link rel="alternate" hreflang="zh" href={`${Astro.site}zh${Astro.url.pathname.replace(/^\/(en|zh)/, '') || '/'}`} />
+  <link rel="alternate" hreflang="x-default" href={`${Astro.site}en${Astro.url.pathname.replace(/^\/(en|zh)/, '') || '/'}`} />
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:type" content="website" />
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+  
+  <!-- Styles import -->
+  
+  <!-- Preload critical fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Structured Data -->
+  {structuredData && (
+    <StructuredData type={structuredData.type} data={structuredData.data} />
+  )}
+  
+  <!-- Default Organization Structured Data -->
+  {!structuredData && (
+    <StructuredData 
+      type="organization" 
+      data={{}} 
+    />
+  )}
+</head>
+
+<body class="font-inter bg-white text-gray-900 antialiased">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <a href={`/${currentLang}`} class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-lg">G</span>
+            </div>
+            <span class="text-xl font-bold text-gray-900">Geppetto</span>
+          </a>
+        </div>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-6">
+          <a href={`/${currentLang}/services`} class="text-gray-600 hover:text-purple-600 transition-colors">{t('nav.services', currentLang)}</a>
+          <a href={`/${currentLang}/why-geppetto`} class="text-gray-600 hover:text-purple-600 transition-colors">{t('nav.about', currentLang)}</a>
+          <a href={`/${currentLang}/contact`} class="text-gray-600 hover:text-purple-600 transition-colors">{t('nav.contact', currentLang)}</a>
+          <LanguageSwitcher />
+          <a href={`/${currentLang}/ai-quote`} class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors font-medium">
+            {t('nav.quote', currentLang)}
+          </a>
+        </div>
+        
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+          <button type="button" class="text-gray-600 hover:text-gray-900" id="mobile-menu-button">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Mobile Navigation -->
+      <div class="md:hidden hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-100">
+          <a href={`/${currentLang}/services`} class="block px-3 py-2 text-gray-600 hover:text-purple-600">{t('nav.services', currentLang)}</a>
+          <a href={`/${currentLang}/why-geppetto`} class="block px-3 py-2 text-gray-600 hover:text-purple-600">{t('nav.about', currentLang)}</a>
+          <a href={`/${currentLang}/contact`} class="block px-3 py-2 text-gray-600 hover:text-purple-600">{t('nav.contact', currentLang)}</a>
+          <a href={`/${currentLang}/ai-quote`} class="block mx-3 mt-4 bg-purple-600 text-white px-4 py-2 rounded-lg text-center">
+            {t('nav.quote', currentLang)}
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Main Content -->
+  <main>
+    <slot />
+  </main>
+  
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Company Info -->
+        <div class="col-span-1 md:col-span-2">
+          <div class="flex items-center space-x-2 mb-4">
+            <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-lg">G</span>
+            </div>
+            <span class="text-xl font-bold">Geppetto</span>
+          </div>
+          <p class="text-gray-300 mb-4 max-w-md">
+            {currentLang === 'zh' ? 
+              '奇塑科技 - AI驱动的精密制造服务商。提供智能报价、24小时交付、±0.05mm精度的革命性制造体验。' :
+              'Geppetto Tech - AI-powered precision manufacturing service provider. Delivering intelligent quotes, 24-hour delivery, and revolutionary manufacturing experience with ±0.05mm precision.'
+            }
+          </p>
+          <div class="flex space-x-4">
+            <a href="tel:400-XXX-XXXX" class="text-purple-400 hover:text-purple-300">📞 400-XXX-XXXX</a>
+            <a href="mailto:hello@geppetto.com" class="text-purple-400 hover:text-purple-300">📧 hello@geppetto.com</a>
+          </div>
+        </div>
+        
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">{currentLang === 'zh' ? '快速链接' : 'Quick Links'}</h3>
+          <ul class="space-y-2">
+            <li><a href={`/${currentLang}/why-geppetto`} class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '为何选择Geppetto' : 'Why Geppetto'}</a></li>
+            <li><a href={`/${currentLang}/services`} class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '服务能力' : 'Services'}</a></li>
+            <li><a href="/embodied-ai" class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '具身智能' : 'Embodied AI'}</a></li>
+            <li><a href="/no-moq" class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '无MOQ制造' : 'No MOQ Manufacturing'}</a></li>
+            <li><a href="/precision-capability" class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '精度能力' : 'Precision Capabilities'}</a></li>
+            <li><a href="/platform-comparison" class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '平台对比' : 'Platform Comparison'}</a></li>
+            <li><a href={`/${currentLang}/ai-quote`} class="text-gray-300 hover:text-white">{currentLang === 'zh' ? 'AI智能报价' : 'AI Smart Quote'}</a></li>
+          </ul>
+        </div>
+        
+        <!-- Resources -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">{currentLang === 'zh' ? '更多信息' : 'More Information'}</h3>
+          <ul class="space-y-2">
+            <li><a href="/case-studies" class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '客户案例' : 'Case Studies'}</a></li>
+            <li><a href="/about" class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '关于我们' : 'About Us'}</a></li>
+            <li><a href={`/${currentLang}/faq`} class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '常见问题' : 'FAQ'}</a></li>
+            <li><a href={`/${currentLang}/contact`} class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '联系我们' : 'Contact Us'}</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>
+          {currentLang === 'zh' ? 
+            '&copy; 2024 奇塑科技(深圳)有限公司. 保留所有权利.' : 
+            '&copy; 2024 Geppetto Technologies Ltd. All rights reserved.'
+          } | 
+          <a href="/privacy" class="hover:text-white">{currentLang === 'zh' ? '隐私政策' : 'Privacy Policy'}</a> | 
+          <a href="/terms" class="hover:text-white">{currentLang === 'zh' ? '服务条款' : 'Terms of Service'}</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Mobile Menu Script -->
+  <script>
+    document.getElementById('mobile-menu-button')?.addEventListener('click', () => {
+      const menu = document.getElementById('mobile-menu')
+      menu?.classList.toggle('hidden')
+    })
+  </script>
+</body>
+</html>

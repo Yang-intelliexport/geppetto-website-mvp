@@ -1,0 +1,171 @@
+---
+// AI报价页面的Hero区域 (支持多语言)
+interface Props {
+  language?: 'zh' | 'en';
+}
+
+const { language = 'zh' } = Astro.props;
+
+// 多语言文本配置
+const text = {
+  zh: {
+    title: '🤖AI智能报价',
+    subtitle: '秒级精准 • 极致低价',
+    description: '上传CAD图纸，AI瞬间分析',
+    highlight: '比传统报价快1000倍，比市场价格低30-50%',
+    valueProps: [
+      {
+        value: '3秒',
+        title: 'AI智能分析',
+        description: '传统需要3-7天'
+      },
+      {
+        value: '30-50%',
+        title: '成本降低',
+        description: 'AI+专家制造革命'
+      },
+      {
+        value: '±0.05mm',
+        title: '精度保证',
+        description: '24小时极速交付'
+      }
+    ],
+    steps: {
+      title: '🚀 三步智能报价',
+      items: [
+        {
+          title: '上传CAD文件',
+          description: '支持STEP、STL、IGES格式'
+        },
+        {
+          title: 'AI瞬间分析',
+          description: '智能识别工艺、材料、成本'
+        },
+        {
+          title: '获得精准报价',
+          description: '详细成本分解+交期承诺'
+        }
+      ]
+    },
+    cta: '立即上传文件 • 获取报价 🎯'
+  },
+  en: {
+    title: '🤖AI Smart Quote',
+    subtitle: 'Instant Precision • Lowest Price',
+    description: 'Upload CAD files, get AI instant analysis',
+    highlight: '1000× faster than traditional quotes, 30-50% lower than market price',
+    valueProps: [
+      {
+        value: '3sec',
+        title: 'AI Smart Analysis',
+        description: 'Traditional takes 3-7 days'
+      },
+      {
+        value: '30-50%',
+        title: 'Cost Reduction',
+        description: 'AI+Expert manufacturing revolution'
+      },
+      {
+        value: '±0.05mm',
+        title: 'Precision Guarantee',
+        description: '24-hour express delivery'
+      }
+    ],
+    steps: {
+      title: '🚀 Three Steps to Smart Quote',
+      items: [
+        {
+          title: 'Upload CAD Files',
+          description: 'Support STEP, STL, IGES formats'
+        },
+        {
+          title: 'AI Instant Analysis',
+          description: 'Smart recognition of process, materials, cost'
+        },
+        {
+          title: 'Get Precise Quote',
+          description: 'Detailed cost breakdown + delivery commitment'
+        }
+      ]
+    },
+    cta: 'Upload Files Now • Get Quote 🎯'
+  }
+};
+
+const currentText = text[language];
+---
+
+<section class="relative bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-20 overflow-hidden">
+  <!-- 动态背景效果 -->
+  <div class="absolute inset-0 opacity-10">
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-300 rounded-full blur-2xl animate-bounce"></div>
+  </div>
+  
+  <div class="container mx-auto px-6 relative z-10">
+    <div class="max-w-4xl mx-auto text-center">
+      <!-- 核心标题 -->
+      <div class="mb-8">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          <span class="bg-gradient-to-r from-yellow-300 to-white bg-clip-text text-transparent">
+            {currentText.title}
+          </span>
+          <br>
+          <span class="text-4xl md:text-5xl">{currentText.subtitle}</span>
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-blue-100 mb-8 leading-relaxed">
+          {currentText.description}<br>
+          <strong class="text-yellow-300">{currentText.highlight}</strong>
+        </p>
+      </div>
+
+      <!-- 核心价值指标 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        {currentText.valueProps.map((prop) => (
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+            <div class="text-3xl font-bold text-yellow-300 mb-2">{prop.value}</div>
+            <div class="text-lg">{prop.title}</div>
+            <div class="text-sm text-blue-200 mt-2">{prop.description}</div>
+          </div>
+        ))}
+      </div>
+
+      <!-- 操作指引 -->
+      <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-8 border border-white/30">
+        <h3 class="text-2xl font-bold mb-4">{currentText.steps.title}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+          {currentText.steps.items.map((step, index) => (
+            <div class="flex items-start space-x-3">
+              <div class="bg-yellow-400 text-purple-900 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">{index + 1}</div>
+              <div>
+                <div class="font-semibold">{step.title}</div>
+                <div class="text-blue-100 text-sm">{step.description}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- CTA按钮 -->
+      <div class="mt-12">
+        <button 
+          onclick="document.getElementById('file-upload-section').scrollIntoView({behavior: 'smooth'})"
+          class="bg-gradient-to-r from-yellow-400 to-orange-500 text-purple-900 px-12 py-4 rounded-full text-xl font-bold hover:from-yellow-300 hover:to-orange-400 transform hover:scale-105 transition-all duration-300 shadow-2xl">
+          {currentText.cta}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+</style>

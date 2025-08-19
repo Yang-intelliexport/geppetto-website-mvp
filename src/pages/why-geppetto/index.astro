@@ -1,0 +1,113 @@
+---
+import { getEntry } from 'astro:content'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import DarkHeroSection from '../../components/marketing/DarkHeroSection.astro'
+import AdvantagesGrid from '../../components/marketing/AdvantagesGrid.astro'
+import ComparisonTable from '../../components/marketing/ComparisonTable.astro'
+import TestimonialSection from '../../components/marketing/TestimonialSection.astro'
+
+const whyGeppettoContent = await getEntry('pages', 'why-geppetto')
+const { data, render } = whyGeppettoContent
+const { Content } = await render()
+---
+
+<BaseLayout 
+  title={data.seo?.title || data.title}
+  description={data.seo?.description || data.description}
+  keywords={data.seo?.keywords || data.keywords}
+>
+  <!-- Hero Section -->
+  <DarkHeroSection hero={data.hero} />
+
+  <!-- Core Problems We Solve -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+          传统制造业的痛点 vs Geppetto的解决方案
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          我们深度理解制造业的挑战，用AI技术重新定义制造服务标准
+        </p>
+      </div>
+      
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Problems -->
+        <div class="space-y-8">
+          <div class="text-center lg:text-left">
+            <h3 class="text-2xl font-bold text-red-600 mb-6">❌ 传统制造业痛点</h3>
+          </div>
+          
+          {data.problems && data.problems.length > 0 && (
+            <div class="space-y-6">
+              {data.problems.map(problem => (
+                <div class="bg-red-50 border-l-4 border-red-400 p-6 rounded-r-lg">
+                  <h4 class="font-semibold text-red-800 mb-2">{problem.title}</h4>
+                  <p class="text-red-700">{problem.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <!-- Solutions -->
+        <div class="space-y-8">
+          <div class="text-center lg:text-left">
+            <h3 class="text-2xl font-bold text-green-600 mb-6">✅ Geppetto创新解决方案</h3>
+          </div>
+          
+          {data.solutions && data.solutions.length > 0 && (
+            <div class="space-y-6">
+              {data.solutions.map(solution => (
+                <div class="bg-green-50 border-l-4 border-green-400 p-6 rounded-r-lg">
+                  <h4 class="font-semibold text-green-800 mb-2">{solution.title}</h4>
+                  <p class="text-green-700">{solution.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Four Core Advantages Detail -->
+  <AdvantagesGrid 
+    advantages={data.advantages} 
+    showDetails={true}
+    language="zh"
+  />
+
+  <!-- Competitive Comparison -->
+  <ComparisonTable />
+
+  <!-- Customer Success Stories -->
+  <TestimonialSection testimonials={data.testimonials} />
+
+  <!-- Call to Action -->
+  <section class="py-20 bg-gradient-to-r from-purple-600 to-blue-500">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+        准备体验这四大优势？
+      </h2>
+      <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+        立即体验Geppetto智能报价承诺，感受AI驱动制造的革命性体验
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/instant-quote" 
+          class="inline-flex items-center justify-center px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200 shadow-lg"
+        >
+          🚀 立即获取智能报价
+        </a>
+        <a 
+          href="/contact" 
+          class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-purple-600 transition-colors duration-200"
+        >
+          💬 技术专家咨询
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

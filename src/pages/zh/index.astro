@@ -1,0 +1,236 @@
+---
+import { getEntry } from 'astro:content'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import HeroSection from '../../components/marketing/HeroSection.astro'
+import AdvantagesGrid from '../../components/marketing/AdvantagesGrid.astro'
+import TestimonialSection from '../../components/marketing/TestimonialSection.astro'
+import { t } from '../../utils/i18n'
+
+const currentLang = 'zh'
+
+// Chinese market optimized content
+const data = {
+  seo: {
+    title: 'CNC加工报价_AI智能制造_±0.05mm精度_24小时交付 - Geppetto',
+    description: '专业CNC加工报价平台，AI智能分析30秒报价，±0.05mm超高精度，24小时极速交付，50%成本节省。立即上传图纸获取免费报价！',
+    keywords: ['CNC加工', 'AI智能报价', '精密制造', '五轴加工', '24小时交付', '±0.05mm精度', '无MOQ制造', 'CAD图纸分析', '制造服务平台', 'Geppetto']
+  },
+  hero: {
+    title: '体验 Geppetto智能报价承诺',
+    subtitle: '🚀 AI驱动制造革命',
+    description: 'AI秒级分析，专家团队4-8工作小时内完成技术复核与精确报价。\n±0.05mm精度 • 24小时交付 • 无MOQ限制 • 成本节省50-70%',
+    cta: {
+      primary: {
+        text: '🎯 获取Geppetto智能报价承诺',
+        href: '/zh/ai-quote'
+      },
+      secondary: {
+        text: '🔍 了解技术优势',
+        href: '/zh/why-geppetto'
+      }
+    }
+  },
+  advantages: [
+    {
+      id: 'smart-quote',
+      title: 'Geppetto智能报价承诺',
+      description: 'AI秒级分析，专家团队4-8工作小时内完成技术复核与精确报价',
+      icon: '🧠',
+      stats: '4-8小时 vs 传统3-7天',
+      color: 'purple'
+    },
+    {
+      id: 'fast-delivery',
+      title: '24小时极速交付',
+      description: 'AI优化生产调度，智能工艺规划，实现行业领先的交付速度',
+      icon: '⚡',
+      stats: '24-48小时 vs 传统7-15天',
+      color: 'blue'
+    },
+    {
+      id: 'no-moq',
+      title: '单件起做 无MOQ限制',
+      description: 'AI驱动的智能制造模式，让小批量生产也具备经济性',
+      icon: '🎯',
+      stats: '1件起做 vs 传统50-100件MOQ',
+      color: 'green'
+    },
+    {
+      id: 'cost-efficiency',
+      title: '极致性价比',
+      description: 'AI+专家模式大幅降低人力成本，直供模式减少中间环节',
+      icon: '💰',
+      stats: '成本节省50-70%',
+      color: 'orange'
+    }
+  ],
+  testimonials: [
+    {
+      name: '张工程师',
+      company: '某具身智能公司',
+      content: '收到Geppetto的报价后很惊讶，精度要求±0.05mm，实际达到±0.03mm，而且价格比之前的供应商低了60%。现在已经成为我们的主要供应商。',
+      stats: {
+        precision: '±0.03mm',
+        cost_saving: '60%',
+        delivery_time: '2天',
+        quality_rate: '100%'
+      }
+    }
+  ],
+  features: [
+    {
+      title: '先进AI技术',
+      description: '自主研发AI系统，实现CAD瞬间分析和精密制造',
+      icon: '✓'
+    },
+    {
+      title: '500+成功案例',
+      description: '服务过具身智能、电子设备、汽车配件等行业客户',
+      icon: '✓'
+    },
+    {
+      title: '24/7技术支持',
+      description: '专业技术团队全天候提供支持',
+      icon: '✓'
+    }
+  ]
+}
+
+const structuredData = {
+  type: 'organization',
+  data: {
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      "name": "AI智能制造服务",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "AI智能报价",
+            "description": "30秒CAD图纸AI分析自动报价，95%准确率"
+          },
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "priceCurrency": "CNY",
+            "price": "0",
+            "description": "免费AI报价服务"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service", 
+            "name": "±0.05mm精密CNC加工",
+            "description": "超高精度CNC加工，实际精度±0.03mm"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "24小时极速交付",
+            "description": "专门产能配置，24小时内完成制造交付"
+          }
+        }
+      ]
+    }
+  }
+}
+---
+
+<BaseLayout 
+  title={data.seo.title}
+  description={data.seo.description}
+  keywords={data.seo.keywords}
+  structuredData={structuredData}
+>
+  <!-- Hero Section -->
+  <HeroSection hero={data.hero} features={data.features} language="zh" />
+
+  <!-- Four Core Advantages -->
+  <AdvantagesGrid advantages={data.advantages} language="zh" />
+
+  <!-- Customer Success Story -->
+  <TestimonialSection testimonials={data.testimonials} language="zh" />
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-gradient-to-r from-purple-600 to-blue-500">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+        准备体验Geppetto智能报价承诺？
+      </h2>
+      <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+        上传您的图纸，AI秒级分析，专家4-8小时内完成技术复核与精确报价
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/zh/ai-quote" 
+          class="inline-flex items-center justify-center px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200 shadow-lg"
+        >
+          🚀 立即获取智能报价
+        </a>
+        <a 
+          href="tel:400-XXX-XXXX" 
+          class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-purple-600 transition-colors duration-200"
+        >
+          📞 技术专家咨询
+        </a>
+      </div>
+      
+      <div class="mt-8 text-purple-100 text-sm">
+        💫 无风险试用 • 质量承诺 • 7×24技术支持
+      </div>
+    </div>
+  </section>
+
+  <!-- 中国市场特色优势 -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          专为中国市场打造的制造优势
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          深度理解中国制造业需求，提供最适合的智能制造解决方案
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-lg p-6 shadow-md">
+          <div class="text-4xl mb-4 text-center">🏭</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3 text-center">深圳总部优势</h3>
+          <ul class="space-y-2 text-gray-600">
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>本土化服务团队</li>
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>粤港澳大湾区制造网络</li>
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>中文技术支持</li>
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>国内物流配送</li>
+          </ul>
+        </div>
+        
+        <div class="bg-white rounded-lg p-6 shadow-md">
+          <div class="text-4xl mb-4 text-center">💰</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3 text-center">成本控制优势</h3>
+          <ul class="space-y-2 text-gray-600">
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>AI+学徒制降本模式</li>
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>无汇率风险</li>
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>人民币计价结算</li>
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>本地化供应链</li>
+          </ul>
+        </div>
+        
+        <div class="bg-white rounded-lg p-6 shadow-md">
+          <div class="text-4xl mb-4 text-center">🚀</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3 text-center">服务响应优势</h3>
+          <ul class="space-y-2 text-gray-600">
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>同时区实时沟通</li>
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>现场技术支持</li>
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>定制化解决方案</li>
+            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span>快速迭代优化</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,121 @@
+---
+export interface Props {
+  src: string
+  alt: string
+  width?: number
+  height?: number
+  loading?: 'lazy' | 'eager'
+  class?: string
+  sizes?: string
+  priority?: boolean
+}
+
+const { 
+  src, 
+  alt, 
+  width, 
+  height, 
+  loading = 'lazy', 
+  class: className = '', 
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+  priority = false
+} = Astro.props
+
+// Generate responsive image URLs (在实际项目中，这里会连接到图片处理服务)
+function getResponsiveUrls(originalSrc: string) {
+  const baseUrl = originalSrc.replace(/\.[^/.]+$/, '')
+  const ext = originalSrc.split('.').pop()
+  
+  return {
+    webp: {
+      '320w': `${baseUrl}-320w.webp`,
+      '640w': `${baseUrl}-640w.webp`, 
+      '1024w': `${baseUrl}-1024w.webp`,
+      '1280w': `${baseUrl}-1280w.webp`
+    },
+    fallback: {
+      '320w': `${baseUrl}-320w.${ext}`,
+      '640w': `${baseUrl}-640w.${ext}`,
+      '1024w': `${baseUrl}-1024w.${ext}`, 
+      '1280w': `${baseUrl}-1280w.${ext}`
+    }
+  }
+}
+
+const responsiveUrls = getResponsiveUrls(src)
+
+// 为高优先级图片生成preload links
+const preloadLinks = priority ? [
+  `<link rel="preload" as="image" href="${responsiveUrls.webp['640w']}" type="image/webp">`,
+  `<link rel="preload" as="image" href="${responsiveUrls.fallback['640w']}" type="image/${src.split('.').pop()}">`
+].join('') : ''
+---
+
+<!-- 高优先级图片的预加载 -->
+{priority && (
+  <Fragment set:html={preloadLinks} />
+)}
+
+<!-- 响应式图片 -->
+<picture class={className}>
+  <!-- WebP格式 - 现代浏览器 -->
+  <source 
+    type="image/webp"
+    srcset={`
+      ${responsiveUrls.webp['320w']} 320w,
+      ${responsiveUrls.webp['640w']} 640w,
+      ${responsiveUrls.webp['1024w']} 1024w,
+      ${responsiveUrls.webp['1280w']} 1280w
+    `}
+    sizes={sizes}
+  />
+  
+  <!-- 原格式 - 兜底方案 -->
+  <source 
+    srcset={`
+      ${responsiveUrls.fallback['320w']} 320w,
+      ${responsiveUrls.fallback['640w']} 640w,
+      ${responsiveUrls.fallback['1024w']} 1024w,
+      ${responsiveUrls.fallback['1280w']} 1280w
+    `}
+    sizes={sizes}
+  />
+  
+  <!-- 默认图片 -->
+  <img 
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding="async"
+    class={className}
+    style={width && height ? `aspect-ratio: ${width}/${height}` : undefined}
+  />
+</picture>
+
+<style>
+  picture img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  /* 懒加载占位效果 */
+  picture img[loading="lazy"] {
+    background: linear-gradient(90deg, #f0f0f0 25%, transparent 37%, #f0f0f0 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: 100% 50%; }
+    100% { background-position: -100% 50%; }
+  }
+  
+  /* 图片加载完成后移除动画 */
+  picture img[loading="lazy"]:not([src=""]) {
+    animation: none;
+    background: none;
+  }
+</style>

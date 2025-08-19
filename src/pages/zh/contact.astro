@@ -1,0 +1,282 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="联系我们 | Geppetto - AI智能制造" 
+  description="联系Geppetto专业团队，获取AI智能报价和制造解决方案。24小时在线支持，专业工程师为您服务。"
+>
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-20">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="text-5xl font-bold mb-6">
+            联系Geppetto专业团队
+          </h1>
+          <p class="text-2xl text-blue-100 mb-8">
+            24小时在线支持 • AI智能报价 • 专业工程师服务
+          </p>
+          
+          <!-- Quick Contact Methods -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl mb-4">📞</div>
+              <h3 class="text-xl font-bold mb-2">热线电话</h3>
+              <p class="text-blue-100">400-XXX-XXXX</p>
+              <p class="text-sm text-blue-200">工作时间: 9:00-18:00</p>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl mb-4">📧</div>
+              <h3 class="text-xl font-bold mb-2">邮箱咨询</h3>
+              <p class="text-blue-100">business@geppetto.com</p>
+              <p class="text-sm text-blue-200">24小时内回复</p>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl mb-4">🚀</div>
+              <h3 class="text-xl font-bold mb-2">AI智能报价</h3>
+              <a href="/zh/ai-quote" class="text-yellow-300 hover:text-yellow-200 transition-colors">
+                立即体验 →
+              </a>
+              <p class="text-sm text-blue-200">3秒获得精准报价</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          
+          <!-- Contact Form -->
+          <div class="bg-white rounded-3xl shadow-2xl p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">
+              📝 获取专业咨询
+            </h2>
+            <form id="contact-form-zh" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                  <input type="text" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">职位</label>
+                  <input type="text" name="position" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">邮箱</label>
+                <input type="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">公司名称</label>
+                <input type="text" name="company" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">联系电话</label>
+                <input type="tel" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">项目详情</label>
+                <textarea rows="4" name="projectDetails" placeholder="请描述您的制造需求..." required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"></textarea>
+              </div>
+              
+              <input type="hidden" name="language" value="zh">
+              <button type="submit" id="submit-btn-zh" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                <span class="submit-text">提交需求</span>
+                <span class="loading-text hidden">提交中...</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="space-y-8">
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+              <!-- 办公环境照片 -->
+              <div class="mb-6 rounded-lg overflow-hidden">
+                <img 
+                  src="/images/facility/storage-area.jpg" 
+                  alt="深圳总部办公环境" 
+                  class="w-full h-48 object-cover"
+                />
+              </div>
+              
+              <h3 class="text-2xl font-bold text-gray-900 mb-6">联系方式</h3>
+              <div class="space-y-4">
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center">📍</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-900">深圳总部</h4>
+                    <p class="text-gray-600">广东省深圳市南山区<br>科技园南区深圳湾科技生态园</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">📞</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-900">客服热线</h4>
+                    <p class="text-gray-600">400-XXX-XXXX</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center">📧</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-900">商务邮箱</h4>
+                    <p class="text-gray-600">business@geppetto.com</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center">🕒</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-900">服务时间</h4>
+                    <p class="text-gray-600">周一至周五: 9:00 - 18:00<br>周末: 紧急项目支持</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Why Contact Us -->
+            <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8">
+              <h3 class="text-2xl font-bold text-gray-900 mb-6">为什么选择我们？</h3>
+              <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                  <span class="text-green-500 text-xl">✓</span>
+                  <span class="text-gray-700">制造专家免费技术咨询</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span class="text-green-500 text-xl">✓</span>
+                  <span class="text-gray-700">针对需求定制解决方案</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span class="text-green-500 text-xl">✓</span>
+                  <span class="text-gray-700">技术可行性评估分析</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span class="text-green-500 text-xl">✓</span>
+                  <span class="text-gray-700">成本优化建议方案</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 中国市场特色服务 -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            专为中国客户提供的特色服务
+          </h2>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="text-center p-6">
+            <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">🚀</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">本土化服务</h3>
+            <p class="text-gray-600">深圳本地团队，同时区沟通，现场技术支持，无时差协作</p>
+          </div>
+          
+          <div class="text-center p-6">
+            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">💰</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">人民币结算</h3>
+            <p class="text-gray-600">避免汇率风险，本地化供应链，成本更可控，资金周转更灵活</p>
+          </div>
+          
+          <div class="text-center p-6">
+            <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">🏭</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">粤港澳制造网络</h3>
+            <p class="text-gray-600">立足深圳，辐射珠三角，享受大湾区制造业集群优势</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  // 中文联系表单提交处理
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form-zh');
+    const submitBtn = document.getElementById('submit-btn-zh');
+    const submitText = document.querySelector('.submit-text');
+    const loadingText = document.querySelector('.loading-text');
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // 禁用表单并显示加载状态
+        submitBtn.disabled = true;
+        submitText.classList.add('hidden');
+        loadingText.classList.remove('hidden');
+        
+        try {
+          const formData = new FormData(form);
+          
+          const response = await fetch('/api/contact', {
+            method: 'POST',
+            body: formData
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            // 显示成功消息
+            showMessage(result.message, 'success');
+            form.reset();
+          } else {
+            // 显示错误消息
+            showMessage(result.error || '发生错误，请重试。', 'error');
+          }
+        } catch (error) {
+          console.error('表单提交错误:', error);
+          showMessage('网络错误，请检查连接后重试。', 'error');
+        } finally {
+          // 重新启用表单
+          submitBtn.disabled = false;
+          submitText.classList.remove('hidden');
+          loadingText.classList.add('hidden');
+        }
+      });
+    }
+  });
+  
+  function showMessage(message, type) {
+    // 删除现有消息
+    const existingMessages = document.querySelectorAll('.form-message');
+    existingMessages.forEach(msg => msg.remove());
+    
+    // 创建新消息元素
+    const messageEl = document.createElement('div');
+    messageEl.className = `form-message p-4 rounded-lg mb-6 ${
+      type === 'success' 
+        ? 'bg-green-100 text-green-800 border border-green-200' 
+        : 'bg-red-100 text-red-800 border border-red-200'
+    }`;
+    messageEl.textContent = message;
+    
+    // 在表单前插入消息
+    const form = document.getElementById('contact-form-zh');
+    form.parentNode.insertBefore(messageEl, form);
+    
+    // 5秒后自动删除
+    setTimeout(() => {
+      messageEl.remove();
+    }, 5000);
+    
+    // 滚动到消息位置
+    messageEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>

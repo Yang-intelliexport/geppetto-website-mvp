@@ -1,0 +1,63 @@
+name: Deploy Geppetto Website
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run linting
+      run: npm run lint --if-present
+    
+    - name: Run tests
+      run: npm run test --if-present
+    
+    - name: Build website
+      run: npm run build
+      env:
+        SITE_URL: ${{ secrets.SITE_URL || 'https://geppetto.com' }}
+    
+    - name: Upload build artifacts
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist
+        path: dist/
+    
+    # Deploy to Vercel (if using Vercel)
+    - name: Deploy to Vercel
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: vercel/action@v1
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        vercel-args: '--prod'
+    
+    # Alternative: Deploy to Netlify (if using Netlify)
+    # - name: Deploy to Netlify
+    #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    #   uses: netlify/actions/build@master
+    #   with:
+    #     publish-dir: './dist'
+    #     production-branch: main
+    #   env:
+    #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+    #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

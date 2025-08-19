@@ -1,0 +1,318 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Contact Us | Geppetto AI Manufacturing | Get Quote" 
+  description="Contact Geppetto's expert team for AI-powered quotes and manufacturing solutions. 24/7 online support with professional engineers at your service."
+>
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-20">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="text-5xl font-bold mb-6">
+            Contact Geppetto Expert Team
+          </h1>
+          <p class="text-2xl text-blue-100 mb-8">
+            24/7 Support • AI-Powered Quotes • Professional Engineering Services
+          </p>
+          
+          <!-- Quick Contact Methods -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl mb-4">📞</div>
+              <h3 class="text-xl font-bold mb-2">Call Us Now</h3>
+              <p class="text-blue-100">+1-800-XXX-XXXX</p>
+              <p class="text-sm text-blue-200">Business Hours: 8AM-6PM EST</p>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl mb-4">📧</div>
+              <h3 class="text-xl font-bold mb-2">Email Support</h3>
+              <p class="text-blue-100">quotes@geppetto.com</p>
+              <p class="text-sm text-blue-200">Response within 4 hours</p>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+              <div class="text-3xl mb-4">🚀</div>
+              <h3 class="text-xl font-bold mb-2">AI Instant Quote</h3>
+              <a href="/en/ai-quote" class="text-yellow-300 hover:text-yellow-200 transition-colors">
+                Get Quote Now →
+              </a>
+              <p class="text-sm text-blue-200">Results in seconds</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          
+          <!-- Contact Form -->
+          <div class="bg-white rounded-3xl shadow-2xl p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">
+              📝 Get Professional Consultation
+            </h2>
+            <form id="contact-form" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                  <input type="text" name="firstName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                  <input type="text" name="lastName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <input type="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Company</label>
+                <input type="text" name="company" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                <input type="tel" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Project Details</label>
+                <textarea rows="4" name="projectDetails" placeholder="Describe your manufacturing requirements..." required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"></textarea>
+              </div>
+              
+              <input type="hidden" name="language" value="en">
+              <button type="submit" id="submit-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                <span class="submit-text">Submit Request</span>
+                <span class="loading-text hidden">Submitting...</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="space-y-8">
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+              <!-- US Facility Photo -->
+              <div class="mb-6 rounded-lg overflow-hidden">
+                <img 
+                  src="/images/facility/us-manufacturing-facility.jpg" 
+                  alt="US Manufacturing Facility" 
+                  class="w-full h-48 object-cover"
+                />
+              </div>
+              
+              <h3 class="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
+              <div class="space-y-4">
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center">📍</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-900">US Operations Center</h4>
+                    <p class="text-gray-600">Silicon Valley Tech Hub<br>Fremont, CA 94538<br>Serving West Coast Markets</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">📞</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-900">US Hotline</h4>
+                    <p class="text-gray-600">+1-800-GEPPETTO<br>(+1-800-437-7388)</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center">📧</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-900">US Sales Team</h4>
+                    <p class="text-gray-600">usa@geppetto.com<br>quotes-us@geppetto.com</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center">🕒</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-900">US Business Hours</h4>
+                    <p class="text-gray-600">Monday - Friday: 6AM - 6PM PST<br>Extended Hours: 6AM PST - 9PM EST<br>Weekend: Rush order support</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Why Contact Us -->
+            <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8">
+              <h3 class="text-2xl font-bold text-gray-900 mb-6">Why Contact Us?</h3>
+              <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                  <span class="text-green-500 text-xl">✓</span>
+                  <span class="text-gray-700">Free consultation with manufacturing experts</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span class="text-green-500 text-xl">✓</span>
+                  <span class="text-gray-700">Custom solutions for your specific needs</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span class="text-green-500 text-xl">✓</span>
+                  <span class="text-gray-700">Technical feasibility assessment</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span class="text-green-500 text-xl">✓</span>
+                  <span class="text-gray-700">Cost optimization recommendations</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- US Market Specialized Services -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            🇺🇸 Specialized Services for US Market
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Tailored solutions designed specifically for American manufacturing needs
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="text-center p-6">
+            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">🌎</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">US Time Zone Coverage</h3>
+            <p class="text-gray-600">Extended business hours from 6AM PST to 9PM EST. Real-time communication during US business hours with dedicated US support team</p>
+          </div>
+          
+          <div class="text-center p-6">
+            <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">📋</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">US Standards Compliance</h3>
+            <p class="text-gray-600">ANSI, ASTM, ASME standards compliance. FDA, ITAR, AS9100D certifications. Full traceability for regulated industries</p>
+          </div>
+          
+          <div class="text-center p-6">
+            <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">💳</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">US Payment Methods</h3>
+            <p class="text-gray-600">Corporate credit cards, ACH transfers, PayPal Business, Net30 terms for qualified accounts. USD pricing, no currency conversion fees</p>
+          </div>
+        </div>
+        
+        <!-- Additional US Benefits -->
+        <div class="mt-16 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8">
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">🚀 Additional US Market Benefits</h3>
+          </div>
+          
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="text-center">
+              <div class="text-3xl mb-2">🛡️</div>
+              <h4 class="font-semibold text-gray-900 mb-2">US Legal Protection</h4>
+              <p class="text-sm text-gray-600">US-based contracts, IP protection, and legal recourse under US jurisdiction</p>
+            </div>
+            
+            <div class="text-center">
+              <div class="text-3xl mb-2">⚡</div>
+              <h4 class="font-semibold text-gray-900 mb-2">Express Logistics</h4>
+              <p class="text-sm text-gray-600">FedEx/UPS partnerships, same-day delivery in Bay Area, 1-2 day US-wide shipping</p>
+            </div>
+            
+            <div class="text-center">
+              <div class="text-3xl mb-2">🔧</div>
+              <h4 class="font-semibent text-gray-900 mb-2">Local Support Network</h4>
+              <p class="text-sm text-gray-600">US-based engineers, on-site consultation, local quality inspection services</p>
+            </div>
+            
+            <div class="text-center">
+              <div class="text-3xl mb-2">📊</div>
+              <h4 class="font-semibold text-gray-900 mb-2">US Market Expertise</h4>
+              <p class="text-sm text-gray-600">Deep understanding of US manufacturing requirements, industry standards, and business practices</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  // Contact form submission handling
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.querySelector('.submit-text');
+    const loadingText = document.querySelector('.loading-text');
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Disable form and show loading state
+        submitBtn.disabled = true;
+        submitText.classList.add('hidden');
+        loadingText.classList.remove('hidden');
+        
+        try {
+          const formData = new FormData(form);
+          
+          const response = await fetch('/api/contact', {
+            method: 'POST',
+            body: formData
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            // Show success message
+            showMessage(result.message, 'success');
+            form.reset();
+          } else {
+            // Show error message
+            showMessage(result.error || 'An error occurred. Please try again.', 'error');
+          }
+        } catch (error) {
+          console.error('Form submission error:', error);
+          showMessage('Network error. Please check your connection and try again.', 'error');
+        } finally {
+          // Re-enable form
+          submitBtn.disabled = false;
+          submitText.classList.remove('hidden');
+          loadingText.classList.add('hidden');
+        }
+      });
+    }
+  });
+  
+  function showMessage(message, type) {
+    // Remove existing messages
+    const existingMessages = document.querySelectorAll('.form-message');
+    existingMessages.forEach(msg => msg.remove());
+    
+    // Create new message element
+    const messageEl = document.createElement('div');
+    messageEl.className = `form-message p-4 rounded-lg mb-6 ${
+      type === 'success' 
+        ? 'bg-green-100 text-green-800 border border-green-200' 
+        : 'bg-red-100 text-red-800 border border-red-200'
+    }`;
+    messageEl.textContent = message;
+    
+    // Insert message before the form
+    const form = document.getElementById('contact-form');
+    form.parentNode.insertBefore(messageEl, form);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+      messageEl.remove();
+    }, 5000);
+    
+    // Scroll to message
+    messageEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>

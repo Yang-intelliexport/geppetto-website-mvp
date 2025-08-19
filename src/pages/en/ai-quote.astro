@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AIQuoteHero from '../../components/calculators/AIQuoteHero.astro';
+import FileUploadSection from '../../components/calculators/FileUploadSection.astro';
+import SmartPromiseSection from '../../components/calculators/SmartPromiseSection.astro';
+import QuoteResults from '../../components/calculators/QuoteResults.astro';
+---
+
+<BaseLayout 
+  title="AI Quote | Instant CNC Quotes | Geppetto Manufacturing" 
+  description="Get instant AI-powered CNC quotes in seconds. Upload CAD files, get precise quotes instantly. 24-hour delivery, ±0.05mm precision, 30-50% cost savings vs traditional suppliers."
+  keywords={["AI quote", "instant CNC quote", "manufacturing quote", "cnc machining quote", "rapid quote", "online quote"]}
+>
+  <main class="min-h-screen bg-gradient-to-b from-purple-50 to-white">
+    <!-- AI Quote Hero Section -->
+    <AIQuoteHero language="en" />
+
+    <!-- File Upload Section -->
+    <FileUploadSection language="en" />
+
+    <!-- Smart Promise Section -->
+    <SmartPromiseSection language="en" />
+
+    <!-- Quote Results Section (hidden by default, shown after quote generation) -->
+    <div id="quote-results" class="hidden">
+      <QuoteResults language="en" />
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  // AI Quote page functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('AI Quote page loaded');
+    
+    // File upload simulation
+    const uploadButtons = document.querySelectorAll('button');
+    uploadButtons.forEach(button => {
+      if (button.textContent?.includes('Select CAD Files') || button.textContent?.includes('Upload Files')) {
+        button.addEventListener('click', () => {
+          // Simulate file upload
+          alert('File upload functionality will be implemented with actual backend integration');
+        });
+      }
+    });
+  });
+</script>

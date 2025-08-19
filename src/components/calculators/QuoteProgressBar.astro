@@ -1,0 +1,644 @@
+---
+// 报价进度条组件 - 三阶段流程展示 (支持多语言)
+interface Props {
+  language?: 'zh' | 'en';
+}
+
+const { language = 'zh' } = Astro.props;
+
+// 多语言文本配置
+const text = {
+  zh: {
+    title: '🚀 Geppetto智能报价进行中',
+    subtitle: 'AI+专家双重保障，确保报价精准可靠',
+    stage1: {
+      title: '🤖 AI智能计算',
+      subtitle: '几何分析 + 工艺识别',
+      details: [
+        '• 3D几何形状解析',
+        '• 最优加工路径',
+        '• 材料用量计算'
+      ],
+      eta: '预计：1-2秒'
+    },
+    stage2: {
+      title: '👨‍🔬 专家优化审核',
+      subtitle: '质量把控 + 成本优化',
+      details: [
+        '• 工艺可行性验证',
+        '• 成本结构优化',
+        '• 风险评估排查'
+      ],
+      eta: '预计：1-2秒'
+    },
+    stage3: {
+      title: '📋 生成精准报价',
+      subtitle: '详细清单 + 交期承诺',
+      details: [
+        '• 详细成本分解',
+        '• 精确交期计算',
+        '• 质量保证条款'
+      ],
+      eta: '预计：1秒'
+    },
+    status: {
+      initializing: '正在初始化AI分析引擎...',
+      message: '请稍候，我们的AI+专家团队正在为您生成最优报价方案',
+      aiRunning: 'AI算法运行中',
+      expertStandby: '专家待命审核',
+      eta: '预计完成时间',
+      stages: {
+        1: {
+          title: '🤖 AI智能分析进行中...',
+          message: 'AI算法正在解析您的CAD图纸，分析几何结构和制造工艺要求'
+        },
+        2: {
+          title: '👨‍🔬 专家优化审核中...',
+          message: '资深工程师正在验证AI分析结果，优化成本结构和工艺方案'
+        },
+        3: {
+          title: '📋 生成精准报价中...',
+          message: '正在整合分析结果，生成详细的报价单和交期承诺'
+        }
+      },
+      complete: {
+        title: '✅ 报价生成完成！',
+        message: '恭喜！您的智能报价已准备就绪，请查看下方详细结果。'
+      }
+    },
+    values: [
+      {
+        title: '秒级精准',
+        description: 'AI算法3秒完成传统人工3小时的报价工作'
+      },
+      {
+        title: '专家保障',
+        description: '10年+经验专家审核确保每个报价准确可靠'
+      },
+      {
+        title: '成本透明',
+        description: '详细成本分解，价格比市场平均低30-50%'
+      }
+    ]
+  },
+  en: {
+    title: '🚀 Geppetto AI Quote in Progress',
+    subtitle: 'AI + Expert dual guarantee for precise and reliable quotes',
+    stage1: {
+      title: '🤖 AI Smart Analysis',
+      subtitle: 'Geometry parsing + Process identification',
+      details: [
+        '• 3D geometry analysis',
+        '• Optimal machining paths',
+        '• Material usage calculation'
+      ],
+      eta: 'ETA: 1-2 seconds'
+    },
+    stage2: {
+      title: '👨‍🔬 Expert Technical Review',
+      subtitle: 'Quality control + Cost optimization',
+      details: [
+        '• Process feasibility verification',
+        '• Cost structure optimization',
+        '• Risk assessment evaluation'
+      ],
+      eta: 'ETA: 4-8 hours'
+    },
+    stage3: {
+      title: '📋 Precise Quote Generation',
+      subtitle: 'Detailed breakdown + Delivery commitment',
+      details: [
+        '• Detailed cost breakdown',
+        '• Precise delivery calculation',
+        '• Quality guarantee terms'
+      ],
+      eta: 'ETA: Email notification'
+    },
+    status: {
+      initializing: 'Initializing AI Analysis Engine...',
+      message: 'Please wait, our AI + Expert team is generating the optimal quote solution for you',
+      aiRunning: 'AI algorithm running',
+      expertStandby: 'Expert standby for review',
+      eta: 'ETA',
+      stages: {
+        1: {
+          title: '🤖 AI Smart Analysis in Progress...',
+          message: 'AI algorithm is parsing your CAD drawings, analyzing geometric structures and manufacturing process requirements'
+        },
+        2: {
+          title: '👨‍🔬 Expert Technical Review in Progress...',
+          message: 'Senior engineers are verifying AI analysis results, optimizing cost structure and process solutions'
+        },
+        3: {
+          title: '📋 Generating Precise Quote...',
+          message: 'Integrating analysis results, generating detailed quote and delivery commitment'
+        }
+      },
+      complete: {
+        title: '✅ Quote Generation Complete!',
+        message: 'Congratulations! Your AI-powered quote is ready. Please check your email for detailed results.'
+      }
+    },
+    values: [
+      {
+        title: 'Lightning Precision',
+        description: 'AI completes in 3 seconds what traditional manual quoting takes 3 hours'
+      },
+      {
+        title: 'Expert Assurance',
+        description: '10+ years experienced experts review every quote for accuracy and reliability'
+      },
+      {
+        title: 'Cost Transparency',
+        description: 'Detailed cost breakdown, prices 30-50% below market average'
+      }
+    ]
+  }
+};
+
+const currentText = text[language];
+---
+
+<div id="quote-progress-section" class="hidden py-12">
+  <div class="max-w-4xl mx-auto">
+    <!-- 进度条标题 -->
+    <div class="text-center mb-8">
+      <h3 class="text-2xl font-bold text-gray-800 mb-4">
+        {currentText.title}
+      </h3>
+      <p class="text-gray-600">
+        {currentText.subtitle}
+      </p>
+    </div>
+
+    <!-- 三阶段进度条 -->
+    <div class="relative">
+      <!-- 进度线 -->
+      <div class="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 rounded-full transform -translate-y-1/2 z-0">
+        <div id="progress-line" class="h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+      </div>
+      
+      <!-- 三个阶段 -->
+      <div class="relative flex justify-between items-center z-10">
+        
+        <!-- 阶段1: AI计算 -->
+        <div class="quote-stage flex flex-col items-center group" id="stage-1">
+          <div class="stage-circle w-16 h-16 rounded-full border-4 border-gray-300 bg-white flex items-center justify-center mb-4 transition-all duration-500">
+            <div class="stage-icon hidden">
+              <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div class="stage-spinner hidden">
+              <svg class="w-8 h-8 text-purple-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+            </div>
+            <div class="stage-number text-gray-400 font-bold text-xl">1</div>
+          </div>
+          
+          <div class="text-center max-w-xs">
+            <h4 class="font-bold text-gray-800 mb-2">{currentText.stage1.title}</h4>
+            <p class="text-sm text-gray-600 mb-1">{currentText.stage1.subtitle}</p>
+            <div class="stage-details text-xs text-gray-500 space-y-1">
+              {currentText.stage1.details.map((detail, index) => (
+                <div class="detail-item opacity-50" data-detail={`detail-${index}`}>{detail}</div>
+              ))}
+            </div>
+            <div class="stage-time text-xs text-purple-600 font-semibold mt-2">{currentText.stage1.eta}</div>
+          </div>
+        </div>
+
+        <!-- 阶段2: 专家优化审核 -->
+        <div class="quote-stage flex flex-col items-center group" id="stage-2">
+          <div class="stage-circle w-16 h-16 rounded-full border-4 border-gray-300 bg-white flex items-center justify-center mb-4 transition-all duration-500">
+            <div class="stage-icon hidden">
+              <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div class="stage-spinner hidden">
+              <svg class="w-8 h-8 text-blue-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+            </div>
+            <div class="stage-number text-gray-400 font-bold text-xl">2</div>
+          </div>
+          
+          <div class="text-center max-w-xs">
+            <h4 class="font-bold text-gray-800 mb-2">{currentText.stage2.title}</h4>
+            <p class="text-sm text-gray-600 mb-1">{currentText.stage2.subtitle}</p>
+            <div class="stage-details text-xs text-gray-500 space-y-1">
+              {currentText.stage2.details.map((detail, index) => (
+                <div class="detail-item opacity-50" data-detail={`detail-${index}`}>{detail}</div>
+              ))}
+            </div>
+            <div class="stage-time text-xs text-blue-600 font-semibold mt-2">{currentText.stage2.eta}</div>
+          </div>
+        </div>
+
+        <!-- 阶段3: 输出报价 -->
+        <div class="quote-stage flex flex-col items-center group" id="stage-3">
+          <div class="stage-circle w-16 h-16 rounded-full border-4 border-gray-300 bg-white flex items-center justify-center mb-4 transition-all duration-500">
+            <div class="stage-icon hidden">
+              <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div class="stage-spinner hidden">
+              <svg class="w-8 h-8 text-green-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+            <div class="stage-number text-gray-400 font-bold text-xl">3</div>
+          </div>
+          
+          <div class="text-center max-w-xs">
+            <h4 class="font-bold text-gray-800 mb-2">{currentText.stage3.title}</h4>
+            <p class="text-sm text-gray-600 mb-1">{currentText.stage3.subtitle}</p>
+            <div class="stage-details text-xs text-gray-500 space-y-1">
+              {currentText.stage3.details.map((detail, index) => (
+                <div class="detail-item opacity-50" data-detail={`detail-${index}`}>{detail}</div>
+              ))}
+            </div>
+            <div class="stage-time text-xs text-green-600 font-semibold mt-2">{currentText.stage3.eta}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 当前状态显示 -->
+    <div class="mt-8 text-center">
+      <div id="current-status" class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-6">
+        <div class="flex items-center justify-center space-x-3 mb-4">
+          <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+          </div>
+          <h4 id="status-title" class="text-lg font-bold text-gray-800">{currentText.status.initializing}</h4>
+        </div>
+        
+        <p id="status-message" class="text-gray-600 mb-4">
+          {currentText.status.message}
+        </p>
+        
+        <div class="flex items-center justify-center space-x-4 text-sm text-gray-500">
+          <div class="flex items-center space-x-2">
+            <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span>{currentText.status.aiRunning}</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+            <span>{currentText.status.expertStandby}</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+            <span>{currentText.status.eta}: <span id="total-eta">{language === 'en' ? '5 seconds' : '5秒'}</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 价值承诺 -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white rounded-xl p-6 border border-purple-100 hover:shadow-lg transition-shadow duration-300">
+        <div class="text-center">
+          <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <h5 class="font-bold text-gray-800 mb-2">{currentText.values[0].title}</h5>
+          <p class="text-sm text-gray-600">{currentText.values[0].description}</p>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl p-6 border border-blue-100 hover:shadow-lg transition-shadow duration-300">
+        <div class="text-center">
+          <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <h5 class="font-bold text-gray-800 mb-2">{currentText.values[1].title}</h5>
+          <p class="text-sm text-gray-600">{currentText.values[1].description}</p>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+        <div class="text-center">
+          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <h5 class="font-bold text-gray-800 mb-2">{currentText.values[2].title}</h5>
+          <p class="text-sm text-gray-600">{currentText.values[2].description}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+export class QuoteProgressController {
+  constructor() {
+    this.currentStage = 0;
+    this.totalStages = 3;
+    this.stageElements = [];
+    this.isRunning = false;
+    
+    this.init();
+  }
+
+  init() {
+    // 获取所有阶段元素
+    for (let i = 1; i <= this.totalStages; i++) {
+      this.stageElements.push(document.getElementById(`stage-${i}`));
+    }
+    
+    this.progressLine = document.getElementById('progress-line');
+    this.statusTitle = document.getElementById('status-title');
+    this.statusMessage = document.getElementById('status-message');
+    this.totalEta = document.getElementById('total-eta');
+  }
+
+  show() {
+    const section = document.getElementById('quote-progress-section');
+    section?.classList.remove('hidden');
+    return this;
+  }
+
+  hide() {
+    const section = document.getElementById('quote-progress-section');
+    section?.classList.add('hidden');
+    return this;
+  }
+
+  start() {
+    if (this.isRunning) return;
+    
+    this.isRunning = true;
+    this.currentStage = 0;
+    this.show();
+    
+    // 重置所有阶段
+    this.resetAllStages();
+    
+    // 开始第一阶段
+    setTimeout(() => this.startStage(1), 500);
+    
+    return this;
+  }
+
+  startStage(stageNumber) {
+    if (stageNumber > this.totalStages) {
+      this.complete();
+      return;
+    }
+
+    this.currentStage = stageNumber;
+    const stageElement = this.stageElements[stageNumber - 1];
+    
+    if (!stageElement) return;
+
+    // 更新进度线
+    const progressPercentage = ((stageNumber - 1) / this.totalStages) * 100;
+    this.progressLine.style.width = `${progressPercentage}%`;
+
+    // 设置当前阶段为进行中
+    this.setStageActive(stageElement, stageNumber);
+    
+    // 更新状态信息
+    this.updateStatus(stageNumber);
+    
+    // 模拟阶段处理时间
+    const stageDuration = this.getStageDuration(stageNumber);
+    
+    setTimeout(() => {
+      this.completeStage(stageElement, stageNumber);
+      
+      // 进入下一阶段
+      setTimeout(() => {
+        this.startStage(stageNumber + 1);
+      }, 500);
+    }, stageDuration);
+  }
+
+  setStageActive(stageElement, stageNumber) {
+    const circle = stageElement.querySelector('.stage-circle');
+    const number = stageElement.querySelector('.stage-number');
+    const spinner = stageElement.querySelector('.stage-spinner');
+    const details = stageElement.querySelectorAll('.detail-item');
+    
+    // 设置圆圈为活动状态
+    circle.className = 'stage-circle w-16 h-16 rounded-full border-4 border-purple-500 bg-purple-50 flex items-center justify-center mb-4 transition-all duration-500';
+    
+    // 隐藏数字，显示加载动画
+    number.classList.add('hidden');
+    spinner.classList.remove('hidden');
+    
+    // 激活细节项目
+    details.forEach((detail, index) => {
+      setTimeout(() => {
+        detail.classList.remove('opacity-50');
+        detail.classList.add('opacity-100', 'text-purple-600');
+      }, index * 300);
+    });
+  }
+
+  completeStage(stageElement, stageNumber) {
+    const circle = stageElement.querySelector('.stage-circle');
+    const icon = stageElement.querySelector('.stage-icon');
+    const spinner = stageElement.querySelector('.stage-spinner');
+    const details = stageElement.querySelectorAll('.detail-item');
+    
+    // 设置圆圈为完成状态
+    const colors = ['purple', 'blue', 'green'];
+    const color = colors[stageNumber - 1];
+    circle.className = `stage-circle w-16 h-16 rounded-full border-4 border-${color}-500 bg-${color}-500 flex items-center justify-center mb-4 transition-all duration-500`;
+    
+    // 隐藏加载动画，显示完成图标
+    spinner.classList.add('hidden');
+    icon.classList.remove('hidden');
+    
+    // 标记所有细节为完成
+    details.forEach(detail => {
+      detail.classList.add('line-through', 'text-green-600');
+    });
+
+    // 更新进度线
+    const progressPercentage = (stageNumber / this.totalStages) * 100;
+    this.progressLine.style.width = `${progressPercentage}%`;
+  }
+
+  resetAllStages() {
+    this.stageElements.forEach((stageElement, index) => {
+      if (!stageElement) return;
+      
+      const circle = stageElement.querySelector('.stage-circle');
+      const number = stageElement.querySelector('.stage-number');
+      const icon = stageElement.querySelector('.stage-icon');
+      const spinner = stageElement.querySelector('.stage-spinner');
+      const details = stageElement.querySelectorAll('.detail-item');
+      
+      // 重置圆圈
+      circle.className = 'stage-circle w-16 h-16 rounded-full border-4 border-gray-300 bg-white flex items-center justify-center mb-4 transition-all duration-500';
+      
+      // 显示数字，隐藏其他
+      number.classList.remove('hidden');
+      icon.classList.add('hidden');
+      spinner.classList.add('hidden');
+      
+      // 重置细节项目
+      details.forEach(detail => {
+        detail.className = 'detail-item opacity-50';
+      });
+    });
+    
+    // 重置进度线
+    this.progressLine.style.width = '0%';
+  }
+
+  updateStatus(stageNumber) {
+    const stageInfo = window.quoteProgressText?.status.stages || {
+      1: {
+        title: '🤖 AI智能分析进行中...',
+        message: 'AI算法正在解析您的CAD图纸，分析几何结构和制造工艺要求'
+      },
+      2: {
+        title: '👨‍🔬 专家优化审核中...',
+        message: '资深工程师正在验证AI分析结果，优化成本结构和工艺方案'
+      },
+      3: {
+        title: '📋 生成精准报价中...',
+        message: '正在整合分析结果，生成详细的报价单和交期承诺'
+      }
+    };
+    
+    const info = stageInfo[stageNumber];
+    if (info) {
+      this.statusTitle.textContent = info.title;
+      this.statusMessage.textContent = info.message;
+    }
+    
+    // 更新剩余时间
+    const remainingTime = this.getRemainingTime(stageNumber);
+    const language = window.quoteProgressLanguage || 'zh';
+    this.totalEta.textContent = stageNumber === 2 && language === 'en' ? '4-8 hours' : `${remainingTime}${language === 'en' ? ' seconds' : '秒'}`;
+  }
+
+  getStageDuration(stageNumber) {
+    // 各阶段持续时间（毫秒）
+    const durations = [2000, 1500, 1000]; // AI计算2秒，专家审核1.5秒，输出报价1秒
+    return durations[stageNumber - 1] || 1000;
+  }
+
+  getRemainingTime(currentStage) {
+    const remainingStages = this.totalStages - currentStage + 1;
+    return Math.max(1, remainingStages);
+  }
+
+  complete() {
+    this.isRunning = false;
+    
+    // 更新最终状态
+    const completeText = window.quoteProgressText?.status.complete || {
+      title: '✅ 报价生成完成！',
+      message: '恭喜！您的智能报价已准备就绪，请查看下方详细结果。'
+    };
+    this.statusTitle.textContent = completeText.title;
+    this.statusMessage.textContent = completeText.message;
+    const language = window.quoteProgressLanguage || 'zh';
+    this.totalEta.textContent = language === 'en' ? 'Complete' : '已完成';
+    
+    // 触发完成事件
+    const event = new CustomEvent('quoteProgressComplete', {
+      detail: { timestamp: new Date().toISOString() }
+    });
+    document.dispatchEvent(event);
+    
+    // 3秒后隐藏进度条
+    setTimeout(() => {
+      this.hide();
+    }, 3000);
+  }
+
+  // 外部接口方法
+  updateProgress(stage, details = {}) {
+    if (stage === 'ai-analysis') {
+      this.startStage(1);
+    } else if (stage === 'expert-review') {
+      this.startStage(2);
+    } else if (stage === 'quote-generation') {
+      this.startStage(3);
+    } else if (stage === 'complete') {
+      this.complete();
+    }
+  }
+}
+
+// 创建全局实例
+window.QuoteProgressController = QuoteProgressController;
+
+// 当DOM加载完成时初始化
+document.addEventListener('DOMContentLoaded', () => {
+  window.quoteProgress = new QuoteProgressController();
+});
+</script>
+
+<!-- 设置全局变量以支持多语言 -->
+<script define:vars={{ language, currentText }}>
+  // 设置全局变量供 JavaScript 使用
+  window.quoteProgressLanguage = language;
+  window.quoteProgressText = currentText;
+</script>
+</script>
+
+<style>
+  /* 进度条专用样式 */
+  .quote-stage {
+    position: relative;
+  }
+  
+  .stage-circle {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .quote-stage:hover .stage-circle {
+    transform: scale(1.05);
+  }
+  
+  .detail-item {
+    transition: all 0.3s ease;
+  }
+  
+  .stage-time {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .quote-stage:hover .stage-time {
+    opacity: 1;
+  }
+  
+  @media (max-width: 768px) {
+    .quote-stage {
+      margin-bottom: 2rem;
+    }
+    
+    .relative {
+      flex-direction: column;
+    }
+    
+    .stage-circle {
+      width: 3rem;
+      height: 3rem;
+    }
+    
+    .absolute {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI报价工具测试页面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-6 py-12">
+        <h1 class="text-4xl font-bold text-center mb-8">🚀 AI报价工具测试</h1>
+        
+        <!-- 文件上传区域 -->
+        <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-8 border-2 border-dashed border-purple-200 hover:border-purple-400 transition-colors duration-300">
+            <div id="upload-zone" class="text-center p-12 cursor-pointer group">
+                <div class="mb-6">
+                    <svg class="w-24 h-24 text-purple-400 mx-auto group-hover:text-purple-600 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                    </svg>
+                </div>
+                
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                    拖拽文件到此处或点击选择
+                </h3>
+                
+                <p class="text-gray-600 mb-6">
+                    支持格式：STEP, STL, IGES, DWG, DXF, STP, IGS
+                </p>
+                
+                <button type="button" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105">
+                    选择文件
+                </button>
+                
+                <input type="file" id="cad-file-input" multiple accept=".step,.stp,.stl,.iges,.igs,.dwg,.dxf" class="hidden">
+            </div>
+
+            <!-- 文件信息显示 -->
+            <div id="file-info" class="hidden mt-6">
+                <div class="bg-purple-50 rounded-2xl p-6">
+                    <h4 class="text-lg font-semibold text-purple-800 mb-4">已选择的文件：</h4>
+                    <div id="file-list" class="space-y-3">
+                        <!-- 动态生成文件列表 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 上传进度 -->
+            <div id="upload-progress" class="hidden mt-6">
+                <div class="bg-blue-50 rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-blue-800 font-semibold">正在上传...</span>
+                        <span id="progress-text" class="text-blue-600">0%</span>
+                    </div>
+                    <div class="w-full bg-blue-200 rounded-full h-3">
+                        <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI分析进度 -->
+            <div id="analysis-progress" class="hidden mt-6">
+                <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-3xl p-8 text-white">
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-6">
+                            <svg class="w-8 h-8 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </div>
+                        
+                        <h3 class="text-2xl font-bold mb-4">🤖 AI正在分析您的图纸...</h3>
+                        
+                        <div class="space-y-3 text-left max-w-2xl mx-auto">
+                            <div id="analysis-step-1" class="flex items-center space-x-3 opacity-100">
+                                <div class="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-green-800" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span>几何形状识别完成</span>
+                            </div>
+                            
+                            <div id="analysis-step-2" class="flex items-center space-x-3 opacity-50">
+                                <div class="w-6 h-6 bg-yellow-400 rounded-full animate-pulse"></div>
+                                <span>制造工艺分析中...</span>
+                            </div>
+                            
+                            <div id="analysis-step-3" class="flex items-center space-x-3 opacity-30">
+                                <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+                                <span>材料成本计算</span>
+                            </div>
+                            
+                            <div id="analysis-step-4" class="flex items-center space-x-3 opacity-30">
+                                <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+                                <span>生成智能报价</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <p class="text-blue-100">
+                                预计完成时间：<span id="eta-countdown" class="font-bold text-yellow-300">3秒</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 报价结果区域 -->
+        <div id="quote-results" class="hidden mt-12 max-w-4xl mx-auto">
+            <div class="bg-white rounded-3xl shadow-2xl p-8">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-400 to-blue-500 rounded-full mb-6">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">
+                        🎯 AI智能报价结果
+                    </h2>
+                </div>
+
+                <!-- 价格信息 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-purple-50 rounded-2xl p-6">
+                        <h3 class="text-2xl font-bold text-purple-800 mb-4">Geppetto报价</h3>
+                        <div class="text-4xl font-bold text-purple-600 mb-2">
+                            ¥<span id="ai-price">1,280</span>
+                        </div>
+                        <div class="text-green-600 font-semibold">
+                            节省：<span id="savings">50%</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-2xl p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">市场平均价</h3>
+                        <div class="text-4xl font-bold text-gray-600 mb-2 line-through">
+                            ¥<span id="market-price">2,560</span>
+                        </div>
+                        <div class="text-red-600 font-semibold">
+                            传统制造商价格
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="mt-8 text-center space-y-4">
+                    <button class="w-full md:w-auto bg-gradient-to-r from-purple-600 to-blue-600 text-white px-12 py-4 rounded-2xl font-bold text-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105">
+                        确认下单 🚀
+                    </button>
+                    <button class="w-full md:w-auto ml-0 md:ml-4 border-2 border-purple-300 text-purple-600 px-8 py-4 rounded-2xl font-semibold hover:bg-purple-50 transition-all duration-300">
+                        下载报价单 📋
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测试日志 -->
+        <div class="mt-12 max-w-4xl mx-auto">
+            <div class="bg-gray-900 text-green-400 rounded-xl p-6 font-mono text-sm">
+                <h3 class="text-white font-bold mb-4">📊 测试日志</h3>
+                <div id="test-log" class="space-y-1">
+                    <div>System initialized...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 简化的CAD处理器用于测试
+        class SimplifiedCADProcessor {
+            validateFiles(files) {
+                const validExtensions = ['step', 'stp', 'stl', 'iges', 'igs', 'dwg', 'dxf'];
+                const validFiles = [];
+                const invalidFiles = [];
+                const totalErrors = [];
+
+                Array.from(files).forEach(file => {
+                    const extension = file.name.split('.').pop().toLowerCase();
+                    if (validExtensions.includes(extension) && file.size <= 50 * 1024 * 1024) {
+                        validFiles.push(file);
+                    } else {
+                        invalidFiles.push(file);
+                        if (!validExtensions.includes(extension)) {
+                            totalErrors.push(`不支持的文件格式: ${extension}`);
+                        }
+                        if (file.size > 50 * 1024 * 1024) {
+                            totalErrors.push(`文件 ${file.name} 超过50MB限制`);
+                        }
+                    }
+                });
+
+                return { validFiles, invalidFiles, totalErrors };
+            }
+
+            async processFiles(files, callbacks) {
+                callbacks.onStart?.();
+                
+                // 模拟上传进度
+                for (let i = 0; i <= 100; i += 10) {
+                    await this.delay(150);
+                    callbacks.onProgress?.({
+                        stage: 'upload',
+                        progress: i,
+                        message: `上传中... ${Math.round(i)}%`
+                    });
+                }
+                
+                await this.delay(500);
+                
+                // 模拟分析进度
+                const analysisSteps = [
+                    { threshold: 25, name: '几何形状识别', step: 1 },
+                    { threshold: 50, name: '制造工艺分析', step: 2 },
+                    { threshold: 75, name: '材料成本计算', step: 3 },
+                    { threshold: 95, name: '生成智能报价', step: 4 }
+                ];
+
+                for (let i = 0; i <= 100; i += 5) {
+                    await this.delay(100);
+                    
+                    const currentStep = analysisSteps.find(step => i >= step.threshold);
+                    
+                    callbacks.onProgress?.({
+                        stage: 'analysis',
+                        progress: i,
+                        message: currentStep ? currentStep.name : '初始化分析...',
+                        currentStep: currentStep ? currentStep.name : '准备阶段'
+                    });
+                }
+
+                // 生成模拟报价结果
+                const mockResult = {
+                    analysis: {
+                        summary: {
+                            totalCost: 1280,
+                            totalMarketPrice: 2560,
+                            totalSavings: 1280,
+                            totalFiles: files.length
+                        }
+                    }
+                };
+
+                callbacks.onComplete?.(mockResult);
+                return mockResult;
+            }
+
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // 日志功能
+        function log(message) {
+            const logContainer = document.getElementById('test-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // 主要功能
+        document.addEventListener('DOMContentLoaded', () => {
+            log('AI报价工具测试页面加载完成');
+            
+            const uploadZone = document.getElementById('upload-zone');
+            const fileInput = document.getElementById('cad-file-input');
+            const fileInfo = document.getElementById('file-info');
+            const fileList = document.getElementById('file-list');
+            const uploadProgress = document.getElementById('upload-progress');
+            const analysisProgress = document.getElementById('analysis-progress');
+            const quoteResults = document.getElementById('quote-results');
+
+            const cadProcessor = new SimplifiedCADProcessor();
+            
+            log('CAD处理器初始化成功');
+
+            // 点击上传区域触发文件选择
+            uploadZone.addEventListener('click', () => {
+                log('触发文件选择');
+                fileInput.click();
+            });
+
+            // 文件选择处理
+            fileInput.addEventListener('change', (e) => {
+                const files = e.target.files;
+                if (files.length > 0) {
+                    log(`选择了 ${files.length} 个文件`);
+                    handleFiles(files);
+                }
+            });
+
+            // 拖拽功能
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('bg-purple-50', 'border-purple-400');
+            });
+
+            uploadZone.addEventListener('dragleave', () => {
+                uploadZone.classList.remove('bg-purple-50', 'border-purple-400');
+            });
+
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('bg-purple-50', 'border-purple-400');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    log(`拖拽了 ${files.length} 个文件`);
+                    handleFiles(files);
+                }
+            });
+
+            async function handleFiles(files) {
+                // 验证文件
+                const validation = cadProcessor.validateFiles(files);
+                
+                if (validation.totalErrors.length > 0) {
+                    log(`文件验证失败: ${validation.totalErrors.join(', ')}`);
+                    alert('文件验证失败:\n' + validation.totalErrors.join('\n'));
+                    return;
+                }
+
+                log(`文件验证成功，有效文件: ${validation.validFiles.length} 个`);
+
+                // 显示文件信息
+                displayFileInfo(validation.validFiles);
+                
+                // 开始处理文件
+                try {
+                    log('开始处理文件...');
+                    
+                    const result = await cadProcessor.processFiles(validation.validFiles, {
+                        onStart: () => {
+                            log('文件处理开始');
+                            uploadProgress.classList.remove('hidden');
+                        },
+                        onProgress: (data) => {
+                            const { stage, progress, message, currentStep } = data;
+                            
+                            if (stage === 'upload') {
+                                updateUploadProgress(progress);
+                            } else if (stage === 'analysis') {
+                                showAnalysisProgress(progress, currentStep);
+                            }
+                            
+                            log(`${stage}: ${Math.round(progress)}% - ${message}`);
+                        },
+                        onComplete: (data) => {
+                            log('文件处理完成');
+                            showResults(data);
+                        },
+                        onError: (error) => {
+                            log(`处理错误: ${error}`);
+                            alert('处理失败: ' + error);
+                        }
+                    });
+
+                } catch (error) {
+                    log(`处理异常: ${error.message}`);
+                    alert('处理异常: ' + error.message);
+                }
+            }
+
+            function displayFileInfo(files) {
+                fileInfo.classList.remove('hidden');
+                fileList.innerHTML = '';
+
+                files.forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'flex items-center justify-between p-3 bg-white rounded-lg border';
+                    
+                    const extension = file.name.split('.').pop().toUpperCase();
+                    const fileSize = formatFileSize(file.size);
+                    
+                    fileItem.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">${extension}</span>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">${file.name}</div>
+                                <div class="text-sm text-gray-500">${fileSize}</div>
+                            </div>
+                        </div>
+                        <div class="text-green-600 font-semibold">✓ 已选择</div>
+                    `;
+                    
+                    fileList.appendChild(fileItem);
+                });
+            }
+
+            function updateUploadProgress(progress) {
+                const progressBar = document.getElementById('progress-bar');
+                const progressText = document.getElementById('progress-text');
+                
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `${Math.round(progress)}%`;
+                
+                if (progress >= 100) {
+                    setTimeout(() => {
+                        uploadProgress.classList.add('hidden');
+                        analysisProgress.classList.remove('hidden');
+                    }, 500);
+                }
+            }
+
+            function showAnalysisProgress(progress, currentStep) {
+                analysisProgress.classList.remove('hidden');
+                
+                // 更新倒计时
+                const remainingTime = Math.max(1, Math.ceil((100 - progress) * 0.03));
+                const countdownEl = document.getElementById('eta-countdown');
+                countdownEl.textContent = `${remainingTime}秒`;
+                
+                // 更新步骤状态
+                updateAnalysisSteps(progress);
+            }
+
+            function updateAnalysisSteps(progress) {
+                const steps = [
+                    { id: 'analysis-step-1', threshold: 25 },
+                    { id: 'analysis-step-2', threshold: 50 },
+                    { id: 'analysis-step-3', threshold: 75 },
+                    { id: 'analysis-step-4', threshold: 95 }
+                ];
+
+                steps.forEach(step => {
+                    const stepEl = document.getElementById(step.id);
+                    if (stepEl && progress >= step.threshold) {
+                        stepEl.classList.remove('opacity-50', 'opacity-30');
+                        stepEl.classList.add('opacity-100');
+                        
+                        const icon = stepEl.querySelector('div');
+                        if (icon) {
+                            icon.className = 'w-6 h-6 bg-green-400 rounded-full flex items-center justify-center';
+                            icon.innerHTML = `
+                                <svg class="w-4 h-4 text-green-800" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            `;
+                        }
+                    }
+                });
+            }
+
+            function showResults(data) {
+                uploadProgress.classList.add('hidden');
+                analysisProgress.classList.add('hidden');
+                
+                // 更新结果数据
+                const { analysis } = data;
+                const { summary } = analysis;
+                
+                document.getElementById('ai-price').textContent = summary.totalCost.toLocaleString();
+                document.getElementById('market-price').textContent = summary.totalMarketPrice.toLocaleString();
+                
+                const savingsPercentage = Math.round((summary.totalSavings / summary.totalMarketPrice) * 100);
+                document.getElementById('savings').textContent = `${savingsPercentage}%`;
+                
+                // 显示结果区域
+                quoteResults.classList.remove('hidden');
+                quoteResults.scrollIntoView({ behavior: 'smooth' });
+                
+                log(`报价生成完成: ¥${summary.totalCost} (节省${savingsPercentage}%)`);
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        });
+    </script>
+</body>
+</html>

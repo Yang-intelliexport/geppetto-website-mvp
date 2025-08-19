@@ -1,0 +1,98 @@
+---
+export interface Props {
+  title?: string
+  subtitle?: string
+}
+
+const { 
+  title = "Geppetto vs 传统制造业 vs 在线平台",
+  subtitle = "全方位对比分析，看清Geppetto的独特价值"
+} = Astro.props
+
+const comparisonData = [
+  {
+    dimension: "报价速度",
+    geppetto: "4-8小时",
+    traditional: "3-7天", 
+    platform: "即时但不准确"
+  },
+  {
+    dimension: "最小订量 (MOQ)",
+    geppetto: "1件起做",
+    traditional: "50-100件",
+    platform: "1件(但加价)"
+  },
+  {
+    dimension: "交付周期", 
+    geppetto: "24-48小时",
+    traditional: "7-15天",
+    platform: "3-10天"
+  },
+  {
+    dimension: "精度保证",
+    geppetto: "±0.05mm", 
+    traditional: "±0.1mm",
+    platform: "依供应商"
+  },
+  {
+    dimension: "成本水平",
+    geppetto: "50-70%节省",
+    traditional: "标准价格",
+    platform: "+20-30%溢价"
+  },
+  {
+    dimension: "技术支持",
+    geppetto: "AI+专家双重",
+    traditional: "人工经验", 
+    platform: "平台标准化"
+  },
+  {
+    dimension: "质量一致性",
+    geppetto: "AI算法保证",
+    traditional: "人工差异大",
+    platform: "供应商不一"
+  }
+]
+---
+
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+        {title}
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        {subtitle}
+      </p>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full bg-white rounded-lg shadow-lg overflow-hidden">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">比较维度</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-purple-600">Geppetto</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-gray-600">传统CNC厂商</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-gray-600">在线平台 (如Xometry)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          {comparisonData.map((row, index) => (
+            <tr class={index % 2 === 1 ? 'bg-gray-50' : ''}>
+              <td class="px-6 py-4 font-medium text-gray-900">{row.dimension}</td>
+              <td class="px-6 py-4 text-center text-purple-600 font-semibold">{row.geppetto}</td>
+              <td class="px-6 py-4 text-center text-gray-500">{row.traditional}</td>
+              <td class="px-6 py-4 text-center text-gray-500">{row.platform}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="mt-12 text-center">
+      <div class="inline-flex items-center px-6 py-3 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
+        💡 结论：Geppetto在速度、成本、精度、服务四个维度全面领先
+      </div>
+    </div>
+  </div>
+</section>

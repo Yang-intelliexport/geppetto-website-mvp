@@ -1,0 +1,68 @@
+---
+interface Props {
+  title: string;
+  icon: string;
+  description: string;
+  features: string[];
+  applications: string[];
+  gradient: string;
+}
+
+const { title, icon, description, features, applications, gradient } = Astro.props;
+---
+
+<div class="bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 group border border-gray-100">
+  <div class="space-y-6">
+    <!-- 标题和图标 -->
+    <div class="text-center">
+      <div class={`w-20 h-20 bg-gradient-to-r ${gradient} rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
+        <span class="text-3xl">{icon}</span>
+      </div>
+      
+      <h3 class="text-2xl font-bold text-gray-800 mb-3">{title}</h3>
+      <p class="text-gray-600 leading-relaxed">{description}</p>
+    </div>
+
+    <!-- 技术特征 -->
+    <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6">
+      <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+        <span class="text-blue-600 mr-2">⚙️</span>
+        技术参数
+      </h4>
+      <div class="space-y-3">
+        {features.map((feature: string) => (
+          <div class="flex items-center space-x-3">
+            <div class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
+            <span class="text-gray-700 text-sm">{feature}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- 应用场景 -->
+    <div class="bg-gradient-to-br from-green-50 to-yellow-50 rounded-2xl p-6">
+      <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+        <span class="text-green-600 mr-2">🎯</span>
+        应用场景
+      </h4>
+      <div class="grid grid-cols-2 gap-3">
+        {applications.map((application: string) => (
+          <div class="flex items-center space-x-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+            <span class="text-gray-700 text-sm">{application}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- 行动按钮 -->
+    <div class="pt-4">
+      <a 
+        href="/ai-quote" 
+        class={`w-full inline-block text-center bg-gradient-to-r ${gradient} text-white py-3 px-6 rounded-2xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300`}
+      >
+        🚀 立即获取报价
+      </a>
+    </div>
+  </div>
+</div>

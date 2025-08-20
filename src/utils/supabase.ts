@@ -29,6 +29,9 @@ export interface ContactSubmission {
   company?: string
   phone?: string
   message: string
+  service?: string
+  quantity?: string
+  contact_preference?: string
   source: 'contact_form' | 'ai_quote' | 'calculator'
   created_at?: string
 }

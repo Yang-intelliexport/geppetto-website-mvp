@@ -1,7 +1,5 @@
 import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
-import react from '@astrojs/react'
-import vue from '@astrojs/vue'
 import sitemap from '@astrojs/sitemap'
 
 // https://astro.build/config
@@ -9,12 +7,6 @@ export default defineConfig({
   site: 'https://geppetto.com',
   integrations: [
     tailwind(),
-    react({
-      include: ['**/interactive/**']
-    }),
-    vue({
-      include: ['**/components/**/*.vue', '**/forms/**/*.vue']
-    }),
     sitemap({
       changefreq: 'weekly',
       priority: 0.7,
@@ -43,14 +35,13 @@ export default defineConfig({
     format: 'directory'
   },
 
-
   vite: {
     build: {
       rollupOptions: {
         output: {
           manualChunks: {
-            'quote-engine': ['./src/components/interactive/QuoteEngine.jsx'],
-            'calculator': ['./src/components/calculators/CostCalculator.vue']
+            'vendor': ['@astrojs/tailwind'],
+            'utils': ['./src/utils/i18n.ts', './src/utils/supabase.ts']
           }
         }
       }

@@ -30,21 +30,6 @@ export default defineConfig({
   ],
   
   build: {
-    inlineStylesheets: 'auto',
-    split: true,
     format: 'directory'
-  },
-
-  vite: {
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            'vendor': ['@astrojs/tailwind'],
-            'utils': ['./src/utils/i18n.ts', './src/utils/supabase.ts']
-          }
-        }
-      }
-    }
   }
 })

@@ -12,11 +12,12 @@ import {
 } from './errorHandler'
 
 // Supabase配置
-const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables')
+// 在生产环境中检查环境变量
+if (typeof window !== 'undefined' && (!import.meta.env.PUBLIC_SUPABASE_URL || !import.meta.env.PUBLIC_SUPABASE_ANON_KEY)) {
+  console.warn('Supabase environment variables not configured properly')
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)

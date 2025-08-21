@@ -1,153 +1,61 @@
 ---
-export interface Props {
-  measurementId: string
-}
-
-const { measurementId } = Astro.props
-
-// Don't load analytics in development unless explicitly enabled
+const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID
 const isDev = import.meta.env.DEV
-const enableInDev = import.meta.env.PUBLIC_GA_ENABLE_DEV === 'true'
-
-const shouldLoadGA = !isDev || enableInDev
 ---
 
-{shouldLoadGA && measurementId && (
+{measurementId && (
   <>
-    <!-- Google Analytics 4 -->
+    <!-- Google tag (gtag.js) - Following Daniel's Ultimate Astro GA Guide -->
     <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
     <script is:inline define:vars={{ measurementId }}>
-      // 确保gtag函数始终存在
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      window.gtag = gtag; // 暴露到全局作用域
+      window.gtag = gtag;
       gtag('js', new Date());
       
-      // Initialize with denied consent (will be updated by cookie consent)
+      // GDPR Compliant - Default consent to denied
       gtag('consent', 'default', {
-        'analytics_storage': 'denied',
         'ad_storage': 'denied',
         'ad_user_data': 'denied',
-        'ad_personalization': 'denied'
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
       });
       
-      // Enhanced measurement and privacy settings
+      // Configure GA4 with privacy settings
       gtag('config', measurementId, {
-        // Privacy settings
         anonymize_ip: true,
         allow_google_signals: false,
         allow_ad_personalization_signals: false,
-        
-        // Performance settings
-        send_page_view: true,
-        
-        // Enhanced Measurement settings
-        enhanced_measurements: {
-          scrolls: true,
-          outbound_clicks: true,
-          site_search: true,
-          video_engagement: true,
-          file_downloads: true
-        },
-        
-        // Custom dimensions for B2B tracking
-        custom_map: {
-          'dimension1': 'user_type', // visitor, lead, customer
-          'dimension2': 'traffic_source', // organic, direct, referral, etc.
-          'dimension3': 'page_language' // zh, en
-        },
-        
-        // Debug mode (only in development)
-        debug_mode: import.meta.env.DEV
+        debug_mode: isDev
       });
       
-      // Track language preference
-      gtag('event', 'page_view', {
-        'page_language': document.documentElement.lang || 'en'
+      // View Transitions support - Reinitialize on page changes
+      document.addEventListener('astro:page-load', () => {
+        gtag('js', new Date());
+        gtag('config', measurementId);
       });
       
-      // Enhanced e-commerce tracking for quote requests
+      // Custom tracking functions
       window.trackQuoteRequest = function(quoteData) {
-        gtag('event', 'begin_checkout', {
+        gtag('event', 'generate_lead', {
           currency: 'USD',
-          value: quoteData.estimatedValue || 0,
-          transaction_id: quoteData.quoteId,
-          // Required e-commerce parameters
-          engagement_time_msec: 100,
-          session_id: quoteData.sessionId || 'unknown',
-          items: [{
-            item_id: quoteData.quoteId,
-            item_name: 'CNC Quote Request',
-            item_category: 'Manufacturing Service',
-            item_brand: 'Geppetto',
-            quantity: 1,
-            price: quoteData.estimatedValue || 0
-          }]
+          value: quoteData.estimatedValue || 0
         });
       };
       
-      // Track file uploads
       window.trackFileUpload = function(fileData) {
         gtag('event', 'file_upload', {
-          event_category: 'engagement',
-          event_label: fileData.fileType || 'unknown',
           file_extension: fileData.fileType,
-          file_name: fileData.fileName,
-          value: fileData.fileSize || 0,
-          // Required for Realtime reports
-          engagement_time_msec: 100,
-          session_id: fileData.sessionId || 'unknown'
+          file_name: fileData.fileName
         });
       };
       
-      // Track contact form submissions
       window.trackContactForm = function(formType) {
-        gtag('event', 'generate_lead', {
-          event_category: 'lead_generation',
-          event_label: formType || 'contact_form',
-          form_type: formType,
-          value: 1,
-          // Required for Realtime reports
-          engagement_time_msec: 100,
-          session_id: 'contact_session'
+        gtag('event', 'form_submit', {
+          form_type: formType || 'contact'
         });
       };
     </script>
   </>
 )}
 
-{!shouldLoadGA && (
-  <!-- GA disabled in development -->
-  <script>
-    console.log('Google Analytics disabled in development mode');
-    
-    // 确保基础函数存在
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function() {
-      console.log('GA (dev mode):', arguments);
-      window.dataLayer.push(arguments);
-    };
-    
-    window.trackQuoteRequest = function(quoteData) {
-      console.log('Quote request tracked (dev mode):', quoteData);
-    };
-    
-    window.trackFileUpload = function(fileData) {
-      console.log('File upload tracked (dev mode):', fileData);
-    };
-    
-    window.trackContactForm = function(formType) {
-      console.log('Contact form tracked (dev mode):', formType);
-    };
-  </script>
-)}
-
-<!-- 确保gtag函数全局可用 -->
-<script is:inline>
-  // 确保gtag函数始终定义在window对象上
-  window.dataLayer = window.dataLayer || [];
-  if (typeof window.gtag === 'undefined') {
-    function gtag(){dataLayer.push(arguments);}
-    window.gtag = gtag;
-  }
-</script>

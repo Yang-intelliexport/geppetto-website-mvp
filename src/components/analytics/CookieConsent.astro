@@ -1,0 +1,314 @@
+---
+import { getLanguageFromUrl, t } from '../../utils/i18n'
+
+const currentLang = getLanguageFromUrl(Astro.url)
+const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
+---
+
+{consentEnabled && (
+  <div id="cookie-consent-banner" class="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 shadow-lg z-50 transform translate-y-full transition-transform duration-300 ease-in-out" style="display: none;">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex-1">
+        <p class="text-sm">
+          {currentLang === 'zh' ? (
+            <>
+              我们使用cookie来改善您的浏览体验并分析网站流量。继续使用我们的网站即表示您同意我们的
+              <a href="/privacy" class="text-purple-400 hover:text-purple-300 underline">隐私政策</a>。
+            </>
+          ) : (
+            <>
+              We use cookies to improve your browsing experience and analyze website traffic. By continuing to use our website, you agree to our 
+              <a href="/privacy" class="text-purple-400 hover:text-purple-300 underline">Privacy Policy</a>.
+            </>
+          )}
+        </p>
+      </div>
+      <div class="flex gap-3">
+        <button 
+          id="cookie-accept" 
+          class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+        >
+          {currentLang === 'zh' ? '接受所有' : 'Accept All'}
+        </button>
+        <button 
+          id="cookie-settings" 
+          class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+        >
+          {currentLang === 'zh' ? '设置' : 'Settings'}
+        </button>
+        <button 
+          id="cookie-decline" 
+          class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+        >
+          {currentLang === 'zh' ? '拒绝' : 'Decline'}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cookie Settings Modal -->
+  <div id="cookie-settings-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" style="display: none;">
+    <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold text-gray-900">
+            {currentLang === 'zh' ? 'Cookie设置' : 'Cookie Settings'}
+          </h2>
+          <button id="cookie-modal-close" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="space-y-6">
+          <!-- Essential Cookies -->
+          <div class="border-b border-gray-200 pb-4">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-semibold text-gray-900">
+                {currentLang === 'zh' ? '必要Cookie' : 'Essential Cookies'}
+              </h3>
+              <div class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">
+                {currentLang === 'zh' ? '总是开启' : 'Always On'}
+              </div>
+            </div>
+            <p class="text-sm text-gray-600">
+              {currentLang === 'zh' 
+                ? '这些cookie对网站功能至关重要，无法禁用。它们通常是响应您的操作而设置的。'
+                : 'These cookies are essential for the website to function and cannot be disabled. They are usually set in response to your actions.'
+              }
+            </p>
+          </div>
+
+          <!-- Analytics Cookies -->
+          <div class="border-b border-gray-200 pb-4">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-semibold text-gray-900">
+                {currentLang === 'zh' ? '分析Cookie' : 'Analytics Cookies'}
+              </h3>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="analytics-toggle" class="sr-only peer" checked>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+              </label>
+            </div>
+            <p class="text-sm text-gray-600">
+              {currentLang === 'zh' 
+                ? '这些cookie帮助我们了解访客如何使用网站，以便我们改善用户体验。'
+                : 'These cookies help us understand how visitors use our website so we can improve the user experience.'
+              }
+            </p>
+          </div>
+
+          <!-- Marketing Cookies -->
+          <div class="pb-4">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-semibold text-gray-900">
+                {currentLang === 'zh' ? '营销Cookie' : 'Marketing Cookies'}
+              </h3>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="marketing-toggle" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+              </label>
+            </div>
+            <p class="text-sm text-gray-600">
+              {currentLang === 'zh' 
+                ? '这些cookie用于提供更相关的广告和营销内容。'
+                : 'These cookies are used to provide more relevant advertisements and marketing content.'
+              }
+            </p>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+          <button id="cookie-save-settings" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+            {currentLang === 'zh' ? '保存设置' : 'Save Settings'}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Cookie consent management
+    class CookieConsent {
+      constructor() {
+        this.consentKey = 'geppetto_cookie_consent';
+        this.consentData = this.getConsent();
+        this.init();
+      }
+
+      init() {
+        // Show banner if no consent given
+        if (!this.consentData) {
+          this.showBanner();
+        } else {
+          // Apply consent settings
+          this.applyCookieSettings(this.consentData);
+        }
+
+        this.bindEvents();
+      }
+
+      showBanner() {
+        const banner = document.getElementById('cookie-consent-banner');
+        if (banner) {
+          banner.style.display = 'block';
+          setTimeout(() => {
+            banner.classList.remove('translate-y-full');
+          }, 100);
+        }
+      }
+
+      hideBanner() {
+        const banner = document.getElementById('cookie-consent-banner');
+        if (banner) {
+          banner.classList.add('translate-y-full');
+          setTimeout(() => {
+            banner.style.display = 'none';
+          }, 300);
+        }
+      }
+
+      showModal() {
+        const modal = document.getElementById('cookie-settings-modal');
+        if (modal) {
+          modal.style.display = 'flex';
+          
+          // Set current preferences
+          const consent = this.getConsent() || { analytics: true, marketing: false };
+          document.getElementById('analytics-toggle').checked = consent.analytics;
+          document.getElementById('marketing-toggle').checked = consent.marketing;
+        }
+      }
+
+      hideModal() {
+        const modal = document.getElementById('cookie-settings-modal');
+        if (modal) {
+          modal.style.display = 'none';
+        }
+      }
+
+      acceptAll() {
+        const consent = {
+          essential: true,
+          analytics: true,
+          marketing: true,
+          timestamp: Date.now()
+        };
+        this.saveConsent(consent);
+        this.applyCookieSettings(consent);
+        this.hideBanner();
+      }
+
+      declineAll() {
+        const consent = {
+          essential: true,
+          analytics: false,
+          marketing: false,
+          timestamp: Date.now()
+        };
+        this.saveConsent(consent);
+        this.applyCookieSettings(consent);
+        this.hideBanner();
+      }
+
+      saveSettings() {
+        const analytics = document.getElementById('analytics-toggle').checked;
+        const marketing = document.getElementById('marketing-toggle').checked;
+        
+        const consent = {
+          essential: true,
+          analytics,
+          marketing,
+          timestamp: Date.now()
+        };
+        
+        this.saveConsent(consent);
+        this.applyCookieSettings(consent);
+        this.hideModal();
+        this.hideBanner();
+      }
+
+      saveConsent(consent) {
+        localStorage.setItem(this.consentKey, JSON.stringify(consent));
+        this.consentData = consent;
+      }
+
+      getConsent() {
+        try {
+          const stored = localStorage.getItem(this.consentKey);
+          return stored ? JSON.parse(stored) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      applyCookieSettings(consent) {
+        // Enable/disable Google Analytics based on consent
+        if (consent.analytics && window.gtag) {
+          // Enable GA if it was disabled
+          window.gtag('consent', 'update', {
+            'analytics_storage': 'granted'
+          });
+        } else if (window.gtag) {
+          // Disable GA
+          window.gtag('consent', 'update', {
+            'analytics_storage': 'denied'
+          });
+        }
+
+        // Handle marketing cookies
+        if (consent.marketing && window.gtag) {
+          window.gtag('consent', 'update', {
+            'ad_storage': 'granted',
+            'ad_user_data': 'granted',
+            'ad_personalization': 'granted'
+          });
+        } else if (window.gtag) {
+          window.gtag('consent', 'update', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied'
+          });
+        }
+
+        // Dispatch custom event for other scripts
+        window.dispatchEvent(new CustomEvent('cookieConsentChanged', {
+          detail: consent
+        }));
+      }
+
+      bindEvents() {
+        document.getElementById('cookie-accept')?.addEventListener('click', () => this.acceptAll());
+        document.getElementById('cookie-decline')?.addEventListener('click', () => this.declineAll());
+        document.getElementById('cookie-settings')?.addEventListener('click', () => this.showModal());
+        document.getElementById('cookie-modal-close')?.addEventListener('click', () => this.hideModal());
+        document.getElementById('cookie-save-settings')?.addEventListener('click', () => this.saveSettings());
+
+        // Close modal on backdrop click
+        document.getElementById('cookie-settings-modal')?.addEventListener('click', (e) => {
+          if (e.target.id === 'cookie-settings-modal') {
+            this.hideModal();
+          }
+        });
+      }
+    }
+
+    // Initialize cookie consent when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => new CookieConsent());
+    } else {
+      new CookieConsent();
+    }
+
+    // Expose consent status globally
+    window.getCookieConsent = function() {
+      try {
+        const stored = localStorage.getItem('geppetto_cookie_consent');
+        return stored ? JSON.parse(stored) : null;
+      } catch (e) {
+        return null;
+      }
+    };
+  </script>
+)}

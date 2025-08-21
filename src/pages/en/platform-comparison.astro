@@ -1,0 +1,426 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+---
+
+<BaseLayout 
+  title="Platform Comparison | Geppetto vs Traditional Manufacturing"
+  description="Compare Geppetto's AI-powered manufacturing with traditional methods. See why thousands choose our platform for speed, precision, and cost."
+  keywords={['manufacturing comparison', 'geppetto vs competitors', 'cnc manufacturing platform', 'traditional vs ai manufacturing']}
+>
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-purple-600 to-blue-500 text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">
+        Platform Comparison
+      </h1>
+      <p class="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">
+        See how Geppetto revolutionizes manufacturing compared to traditional methods
+      </p>
+    </div>
+  </section>
+
+  <!-- Quick Comparison Overview -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-12">
+        <!-- Speed -->
+        <div class="p-6">
+          <div class="text-4xl font-bold text-green-600 mb-2">24 Hours</div>
+          <div class="text-gray-600">vs 2-4 Weeks</div>
+          <div class="text-sm text-gray-500 mt-2">Delivery Time</div>
+        </div>
+
+        <!-- MOQ -->
+        <div class="p-6">
+          <div class="text-4xl font-bold text-blue-600 mb-2">1 Piece</div>
+          <div class="text-gray-600">vs 100+ Pieces</div>
+          <div class="text-sm text-gray-500 mt-2">Minimum Order</div>
+        </div>
+
+        <!-- Quote Time -->
+        <div class="p-6">
+          <div class="text-4xl font-bold text-purple-600 mb-2">15 Minutes</div>
+          <div class="text-gray-600">vs 3-5 Days</div>
+          <div class="text-sm text-gray-500 mt-2">Quote Response</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Detailed Comparison Table -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          Detailed Feature Comparison
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Side-by-side comparison of key manufacturing features
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="bg-gray-900 text-white">
+                <th class="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">Feature</th>
+                <th class="px-6 py-4 text-center text-sm font-medium text-red-400 uppercase tracking-wider">Traditional Shop</th>
+                <th class="px-6 py-4 text-center text-sm font-medium text-yellow-400 uppercase tracking-wider">Online Platforms</th>
+                <th class="px-6 py-4 text-center text-sm font-medium text-green-400 uppercase tracking-wider">Geppetto AI</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <!-- Quote Response Time -->
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Quote Response Time</td>
+                <td class="px-6 py-4 text-sm text-center text-red-600">3-5 business days</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">24-48 hours</td>
+                <td class="px-6 py-4 text-sm text-center text-green-600 font-bold">15 minutes</td>
+              </tr>
+
+              <!-- Minimum Order Quantity -->
+              <tr class="bg-gray-50 hover:bg-gray-100">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Minimum Order Quantity</td>
+                <td class="px-6 py-4 text-sm text-center text-red-600">100-1000+ pieces</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">10-50 pieces</td>
+                <td class="px-6 py-4 text-sm text-center text-green-600 font-bold">1 piece</td>
+              </tr>
+
+              <!-- Lead Time -->
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Manufacturing Lead Time</td>
+                <td class="px-6 py-4 text-sm text-center text-red-600">2-4 weeks</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">7-14 days</td>
+                <td class="px-6 py-4 text-sm text-center text-green-600 font-bold">24 hours</td>
+              </tr>
+
+              <!-- Setup Fees -->
+              <tr class="bg-gray-50 hover:bg-gray-100">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Setup/Programming Fees</td>
+                <td class="px-6 py-4 text-sm text-center text-red-600">$500-2000</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">$200-500</td>
+                <td class="px-6 py-4 text-sm text-center text-green-600 font-bold">$0</td>
+              </tr>
+
+              <!-- Precision -->
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Standard Precision</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">±0.1-0.2mm</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">±0.1mm</td>
+                <td class="px-6 py-4 text-sm text-center text-green-600 font-bold">±0.05mm</td>
+              </tr>
+
+              <!-- Quality Certification -->
+              <tr class="bg-gray-50 hover:bg-gray-100">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Quality Certification</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">Varies by shop</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">Limited</td>
+                <td class="px-6 py-4 text-sm text-center text-green-600 font-bold">ISO 9001, AS9100D</td>
+              </tr>
+
+              <!-- AI Analysis -->
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">AI Design Analysis</td>
+                <td class="px-6 py-4 text-sm text-center text-red-600">None</td>
+                <td class="px-6 py-4 text-sm text-center text-red-600">Basic</td>
+                <td class="px-6 py-4 text-sm text-center text-green-600 font-bold">Advanced</td>
+              </tr>
+
+              <!-- Real-time Updates -->
+              <tr class="bg-gray-50 hover:bg-gray-100">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Real-time Production Updates</td>
+                <td class="px-6 py-4 text-sm text-center text-red-600">Phone calls</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">Email updates</td>
+                <td class="px-6 py-4 text-sm text-center text-green-600 font-bold">Live dashboard</td>
+              </tr>
+
+              <!-- Design Changes -->
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Design Change Flexibility</td>
+                <td class="px-6 py-4 text-sm text-center text-red-600">Restart process</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">Additional fees</td>
+                <td class="px-6 py-4 text-sm text-center text-green-600 font-bold">Free revisions</td>
+              </tr>
+
+              <!-- Customer Support -->
+              <tr class="bg-gray-50 hover:bg-gray-100">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">Customer Support</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">Business hours only</td>
+                <td class="px-6 py-4 text-sm text-center text-yellow-600">Email support</td>
+                <td class="px-6 py-4 text-sm text-center text-green-600 font-bold">24/7 AI + human</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platform Categories -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          Manufacturing Platform Types
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Understanding different approaches to manufacturing services
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Traditional Shops -->
+        <div class="bg-red-50 p-8 rounded-lg border border-red-200">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+              🏭
+            </div>
+            <h3 class="text-2xl font-bold text-red-800 mb-2">Traditional Shops</h3>
+            <p class="text-red-700">Local machine shops and manufacturers</p>
+          </div>
+          
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-semibold text-red-800 mb-2">Pros:</h4>
+              <ul class="text-sm text-red-700 space-y-1 list-disc list-inside">
+                <li>Personal relationships</li>
+                <li>Custom capabilities</li>
+                <li>Local presence</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold text-red-800 mb-2">Cons:</h4>
+              <ul class="text-sm text-red-700 space-y-1 list-disc list-inside">
+                <li>High minimums (100-1000+ pcs)</li>
+                <li>Long lead times (2-4 weeks)</li>
+                <li>Manual quoting process</li>
+                <li>Setup fees ($500-2000)</li>
+                <li>Limited availability</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Online Platforms -->
+        <div class="bg-yellow-50 p-8 rounded-lg border border-yellow-200">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+              🌐
+            </div>
+            <h3 class="text-2xl font-bold text-yellow-800 mb-2">Online Platforms</h3>
+            <p class="text-yellow-700">Web-based manufacturing services</p>
+          </div>
+          
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-semibold text-yellow-800 mb-2">Pros:</h4>
+              <ul class="text-sm text-yellow-700 space-y-1 list-disc list-inside">
+                <li>Online convenience</li>
+                <li>Faster than traditional</li>
+                <li>Standardized processes</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold text-yellow-800 mb-2">Cons:</h4>
+              <ul class="text-sm text-yellow-700 space-y-1 list-disc list-inside">
+                <li>Still require minimums (10-50 pcs)</li>
+                <li>1-2 week lead times</li>
+                <li>Limited AI capabilities</li>
+                <li>Setup/programming fees</li>
+                <li>Basic quality control</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Geppetto AI -->
+        <div class="bg-green-50 p-8 rounded-lg border-2 border-green-300">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+              🤖
+            </div>
+            <h3 class="text-2xl font-bold text-green-800 mb-2">Geppetto AI</h3>
+            <p class="text-green-700">AI-powered manufacturing platform</p>
+          </div>
+          
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-semibold text-green-800 mb-2">Advantages:</h4>
+              <ul class="text-sm text-green-700 space-y-1 list-disc list-inside">
+                <li><strong>1 piece minimum</strong></li>
+                <li><strong>24-hour delivery</strong></li>
+                <li><strong>15-minute quotes</strong></li>
+                <li><strong>No setup fees</strong></li>
+                <li><strong>±0.05mm precision</strong></li>
+                <li><strong>AI design analysis</strong></li>
+                <li><strong>Real-time tracking</strong></li>
+                <li><strong>24/7 support</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cost Comparison -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          Cost Comparison Example
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Real cost analysis for a typical CNC part order
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+          <h3 class="font-bold text-gray-900 mb-2">Sample Part: Aluminum Bracket</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600">
+            <div>Material: 6061 Aluminum</div>
+            <div>Dimensions: 100x50x25mm</div>
+            <div>Tolerance: ±0.05mm</div>
+            <div>Quantity: 10 pieces</div>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Cost Component</th>
+                <th class="px-4 py-3 text-center text-sm font-medium text-red-600">Traditional</th>
+                <th class="px-4 py-3 text-center text-sm font-medium text-yellow-600">Online Platform</th>
+                <th class="px-4 py-3 text-center text-sm font-medium text-green-600">Geppetto</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <td class="px-4 py-3 text-sm text-gray-900">Setup/Programming</td>
+                <td class="px-4 py-3 text-sm text-center text-red-600">$800</td>
+                <td class="px-4 py-3 text-sm text-center text-yellow-600">$300</td>
+                <td class="px-4 py-3 text-sm text-center text-green-600">$0</td>
+              </tr>
+              <tr class="bg-gray-50">
+                <td class="px-4 py-3 text-sm text-gray-900">Material Cost</td>
+                <td class="px-4 py-3 text-sm text-center">$120</td>
+                <td class="px-4 py-3 text-sm text-center">$120</td>
+                <td class="px-4 py-3 text-sm text-center">$120</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 text-sm text-gray-900">Machining (per piece)</td>
+                <td class="px-4 py-3 text-sm text-center text-red-600">$45</td>
+                <td class="px-4 py-3 text-sm text-center text-yellow-600">$50</td>
+                <td class="px-4 py-3 text-sm text-center text-green-600">$42</td>
+              </tr>
+              <tr class="bg-gray-50">
+                <td class="px-4 py-3 text-sm text-gray-900">Quality Inspection</td>
+                <td class="px-4 py-3 text-sm text-center">$150</td>
+                <td class="px-4 py-3 text-sm text-center">$100</td>
+                <td class="px-4 py-3 text-sm text-center text-green-600">$0 (included)</td>
+              </tr>
+              <tr class="bg-green-100 font-bold">
+                <td class="px-4 py-3 text-sm text-gray-900">Total Cost</td>
+                <td class="px-4 py-3 text-sm text-center text-red-600">$1,520</td>
+                <td class="px-4 py-3 text-sm text-center text-yellow-600">$1,020</td>
+                <td class="px-4 py-3 text-sm text-center text-green-600">$540</td>
+              </tr>
+              <tr class="bg-blue-100 font-bold">
+                <td class="px-4 py-3 text-sm text-gray-900">Cost Per Piece</td>
+                <td class="px-4 py-3 text-sm text-center text-red-600">$152</td>
+                <td class="px-4 py-3 text-sm text-center text-yellow-600">$102</td>
+                <td class="px-4 py-3 text-sm text-center text-green-600">$54</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-6 text-center">
+          <div class="text-2xl font-bold text-green-600 mb-2">
+            Geppetto Saves 65% vs Traditional Methods
+          </div>
+          <p class="text-gray-600">
+            *Savings increase dramatically for smaller quantities due to eliminated setup costs
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Stories -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          Why Customers Switched to Geppetto
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Real stories from manufacturers who made the switch
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Startup Story -->
+        <div class="bg-blue-50 p-6 rounded-lg">
+          <div class="text-4xl mb-4 text-center">🚀</div>
+          <h3 class="text-lg font-bold text-blue-900 mb-3 text-center">Startup Success</h3>
+          <p class="text-blue-800 text-sm mb-4">
+            "We needed 5 prototypes but every shop wanted minimum 100 pieces. Geppetto made our startup possible by letting us order exactly what we needed."
+          </p>
+          <div class="text-center text-xs text-blue-600">
+            - TechStart founder
+          </div>
+        </div>
+
+        <!-- Time-Critical -->
+        <div class="bg-green-50 p-6 rounded-lg">
+          <div class="text-4xl mb-4 text-center">⚡</div>
+          <h3 class="text-lg font-bold text-green-900 mb-3 text-center">Emergency Repair</h3>
+          <p class="text-green-800 text-sm mb-4">
+            "Our production line was down and we needed a replacement part ASAP. Traditional shops quoted 3 weeks. Geppetto delivered in 18 hours."
+          </p>
+          <div class="text-center text-xs text-green-600">
+            - Manufacturing Manager
+          </div>
+        </div>
+
+        <!-- Cost Savings -->
+        <div class="bg-purple-50 p-6 rounded-lg">
+          <div class="text-4xl mb-4 text-center">💰</div>
+          <h3 class="text-lg font-bold text-purple-900 mb-3 text-center">Cost Reduction</h3>
+          <p class="text-purple-800 text-sm mb-4">
+            "We were spending $5000 on setup fees alone. Geppetto's zero setup cost saved us $50,000 last year while improving quality."
+          </p>
+          <div class="text-center text-xs text-purple-600">
+            - R&D Director
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gradient-to-r from-purple-600 to-blue-500 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6">
+        Experience the Geppetto Advantage
+      </h2>
+      <p class="text-xl mb-8 max-w-3xl mx-auto opacity-90">
+        Join thousands of manufacturers who've discovered faster, better, more affordable production
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/en/ai-quote" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors">
+          Try Geppetto Now
+        </a>
+        <a href="/en/contact" class="border-2 border-white text-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-purple-600 transition-colors">
+          Compare Your Project
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

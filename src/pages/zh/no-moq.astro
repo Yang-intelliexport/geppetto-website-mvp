@@ -1,0 +1,1009 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="无MOQ制造 | 单件起做的智能制造革命 | Geppetto" description="Geppetto突破传统制造MOQ限制，实现真正的单件起做。AI+学徒制造模式让小批量生产成本可控，创新企业无需为MOQ妥协设计。">
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-green-600 via-blue-600 to-purple-800 text-white py-20">
+      <div class="container mx-auto px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div class="flex items-center space-x-3 mb-6">
+                <div class="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center">
+                  <span class="text-2xl">🎯</span>
+                </div>
+                <span class="text-green-200 text-lg font-semibold">无MOQ制造革命</span>
+              </div>
+              
+              <h1 class="text-5xl font-bold mb-6 leading-tight">
+                告别MOQ束缚<br/>
+                <span class="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">单件起做新时代</span>
+              </h1>
+              
+              <p class="text-2xl text-blue-100 mb-8 leading-relaxed">
+                Geppetto AI+学徒制造模式重新定义小批量生产经济学。从1件到10000件，同样的精度，同样的速度，颠覆性的成本优势。
+              </p>
+              
+              <div class="grid grid-cols-2 gap-6 mb-8">
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
+                  <div class="text-3xl font-bold text-yellow-300 mb-2">1件</div>
+                  <div class="text-sm text-blue-200">最小起订量</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
+                  <div class="text-3xl font-bold text-yellow-300 mb-2">24小时</div>
+                  <div class="text-sm text-blue-200">单件交付时间</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
+                  <div class="text-3xl font-bold text-yellow-300 mb-2">50%↓</div>
+                  <div class="text-sm text-blue-200">小批量成本</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
+                  <div class="text-3xl font-bold text-yellow-300 mb-2">±0.05mm</div>
+                  <div class="text-sm text-blue-200">精度保证</div>
+                </div>
+              </div>
+              
+              <div class="flex flex-col sm:flex-row gap-4">
+                <a href="/ai-quote" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-purple-900 px-8 py-4 rounded-full text-lg font-bold hover:from-yellow-300 hover:to-orange-400 transform hover:scale-105 transition-all duration-300 shadow-2xl text-center">
+                  🚀 立即体验单件报价
+                </a>
+                <a href="#cost-model" class="border-2 border-white text-white px-6 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-purple-900 transition-all duration-300 text-center">
+                  💡 了解成本模型
+                </a>
+              </div>
+            </div>
+            
+            <div class="relative">
+              <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8">
+                <h3 class="text-2xl font-bold mb-6 text-center">🔥 无MOQ优势一览</h3>
+                <div class="space-y-4">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">创新迭代零门槛</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">资金占用最小化</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">市场验证零风险</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">库存压力零负担</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">定制需求零妥协</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <span class="text-lg">供应链零依赖</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOQ痛点分析 -->
+    <section class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">
+              💥 传统MOQ制造的致命痛点
+            </h2>
+            <p class="text-xl text-gray-600">
+              MOQ不仅仅是数量限制，更是创新的枷锁
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <!-- 痛点1：资金压力 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-red-500">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">💰</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">资金压力山大</h3>
+              </div>
+              <div class="space-y-3 text-gray-600">
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                  <span class="text-sm">MOQ 100件 = 10万元起步投入</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                  <span class="text-sm">样品阶段就需要大额资金占用</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                  <span class="text-sm">现金流压力限制创新速度</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                  <span class="text-sm">投资失败风险成倍放大</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 痛点2：库存风险 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-orange-500">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">📦</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">库存风险巨大</h3>
+              </div>
+              <div class="space-y-3 text-gray-600">
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                  <span class="text-sm">市场反馈不佳导致大量积压</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                  <span class="text-sm">产品迭代速度受库存拖累</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                  <span class="text-sm">仓储成本不断攀升</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                  <span class="text-sm">过期库存成为沉没成本</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 痛点3：创新束缚 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-yellow-500">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">⛓️</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">创新严重受限</h3>
+              </div>
+              <div class="space-y-3 text-gray-600">
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
+                  <span class="text-sm">为MOQ妥协产品设计方案</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
+                  <span class="text-sm">无法快速验证新创意</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
+                  <span class="text-sm">错失最佳市场时机</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
+                  <span class="text-sm">创新试错成本过高</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 痛点4：市场验证困难 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-green-500">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">📊</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">市场验证困难</h3>
+              </div>
+              <div class="space-y-3 text-gray-600">
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                  <span class="text-sm">无法用少量样品测试市场</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                  <span class="text-sm">客户反馈收集周期过长</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                  <span class="text-sm">产品优化迭代速度慢</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                  <span class="text-sm">竞争对手抢占先机</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 痛点5：供应链依赖 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-blue-500">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">🔗</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">供应链高依赖</h3>
+              </div>
+              <div class="space-y-3 text-gray-600">
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                  <span class="text-sm">供应商交期不可控</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                  <span class="text-sm">质量问题影响全批次</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                  <span class="text-sm">价格波动难以预测</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                  <span class="text-sm">切换供应商成本高昂</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 痛点6：决策失误风险 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-purple-500">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">⚠️</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">决策失误风险</h3>
+              </div>
+              <div class="space-y-3 text-gray-600">
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                  <span class="text-sm">一次决策错误损失巨大</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                  <span class="text-sm">无法灵活调整生产计划</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                  <span class="text-sm">市场变化响应不及时</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                  <span class="text-sm">企业生存风险放大</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 数据对比 -->
+          <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-3xl p-12">
+            <h3 class="text-3xl font-bold text-center text-gray-800 mb-8">📈 MOQ对创新企业的数据冲击</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div class="text-center">
+                <div class="text-4xl font-bold text-red-600 mb-2">85%</div>
+                <div class="text-lg font-medium text-gray-700">初创企业</div>
+                <div class="text-sm text-gray-500">因MOQ限制放弃创新想法</div>
+              </div>
+              <div class="text-center">
+                <div class="text-4xl font-bold text-orange-600 mb-2">6个月</div>
+                <div class="text-lg font-medium text-gray-700">平均延误</div>
+                <div class="text-sm text-gray-500">因MOQ导致的产品上市延迟</div>
+              </div>
+              <div class="text-center">
+                <div class="text-4xl font-bold text-yellow-600 mb-2">300%</div>
+                <div class="text-lg font-medium text-gray-700">成本增加</div>
+                <div class="text-sm text-gray-500">小批量vs大批量的成本差异</div>
+              </div>
+              <div class="text-center">
+                <div class="text-4xl font-bold text-red-600 mb-2">40%</div>
+                <div class="text-lg font-medium text-gray-700">企业死亡率</div>
+                <div class="text-sm text-gray-500">因资金链断裂导致的失败</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Geppetto无MOQ解决方案 -->
+    <section id="cost-model" class="py-20 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">
+              ⚡ Geppetto无MOQ制造革命
+            </h2>
+            <p class="text-xl text-gray-600">
+              AI+学徒制造模式如何实现单件起做的经济性
+            </p>
+          </div>
+
+          <!-- 核心技术突破 -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+            <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8">
+              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="mr-3">🧠</span>AI智能化降本增效
+              </h3>
+              <div class="space-y-4">
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">3秒智能报价</div>
+                    <div class="text-gray-600 text-sm">AI算法消除人工报价成本，每个项目节省2-3天时间成本</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">自动工艺规划</div>
+                    <div class="text-gray-600 text-sm">AI分析CAD文件自动生成最优加工路径，减少80%工艺准备时间</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">智能排产调度</div>
+                    <div class="text-gray-600 text-sm">AI实时优化生产排程，设备利用率提升40%，摊薄固定成本</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">质量预测控制</div>
+                    <div class="text-gray-600 text-sm">AI预测质量风险，一次成功率98%，避免返工损失</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8">
+              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="mr-3">👨‍🎓</span>学徒制造模式创新
+              </h3>
+              <div class="space-y-4">
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-purple-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">柔性制造单元</div>
+                    <div class="text-gray-600 text-sm">小型化、模块化生产单元，无需大批量摊薄成本</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-purple-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">快速换模技术</div>
+                    <div class="text-gray-600 text-sm">专利快换系统，模具更换时间从4小时缩短到15分钟</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-purple-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">共享制造资源</div>
+                    <div class="text-gray-600 text-sm">设备、工艺、人力资源动态共享，边际成本递减</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="w-3 h-3 bg-purple-500 rounded-full mt-2"></div>
+                  <div>
+                    <div class="font-semibold text-gray-800">数字化供应链</div>
+                    <div class="text-gray-600 text-sm">AI预测材料需求，智能采购降低库存成本60%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 成本模型分析 -->
+          <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-16">
+            <div class="bg-gradient-to-r from-green-600 to-blue-600 text-white p-6">
+              <h3 class="text-2xl font-bold text-center">💰 无MOQ成本模型详解</h3>
+            </div>
+            <div class="p-8">
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- 传统制造成本结构 -->
+                <div>
+                  <h4 class="text-xl font-bold text-red-600 mb-6 text-center">传统制造成本结构</h4>
+                  <div class="space-y-4">
+                    <div class="bg-red-50 rounded-xl p-4">
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-gray-800">模具开发费用</span>
+                        <span class="text-red-600 font-bold">30-50%</span>
+                      </div>
+                      <div class="text-sm text-gray-600">需要专用模具，成本高昂</div>
+                    </div>
+                    
+                    <div class="bg-red-50 rounded-xl p-4">
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-gray-800">设备调试费用</span>
+                        <span class="text-red-600 font-bold">15-20%</span>
+                      </div>
+                      <div class="text-sm text-gray-600">人工调试，时间成本巨大</div>
+                    </div>
+                    
+                    <div class="bg-red-50 rounded-xl p-4">
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-gray-800">材料采购成本</span>
+                        <span class="text-red-600 font-bold">20-25%</span>
+                      </div>
+                      <div class="text-sm text-gray-600">大批量采购，库存压力大</div>
+                    </div>
+                    
+                    <div class="bg-red-50 rounded-xl p-4">
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-gray-800">人工制造成本</span>
+                        <span class="text-red-600 font-bold">15-20%</span>
+                      </div>
+                      <div class="text-sm text-gray-600">人工效率低，质量不稳定</div>
+                    </div>
+                    
+                    <div class="bg-red-50 rounded-xl p-4">
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-gray-800">管理运营费用</span>
+                        <span class="text-red-600 font-bold">10-15%</span>
+                      </div>
+                      <div class="text-sm text-gray-600">沟通成本高，管理复杂</div>
+                    </div>
+                  </div>
+                  
+                  <div class="mt-6 p-4 bg-red-100 rounded-xl text-center">
+                    <div class="text-2xl font-bold text-red-600 mb-2">单件成本：市场价3-5倍</div>
+                    <div class="text-sm text-gray-600">MOQ 100件才能接近合理价格</div>
+                  </div>
+                </div>
+
+                <!-- Geppetto成本结构 -->
+                <div>
+                  <h4 class="text-xl font-bold text-green-600 mb-6 text-center">Geppetto智能制造成本</h4>
+                  <div class="space-y-4">
+                    <div class="bg-green-50 rounded-xl p-4">
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-gray-800">AI分析费用</span>
+                        <span class="text-green-600 font-bold">5%</span>
+                      </div>
+                      <div class="text-sm text-gray-600">3秒完成，边际成本几乎为零</div>
+                    </div>
+                    
+                    <div class="bg-green-50 rounded-xl p-4">
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-gray-800">快速换模费用</span>
+                        <span class="text-green-600 font-bold">10%</span>
+                      </div>
+                      <div class="text-sm text-gray-600">15分钟快换，成本大幅降低</div>
+                    </div>
+                    
+                    <div class="bg-green-50 rounded-xl p-4">
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-gray-800">智能采购成本</span>
+                        <span class="text-green-600 font-bold">20%</span>
+                      </div>
+                      <div class="text-sm text-gray-600">AI预测需求，零库存采购</div>
+                    </div>
+                    
+                    <div class="bg-green-50 rounded-xl p-4">
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-gray-800">学徒制造成本</span>
+                        <span class="text-green-600 font-bold">35%</span>
+                      </div>
+                      <div class="text-sm text-gray-600">AI+人工，效率和质量双提升</div>
+                    </div>
+                    
+                    <div class="bg-green-50 rounded-xl p-4">
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-gray-800">智能运营费用</span>
+                        <span class="text-green-600 font-bold">30%</span>
+                      </div>
+                      <div class="text-sm text-gray-600">自动化管理，零沟通成本</div>
+                    </div>
+                  </div>
+                  
+                  <div class="mt-6 p-4 bg-green-100 rounded-xl text-center">
+                    <div class="text-2xl font-bold text-green-600 mb-2">单件成本：市场价50%</div>
+                    <div class="text-sm text-gray-600">1件即可享受批量价格</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 实际效果对比 -->
+          <div class="bg-gradient-to-r from-purple-100 to-blue-100 rounded-3xl p-12">
+            <h3 class="text-3xl font-bold text-center text-gray-800 mb-8">📊 实际效果数据对比</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full bg-white rounded-xl shadow-lg">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-4 text-left font-semibold text-gray-800">制造批量</th>
+                    <th class="px-6 py-4 text-center font-semibold text-red-600">传统制造商</th>
+                    <th class="px-6 py-4 text-center font-semibold text-green-600">Geppetto</th>
+                    <th class="px-6 py-4 text-center font-semibold text-purple-600">成本节省</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                  <tr>
+                    <td class="px-6 py-4 font-medium text-gray-800">1件</td>
+                    <td class="px-6 py-4 text-center text-red-600">¥5,000</td>
+                    <td class="px-6 py-4 text-center text-green-600 font-bold">¥2,500</td>
+                    <td class="px-6 py-4 text-center text-purple-600 font-bold">50%</td>
+                  </tr>
+                  <tr class="bg-gray-50">
+                    <td class="px-6 py-4 font-medium text-gray-800">5件</td>
+                    <td class="px-6 py-4 text-center text-red-600">¥3,500/件</td>
+                    <td class="px-6 py-4 text-center text-green-600 font-bold">¥1,800/件</td>
+                    <td class="px-6 py-4 text-center text-purple-600 font-bold">49%</td>
+                  </tr>
+                  <tr>
+                    <td class="px-6 py-4 font-medium text-gray-800">10件</td>
+                    <td class="px-6 py-4 text-center text-red-600">¥2,800/件</td>
+                    <td class="px-6 py-4 text-center text-green-600 font-bold">¥1,500/件</td>
+                    <td class="px-6 py-4 text-center text-purple-600 font-bold">46%</td>
+                  </tr>
+                  <tr class="bg-gray-50">
+                    <td class="px-6 py-4 font-medium text-gray-800">50件</td>
+                    <td class="px-6 py-4 text-center text-red-600">¥1,800/件</td>
+                    <td class="px-6 py-4 text-center text-green-600 font-bold">¥1,200/件</td>
+                    <td class="px-6 py-4 text-center text-purple-600 font-bold">33%</td>
+                  </tr>
+                  <tr>
+                    <td class="px-6 py-4 font-medium text-gray-800">100件</td>
+                    <td class="px-6 py-4 text-center text-red-600">¥1,500/件</td>
+                    <td class="px-6 py-4 text-center text-green-600 font-bold">¥1,000/件</td>
+                    <td class="px-6 py-4 text-center text-purple-600 font-bold">33%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 应用场景 -->
+    <section class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">
+              🎯 无MOQ制造的典型应用场景
+            </h2>
+            <p class="text-xl text-gray-600">
+              从创新验证到个性定制，覆盖全生命周期需求
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- 场景1：创新验证 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">💡</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">创新概念验证</h3>
+              </div>
+              <div class="space-y-3 text-gray-600 text-sm">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>1-3件原型快速验证创意</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>24小时内获得实物反馈</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>低成本快速试错迭代</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>投资决策风险最小化</span>
+                </div>
+              </div>
+              <div class="mt-6 p-3 bg-blue-50 rounded-xl">
+                <div class="text-center text-blue-700 font-semibold">单件成本 ¥2,500</div>
+                <div class="text-center text-blue-600 text-sm">vs 传统 ¥5,000</div>
+              </div>
+            </div>
+
+            <!-- 场景2：市场测试 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">📊</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">市场反馈测试</h3>
+              </div>
+              <div class="space-y-3 text-gray-600 text-sm">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>5-20件产品投放测试市场</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>收集真实用户使用反馈</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>优化产品设计和功能</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>验证市场需求真实性</span>
+                </div>
+              </div>
+              <div class="mt-6 p-3 bg-green-50 rounded-xl">
+                <div class="text-center text-green-700 font-semibold">10件成本 ¥15,000</div>
+                <div class="text-center text-green-600 text-sm">vs 传统 ¥28,000</div>
+              </div>
+            </div>
+
+            <!-- 场景3：功能迭代 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">🔄</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">产品功能迭代</h3>
+              </div>
+              <div class="space-y-3 text-gray-600 text-sm">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span>每次升级只需制造3-5件</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span>快速验证新功能可行性</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span>A/B测试不同设计方案</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span>保持产品竞争力</span>
+                </div>
+              </div>
+              <div class="mt-6 p-3 bg-purple-50 rounded-xl">
+                <div class="text-center text-purple-700 font-semibold">5件成本 ¥9,000</div>
+                <div class="text-center text-purple-600 text-sm">vs 传统 ¥17,500</div>
+              </div>
+            </div>
+
+            <!-- 场景4：个性定制 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">🎨</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">个性化定制</h3>
+              </div>
+              <div class="space-y-3 text-gray-600 text-sm">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span>单件个性化产品制造</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span>满足特殊客户需求</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span>高端定制市场切入</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span>差异化竞争优势</span>
+                </div>
+              </div>
+              <div class="mt-6 p-3 bg-yellow-50 rounded-xl">
+                <div class="text-center text-yellow-700 font-semibold">定制价格 ¥3,500</div>
+                <div class="text-center text-yellow-600 text-sm">vs 传统不接单</div>
+              </div>
+            </div>
+
+            <!-- 场景5：紧急补货 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">🚨</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">紧急补货需求</h3>
+              </div>
+              <div class="space-y-3 text-gray-600 text-sm">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>关键零件急需1-2件</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>避免生产线停产损失</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>48小时紧急交付</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>保障业务连续性</span>
+                </div>
+              </div>
+              <div class="mt-6 p-3 bg-red-50 rounded-xl">
+                <div class="text-center text-red-700 font-semibold">紧急价格 ¥4,000</div>
+                <div class="text-center text-red-600 text-sm">vs 停产损失 ¥50,000/天</div>
+              </div>
+            </div>
+
+            <!-- 场景6：备件服务 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span class="text-2xl">🔧</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">备件维修服务</h3>
+              </div>
+              <div class="space-y-3 text-gray-600 text-sm">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                  <span>老设备停产零件复制</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                  <span>延长设备使用寿命</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                  <span>降低设备维护成本</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                  <span>逆向工程技术支持</span>
+                </div>
+              </div>
+              <div class="mt-6 p-3 bg-indigo-50 rounded-xl">
+                <div class="text-center text-indigo-700 font-semibold">备件价格 ¥3,200</div>
+                <div class="text-center text-indigo-600 text-sm">vs 换新设备 ¥500,000</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 成功案例展示 -->
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">
+              🏆 无MOQ制造成功案例
+            </h2>
+            <p class="text-xl text-gray-600">
+              真实案例见证无MOQ制造的强大威力
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- 案例1 -->
+            <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 shadow-lg">
+              <div class="flex items-center space-x-4 mb-6">
+                <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center">
+                  <span class="text-white text-2xl">🚀</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-800">AI硬件创业公司</h3>
+                  <p class="text-blue-600">从概念到量产的完整历程</p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-blue-600">3件</div>
+                  <div class="text-xs text-gray-600">概念验证</div>
+                </div>
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-green-600">15件</div>
+                  <div class="text-xs text-gray-600">市场测试</div>
+                </div>
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-purple-600">500件</div>
+                  <div class="text-xs text-gray-600">小批量产</div>
+                </div>
+              </div>
+              
+              <div class="space-y-3 text-gray-700 text-sm">
+                <p><strong>挑战：</strong>AI芯片散热器设计，需要在概念阶段快速验证多种方案。</p>
+                <p><strong>解决：</strong>Geppetto提供3件原型制造，成本仅¥7,500，24小时交付。</p>
+                <p><strong>结果：</strong>成功验证最优方案，获得A轮融资，现已批量生产。</p>
+              </div>
+              
+              <div class="mt-6 p-4 bg-white rounded-xl">
+                <div class="text-center">
+                  <div class="text-green-600 font-bold text-lg">节省成本 85%</div>
+                  <div class="text-gray-600 text-sm">vs 传统制造商要求MOQ 100件</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 案例2 -->
+            <div class="bg-gradient-to-br from-green-50 to-yellow-50 rounded-2xl p-8 shadow-lg">
+              <div class="flex items-center space-x-4 mb-6">
+                <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+                  <span class="text-white text-2xl">🏭</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-800">制造业龙头企业</h3>
+                  <p class="text-green-600">关键设备紧急维修</p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-red-600">1件</div>
+                  <div class="text-xs text-gray-600">紧急需求</div>
+                </div>
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-yellow-600">36小时</div>
+                  <div class="text-xs text-gray-600">交付时间</div>
+                </div>
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-green-600">¥200万</div>
+                  <div class="text-xs text-gray-600">避免损失</div>
+                </div>
+              </div>
+              
+              <div class="space-y-3 text-gray-700 text-sm">
+                <p><strong>挑战：</strong>核心生产线关键零件损坏，原厂已停产，面临长期停工。</p>
+                <p><strong>解决：</strong>Geppetto逆向工程+AI优化，36小时完成1件替代品制造。</p>
+                <p><strong>结果：</strong>生产线快速恢复，避免停产损失¥200万。</p>
+              </div>
+              
+              <div class="mt-6 p-4 bg-white rounded-xl">
+                <div class="text-center">
+                  <div class="text-green-600 font-bold text-lg">投资回报率 5000%</div>
+                  <div class="text-gray-600 text-sm">制造费用 ¥4,000 vs 避免损失 ¥2,000,000</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 案例3 -->
+            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 shadow-lg">
+              <div class="flex items-center space-x-4 mb-6">
+                <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center">
+                  <span class="text-white text-2xl">🎨</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-800">高端定制品牌</h3>
+                  <p class="text-purple-600">个性化产品批量定制</p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-purple-600">50+款</div>
+                  <div class="text-xs text-gray-600">个性设计</div>
+                </div>
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-pink-600">1-5件</div>
+                  <div class="text-xs text-gray-600">每款数量</div>
+                </div>
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-yellow-600">300%</div>
+                  <div class="text-xs text-gray-600">利润提升</div>
+                </div>
+              </div>
+              
+              <div class="space-y-3 text-gray-700 text-sm">
+                <p><strong>挑战：</strong>高端客户需要50多款个性化设计，每款只需1-5件。</p>
+                <p><strong>解决：</strong>Geppetto无MOQ制造，AI快速适应不同设计要求。</p>
+                <p><strong>结果：</strong>成功进入高端定制市场，利润率提升300%。</p>
+              </div>
+              
+              <div class="mt-6 p-4 bg-white rounded-xl">
+                <div class="text-center">
+                  <div class="text-purple-600 font-bold text-lg">市场占有率 +15%</div>
+                  <div class="text-gray-600 text-sm">开辟全新个性化定制赛道</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 案例4 -->
+            <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-8 shadow-lg">
+              <div class="flex items-center space-x-4 mb-6">
+                <div class="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center">
+                  <span class="text-white text-2xl">🔬</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-800">科研院所</h3>
+                  <p class="text-yellow-600">实验设备快速迭代</p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-yellow-600">12轮</div>
+                  <div class="text-xs text-gray-600">设计迭代</div>
+                </div>
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-orange-600">2-3件</div>
+                  <div class="text-xs text-gray-600">每轮数量</div>
+                </div>
+                <div class="text-center p-3 bg-white rounded-xl">
+                  <div class="text-lg font-bold text-green-600">6个月</div>
+                  <div class="text-xs text-gray-600">时间节省</div>
+                </div>
+              </div>
+              
+              <div class="space-y-3 text-gray-700 text-sm">
+                <p><strong>挑战：</strong>实验设备需要多轮迭代优化，每轮只需2-3件验证。</p>
+                <p><strong>解决：</strong>Geppetto支持快速迭代，每轮24-48小时完成制造。</p>
+                <p><strong>结果：</strong>12轮迭代后获得最优方案，节省研发时间6个月。</p>
+              </div>
+              
+              <div class="mt-6 p-4 bg-white rounded-xl">
+                <div class="text-center">
+                  <div class="text-yellow-600 font-bold text-lg">研发效率 +400%</div>
+                  <div class="text-gray-600 text-sm">快速迭代 vs 传统长周期验证</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 立即开始 -->
+    <section class="py-20 bg-gradient-to-r from-green-900 to-blue-900 text-white">
+      <div class="container mx-auto px-6 text-center">
+        <h2 class="text-4xl font-bold mb-6">
+          🎯 开启您的无MOQ制造之旅
+        </h2>
+        <p class="text-2xl text-green-100 mb-12">
+          从1件开始，验证您的每一个创意，无需为MOQ妥协
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div class="text-4xl mb-4">⚡</div>
+            <h3 class="text-xl font-semibold mb-2">1件起做</h3>
+            <p class="text-green-100 mb-3">单件制造，无MOQ限制</p>
+            <p class="text-sm text-green-200">成本仅为传统制造商50%</p>
+          </div>
+          
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div class="text-4xl mb-4">🚀</div>
+            <h3 class="text-xl font-semibold mb-2">24小时交付</h3>
+            <p class="text-green-100 mb-3">极速响应您的需求</p>
+            <p class="text-sm text-green-200">AI+学徒制造，效率革命</p>
+          </div>
+          
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div class="text-4xl mb-4">🎯</div>
+            <h3 class="text-xl font-semibold mb-2">±0.05mm精度</h3>
+            <p class="text-green-100 mb-3">单件也有批量精度</p>
+            <p class="text-sm text-green-200">质量零妥协</p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <a href="/ai-quote" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-purple-900 px-12 py-4 rounded-full text-xl font-bold hover:from-yellow-300 hover:to-orange-400 transform hover:scale-105 transition-all duration-300 shadow-2xl">
+            🎯 体验1件起做
+          </a>
+          
+          <a href="/calculator" class="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-purple-900 transition-all duration-300">
+            💰 计算制造成本
+          </a>
+        </div>
+
+        <div class="mt-8 text-green-100">
+          <p class="text-lg">
+            💡 告别MOQ束缚，让Geppetto成为您创新路上的制造伙伴
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  /* 添加特定样式 */
+  .hover\:shadow-xl:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+</style>

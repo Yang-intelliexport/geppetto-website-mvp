@@ -10,12 +10,12 @@ keywords: ["联系Geppetto", "CNC加工报价", "制造咨询", "技术支持"]
 
 ### 联系方式
 
-**📞 全国客服热线**
+** 全国客服热线**
 400-XXX-XXXX  
 工作时间：周一至周五 9:00-18:00  
 紧急项目：24小时在线支持
 
-**📧 商务合作邮箱**
+** 商务合作邮箱**
 business@geppetto.com  
 技术支持：support@geppetto.com  
 合作伙伴：partners@geppetto.com
@@ -48,7 +48,7 @@ QQ：400XXXXXX
 - 技术难题现场解答
 - 批量订单优惠方案
 
-**📞 400-XXX-XXXX**
+** 400-XXX-XXXX**
 
 ### 3. 在线表单咨询
 **详细需求一次性提交**

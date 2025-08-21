@@ -2,6 +2,8 @@
 import '../styles/global.css'
 import LanguageSwitcher from '../components/ui/LanguageSwitcher.astro'
 import StructuredData from '../components/seo/StructuredData.astro'
+import GoogleAnalytics from '../components/analytics/GoogleAnalytics.astro'
+import CookieConsent from '../components/analytics/CookieConsent.astro'
 import { getLanguageFromUrl, getTranslations, t } from '../utils/i18n'
 
 export interface Props {
@@ -85,6 +87,9 @@ const finalDescription = description || defaultDescription
       data={{}} 
     />
   )}
+  
+  <!-- Google Analytics -->
+  <GoogleAnalytics measurementId={import.meta.env.PUBLIC_GA_MEASUREMENT_ID} />
 </head>
 
 <body class="font-inter bg-white text-gray-900 antialiased">
@@ -161,8 +166,8 @@ const finalDescription = description || defaultDescription
             }
           </p>
           <div class="flex space-x-4">
-            <a href="tel:400-XXX-XXXX" class="text-purple-400 hover:text-purple-300">📞 400-XXX-XXXX</a>
-            <a href="mailto:hello@geppetto.com" class="text-purple-400 hover:text-purple-300">📧 hello@geppetto.com</a>
+            <a href="tel:400-XXX-XXXX" class="text-purple-400 hover:text-purple-300">400-XXX-XXXX</a>
+            <a href="mailto:hello@geppetto.com" class="text-purple-400 hover:text-purple-300">hello@geppetto.com</a>
           </div>
         </div>
         
@@ -204,6 +209,9 @@ const finalDescription = description || defaultDescription
       </div>
     </div>
   </footer>
+  
+  <!-- Cookie Consent Banner -->
+  <CookieConsent />
   
   <!-- Mobile Menu Script -->
   <script>

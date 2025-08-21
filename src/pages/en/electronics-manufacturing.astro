@@ -1,0 +1,381 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import TestimonialSection from '../../components/marketing/TestimonialSection.astro'
+
+const data = {
+  seo: {
+    title: 'Electronics Manufacturing | Precision Heat Sinks & Connectors | Geppetto',
+    description: 'AI-powered precision manufacturing for electronics. Heat sinks, connectors, housings with ±0.05mm precision. Fast delivery, micro machining capabilities.',
+    keywords: ['electronics manufacturing', 'heat sinks', 'connectors', 'micro machining', 'aluminum machining', 'electronics precision', 'surface finishing']
+  },
+  hero: {
+    title: 'Precision Electronics Manufacturing',
+    subtitle: '📱 Advanced Solutions for Electronic Components',
+    description: 'Specialized in critical electronics parts: heat sinks, connectors, housings, and precision components.\n±0.05mm precision • Micro machining • Fast turnaround • Volume flexibility',
+    cta: {
+      primary: {
+        text: '🎯 Get Electronics Quote',
+        href: '/en/ai-quote'
+      },
+      secondary: {
+        text: '📖 View Electronics Cases',
+        href: '/en/case-studies'
+      }
+    }
+  },
+  electronicsAdvantages: [
+    {
+      title: 'Precision Heat Sink Manufacturing',
+      description: 'Optimized thermal management solutions with AI-designed fin patterns and surface treatments.',
+      icon: '🌡️',
+      benefits: [
+        'Complex fin geometries via 5-axis machining',
+        'Superior surface finishes for optimal heat transfer',
+        'Custom sizes from 10mm to 500mm',
+        'Materials: 6061-T6, 7075-T6, Copper alloys'
+      ]
+    },
+    {
+      title: 'Micro Machining Capabilities',
+      description: 'Ultra-precise manufacturing for miniaturized electronic components and connectors.',
+      icon: '🔬',
+      benefits: [
+        '±0.01mm tolerance for micro components',
+        'Features down to 0.1mm diameter',
+        'Specialized tooling for electronics materials',
+        'Clean room compatible processes'
+      ]
+    },
+    {
+      title: 'High-Volume Electronics Support',
+      description: 'Seamless scaling from prototypes to production volumes with consistent quality.',
+      icon: '⚡',
+      benefits: [
+        '1 to 100,000 pieces capacity',
+        'Automated inspection for volume production',
+        'Supply chain optimization for electronics',
+        'Just-in-time delivery scheduling'
+      ]
+    }
+  ],
+  electronicsSpecialties: [
+    {
+      category: 'Heat Management',
+      parts: ['Heat sinks', 'Thermal spreaders', 'Cooling plates', 'Fan brackets'],
+      applications: ['CPU cooling', 'LED heat dissipation', 'Power electronics', 'Battery thermal management'],
+      materials: ['6061-T6 Al', '7075-T6 Al', 'Copper C101', 'Copper C110']
+    },
+    {
+      category: 'Connectors & Housing',
+      parts: ['Connector housings', 'RF shields', 'Electronic enclosures', 'Cable management'],
+      applications: ['PCB connectors', 'Antenna housings', 'IoT device cases', 'Sensor enclosures'],
+      materials: ['6061-T6 Al', 'Brass C360', 'Stainless 316L', 'ABS/PC plastics']
+    },
+    {
+      category: 'Precision Components',
+      parts: ['Waveguides', 'Precision pins', 'Contact springs', 'Mounting hardware'],
+      applications: ['5G equipment', 'Test equipment', 'Medical electronics', 'Aerospace avionics'],
+      materials: ['Beryllium Copper', 'Phosphor Bronze', 'Titanium Ti-6Al-4V', 'Inconel 718']
+    }
+  ],
+  testimonials: [
+    {
+      name: 'Jennifer Wu',
+      company: 'ThermalTech Solutions',
+      content: 'Geppetto revolutionized our heat sink production. Their AI-optimized fin designs improved thermal performance by 23% while reducing manufacturing costs by 45%. The micro machining precision is unmatched.',
+      stats: {
+        thermal_improvement: '23%',
+        cost_reduction: '45%',
+        precision_achieved: '±0.008mm',
+        delivery_time: '48 hours'
+      }
+    },
+    {
+      name: 'David Park',
+      company: 'IoT Innovations Corp',
+      content: 'The combination of fast prototyping and volume production capability is perfect for our IoT device housings. We can test designs quickly and scale to production without changing suppliers.',
+      stats: {
+        prototype_speed: '24h delivery',
+        volume_capacity: '50K pieces/month',
+        quality_consistency: '99.7%',
+        cost_savings: '38%'
+      }
+    }
+  ],
+  processHighlights: [
+    {
+      title: 'AI Thermal Optimization',
+      description: 'AI algorithms analyze heat dissipation requirements and automatically optimize fin patterns, channel designs, and surface textures for maximum thermal efficiency.',
+      icon: '🧠'
+    },
+    {
+      title: 'Precision Surface Finishing',
+      description: 'Advanced surface treatments including anodizing, vapor blasting, and specialized coatings to enhance thermal conductivity and corrosion resistance.',
+      icon: '✨'
+    },
+    {
+      title: 'Quality Validation',
+      description: 'Comprehensive testing including thermal performance validation, dimensional inspection, and electrical conductivity testing where applicable.',
+      icon: '🔍'
+    }
+  ]
+}
+---
+
+<BaseLayout 
+  title={data.seo.title}
+  description={data.seo.description}
+  keywords={data.seo.keywords}
+>
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-blue-900 via-purple-900 to-cyan-900 text-white overflow-hidden">
+    <div class="absolute inset-0 bg-[url('/images/manufacturing/electronics-background.jpg')] bg-cover bg-center opacity-20"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="text-center max-w-4xl mx-auto">
+        <h1 class="text-4xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+          {data.hero.title}
+        </h1>
+        <p class="text-xl lg:text-2xl text-blue-100 mb-4">
+          {data.hero.subtitle}
+        </p>
+        <div class="text-lg text-gray-300 mb-8 whitespace-pre-line max-w-3xl mx-auto">
+          {data.hero.description}
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <a href={data.hero.cta.primary.href} 
+             class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-200 shadow-lg">
+            {data.hero.cta.primary.text}
+          </a>
+          <a href={data.hero.cta.secondary.href}
+             class="inline-flex items-center justify-center px-8 py-4 border-2 border-cyan-400 text-cyan-400 font-semibold rounded-lg hover:bg-cyan-400 hover:text-gray-900 transition-colors duration-200">
+            {data.hero.cta.secondary.text}
+          </a>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-6 text-center">
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-cyan-400">±0.05mm</div>
+            <div class="text-sm text-gray-300">Precision Tolerance</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-purple-400">48h</div>
+            <div class="text-sm text-gray-300">Fast Delivery</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-blue-400">100K+</div>
+            <div class="text-sm text-gray-300">Volume Capacity</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-green-400">99.7%</div>
+            <div class="text-sm text-gray-300">Quality Rate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Electronics Advantages -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          📱 Advanced Electronics Manufacturing
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Specialized capabilities for critical electronic components and systems
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        {data.electronicsAdvantages.map((advantage) => (
+          <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-200">
+            <div class="text-4xl mb-4">{advantage.icon}</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">{advantage.title}</h3>
+            <p class="text-gray-600 mb-6">{advantage.description}</p>
+            <ul class="space-y-3">
+              {advantage.benefits.map((benefit) => (
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-3">✓</span>
+                  <span class="text-gray-700">{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Electronics Specialties -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          🔧 Electronics Component Specialties
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Comprehensive solutions for modern electronics manufacturing
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        {data.electronicsSpecialties.map((specialty) => (
+          <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-blue-500 transition-colors duration-200">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">{specialty.category}</h3>
+            
+            <div class="mb-6">
+              <h4 class="font-semibold text-gray-700 mb-2">Components:</h4>
+              <div class="flex flex-wrap gap-2">
+                {specialty.parts.map((part) => (
+                  <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">{part}</span>
+                ))}
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <h4 class="font-semibold text-gray-700 mb-2">Applications:</h4>
+              <ul class="space-y-1">
+                {specialty.applications.map((app) => (
+                  <li class="text-gray-600 text-sm">• {app}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 class="font-semibold text-gray-700 mb-2">Materials:</h4>
+              <div class="flex flex-wrap gap-2">
+                {specialty.materials.map((material) => (
+                  <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">{material}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Highlights -->
+  <section class="py-20 bg-gradient-to-br from-gray-900 to-blue-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl lg:text-4xl font-bold mb-4">
+          ⚙️ Advanced Electronics Manufacturing Process
+        </h2>
+        <p class="text-xl text-blue-100 max-w-3xl mx-auto">
+          Cutting-edge technology and processes optimized for electronics production
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        {data.processHighlights.map((highlight) => (
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
+            <div class="text-4xl mb-4">{highlight.icon}</div>
+            <h3 class="text-xl font-bold mb-4">{highlight.title}</h3>
+            <p class="text-blue-100">{highlight.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Success Stories -->
+  <TestimonialSection testimonials={data.testimonials} language="en" />
+
+  <!-- Technical Specifications -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          📊 Technical Capabilities
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Precision specifications for electronics manufacturing
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="bg-white rounded-lg p-6 shadow-lg text-center">
+          <div class="text-3xl font-bold text-blue-600 mb-2">±0.005mm</div>
+          <div class="text-gray-600">Micro Machining Tolerance</div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-6 shadow-lg text-center">
+          <div class="text-3xl font-bold text-green-600 mb-2">Ra 0.1μm</div>
+          <div class="text-gray-600">Surface Finish Quality</div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-6 shadow-lg text-center">
+          <div class="text-3xl font-bold text-purple-600 mb-2">0.1mm</div>
+          <div class="text-gray-600">Minimum Feature Size</div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-6 shadow-lg text-center">
+          <div class="text-3xl font-bold text-orange-600 mb-2">500mm</div>
+          <div class="text-gray-600">Maximum Part Size</div>
+        </div>
+      </div>
+
+      <div class="mt-16 bg-white rounded-xl p-8 shadow-lg">
+        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Material Capabilities for Electronics</h3>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          <div>
+            <h4 class="font-bold text-gray-700 mb-4">Aluminum Alloys</h4>
+            <ul class="space-y-2 text-gray-600">
+              <li>• 6061-T6 (General electronics)</li>
+              <li>• 7075-T6 (High-strength applications)</li>
+              <li>• 2024-T3 (Aerospace electronics)</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 class="font-bold text-gray-700 mb-4">Copper & Brass</h4>
+            <ul class="space-y-2 text-gray-600">
+              <li>• C101 Copper (Thermal management)</li>
+              <li>• C110 Copper (Electrical contacts)</li>
+              <li>• C360 Brass (Connectors)</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 class="font-bold text-gray-700 mb-4">Specialty Materials</h4>
+            <ul class="space-y-2 text-gray-600">
+              <li>• Beryllium Copper (Springs)</li>
+              <li>• Titanium (Lightweight components)</li>
+              <li>• Stainless Steel (Corrosion resistance)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+        Ready to Optimize Your Electronics Manufacturing?
+      </h2>
+      <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+        Join 300+ electronics companies who've improved product performance and reduced costs with Geppetto
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/en/ai-quote" 
+           class="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200 shadow-lg">
+          🎯 Get Electronics Quote
+        </a>
+        <a href="/en/contact"
+           class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-colors duration-200">
+          💬 Talk to Electronics Expert
+        </a>
+      </div>
+      
+      <div class="mt-8 text-blue-100 text-sm">
+        💫 Quality Guarantee • Fast Delivery • Technical Support
+      </div>
+    </div>
+  </section>
+</BaseLayout>

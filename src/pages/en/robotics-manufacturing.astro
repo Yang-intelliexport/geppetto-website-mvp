@@ -1,0 +1,304 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import HeroSection from '../../components/marketing/HeroSection.astro'
+import TestimonialSection from '../../components/marketing/TestimonialSection.astro'
+
+const data = {
+  seo: {
+    title: 'Robotics Manufacturing | Smart Manufacturing for Robot Components | Geppetto',
+    description: 'AI-powered precision manufacturing for robotics. 24-hour prototyping, ±0.05mm precision, zero MOQ. Accelerate your robot development with smart manufacturing solutions.',
+    keywords: ['robotics manufacturing', 'smart manufacturing', 'digital manufacturing', 'robot components', 'precision machining robotics', 'rapid robotics prototyping']
+  },
+  hero: {
+    title: 'Smart Manufacturing for Robotics Innovation',
+    subtitle: '🤖 Accelerate Robot Development with AI-Powered Precision',
+    description: 'From concept to prototype in 24 hours. Perfect for robotics R&D teams who need fast iteration, precise components, and flexible quantities.\n±0.05mm precision • 24h delivery • Zero MOQ • AI-optimized costs',
+    cta: {
+      primary: {
+        text: '🚀 Get Robotics Quote',
+        href: '/en/ai-quote'
+      },
+      secondary: {
+        text: '📖 View Robot Cases',
+        href: '/en/case-studies'
+      }
+    }
+  },
+  roboticsAdvantages: [
+    {
+      title: 'Rapid Prototyping for R&D',
+      description: 'Perfect for robotics development cycles. Upload CAD, get AI analysis in seconds, receive precision parts in 24 hours.',
+      icon: '⚡',
+      benefits: [
+        'Zero MOQ - order just 1 piece for testing',
+        '24-hour delivery for urgent prototypes', 
+        'AI-optimized manufacturing reduces iteration cost by 60%',
+        'Same-day design changes supported'
+      ]
+    },
+    {
+      title: 'Precision Robot Components',
+      description: 'Specialized in critical robotics parts: joints, actuators, frames, and custom mechanical components.',
+      icon: '🎯',
+      benefits: [
+        '±0.05mm tolerance for precise robot movement',
+        'Complex geometries via 5-axis CNC capabilities',
+        'Robot-grade materials: 7075-T6, titanium, stainless steel',
+        'Surface finishes optimized for robotics applications'
+      ]
+    },
+    {
+      title: 'Seamless Scaling',
+      description: 'From single prototypes to production runs. Maintain same quality and lead times as you scale.',
+      icon: '📈',
+      benefits: [
+        '1 to 10,000 pieces with consistent quality',
+        'Production-ready processes from day one',
+        'Volume pricing automatically calculated',
+        'No minimum order quantity restrictions'
+      ]
+    }
+  ],
+  roboticsSpecialties: [
+    {
+      category: 'Joint & Actuator Components',
+      parts: ['Bearing housings', 'Joint brackets', 'Actuator mounts', 'Precision shafts'],
+      tolerance: '±0.02mm',
+      materials: ['7075-T6 Aluminum', 'Stainless Steel 316L', 'Titanium Ti-6Al-4V']
+    },
+    {
+      category: 'Structural Elements',
+      parts: ['Robot frames', 'Mounting plates', 'End effector brackets', 'Support structures'],
+      tolerance: '±0.05mm',
+      materials: ['6061-T6 Aluminum', '7075-T6 Aluminum', 'Carbon Steel']
+    },
+    {
+      category: 'Custom Mechanisms',
+      parts: ['Gripper components', 'Sensor housings', 'Cable management', 'Protective covers'],
+      tolerance: '±0.1mm',
+      materials: ['6061-T6 Aluminum', 'ABS Plastic', 'PEEK']
+    }
+  ],
+  testimonials: [
+    {
+      name: 'Dr. Sarah Chen',
+      company: 'Boston Dynamics-inspired Startup',
+      content: 'Geppetto transformed our development process. We went from 2-week component delivery to 24-hour turnaround. Their AI optimization reduced our prototyping costs by 65% while maintaining the ±0.03mm precision our quadruped robots require.',
+      stats: {
+        precision: '±0.03mm achieved',
+        cost_saving: '65%',
+        delivery_improvement: '14 days → 24 hours',
+        quality_rate: '99.8%'
+      }
+    },
+    {
+      name: 'Mike Rodriguez',
+      company: 'Collaborative Robotics Inc.',
+      content: 'The zero MOQ policy is game-changing for R&D. We can test single components without huge financial commitment. Geppetto\'s smart manufacturing approach saved us $200K in development costs last year.',
+      stats: {
+        annual_savings: '$200,000',
+        prototypes_tested: '150+',
+        time_to_market: '40% faster',
+        success_rate: '92%'
+      }
+    }
+  ]
+}
+---
+
+<BaseLayout 
+  title={data.seo.title}
+  description={data.seo.description}
+  keywords={data.seo.keywords}
+>
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
+    <div class="absolute inset-0 bg-[url('/images/manufacturing/robotics-background.jpg')] bg-cover bg-center opacity-20"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="text-center max-w-4xl mx-auto">
+        <h1 class="text-4xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+          {data.hero.title}
+        </h1>
+        <p class="text-xl lg:text-2xl text-blue-100 mb-4">
+          {data.hero.subtitle}
+        </p>
+        <div class="text-lg text-gray-300 mb-8 whitespace-pre-line max-w-3xl mx-auto">
+          {data.hero.description}
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <a href={data.hero.cta.primary.href} 
+             class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-200 shadow-lg">
+            {data.hero.cta.primary.text}
+          </a>
+          <a href={data.hero.cta.secondary.href}
+             class="inline-flex items-center justify-center px-8 py-4 border-2 border-cyan-400 text-cyan-400 font-semibold rounded-lg hover:bg-cyan-400 hover:text-gray-900 transition-colors duration-200">
+            {data.hero.cta.secondary.text}
+          </a>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 text-center">
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-cyan-400">24h</div>
+            <div class="text-sm text-gray-300">Prototype Delivery</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-purple-400">±0.05mm</div>
+            <div class="text-sm text-gray-300">Precision Tolerance</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-2xl font-bold text-blue-400">Zero MOQ</div>
+            <div class="text-sm text-gray-300">Minimum Order</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Robotics Advantages -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          🤖 Built for Robotics Development
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Every feature designed to accelerate robotics innovation and reduce development friction
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        {data.roboticsAdvantages.map((advantage) => (
+          <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-200">
+            <div class="text-4xl mb-4">{advantage.icon}</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">{advantage.title}</h3>
+            <p class="text-gray-600 mb-6">{advantage.description}</p>
+            <ul class="space-y-3">
+              {advantage.benefits.map((benefit) => (
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-3">✓</span>
+                  <span class="text-gray-700">{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Robotics Specialties -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          🔧 Robotics Component Specialties
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Comprehensive capabilities for all robotics manufacturing needs
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        {data.roboticsSpecialties.map((specialty) => (
+          <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-blue-500 transition-colors duration-200">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">{specialty.category}</h3>
+            
+            <div class="mb-6">
+              <h4 class="font-semibold text-gray-700 mb-2">Typical Parts:</h4>
+              <div class="flex flex-wrap gap-2">
+                {specialty.parts.map((part) => (
+                  <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">{part}</span>
+                ))}
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <h4 class="font-semibold text-gray-700 mb-2">Precision Level:</h4>
+              <span class="text-lg font-bold text-green-600">{specialty.tolerance}</span>
+            </div>
+
+            <div>
+              <h4 class="font-semibold text-gray-700 mb-2">Materials:</h4>
+              <ul class="space-y-1">
+                {specialty.materials.map((material) => (
+                  <li class="text-gray-600 text-sm">• {material}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Success Stories -->
+  <TestimonialSection testimonials={data.testimonials} language="en" />
+
+  <!-- Process Flow for Robotics -->
+  <section class="py-20 bg-gradient-to-br from-gray-900 to-blue-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl lg:text-4xl font-bold mb-4">
+          🔄 Streamlined Robotics Manufacturing Process
+        </h2>
+        <p class="text-xl text-blue-100 max-w-3xl mx-auto">
+          From CAD upload to precision parts delivery in record time
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-cyan-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">1</div>
+          <h3 class="text-xl font-bold mb-2">Upload & Analyze</h3>
+          <p class="text-blue-100">Upload robot CAD files. AI analyzes geometry, suggests optimizations in seconds.</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-purple-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">2</div>
+          <h3 class="text-xl font-bold mb-2">Smart Quote</h3>
+          <p class="text-blue-100">Instant pricing with robotics-specific considerations. Expert validation within 4-8 hours.</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">3</div>
+          <h3 class="text-xl font-bold mb-2">Precision Manufacturing</h3>
+          <p class="text-blue-100">AI-optimized toolpaths, real-time quality monitoring, robotics-grade finishing.</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">4</div>
+          <h3 class="text-xl font-bold mb-2">Fast Delivery</h3>
+          <p class="text-blue-100">24-48 hour delivery to your lab. Quality documentation and test reports included.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-20 bg-gradient-to-r from-cyan-600 to-blue-600">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+        Ready to Accelerate Your Robotics Development?
+      </h2>
+      <p class="text-xl text-cyan-100 mb-8 max-w-2xl mx-auto">
+        Join 500+ robotics teams who've reduced development time by 60% with Geppetto's smart manufacturing
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/en/ai-quote" 
+           class="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200 shadow-lg">
+          🚀 Start Your Robotics Project
+        </a>
+        <a href="/en/contact"
+           class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-colors duration-200">
+          💬 Talk to Robotics Expert
+        </a>
+      </div>
+      
+      <div class="mt-8 text-cyan-100 text-sm">
+        💫 Zero Risk • Quality Guarantee • 24/7 Technical Support
+      </div>
+    </div>
+  </section>
+</BaseLayout>

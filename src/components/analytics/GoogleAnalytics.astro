@@ -1,0 +1,113 @@
+---
+export interface Props {
+  measurementId: string
+}
+
+const { measurementId } = Astro.props
+
+// Don't load analytics in development unless explicitly enabled
+const isDev = import.meta.env.DEV
+const enableInDev = import.meta.env.PUBLIC_GA_ENABLE_DEV === 'true'
+
+const shouldLoadGA = !isDev || enableInDev
+---
+
+{shouldLoadGA && measurementId && (
+  <>
+    <!-- Google Analytics 4 -->
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
+    <script define:vars={{ measurementId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      
+      // Initialize with denied consent (will be updated by cookie consent)
+      gtag('consent', 'default', {
+        'analytics_storage': 'denied',
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied'
+      });
+      
+      // Enhanced measurement and privacy settings
+      gtag('config', measurementId, {
+        // Privacy settings
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false,
+        
+        // Performance settings
+        send_page_view: true,
+        
+        // Custom dimensions for B2B tracking
+        custom_map: {
+          'dimension1': 'user_type', // visitor, lead, customer
+          'dimension2': 'traffic_source', // organic, direct, referral, etc.
+          'dimension3': 'page_language' // zh, en
+        }
+      });
+      
+      // Track language preference
+      gtag('event', 'page_view', {
+        'page_language': document.documentElement.lang || 'en'
+      });
+      
+      // Enhanced e-commerce tracking for quote requests
+      window.trackQuoteRequest = function(quoteData) {
+        gtag('event', 'begin_checkout', {
+          currency: 'USD',
+          value: quoteData.estimatedValue || 0,
+          items: [{
+            item_id: quoteData.quoteId,
+            item_name: 'CNC Quote Request',
+            category: 'Manufacturing Service',
+            quantity: 1,
+            price: quoteData.estimatedValue || 0
+          }]
+        });
+      };
+      
+      // Track file uploads
+      window.trackFileUpload = function(fileData) {
+        gtag('event', 'file_upload', {
+          event_category: 'engagement',
+          event_label: fileData.fileType,
+          value: fileData.fileSize
+        });
+      };
+      
+      // Track contact form submissions
+      window.trackContactForm = function(formType) {
+        gtag('event', 'generate_lead', {
+          event_category: 'lead_generation',
+          event_label: formType,
+          value: 1
+        });
+      };
+    </script>
+  </>
+)}
+
+{!shouldLoadGA && (
+  <!-- GA disabled in development -->
+  <script>
+    console.log('Google Analytics disabled in development mode');
+    
+    // Mock functions for development
+    window.gtag = function() {
+      console.log('GA (dev mode):', arguments);
+    };
+    
+    window.trackQuoteRequest = function(quoteData) {
+      console.log('Quote request tracked (dev mode):', quoteData);
+    };
+    
+    window.trackFileUpload = function(fileData) {
+      console.log('File upload tracked (dev mode):', fileData);
+    };
+    
+    window.trackContactForm = function(formType) {
+      console.log('Contact form tracked (dev mode):', formType);
+    };
+  </script>
+)}

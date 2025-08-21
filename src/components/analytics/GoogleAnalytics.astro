@@ -59,3 +59,33 @@ const isDev = import.meta.env.DEV
   </>
 )}
 
+<!-- 确保自定义跟踪函数始终可用 -->
+<script is:inline>
+  // 定义自定义跟踪函数（如果还不存在）
+  window.trackQuoteRequest = window.trackQuoteRequest || function(quoteData) {
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'generate_lead', {
+        currency: 'USD',
+        value: quoteData.estimatedValue || 0
+      });
+    }
+  };
+  
+  window.trackFileUpload = window.trackFileUpload || function(fileData) {
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'file_upload', {
+        file_extension: fileData.fileType,
+        file_name: fileData.fileName
+      });
+    }
+  };
+  
+  window.trackContactForm = window.trackContactForm || function(formType) {
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'form_submit', {
+        form_type: formType || 'contact'
+      });
+    }
+  };
+</script>
+

@@ -147,13 +147,6 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
         }
 
         this.bindEvents();
-        
-        // Also check on window load to ensure gtag is ready
-        window.addEventListener('load', () => {
-          if (this.consentData) {
-            this.applyCookieSettings(this.consentData);
-          }
-        });
       }
 
       showBanner() {
@@ -251,28 +244,21 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
       }
 
       applyCookieSettings(consent) {
-        // Wait for gtag to be available
-        const updateConsent = () => {
-          if (window.gtag) {
-            // Update all consent settings in one call
-            window.gtag('consent', 'update', {
-              'analytics_storage': consent.analytics ? 'granted' : 'denied',
-              'ad_storage': consent.marketing ? 'granted' : 'denied',
-              'ad_user_data': consent.marketing ? 'granted' : 'denied',
-              'ad_personalization': consent.marketing ? 'granted' : 'denied'
-            });
-          } else {
-            // Retry if gtag not ready
-            setTimeout(updateConsent, 100);
-          }
-        };
-        
-        updateConsent();
-
-        // Dispatch custom event for other scripts
+        // Dispatch consent change event - GA will handle the update
         window.dispatchEvent(new CustomEvent('cookieConsentChanged', {
           detail: consent
         }));
+        
+        // Ensure GA updates consent if already initialized
+        if (window.gtag && window.gaInitialized) {
+          const consentSettings = {
+            'analytics_storage': consent.analytics ? 'granted' : 'denied',
+            'ad_storage': consent.marketing ? 'granted' : 'denied',
+            'ad_user_data': consent.marketing ? 'granted' : 'denied',
+            'ad_personalization': consent.marketing ? 'granted' : 'denied'
+          };
+          window.gtag('consent', 'update', consentSettings);
+        }
       }
 
       bindEvents() {

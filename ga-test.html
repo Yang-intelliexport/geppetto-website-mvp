@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GA集成测试</title>
+</head>
+<body>
+    <h1>🧪 GA集成测试页面</h1>
+    
+    <div style="margin: 20px; padding: 20px; border: 1px solid #ccc;">
+        <h2>测试步骤：</h2>
+        <button onclick="testConsentFlow()">1. 测试Consent流程</button><br><br>
+        <button onclick="testGA()">2. 测试GA函数</button><br><br>
+        <button onclick="testEvents()">3. 测试自定义事件</button><br><br>
+        <button onclick="clearConsent()">4. 清除Consent</button>
+    </div>
+    
+    <div id="results" style="margin: 20px; padding: 20px; background: #f5f5f5;">
+        <h3>测试结果：</h3>
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+        function log(message) {
+            const output = document.getElementById('output');
+            output.textContent += new Date().toISOString() + ': ' + message + '\n';
+        }
+        
+        function testConsentFlow() {
+            log('=== 测试Consent流程 ===');
+            
+            // 检查localStorage
+            const stored = localStorage.getItem('geppetto_cookie_consent');
+            log('LocalStorage consent: ' + (stored || 'null'));
+            
+            // 模拟接受所有Cookie
+            const consent = {
+                essential: true,
+                analytics: true,
+                marketing: true,
+                timestamp: Date.now()
+            };
+            
+            localStorage.setItem('geppetto_cookie_consent', JSON.stringify(consent));
+            log('设置consent为: ' + JSON.stringify(consent));
+            
+            // 触发事件
+            window.dispatchEvent(new CustomEvent('cookieConsentChanged', {
+                detail: consent
+            }));
+            log('触发了cookieConsentChanged事件');
+        }
+        
+        function testGA() {
+            log('=== 测试GA函数 ===');
+            log('gtag类型: ' + typeof window.gtag);
+            log('gaInitialized: ' + window.gaInitialized);
+            log('checkConsentAndInitialize: ' + typeof window.checkConsentAndInitialize);
+            
+            if (window.checkConsentAndInitialize) {
+                window.checkConsentAndInitialize();
+                log('执行了checkConsentAndInitialize()');
+            }
+        }
+        
+        function testEvents() {
+            log('=== 测试自定义事件 ===');
+            
+            if (window.trackQuoteRequest) {
+                window.trackQuoteRequest({ estimatedValue: 299 });
+                log('发送了trackQuoteRequest事件');
+            } else {
+                log('trackQuoteRequest函数不存在');
+            }
+            
+            if (window.trackFileUpload) {
+                window.trackFileUpload({ fileType: 'pdf', fileName: 'test.pdf' });
+                log('发送了trackFileUpload事件');
+            } else {
+                log('trackFileUpload函数不存在');
+            }
+        }
+        
+        function clearConsent() {
+            localStorage.removeItem('geppetto_cookie_consent');
+            log('已清除consent');
+            location.reload();
+        }
+        
+        // 页面加载时的初始检查
+        window.addEventListener('load', () => {
+            log('页面加载完成');
+            setTimeout(() => {
+                log('=== 初始状态检查 ===');
+                log('gtag: ' + typeof window.gtag);
+                log('gaInitialized: ' + window.gaInitialized);
+                log('localStorage consent: ' + localStorage.getItem('geppetto_cookie_consent'));
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

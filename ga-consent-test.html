@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GA Consent Integration Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .status { padding: 5px 10px; margin: 5px 0; border-radius: 3px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        .consent-btn { background: #7c3aed; color: white; border: none; border-radius: 5px; }
+        .test-btn { background: #059669; color: white; border: none; border-radius: 5px; }
+        .reject-btn { background: #dc2626; color: white; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Google Analytics Consent Integration Test</h1>
+    
+    <!-- Simulated GA Script (for testing without real GA) -->
+    <script>
+        // Mock gtag for testing
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){
+            dataLayer.push(arguments);
+            console.log('gtag called with:', arguments);
+        }
+        window.gtag = gtag;
+        
+        // Test measurement ID
+        const measurementId = 'GA_MEASUREMENT_ID_TEST';
+        
+        // Simulate our fixed GA initialization
+        window.initializeGA = function(consentSettings) {
+            gtag('js', new Date());
+            
+            const consent = consentSettings || {
+                'ad_storage': 'denied',
+                'ad_user_data': 'denied', 
+                'ad_personalization': 'denied',
+                'analytics_storage': 'denied'
+            };
+            
+            gtag('consent', 'default', consent);
+            
+            gtag('config', measurementId, {
+                anonymize_ip: true,
+                allow_google_signals: false,
+                allow_ad_personalization_signals: false,
+                debug_mode: true,
+                send_page_view: true
+            });
+            
+            window.gaInitialized = true;
+            updateStatus('ga-status', 'GA initialized with consent: ' + JSON.stringify(consent), 'success');
+        };
+        
+        // Check consent and initialize
+        window.checkConsentAndInitialize = function() {
+            try {
+                const storedConsent = localStorage.getItem('geppetto_cookie_consent');
+                if (storedConsent) {
+                    const consent = JSON.parse(storedConsent);
+                    const consentSettings = {
+                        'analytics_storage': consent.analytics ? 'granted' : 'denied',
+                        'ad_storage': consent.marketing ? 'granted' : 'denied',
+                        'ad_user_data': consent.marketing ? 'granted' : 'denied',
+                        'ad_personalization': consent.marketing ? 'granted' : 'denied'
+                    };
+                    window.initializeGA(consentSettings);
+                    updateStatus('consent-status', 'Found stored consent: ' + JSON.stringify(consent), 'success');
+                } else {
+                    window.initializeGA();
+                    updateStatus('consent-status', 'No stored consent found, using defaults', 'warning');
+                }
+            } catch (e) {
+                window.initializeGA();
+                updateStatus('consent-status', 'Error reading consent: ' + e.message, 'error');
+            }
+        };
+        
+        // Listen for consent changes
+        window.addEventListener('cookieConsentChanged', (event) => {
+            const consent = event.detail;
+            const consentSettings = {
+                'analytics_storage': consent.analytics ? 'granted' : 'denied',
+                'ad_storage': consent.marketing ? 'granted' : 'denied',
+                'ad_user_data': consent.marketing ? 'granted' : 'denied',
+                'ad_personalization': consent.marketing ? 'granted' : 'denied'
+            };
+            
+            if (window.gtag) {
+                gtag('consent', 'update', consentSettings);
+                updateStatus('update-status', 'Consent updated: ' + JSON.stringify(consentSettings), 'success');
+            }
+        });
+        
+        // Custom tracking functions
+        window.trackQuoteRequest = function(quoteData) {
+            if (window.gtag && window.gaInitialized) {
+                gtag('event', 'generate_lead', {
+                    currency: 'USD',
+                    value: quoteData.estimatedValue || 0
+                });
+                updateStatus('tracking-status', 'Quote request tracked: ' + JSON.stringify(quoteData), 'success');
+            } else {
+                updateStatus('tracking-status', 'Cannot track - GA not initialized or gtag unavailable', 'error');
+            }
+        };
+    </script>
+
+    <div class="test-section">
+        <h2>Initialization Status</h2>
+        <div id="ga-status" class="status">Not initialized</div>
+        <div id="consent-status" class="status">No consent checked</div>
+        <button onclick="window.checkConsentAndInitialize()" class="test-btn">Initialize GA</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Consent Management Test</h2>
+        <div id="update-status" class="status">No updates</div>
+        
+        <button onclick="simulateConsentAccept()" class="consent-btn">Accept All Cookies</button>
+        <button onclick="simulateConsentReject()" class="reject-btn">Reject All Cookies</button>
+        <button onclick="simulateAnalyticsOnly()" class="consent-btn">Analytics Only</button>
+        <button onclick="clearConsent()" class="test-btn">Clear Stored Consent</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Tracking Test</h2>
+        <div id="tracking-status" class="status">No tracking events</div>
+        <button onclick="testTracking()" class="test-btn">Test Quote Tracking</button>
+    </div>
+
+    <div class="test-section">
+        <h2>DataLayer Inspection</h2>
+        <div id="datalayer-content" style="background: #f8f9fa; padding: 10px; font-family: monospace; white-space: pre-wrap; max-height: 200px; overflow-y: scroll;"></div>
+        <button onclick="showDataLayer()" class="test-btn">Show DataLayer</button>
+    </div>
+
+    <script>
+        function updateStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = 'status ' + type;
+        }
+
+        function simulateConsentAccept() {
+            const consent = {
+                essential: true,
+                analytics: true,
+                marketing: true,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('geppetto_cookie_consent', JSON.stringify(consent));
+            
+            window.dispatchEvent(new CustomEvent('cookieConsentChanged', {
+                detail: consent
+            }));
+            
+            updateStatus('consent-status', 'Consent accepted: ' + JSON.stringify(consent), 'success');
+        }
+
+        function simulateConsentReject() {
+            const consent = {
+                essential: true,
+                analytics: false,
+                marketing: false,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('geppetto_cookie_consent', JSON.stringify(consent));
+            
+            window.dispatchEvent(new CustomEvent('cookieConsentChanged', {
+                detail: consent
+            }));
+            
+            updateStatus('consent-status', 'Consent rejected: ' + JSON.stringify(consent), 'warning');
+        }
+
+        function simulateAnalyticsOnly() {
+            const consent = {
+                essential: true,
+                analytics: true,
+                marketing: false,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('geppetto_cookie_consent', JSON.stringify(consent));
+            
+            window.dispatchEvent(new CustomEvent('cookieConsentChanged', {
+                detail: consent
+            }));
+            
+            updateStatus('consent-status', 'Analytics only: ' + JSON.stringify(consent), 'success');
+        }
+
+        function clearConsent() {
+            localStorage.removeItem('geppetto_cookie_consent');
+            updateStatus('consent-status', 'Consent cleared from localStorage', 'warning');
+        }
+
+        function testTracking() {
+            window.trackQuoteRequest({
+                estimatedValue: 1200,
+                fileType: 'STEP',
+                material: 'Aluminum'
+            });
+        }
+
+        function showDataLayer() {
+            const content = JSON.stringify(window.dataLayer, null, 2);
+            document.getElementById('datalayer-content').textContent = content;
+        }
+
+        // Auto-initialize for testing
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                window.checkConsentAndInitialize();
+                showDataLayer();
+            }, 500);
+        });
+    </script>
+</body>
+</html>

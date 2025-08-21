@@ -26,7 +26,8 @@ const isDev = import.meta.env.DEV
         anonymize_ip: true,
         allow_google_signals: false,
         allow_ad_personalization_signals: false,
-        debug_mode: isDev
+        debug_mode: false,
+        send_page_view: true
       });
       
       // View Transitions support - Reinitialize on page changes

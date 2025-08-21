@@ -142,11 +142,18 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
         if (!this.consentData) {
           this.showBanner();
         } else {
-          // Apply consent settings
+          // Apply consent settings immediately
           this.applyCookieSettings(this.consentData);
         }
 
         this.bindEvents();
+        
+        // Also check on window load to ensure gtag is ready
+        window.addEventListener('load', () => {
+          if (this.consentData) {
+            this.applyCookieSettings(this.consentData);
+          }
+        });
       }
 
       showBanner() {
@@ -244,33 +251,23 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
       }
 
       applyCookieSettings(consent) {
-        // Enable/disable Google Analytics based on consent
-        if (consent.analytics && window.gtag) {
-          // Enable GA if it was disabled
-          window.gtag('consent', 'update', {
-            'analytics_storage': 'granted'
-          });
-        } else if (window.gtag) {
-          // Disable GA
-          window.gtag('consent', 'update', {
-            'analytics_storage': 'denied'
-          });
-        }
-
-        // Handle marketing cookies
-        if (consent.marketing && window.gtag) {
-          window.gtag('consent', 'update', {
-            'ad_storage': 'granted',
-            'ad_user_data': 'granted',
-            'ad_personalization': 'granted'
-          });
-        } else if (window.gtag) {
-          window.gtag('consent', 'update', {
-            'ad_storage': 'denied',
-            'ad_user_data': 'denied',
-            'ad_personalization': 'denied'
-          });
-        }
+        // Wait for gtag to be available
+        const updateConsent = () => {
+          if (window.gtag) {
+            // Update all consent settings in one call
+            window.gtag('consent', 'update', {
+              'analytics_storage': consent.analytics ? 'granted' : 'denied',
+              'ad_storage': consent.marketing ? 'granted' : 'denied',
+              'ad_user_data': consent.marketing ? 'granted' : 'denied',
+              'ad_personalization': consent.marketing ? 'granted' : 'denied'
+            });
+          } else {
+            // Retry if gtag not ready
+            setTimeout(updateConsent, 100);
+          }
+        };
+        
+        updateConsent();
 
         // Dispatch custom event for other scripts
         window.dispatchEvent(new CustomEvent('cookieConsentChanged', {

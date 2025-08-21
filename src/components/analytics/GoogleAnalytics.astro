@@ -19,6 +19,7 @@ const shouldLoadGA = !isDev || enableInDev
     <script define:vars={{ measurementId }}>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag; // 暴露到全局作用域
       gtag('js', new Date());
       
       // Initialize with denied consent (will be updated by cookie consent)
@@ -39,12 +40,24 @@ const shouldLoadGA = !isDev || enableInDev
         // Performance settings
         send_page_view: true,
         
+        // Enhanced Measurement settings
+        enhanced_measurements: {
+          scrolls: true,
+          outbound_clicks: true,
+          site_search: true,
+          video_engagement: true,
+          file_downloads: true
+        },
+        
         // Custom dimensions for B2B tracking
         custom_map: {
           'dimension1': 'user_type', // visitor, lead, customer
           'dimension2': 'traffic_source', // organic, direct, referral, etc.
           'dimension3': 'page_language' // zh, en
-        }
+        },
+        
+        // Debug mode (only in development)
+        debug_mode: import.meta.env.DEV
       });
       
       // Track language preference
@@ -57,10 +70,15 @@ const shouldLoadGA = !isDev || enableInDev
         gtag('event', 'begin_checkout', {
           currency: 'USD',
           value: quoteData.estimatedValue || 0,
+          transaction_id: quoteData.quoteId,
+          // Required e-commerce parameters
+          engagement_time_msec: 100,
+          session_id: quoteData.sessionId || 'unknown',
           items: [{
             item_id: quoteData.quoteId,
             item_name: 'CNC Quote Request',
-            category: 'Manufacturing Service',
+            item_category: 'Manufacturing Service',
+            item_brand: 'Geppetto',
             quantity: 1,
             price: quoteData.estimatedValue || 0
           }]
@@ -71,8 +89,13 @@ const shouldLoadGA = !isDev || enableInDev
       window.trackFileUpload = function(fileData) {
         gtag('event', 'file_upload', {
           event_category: 'engagement',
-          event_label: fileData.fileType,
-          value: fileData.fileSize
+          event_label: fileData.fileType || 'unknown',
+          file_extension: fileData.fileType,
+          file_name: fileData.fileName,
+          value: fileData.fileSize || 0,
+          // Required for Realtime reports
+          engagement_time_msec: 100,
+          session_id: fileData.sessionId || 'unknown'
         });
       };
       
@@ -80,8 +103,12 @@ const shouldLoadGA = !isDev || enableInDev
       window.trackContactForm = function(formType) {
         gtag('event', 'generate_lead', {
           event_category: 'lead_generation',
-          event_label: formType,
-          value: 1
+          event_label: formType || 'contact_form',
+          form_type: formType,
+          value: 1,
+          // Required for Realtime reports
+          engagement_time_msec: 100,
+          session_id: 'contact_session'
         });
       };
     </script>

@@ -15,8 +15,8 @@ const shouldLoadGA = !isDev || enableInDev
 {shouldLoadGA && measurementId && (
   <>
     <!-- Google Analytics 4 -->
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
-    <script define:vars={{ measurementId }}>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
+    <script is:inline define:vars={{ measurementId }}>
       // 确保gtag函数始终存在
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -142,11 +142,11 @@ const shouldLoadGA = !isDev || enableInDev
   </script>
 )}
 
-<!-- 备用gtag函数确保 (全局加载) -->
-<script>
-  // 如果gtag还不存在，创建一个
+<!-- 确保gtag函数全局可用 -->
+<script is:inline>
+  // 确保gtag函数始终定义在window对象上
+  window.dataLayer = window.dataLayer || [];
   if (typeof window.gtag === 'undefined') {
-    window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     window.gtag = gtag;
   }

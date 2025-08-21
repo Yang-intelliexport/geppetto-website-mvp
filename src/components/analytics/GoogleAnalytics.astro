@@ -17,6 +17,7 @@ const shouldLoadGA = !isDev || enableInDev
     <!-- Google Analytics 4 -->
     <script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
     <script define:vars={{ measurementId }}>
+      // 确保gtag函数始终存在
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       window.gtag = gtag; // 暴露到全局作用域
@@ -120,9 +121,11 @@ const shouldLoadGA = !isDev || enableInDev
   <script>
     console.log('Google Analytics disabled in development mode');
     
-    // Mock functions for development
+    // 确保基础函数存在
+    window.dataLayer = window.dataLayer || [];
     window.gtag = function() {
       console.log('GA (dev mode):', arguments);
+      window.dataLayer.push(arguments);
     };
     
     window.trackQuoteRequest = function(quoteData) {
@@ -138,3 +141,13 @@ const shouldLoadGA = !isDev || enableInDev
     };
   </script>
 )}
+
+<!-- 备用gtag函数确保 (全局加载) -->
+<script>
+  // 如果gtag还不存在，创建一个
+  if (typeof window.gtag === 'undefined') {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+  }
+</script>

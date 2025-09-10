@@ -189,7 +189,7 @@ export default function OrderDetail({ quoteId, language = 'zh', onBack }: OrderD
       'completed': 'bg-gray-100 text-gray-800',
       'cancelled': 'bg-red-100 text-red-800'
     };
-    return colors[status] || 'bg-gray-100 text-gray-800';
+    return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
 
   if (loading) {
@@ -244,7 +244,7 @@ export default function OrderDetail({ quoteId, language = 'zh', onBack }: OrderD
             <p className="text-gray-600 font-mono">#{String(quote.id).slice(0, 8)}</p>
           </div>
           <span className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(quote.status)}`}>
-            {t.statusMap[quote.status] || quote.status}
+            {t.statusMap[quote.status as keyof typeof t.statusMap] || quote.status}
           </span>
         </div>
       </div>
@@ -264,7 +264,7 @@ export default function OrderDetail({ quoteId, language = 'zh', onBack }: OrderD
               
               <div>
                 <label className="block text-sm font-medium text-gray-500">{t.material}</label>
-                <p className="mt-1 text-gray-900">{t.materials[quote.material] || quote.material}</p>
+                <p className="mt-1 text-gray-900">{t.materials[quote.material as keyof typeof t.materials] || quote.material}</p>
               </div>
               
               <div>
@@ -294,7 +294,7 @@ export default function OrderDetail({ quoteId, language = 'zh', onBack }: OrderD
           </div>
 
           {/* 报价明细 */}
-          {(quote.total_amount || quote.quote_breakdown_items?.length > 0) && (
+          {(quote.total_amount || (quote.quote_breakdown_items && quote.quote_breakdown_items.length > 0)) && (
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">{t.priceBreakdown}</h2>
               

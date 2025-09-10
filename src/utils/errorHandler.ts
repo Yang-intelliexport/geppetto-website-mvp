@@ -438,7 +438,7 @@ export class UnifiedErrorHandler {
     }
   }
 
-  public handleApiError(response: Response): Promise<ApiError> {
+  public async handleApiError(response: Response): Promise<ApiError> {
     return response.json()
       .then((data) => {
         const error: ApiError = {

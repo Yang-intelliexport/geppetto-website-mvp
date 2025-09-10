@@ -42,7 +42,7 @@ export function validatePhone(phone: string): boolean {
 }
 
 export function validateRequired(value: string): boolean {
-  return value && value.trim().length > 0;
+  return Boolean(value && value.trim().length > 0);
 }
 
 export function validateFileType(file: File, allowedTypes: string[]): boolean {
@@ -184,7 +184,7 @@ export function validateUploadedFiles(files: FileList | File[], options: {
     }
 
     // 文件类型检查
-    if (!validateFileType(file, allowedTypes)) {
+    if (!validateFileType(file, [...allowedTypes])) {
       errors.push(`文件"${file.name}"格式不支持，请上传${allowedTypes.join(', ')}格式的文件`);
     }
 

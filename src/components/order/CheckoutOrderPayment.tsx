@@ -196,12 +196,14 @@ export default function CheckoutOrderPayment({ orderId, language = 'zh' }: Check
       }
       
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       console.error('❌ 创建支付会话失败:', {
-        error: error.message,
-        stack: error.stack,
+        error: errorMessage,
+        stack: errorStack,
         quoteId: quote.id
       });
-      setMessage(error.message || t.paymentFailed);
+      setMessage(errorMessage || t.paymentFailed);
     } finally {
       setPaymentLoading(false);
     }
@@ -252,7 +254,7 @@ export default function CheckoutOrderPayment({ orderId, language = 'zh' }: Check
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-500">{t.material}</label>
-                  <p className="mt-1 text-gray-900">{t.materials[quote.material] || quote.material}</p>
+                  <p className="mt-1 text-gray-900">{t.materials[quote.material as keyof typeof t.materials] || quote.material}</p>
                 </div>
                 
                 <div>

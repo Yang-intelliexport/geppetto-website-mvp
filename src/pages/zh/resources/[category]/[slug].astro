@@ -25,10 +25,10 @@ const { resource, lang, collectionName } = Astro.props;
 const { Content } = await resource.render();
 
 // 获取相关文章
-const getRelatedPosts = async (currentResource) => {
+const getRelatedPosts = async (currentResource: any) => {
   if (!currentResource.data.relatedPosts || currentResource.data.relatedPosts.length === 0) {
     // 如果没有指定相关文章，根据标签和分类自动推荐
-    const allResources = await getCollection(collectionName, ({ data }) => !data.draft);
+    const allResources = await getCollection(collectionName, ({ data }: any) => !(data as any).draft);
     
     return allResources
       .filter(resource => resource.slug !== currentResource.slug)
@@ -60,7 +60,7 @@ const getRelatedPosts = async (currentResource) => {
 
 const relatedPosts = await getRelatedPosts(resource);
 
-const formatDate = (date) => {
+const formatDate = (date: string | Date) => {
   return new Date(date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
 };
 ---

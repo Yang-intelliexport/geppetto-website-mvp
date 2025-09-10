@@ -131,6 +131,9 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
   <script>
     // Cookie consent management
     class CookieConsent {
+      consentKey: string;
+      consentData: any;
+      
       constructor() {
         this.consentKey = 'geppetto_cookie_consent';
         this.consentData = this.getConsent();

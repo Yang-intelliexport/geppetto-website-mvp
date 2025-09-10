@@ -38,10 +38,10 @@ const categoryMap = {
   'cost-optimization': '成本优化'
 };
 
-const resourcesByCategory = categories.reduce((acc, category) => {
+const resourcesByCategory = categories.reduce((acc: Record<string, any>, category) => {
   acc[category] = sortedResources.filter(resource => resource.data.category === category);
   return acc;
-}, {});
+}, {} as Record<string, any>);
 
 const seoData = {
   title: 'Geppetto制造资源 - CNC加工指南与行业洞察',

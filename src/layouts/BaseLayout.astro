@@ -17,6 +17,9 @@ export interface Props {
   keywords?: string[]
   ogImage?: string
   structuredData?: { type: string; data: Record<string, any> }
+  canonicalURL?: string
+  language?: string
+  currentLang?: string
 }
 
 const currentLang = getLanguageFromUrl(Astro.url)

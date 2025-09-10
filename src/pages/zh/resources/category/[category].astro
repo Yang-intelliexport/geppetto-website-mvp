@@ -45,9 +45,9 @@ const categoryMap = {
   'cost-optimization': '成本优化'
 };
 
-const categoryName = categoryMap[category] || category;
+const categoryName = categoryMap[category as keyof typeof categoryMap] || category;
 
-const formatDate = (date) => {
+const formatDate = (date: string | Date) => {
   return new Date(date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
 };
 

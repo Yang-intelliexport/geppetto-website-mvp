@@ -176,8 +176,10 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
           
           // Set current preferences
           const consent = this.getConsent() || { analytics: true, marketing: false };
-          document.getElementById('analytics-toggle').checked = consent.analytics;
-          document.getElementById('marketing-toggle').checked = consent.marketing;
+          const analyticsEl = document.getElementById('analytics-toggle') as HTMLInputElement;
+          const marketingEl = document.getElementById('marketing-toggle') as HTMLInputElement;
+          if (analyticsEl) analyticsEl.checked = consent.analytics;
+          if (marketingEl) marketingEl.checked = consent.marketing;
         }
       }
 
@@ -213,8 +215,8 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
       }
 
       saveSettings() {
-        const analytics = document.getElementById('analytics-toggle').checked;
-        const marketing = document.getElementById('marketing-toggle').checked;
+        const analytics = (document.getElementById('analytics-toggle') as HTMLInputElement)?.checked || false;
+        const marketing = (document.getElementById('marketing-toggle') as HTMLInputElement)?.checked || false;
         
         const consent = {
           essential: true,
@@ -229,7 +231,7 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
         this.hideBanner();
       }
 
-      saveConsent(consent) {
+      saveConsent(consent: any) {
         localStorage.setItem(this.consentKey, JSON.stringify(consent));
         this.consentData = consent;
       }
@@ -243,21 +245,22 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
         }
       }
 
-      applyCookieSettings(consent) {
+      applyCookieSettings(consent: any) {
         // Dispatch consent change event - GA will handle the update
         window.dispatchEvent(new CustomEvent('cookieConsentChanged', {
           detail: consent
         }));
         
         // Ensure GA updates consent if already initialized
-        if (window.gtag && window.gaInitialized) {
+        const win = window as any;
+        if (win.gtag && win.gaInitialized) {
           const consentSettings = {
             'analytics_storage': consent.analytics ? 'granted' : 'denied',
             'ad_storage': consent.marketing ? 'granted' : 'denied',
             'ad_user_data': consent.marketing ? 'granted' : 'denied',
             'ad_personalization': consent.marketing ? 'granted' : 'denied'
           };
-          window.gtag('consent', 'update', consentSettings);
+          win.gtag('consent', 'update', consentSettings);
         }
       }
 
@@ -270,7 +273,7 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
 
         // Close modal on backdrop click
         document.getElementById('cookie-settings-modal')?.addEventListener('click', (e) => {
-          if (e.target.id === 'cookie-settings-modal') {
+          if (e.target && (e.target as HTMLElement).id === 'cookie-settings-modal') {
             this.hideModal();
           }
         });

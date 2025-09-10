@@ -473,8 +473,9 @@ export class UnifiedErrorHandler {
   }
 
   private getUserFriendlyMessage(code: ErrorCode): string {
-    return this.userFriendlyMessages[this.language][code] || 
-           this.userFriendlyMessages[this.language][ErrorCode.UNKNOWN_ERROR];
+    const messages = this.userFriendlyMessages[this.language];
+    return messages[code as keyof typeof messages] || 
+           messages[ErrorCode.UNKNOWN_ERROR as keyof typeof messages];
   }
 
   private showUserError(error: ApiError): void {

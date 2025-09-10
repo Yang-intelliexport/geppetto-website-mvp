@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useStore } from '@nanostores/react';
-import { sessionStore, userStore, authLoadingStore } from '../stores/sessionStore';
+import { userStore, authLoadingStore } from '../stores/sessionStore';
 import LoginForm from './LoginForm';
 import QuoteForm from './QuoteForm';
 
@@ -11,7 +11,6 @@ interface QuoteCreationFlowProps {
 export default function QuoteCreationFlow({ language = 'zh' }: QuoteCreationFlowProps) {
   const user = useStore(userStore);
   const loading = useStore(authLoadingStore);
-  const session = useStore(sessionStore);
 
   const text = {
     zh: {

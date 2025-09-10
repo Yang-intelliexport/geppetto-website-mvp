@@ -28,7 +28,7 @@ export default function AuthManager() {
 
     // 监听认证状态变化
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      (_event, session) => {
         setSession(session);
         // Auth state change handled
       }

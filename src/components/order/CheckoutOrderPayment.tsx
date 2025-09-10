@@ -136,6 +136,7 @@ export default function CheckoutOrderPayment({ orderId, language = 'zh' }: Check
           orderId
         });
 
+        // 先查询订单信息
         const { data: quoteData, error: quoteError } = await supabase
           .from('quotes')
           .select(`
@@ -147,12 +148,7 @@ export default function CheckoutOrderPayment({ orderId, language = 'zh' }: Check
             currency,
             created_at,
             customer_notes,
-            product_name,
             user_id,
-            profiles!inner(
-              contact_name,
-              email
-            ),
             quote_breakdown_items (
               description,
               quantity,
@@ -175,20 +171,24 @@ export default function CheckoutOrderPayment({ orderId, language = 'zh' }: Check
           return;
         }
 
-        // 🐛 调试：打印实际数据库数据
-        console.log('📊 数据库实际返回的数据:', {
-          id: quoteData.id,
-          product_name: quoteData.product_name,
-          total_amount: quoteData.total_amount,
-          status: quoteData.status,
-          currency: quoteData.currency,
-          created_at: quoteData.created_at,
-          quantity: quoteData.quantity,
-          material: quoteData.material,
-          allFields: Object.keys(quoteData)
+        // 暂时不查询profiles，使用默认数据
+        const displayData = {
+          ...quoteData,
+          profiles: { 
+            contact_name: 'Customer', 
+            email: user.email || 'user@example.com' 
+          }
+        };
+
+        console.log('📊 订单数据:', {
+          id: displayData.id,
+          total_amount: displayData.total_amount,
+          status: displayData.status,
+          material: displayData.material,
+          quantity: displayData.quantity
         });
 
-        setQuote(quoteData);
+        setQuote(displayData);
       } catch (error) {
         console.error('加载订单失败:', error);
         setMessage(t.orderNotFound);

@@ -7,6 +7,7 @@ import GoogleAnalytics from '../components/analytics/GoogleAnalytics.astro'
 import CookieConsent from '../components/analytics/CookieConsent.astro'
 import GlobalModal from '../components/modals/GlobalModal.astro'
 import GlobalToast from '../components/modals/GlobalToast.astro'
+import AuthManager from '../components/AuthManager.tsx'
 import { getLanguageFromUrl, getTranslations, t } from '../utils/i18n'
 import { ViewTransitions } from 'astro:transitions'
 
@@ -100,6 +101,9 @@ const finalDescription = description || defaultDescription
 </head>
 
 <body class="font-inter bg-white text-gray-900 antialiased">
+  <!-- 全局认证管理器 -->
+  <AuthManager client:load />
+  
   <!-- Header -->
   <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

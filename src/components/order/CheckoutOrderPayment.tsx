@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+import { createClient } from '../../lib/supabase/client';
 import { createPaymentSession } from '../../utils/supabase';
 import type { User } from '@supabase/supabase-js';
 
@@ -28,6 +28,7 @@ interface Quote {
 }
 
 export default function CheckoutOrderPayment({ orderId, language = 'zh' }: CheckoutOrderPaymentProps) {
+  const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(true);

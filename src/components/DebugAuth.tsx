@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { createClient } from '../lib/supabase/client';
 
 export default function DebugAuth() {
   const [authState, setAuthState] = useState<any>(null);
   const [envVars, setEnvVars] = useState<any>({});
   const [testEmail, setTestEmail] = useState('');
+
+  const supabase = createClient();
 
   useEffect(() => {
     // 检查环境变量
@@ -26,7 +28,7 @@ export default function DebugAuth() {
         const { data: userData, error: userError } = await supabase.auth.getUser();
         
         // 尝试一个简单的数据库查询来测试连接
-        const { data: testData, error: testError } = await supabase
+        const { error: testError } = await supabase
           .from('quotes')
           .select('id')
           .limit(1);
@@ -48,7 +50,7 @@ export default function DebugAuth() {
         
       } catch (error) {
         console.error('调试检查失败:', error);
-        setAuthState({ generalError: error.message });
+        setAuthState({ generalError: (error as Error).message });
       }
     };
 
@@ -82,7 +84,7 @@ export default function DebugAuth() {
       }
     } catch (error) {
       console.error('❌ 测试登录异常:', error);
-      alert(`测试失败: ${error.message}`);
+      alert(`测试失败: ${(error as Error).message}`);
     }
   };
 

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useStore } from '@nanostores/react';
+import { userStore, authLoadingStore } from '../../stores/sessionStore';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -12,11 +13,12 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
   redirectTo,
   fallback 
 }) => {
-  const { user, loading } = useAuth();
+  const user = useStore(userStore);
+  const loading = useStore(authLoadingStore);
 
   useEffect(() => {
-    // 如果不在加载中且用户未登录，则跳转到登录页
-    if (!loading && !user && redirectTo !== false) {
+    // 如果不在加载中且用户未登录，且设置了跳转URL，则跳转到登录页
+    if (!loading && !user && redirectTo) {
       const currentPath = window.location.pathname;
       const loginUrl = redirectTo || `/login?redirect=${encodeURIComponent(currentPath)}`;
       window.location.href = loginUrl;

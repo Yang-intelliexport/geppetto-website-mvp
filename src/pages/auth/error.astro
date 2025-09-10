@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// 从URL参数获取错误信息
+const { searchParams } = Astro.url;
+const errorMessage = searchParams.get('message') || '未知认证错误';
+---
+
+<BaseLayout title="认证错误 - Geppetto CNC" description="认证过程中遇到错误">
+  <main class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-16">
+    <div class="max-w-md mx-auto px-4">
+      <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
+        <!-- 错误图标 -->
+        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+          </svg>
+        </div>
+        
+        <!-- 错误标题 -->
+        <h1 class="text-2xl font-bold text-gray-900 mb-4">认证失败</h1>
+        
+        <!-- 错误信息 -->
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <p class="text-red-800 text-sm">{errorMessage}</p>
+        </div>
+        
+        <!-- 解决方案建议 -->
+        <div class="text-left mb-6">
+          <h3 class="font-semibold text-gray-900 mb-3">可能的解决方案：</h3>
+          <ul class="text-sm text-gray-600 space-y-2">
+            <li class="flex items-start">
+              <span class="text-purple-600 mr-2">•</span>
+              检查邮件链接是否过期（链接有效期为1小时）
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-600 mr-2">•</span>
+              确保在同一浏览器中点击邮件链接
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-600 mr-2">•</span>
+              尝试清除浏览器缓存后重试
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-600 mr-2">•</span>
+              使用无痕/隐私浏览模式重试
+            </li>
+          </ul>
+        </div>
+        
+        <!-- 操作按钮 -->
+        <div class="space-y-3">
+          <a 
+            href="/zh/create-quote" 
+            class="w-full bg-gradient-to-r from-purple-600 to-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-blue-600 transition-colors inline-block"
+          >
+            重新尝试登录
+          </a>
+          
+          <a 
+            href="mailto:hello@geppetto.studio?subject=登录问题求助&body=我在登录时遇到以下错误：%0A%0A{errorMessage}%0A%0A请协助解决。" 
+            class="w-full bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors inline-block"
+          >
+            联系技术支持
+          </a>
+        </div>
+        
+        <!-- 技术信息 -->
+        <details class="mt-6 text-left">
+          <summary class="text-sm text-gray-500 cursor-pointer hover:text-gray-700">
+            技术详情 (供开发者参考)
+          </summary>
+          <div class="mt-2 p-3 bg-gray-50 rounded text-xs text-gray-600 font-mono">
+            <p><strong>错误时间:</strong> {new Date().toISOString()}</p>
+            <p><strong>错误信息:</strong> {errorMessage}</p>
+            <p><strong>用户代理:</strong> {Astro.request.headers.get('user-agent')}</p>
+            <p><strong>引用页面:</strong> {Astro.request.headers.get('referer') || 'N/A'}</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

@@ -9,7 +9,7 @@ import AuthenticatedOrderTracker from '../../components/order/AuthenticatedOrder
 <BaseLayout 
   title="订单追踪 - 查询您的报价和订单状态 | Geppetto"
   description="查询您在Geppetto的报价申请和订单进度。使用邮箱地址或订单编号即可快速查看当前状态、报价信息和生产进度。"
-  canonicalURL="https://geppetto.studio/zh/track-order"
+  canonicalURL={`${import.meta.env.PUBLIC_SITE_URL || 'https://www.geppetto.studio'}/zh/track-order`}
   language="zh"
 >
   <main class="min-h-screen bg-gradient-to-b from-gray-50 to-white py-16 px-4 sm:px-6 lg:px-8">

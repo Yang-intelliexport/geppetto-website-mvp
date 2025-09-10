@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { AuthProvider } from '../../contexts/AuthContext';
 import AuthGuard from '../auth/AuthGuard';
 import OrderTracker from './OrderTracker';
 import OrderDetail from './OrderDetail';
@@ -42,10 +41,8 @@ function TrackOrderContent({ language = 'zh' }: AuthenticatedOrderTrackerProps) 
 
 export default function AuthenticatedOrderTracker({ language = 'zh' }: AuthenticatedOrderTrackerProps) {
   return (
-    <AuthProvider>
-      <AuthGuard>
-        <TrackOrderContent language={language} />
-      </AuthGuard>
-    </AuthProvider>
+    <AuthGuard>
+      <TrackOrderContent language={language} />
+    </AuthGuard>
   );
 }

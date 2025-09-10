@@ -1,0 +1,80 @@
+---
+// 支持材料组件 - 多语言支持
+interface Props {
+  language?: 'zh' | 'en';
+}
+
+const { language = 'zh' } = Astro.props;
+
+const texts = {
+  zh: {
+    title: '🔧 支持材料',
+    materials: {
+      aluminum: { name: '铝合金', grades: '6061, 7075' },
+      stainless: { name: '不锈钢', grades: '304, 316' },
+      copper: { name: '铜合金', grades: '黄铜, 紫铜' },
+      titanium: { name: '钛合金', grades: '航空级' }
+    }
+  },
+  en: {
+    title: '🔧 Supported Materials',
+    materials: {
+      aluminum: { name: 'Aluminum', grades: '6061, 7075' },
+      stainless: { name: 'Stainless Steel', grades: '304, 316' },
+      copper: { name: 'Copper Alloy', grades: 'Brass, Copper' },
+      titanium: { name: 'Titanium', grades: 'Aerospace Grade' }
+    }
+  }
+};
+
+const t = texts[language];
+---
+
+<div class="bg-white rounded-2xl shadow-sm p-8">
+  <h2 class="text-2xl font-bold text-gray-900 mb-6">{t.title}</h2>
+  <div class="grid grid-cols-2 gap-4">
+    <!-- 铝合金 / Aluminum -->
+    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+      <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+        <span class="text-blue-600 text-sm font-bold">Al</span>
+      </div>
+      <div>
+        <div class="font-medium text-gray-900">{t.materials.aluminum.name}</div>
+        <div class="text-sm text-gray-600">{t.materials.aluminum.grades}</div>
+      </div>
+    </div>
+    
+    <!-- 不锈钢 / Stainless Steel -->
+    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+      <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+        <span class="text-gray-600 text-sm font-bold">SS</span>
+      </div>
+      <div>
+        <div class="font-medium text-gray-900">{t.materials.stainless.name}</div>
+        <div class="text-sm text-gray-600">{t.materials.stainless.grades}</div>
+      </div>
+    </div>
+    
+    <!-- 铜合金 / Copper Alloy -->
+    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+      <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
+        <span class="text-yellow-600 text-sm font-bold">Cu</span>
+      </div>
+      <div>
+        <div class="font-medium text-gray-900">{t.materials.copper.name}</div>
+        <div class="text-sm text-gray-600">{t.materials.copper.grades}</div>
+      </div>
+    </div>
+    
+    <!-- 钛合金 / Titanium -->
+    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+      <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+        <span class="text-purple-600 text-sm font-bold">Ti</span>
+      </div>
+      <div>
+        <div class="font-medium text-gray-900">{t.materials.titanium.name}</div>
+        <div class="text-sm text-gray-600">{t.materials.titanium.grades}</div>
+      </div>
+    </div>
+  </div>
+</div>

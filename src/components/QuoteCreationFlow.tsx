@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import type { User } from '@supabase/supabase-js';
+import React, { useEffect } from 'react';
+import { useStore } from '@nanostores/react';
+import { sessionStore, userStore, authLoadingStore } from '../stores/sessionStore';
 import LoginForm from './LoginForm';
 import QuoteForm from './QuoteForm';
 
@@ -9,8 +9,9 @@ interface QuoteCreationFlowProps {
 }
 
 export default function QuoteCreationFlow({ language = 'zh' }: QuoteCreationFlowProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const user = useStore(userStore);
+  const loading = useStore(authLoadingStore);
+  const session = useStore(sessionStore);
 
   const text = {
     zh: {
@@ -33,69 +34,12 @@ export default function QuoteCreationFlow({ language = 'zh' }: QuoteCreationFlow
 
   const t = text[language];
 
-  useEffect(() => {
-    // 检查用户当前的登录状态
-    const checkSession = async () => {
-      try {
-        console.log('🔍 开始检查用户会话状态...');
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('❌ 获取会话失败:', error);
-          setUser(null);
-        } else if (session?.user) {
-          console.log('✅ 用户已登录:', {
-            userId: session.user.id,
-            userEmail: session.user.email,
-            hasValidSession: true
-          });
-          setUser(session.user);
-        } else {
-          console.log('❌ 没有有效的用户会话');
-          setUser(null);
-        }
-      } catch (error) {
-        console.error('❌ 检查会话异常:', error);
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkSession();
-
-    // 监听认证状态的变化（例如，用户在另一个标签页登录）
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('🔄 认证状态变化详情:', {
-        event,
-        hasSession: !!session,
-        userEmail: session?.user?.email,
-        userId: session?.user?.id,
-        sessionObject: session
-      });
-      
-      if (event === 'SIGNED_IN' && session?.user) {
-        console.log('✅ 用户登录成功:', session.user.email);
-        setUser(session.user);
-      } else if (event === 'SIGNED_OUT') {
-        console.log('👋 用户登出');
-        setUser(null);
-      } else if (session?.user) {
-        console.log('🔄 更新用户状态:', session.user.email);
-        setUser(session.user);
-      } else {
-        console.log('❌ 清空用户状态, event:', event);
-        setUser(null);
-      }
-      setLoading(false);
-    });
-
-    // 组件卸载时取消监听
-    return () => subscription.unsubscribe();
-  }, []);
-
   const handleSignOut = async () => {
     try {
+      // Import supabase client only when needed for signOut
+      const { createClient } = await import('../lib/supabase/client');
+      const supabase = createClient();
+      
       const { error } = await supabase.auth.signOut();
       if (error) {
         console.error('登出失败:', error);
@@ -127,7 +71,7 @@ export default function QuoteCreationFlow({ language = 'zh' }: QuoteCreationFlow
           <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.step1Title}</h2>
           <p className="text-gray-600">{t.step1Desc}</p>
         </div>
-        <LoginForm language={language} />
+        <LoginForm currentLang={language} />
       </div>
     );
   }

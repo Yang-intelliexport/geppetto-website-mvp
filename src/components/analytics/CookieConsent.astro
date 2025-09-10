@@ -1,5 +1,5 @@
 ---
-import { getLanguageFromUrl, t } from '../../utils/i18n'
+import { getLanguageFromUrl } from '../../utils/i18n'
 
 const currentLang = getLanguageFromUrl(Astro.url)
 const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
@@ -285,7 +285,7 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
     }
 
     // Expose consent status globally
-    window.getCookieConsent = function() {
+    (window as any).getCookieConsent = function() {
       try {
         const stored = localStorage.getItem('geppetto_cookie_consent');
         return stored ? JSON.parse(stored) : null;

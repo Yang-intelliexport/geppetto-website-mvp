@@ -4,8 +4,14 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 
-// 创建并导出 Supabase 客户端，这是您在整个前端项目中唯一需要的实例
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// 创建并导出 Supabase 客户端，确保与SSR客户端域名配置一致
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    flowType: "pkce",  // Astro官方推荐的PKCE流程
+    // 确保重定向URL与新SSR客户端一致，避免冲突
+    redirectTo: `${import.meta.env.PUBLIC_SITE_URL || 'https://www.geppetto.studio'}/api/auth/callback`
+  },
+})
 
 // 管理员客户端（使用service role key）
 const supabaseServiceKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY

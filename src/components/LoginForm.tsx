@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import React, { useState } from 'react';
+import { createClient } from '../lib/supabase/client';
 
 interface LoginFormProps {
   redirectUrl?: string;
@@ -11,6 +11,8 @@ export default function LoginForm({ redirectUrl = '/', currentLang = 'zh' }: Log
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
   const [email, setEmail] = useState('');
+
+  const supabase = createClient();
 
   // 多语言文本
   const texts = {
@@ -40,31 +42,13 @@ export default function LoginForm({ redirectUrl = '/', currentLang = 'zh' }: Log
 
   const t = texts[currentLang];
 
-  // 检查是否已经登录，如果已登录则直接跳转
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        window.location.href = redirectUrl;
-      }
-    };
-    
-    checkAuth();
-
-    // 监听认证状态变化
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session?.user) {
-        window.location.href = redirectUrl;
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [redirectUrl]);
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
+    console.log('📧 [LoginForm] Form submitted with email:', email.trim());
+    
     if (!email.trim()) {
+      console.log('❌ [LoginForm] Email validation failed - empty email');
       setMessage(t.emailRequired);
       setMessageType('error');
       return;
@@ -75,26 +59,47 @@ export default function LoginForm({ redirectUrl = '/', currentLang = 'zh' }: Log
     setMessageType('');
 
     try {
+      // 使用环境变量确保域名一致性
+      const siteUrl = import.meta.env.PUBLIC_SITE_URL || window.location.origin;
+      // 构建包含next参数的callback URL，指向当前页面或者指定的redirectUrl
+      const currentPath = window.location.pathname;
+      const nextUrl = redirectUrl === '/' ? currentPath : redirectUrl;
+      const callbackUrl = `${siteUrl}/api/auth/callback?next=${encodeURIComponent(nextUrl)}`;
+      
+      // Magic link sending - production ready
+      
       // 使用Supabase内置魔法链接功能
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
         options: {
-          emailRedirectTo: `${window.location.origin}${redirectUrl}` // 重定向到目标页面
+          emailRedirectTo: callbackUrl
         }
       });
 
       if (error) {
+        console.error('❌ [LoginForm] Magic link send failed:', {
+          error: error.message,
+          code: error.status,
+          timestamp: new Date().toISOString()
+        });
         throw error;
       }
       
+      console.log('✅ [LoginForm] Magic link sent successfully');
       setMessage(t.successMessage);
       setMessageType('success');
     } catch (error: any) {
-      console.error('发送魔法链接失败:', error);
+      console.error('❌ [LoginForm] Magic link error:', {
+        message: error.message,
+        status: error.status,
+        details: error,
+        timestamp: new Date().toISOString()
+      });
       setMessage(error.message || t.errorMessage);
       setMessageType('error');
     } finally {
       setLoading(false);
+      console.log('🏁 [LoginForm] Submit process completed');
     }
   };
 

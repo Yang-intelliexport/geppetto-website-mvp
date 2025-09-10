@@ -40,7 +40,7 @@ export function removeLanguagePrefix(path: string): string {
 // Check if path has language prefix
 export function hasLanguagePrefix(path: string): boolean {
   const segments = path.split('/');
-  return segments[1] && segments[1] in languages;
+  return Boolean(segments[1] && segments[1] in languages);
 }
 
 // Translations
@@ -162,7 +162,7 @@ export function getTranslations(lang: Language) {
 // Translate function
 export function t(key: string, lang: Language): string {
   // Direct key lookup for flat structure
-  const value = translations[lang]?.[key];
+  const value = translations[lang]?.[key as keyof typeof translations[typeof lang]];
   
   if (!value) {
     console.warn(`Translation missing for key: ${key}, lang: ${lang}`);

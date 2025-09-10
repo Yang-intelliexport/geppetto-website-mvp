@@ -98,7 +98,7 @@ async function notifyTeamAboutReply(data: any) {
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="https://geppetto.studio/admin/create-quotes" 
+              <a href="${import.meta.env.PUBLIC_SITE_URL || 'https://www.geppetto.studio'}/admin/create-quotes" 
                  style="display: inline-block; background: #059669; color: white; padding: 15px 30px; text-decoration: none; border-radius: 6px; font-weight: bold;">
                 查看并回复客户 →
               </a>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
+import { createClient } from '../../lib/supabase/client';
+import { useStore } from '@nanostores/react';
+import { userStore } from '../../stores/sessionStore';
 
 interface OrderDetailProps {
   quoteId: string;
@@ -30,7 +31,8 @@ interface QuoteDetail {
 }
 
 export default function OrderDetail({ quoteId, language = 'zh', onBack }: OrderDetailProps) {
-  const { user } = useAuth();
+  const supabase = createClient();
+  const user = useStore(userStore);
   const [quote, setQuote] = useState<QuoteDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '../lib/supabase.ts';
+import { createClient } from '../lib/supabase/client';
 
 // V1.1版本：quote_messages表结构
 interface Message {
@@ -30,6 +30,8 @@ export default function MessageThread({
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const supabase = createClient();
 
   // 多语言文本配置
   const texts = {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getUserQuotes } from '../utils/supabase.js';
-import { hasValidAuth, requireEmailVerification, checkUserPermission, isValidEmail } from '../utils/authUtils.js';
+import { requireEmailVerification, checkUserPermission, isValidEmail } from '../utils/authUtils.js';
 import { showError } from '../stores/modalStore.js';
 
 interface Quote {
@@ -26,7 +26,6 @@ export default function MyOrdersList({ initialEmail = '', authResult = null, cur
   const [email, setEmail] = useState(initialEmail);
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [needsVerification, setNeedsVerification] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -164,7 +163,7 @@ export default function MyOrdersList({ initialEmail = '', authResult = null, cur
     }
 
     // 检查邮箱权限
-    const permissionCheck = checkUserPermission(email, '查看订单');
+    const permissionCheck = checkUserPermission(email, '查看订单') as any;
     if (permissionCheck.hasPermission) {
       // 已验证，直接加载订单
       await loadOrders(email);
@@ -182,7 +181,6 @@ export default function MyOrdersList({ initialEmail = '', authResult = null, cur
   const sendVerificationEmail = async () => {
     try {
       setLoading(true);
-      setError('');
       setMessage(currentLang === 'zh' ? '正在发送验证邮件...' : 'Sending verification email...');
       
       const currentUrl = new URL(window.location.href);
@@ -192,7 +190,6 @@ export default function MyOrdersList({ initialEmail = '', authResult = null, cur
       
       setNeedsVerification(true);
       setMessage('');
-      setError('');
     } catch (error: any) {
       showError(
         currentLang === 'zh' ? '发送失败' : 'Send Failed',
@@ -209,7 +206,6 @@ export default function MyOrdersList({ initialEmail = '', authResult = null, cur
   const loadOrders = async (emailAddress: string) => {
     try {
       setLoading(true);
-      setError('');
       setMessage('');
       setNeedsVerification(false);
       

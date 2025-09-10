@@ -107,11 +107,11 @@ export async function uploadFile(file) {
     // 生成唯一文件名
     const timestamp = Date.now();
     const extension = file.name.split('.').pop();
-    const fileName = `${timestamp}_${Math.random().toString(36).substr(2, 9)}.${extension}`;
+    const fileName = `${timestamp}_${Math.random().toString(36).substring(2, 11)}.${extension}`;
     const filePath = `cad-files/${fileName}`;
 
     // 上传到Supabase Storage
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from('quote-files')
       .upload(filePath, file, {
         cacheControl: '3600',

@@ -3,7 +3,7 @@ export const SITE_CONFIG = {
   // 基本信息
   name: 'Geppetto',
   tagline: '智能弹性 Precision Manufacturing',
-  domain: 'geppetto.studio',
+  domain: 'www.geppetto.studio',
   supportEmail: 'business@geppetto.studio',
   businessEmail: 'business@geppetto.studio',
   quotesEmail: 'hello@geppetto.studio',

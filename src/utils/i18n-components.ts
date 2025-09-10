@@ -260,10 +260,10 @@ export function createI18nHook<T extends Record<string, string>>(
     
     // 业务映射快捷方法
     const getOrderStatus = (status: string) => 
-      getBusinessMapping('orderStatus', language)[status] || status;
+      (getBusinessMapping('orderStatus', language) as any)[status] || status;
     
     const getMaterial = (material: string) =>
-      getBusinessMapping('materials', language)[material] || material;
+      (getBusinessMapping('materials', language) as any)[material] || material;
     
     const formatDate = (dateString: string, options?: Intl.DateTimeFormatOptions) =>
       formatDateTime(dateString, language, options);
@@ -286,10 +286,10 @@ export function useCommonI18n(language: Language = 'zh') {
   const common = getCommonTexts(language);
   
   const getOrderStatus = (status: string) => 
-    getBusinessMapping('orderStatus', language)[status] || status;
+    (getBusinessMapping('orderStatus', language) as any)[status] || status;
   
   const getMaterial = (material: string) =>
-    getBusinessMapping('materials', language)[material] || material;
+    (getBusinessMapping('materials', language) as any)[material] || material;
     
   const formatDate = (dateString: string, options?: Intl.DateTimeFormatOptions) =>
     formatDateTime(dateString, language, options);

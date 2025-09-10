@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
+import { createClient } from '../../lib/supabase/client';
+import { useStore } from '@nanostores/react';
+import { userStore } from '../../stores/sessionStore';
 
 interface OrderTrackerProps {
   language?: 'zh' | 'en';
@@ -20,9 +21,11 @@ interface Quote {
 }
 
 export default function OrderTracker({ language = 'zh' }: OrderTrackerProps) {
-  const { user } = useAuth();
+  const user = useStore(userStore);
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const supabase = createClient();
 
   const text = {
     zh: {

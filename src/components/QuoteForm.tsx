@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { supabase } from '../lib/supabase';
+import { createClient } from '../lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
-import FileUploadSection from './quote/sections/FileUploadSection.astro';
 
 interface QuoteFormProps {
   user: User;
@@ -15,6 +14,8 @@ export default function QuoteForm({ user, language = 'zh' }: QuoteFormProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [selectedMaterial, setSelectedMaterial] = useState('aluminum_6061');
   const formRef = useRef<HTMLFormElement>(null);
+
+  const supabase = createClient();
 
   const text = {
     zh: {

@@ -32,3 +32,13 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+// Astro Locals类型定义
+declare namespace App {
+  interface Locals {
+    user?: {
+      email: string;
+      id?: string;
+    };
+  }
+}

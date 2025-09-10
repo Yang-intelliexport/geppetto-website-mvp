@@ -4,7 +4,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import MessageThread from '../../../components/MessageThread.tsx';
 import { getQuoteDetails, getCurrentSession } from '../../../utils/supabase.js';
-import { supabase } from '../../../lib/supabase.ts';
+// supabase client will be imported via utils/supabase.js
 
 // Get URL parameters
 const { token } = Astro.params;

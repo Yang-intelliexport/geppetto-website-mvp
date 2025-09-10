@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useStore } from '@nanostores/react';
+import { userStore, sessionStore, authLoadingStore } from '../../stores/sessionStore';
 import { createClient } from '../../lib/supabase/client';
 import { createPaymentSession } from '../../utils/supabase';
 import type { User } from '@supabase/supabase-js';
@@ -29,7 +31,9 @@ interface Quote {
 
 export default function CheckoutOrderPayment({ orderId, language = 'zh' }: CheckoutOrderPaymentProps) {
   const supabase = createClient();
-  const [user, setUser] = useState<User | null>(null);
+  const user = useStore(userStore);
+  const session = useStore(sessionStore);
+  const authLoading = useStore(authLoadingStore);
   const [quote, setQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
@@ -105,12 +109,30 @@ export default function CheckoutOrderPayment({ orderId, language = 'zh' }: Check
   useEffect(() => {
     const checkAuthAndLoadOrder = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        if (error || !session?.user) {
+        console.log('🔍 [CheckoutOrderPayment] 认证状态检查:', {
+          authLoading,
+          hasUser: !!user,
+          hasSession: !!session,
+          userId: user?.id,
+          orderId,
+          timestamp: new Date().toISOString()
+        });
+        
+        // 等待认证状态完全加载
+        if (authLoading) {
+          return;
+        }
+        
+        if (!user || !session) {
+          console.log('❌ [CheckoutOrderPayment] 认证失败，需要登录');
           setMessage(t.loginRequired);
           return;
         }
-        setUser(session.user);
+        
+        console.log('✅ [CheckoutOrderPayment] 认证成功，开始查询订单:', {
+          userId: user.id,
+          orderId
+        });
 
         const { data: quoteData, error: quoteError } = await supabase
           .from('quotes')
@@ -133,11 +155,16 @@ export default function CheckoutOrderPayment({ orderId, language = 'zh' }: Check
             )
           `)
           .eq('id', orderId)
-          .eq('user_id', session.user.id)
+          .eq('user_id', user.id)
           .single();
 
         if (quoteError || !quoteData) {
-          console.error('查询订单失败:', quoteError);
+          console.error('❌ [CheckoutOrderPayment] 查询订单失败:', {
+            error: quoteError,
+            orderId,
+            userId: user.id,
+            hasData: !!quoteData
+          });
           setMessage(t.orderNotFound);
           return;
         }
@@ -165,7 +192,7 @@ export default function CheckoutOrderPayment({ orderId, language = 'zh' }: Check
     };
 
     checkAuthAndLoadOrder();
-  }, [orderId, language]);
+  }, [orderId, language, user, session, authLoading]);
 
   const handleCheckout = async () => {
     if (!quote || paymentLoading) return;

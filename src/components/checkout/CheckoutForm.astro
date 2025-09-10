@@ -1,0 +1,1252 @@
+---
+// 结算支付页面组件 - 包含物流选项选择
+interface Props {
+  language?: 'zh' | 'en';
+  quoteData?: any; // 从报价页面传入的数据
+}
+
+const { language = 'zh', quoteData } = Astro.props;
+
+// 多语言文本配置
+const text = {
+  zh: {
+    title: '确认订单',
+    subtitle: '请确认您的订单详情并选择物流方式',
+    
+    // 订单摘要
+    orderSummary: {
+      title: '订单摘要',
+      quoteId: '报价编号',
+      items: '产品',
+      quantity: '数量',
+      material: '材料',
+      surfaceFinish: '表面处理',
+      subtotal: '小计',
+      shippingFee: '物流费用',
+      total: '订单总计',
+      currency: 'CNY'
+    },
+    
+    // 物流选项
+    shipping: {
+      title: '选择物流方式',
+      description: '我们保证72小时内完成生产并发货，物流时间由快递公司负责',
+      options: [
+        {
+          id: 'express-air',
+          type: 'express',
+          name: '特快专递（空运）',
+          description: '顺丰速运/DHL Express',
+          timeRange: '1-3个工作日',
+          features: ['实时跟踪', '签收确认', '保价运输'],
+          basePrice: 85,
+          weightPrice: 12, // 每公斤
+          icon: '✈️'
+        },
+        {
+          id: 'standard-air',
+          type: 'standard',
+          name: '标准快递（空运）',
+          description: '邮政EMS/FedEx Standard',
+          timeRange: '3-5个工作日', 
+          features: ['运输保险', '派送通知'],
+          basePrice: 45,
+          weightPrice: 8,
+          icon: '📦',
+          popular: true
+        },
+        {
+          id: 'economy-sea',
+          type: 'economy',
+          name: '经济海运',
+          description: '适合大批量/不急单',
+          timeRange: '15-25个工作日',
+          features: ['最低成本', '适合大件'],
+          basePrice: 25,
+          weightPrice: 3,
+          icon: '🚢',
+          minWeight: 5 // 最小重量要求
+        }
+      ],
+      weightEstimate: '预估重量',
+      finalPrice: '最终物流费用',
+      note: '实际重量可能因包装而有所差异，我们会按实际重量收费，多退少补'
+    },
+    
+    // 收货信息
+    delivery: {
+      title: '收货信息',
+      contactName: '联系人姓名',
+      contactNamePlaceholder: '请输入收货人姓名',
+      company: '公司名称',
+      companyPlaceholder: '请输入公司名称（可选）',
+      phone: '联系电话',
+      phonePlaceholder: '请输入手机号码',
+      email: '邮箱地址',
+      emailPlaceholder: '请输入邮箱地址',
+      address: '详细地址',
+      addressPlaceholder: '请输入详细收货地址',
+      country: '国家/地区',
+      countryPlaceholder: '请选择国家',
+      city: '城市',
+      cityPlaceholder: '请输入城市',
+      postalCode: '邮政编码',
+      postalCodePlaceholder: '请输入邮政编码',
+      note: '备注信息',
+      notePlaceholder: '特殊要求或备注（可选）'
+    },
+    
+    // 支付信息
+    payment: {
+      title: '支付方式',
+      methods: [
+        {
+          id: 'bank-transfer',
+          name: '银行转账',
+          description: '支持国内外银行转账',
+          fee: 0,
+          icon: '🏦',
+          popular: true
+        },
+        {
+          id: 'paypal',
+          name: 'PayPal',
+          description: '支持信用卡和PayPal余额',
+          fee: 0.029, // 2.9%
+          icon: '💳'
+        },
+        {
+          id: 'wire-transfer',
+          name: '国际电汇',
+          description: '适合大额订单',
+          fee: 25, // 固定费用
+          icon: '💰'
+        }
+      ],
+      depositAmount: '定金金额',
+      depositNote: '需支付50%定金，余款生产完成后支付',
+      finalAmount: '余款金额',
+      finalNote: '生产完成后支付余款'
+    },
+    
+    // 条款和按钮
+    terms: {
+      agreement: '我已阅读并同意',
+      termsOfService: '服务条款',
+      privacyPolicy: '隐私政策',
+      manufacturingTerms: '制造条款',
+      and: '和'
+    },
+    
+    buttons: {
+      backToQuote: '返回报价',
+      confirmOrder: '确认下单',
+      processing: '处理中...'
+    },
+    
+    // 保证信息
+    guarantees: {
+      title: '我们的保证',
+      items: [
+        '72小时生产完成保证',
+        '生产延期自动赔付10%',
+        '不合格产品100%重做',
+        '7天质量问题免费处理'
+      ]
+    },
+    
+    validation: {
+      contactNameRequired: '请输入联系人姓名',
+      phoneRequired: '请输入联系电话',
+      emailRequired: '请输入邮箱地址',
+      emailInvalid: '请输入有效的邮箱地址',
+      addressRequired: '请输入详细地址',
+      countryRequired: '请选择国家',
+      cityRequired: '请输入城市',
+      postalCodeRequired: '请输入邮政编码',
+      shippingRequired: '请选择物流方式',
+      paymentRequired: '请选择支付方式',
+      termsRequired: '请阅读并同意相关条款'
+    }
+  },
+  en: {
+    title: 'Confirm Order',
+    subtitle: 'Please confirm your order details and select shipping method',
+    
+    orderSummary: {
+      title: 'Order Summary',
+      quoteId: 'Quote ID',
+      items: 'Items',
+      quantity: 'Quantity',
+      material: 'Material', 
+      surfaceFinish: 'Surface Finish',
+      subtotal: 'Subtotal',
+      shippingFee: 'Shipping Fee',
+      total: 'Order Total',
+      currency: 'USD'
+    },
+    
+    shipping: {
+      title: 'Select Shipping Method',
+      description: 'We guarantee 72-hour production completion and shipping. Transit time handled by courier services.',
+      options: [
+        {
+          id: 'express-air',
+          type: 'express',
+          name: 'Express Air Shipping',
+          description: 'FedEx/DHL Express',
+          timeRange: '1-3 business days',
+          features: ['Real-time tracking', 'Signature required', 'Insurance included'],
+          basePrice: 85,
+          weightPrice: 12,
+          icon: '✈️'
+        },
+        {
+          id: 'standard-air',
+          type: 'standard', 
+          name: 'Standard Air Shipping',
+          description: 'FedEx Standard/UPS',
+          timeRange: '3-5 business days',
+          features: ['Shipping insurance', 'Delivery notifications'],
+          basePrice: 45,
+          weightPrice: 8,
+          icon: '📦',
+          popular: true
+        },
+        {
+          id: 'economy-sea',
+          type: 'economy',
+          name: 'Economy Sea Freight',
+          description: 'For large/non-urgent orders',
+          timeRange: '15-25 business days',
+          features: ['Lowest cost', 'Suitable for bulk orders'],
+          basePrice: 25,
+          weightPrice: 3,
+          icon: '🚢',
+          minWeight: 5
+        }
+      ],
+      weightEstimate: 'Estimated Weight',
+      finalPrice: 'Final Shipping Cost',
+      note: 'Actual weight may vary due to packaging. We charge based on actual weight with refund/additional charge as needed.'
+    },
+    
+    delivery: {
+      title: 'Delivery Information',
+      contactName: 'Contact Name',
+      contactNamePlaceholder: 'Enter recipient name',
+      company: 'Company Name',
+      companyPlaceholder: 'Enter company name (optional)',
+      phone: 'Phone Number',
+      phonePlaceholder: 'Enter phone number',
+      email: 'Email Address',
+      emailPlaceholder: 'Enter email address',
+      address: 'Street Address',
+      addressPlaceholder: 'Enter detailed delivery address',
+      country: 'Country/Region',
+      countryPlaceholder: 'Select country',
+      city: 'City',
+      cityPlaceholder: 'Enter city',
+      postalCode: 'Postal Code',
+      postalCodePlaceholder: 'Enter postal code',
+      note: 'Additional Notes',
+      notePlaceholder: 'Special requirements or notes (optional)'
+    },
+    
+    payment: {
+      title: 'Payment Method',
+      methods: [
+        {
+          id: 'bank-transfer',
+          name: 'Bank Transfer',
+          description: 'Domestic & international bank transfer',
+          fee: 0,
+          icon: '🏦',
+          popular: true
+        },
+        {
+          id: 'paypal',
+          name: 'PayPal',
+          description: 'Credit cards and PayPal balance',
+          fee: 0.029,
+          icon: '💳'
+        },
+        {
+          id: 'wire-transfer',
+          name: 'Wire Transfer',
+          description: 'For large orders',
+          fee: 25,
+          icon: '💰'
+        }
+      ],
+      depositAmount: 'Deposit Amount',
+      depositNote: '50% deposit required, balance due upon completion',
+      finalAmount: 'Final Payment',
+      finalNote: 'Balance payment due upon production completion'
+    },
+    
+    terms: {
+      agreement: 'I have read and agree to the',
+      termsOfService: 'Terms of Service',
+      privacyPolicy: 'Privacy Policy', 
+      manufacturingTerms: 'Manufacturing Terms',
+      and: 'and'
+    },
+    
+    buttons: {
+      backToQuote: 'Back to Quote',
+      confirmOrder: 'Confirm Order',
+      processing: 'Processing...'
+    },
+    
+    guarantees: {
+      title: 'Our Guarantees',
+      items: [
+        '72-hour production completion guarantee',
+        '10% automatic refund for production delays',
+        '100% remake for non-conforming products', 
+        '7-day free quality issue resolution'
+      ]
+    },
+    
+    validation: {
+      contactNameRequired: 'Contact name is required',
+      phoneRequired: 'Phone number is required', 
+      emailRequired: 'Email address is required',
+      emailInvalid: 'Please enter a valid email address',
+      addressRequired: 'Address is required',
+      countryRequired: 'Please select country',
+      cityRequired: 'City is required',
+      postalCodeRequired: 'Postal code is required',
+      shippingRequired: 'Please select shipping method',
+      paymentRequired: 'Please select payment method',
+      termsRequired: 'Please read and agree to the terms'
+    }
+  }
+};
+
+const currentText = text[language];
+
+// Mock 订单数据（实际应该从URL参数或状态管理获取）
+const mockOrderData = {
+  quoteId: 'Q1730875234567',
+  items: [
+    {
+      name: 'bracket_assembly.step',
+      quantity: 5,
+      material: '6061铝合金',
+      surfaceFinish: '阳极氧化',
+      unitPrice: 180,
+      totalPrice: 900
+    }
+  ],
+  subtotal: 900,
+  estimatedWeight: 2.5 // kg
+};
+---
+
+<section class="min-h-screen bg-gray-50 py-8">
+  <div class="container mx-auto px-6">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- 页面标题 -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-[#111827] mb-4">
+          {currentText.title}
+        </h1>
+        <p class="text-lg text-gray-600">
+          {currentText.subtitle}
+        </p>
+      </div>
+
+      <form id="checkout-form" class="grid lg:grid-cols-3 gap-8">
+        
+        <!-- 左侧：主要表单内容 -->
+        <div class="lg:col-span-2 space-y-8">
+          
+          <!-- 产品配置 -->
+          <div class="bg-white rounded-2xl shadow-sm p-8">
+            <h2 class="text-2xl font-bold text-[#111827] mb-4">
+              ⚙️ {language === 'zh' ? '产品配置' : 'Product Configuration'}
+            </h2>
+            <p class="text-gray-600 mb-6">
+              {language === 'zh' ? '确认或调整您的产品规格' : 'Confirm or adjust your product specifications'}
+            </p>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+              <!-- 材料选择 -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'zh' ? '材料选择' : 'Material Selection'} <span class="text-red-500">*</span>
+                </label>
+                <select 
+                  id="material"
+                  name="material"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200 transition-colors"
+                >
+                  <option value="aluminum-6061" selected>6061 {language === 'zh' ? '铝合金（最常用）' : 'Aluminum (Most Popular)'}</option>
+                  <option value="aluminum-7075">7075 {language === 'zh' ? '铝合金（高强度）' : 'Aluminum (High Strength)'}</option>
+                  <option value="stainless-304">304 {language === 'zh' ? '不锈钢（耐腐蚀）' : 'Stainless Steel (Corrosion Resistant)'}</option>
+                  <option value="stainless-316">316 {language === 'zh' ? '不锈钢（医疗级）' : 'Stainless Steel (Medical Grade)'}</option>
+                  <option value="brass">{language === 'zh' ? '黄铜（导电性好）' : 'Brass (Conductive)'}</option>
+                  <option value="copper">{language === 'zh' ? '紫铜（导热性好）' : 'Copper (Thermal Conductive)'}</option>
+                  <option value="titanium">{language === 'zh' ? '钛合金（航空级）' : 'Titanium (Aerospace Grade)'}</option>
+                </select>
+              </div>
+              
+              <!-- 表面处理 -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'zh' ? '表面处理' : 'Surface Finish'} <span class="text-red-500">*</span>
+                </label>
+                <select 
+                  id="surface-finish"
+                  name="surfaceFinish"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200 transition-colors"
+                >
+                  <option value="as-machined" selected>{language === 'zh' ? '机加工原样（标准）' : 'As-Machined (Standard)'}</option>
+                  <option value="anodized">{language === 'zh' ? '阳极氧化' : 'Anodized'}</option>
+                  <option value="powder-coating">{language === 'zh' ? '喷粉处理' : 'Powder Coating'}</option>
+                  <option value="chromate">{language === 'zh' ? '铬酸盐转化' : 'Chromate Conversion'}</option>
+                  <option value="electroplating">{language === 'zh' ? '电镀处理' : 'Electroplating'}</option>
+                  <option value="brushed">{language === 'zh' ? '拉丝处理' : 'Brushed Finish'}</option>
+                  <option value="polished">{language === 'zh' ? '抛光处理' : 'Polished'}</option>
+                </select>
+              </div>
+              
+              <!-- 数量调整 -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'zh' ? '数量' : 'Quantity'} <span class="text-red-500">*</span>
+                </label>
+                <div class="flex items-center space-x-3">
+                  <button 
+                    type="button"
+                    id="quantity-decrease"
+                    class="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center justify-center transition-colors"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                    </svg>
+                  </button>
+                  <input 
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    min="1"
+                    max="1000"
+                    value="5"
+                    required
+                    class="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200"
+                  />
+                  <button 
+                    type="button"
+                    id="quantity-increase"
+                    class="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center justify-center transition-colors"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- 特殊要求 -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'zh' ? '特殊要求' : 'Special Requirements'}
+                </label>
+                <textarea 
+                  name="specialRequirements"
+                  rows="3"
+                  placeholder={language === 'zh' ? '如有特殊公差、标记或其他要求请说明' : 'Please specify special tolerances, markings, or other requirements'}
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200 resize-none"
+                ></textarea>
+              </div>
+            </div>
+            
+            <!-- 实时价格更新 -->
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+              <div class="flex justify-between items-center">
+                <span class="text-gray-700">{language === 'zh' ? '当前配置价格：' : 'Current Configuration Price:'}</span>
+                <span class="font-bold text-[#7F00FF]" id="config-price">$900</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">
+                {language === 'zh' ? '价格会根据材料、表面处理和数量自动更新' : 'Price updates automatically based on material, surface finish, and quantity'}
+              </p>
+            </div>
+          </div>
+          
+          <!-- 物流选择 -->
+          <div class="bg-white rounded-2xl shadow-sm p-8">
+            <h2 class="text-2xl font-bold text-[#111827] mb-4">
+              🚚 {currentText.shipping.title}
+            </h2>
+            <p class="text-gray-600 mb-6">
+              {currentText.shipping.description}
+            </p>
+            
+            <div class="space-y-4">
+              {currentText.shipping.options.map((option) => (
+                <label class="shipping-option block cursor-pointer">
+                  <input 
+                    type="radio" 
+                    name="shipping" 
+                    value={option.id}
+                    class="hidden"
+                    required
+                  />
+                  <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-[#7F00FF] transition-colors relative">
+                    {option.popular && (
+                      <div class="absolute -top-3 left-6 bg-[#7F00FF] text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {language === 'zh' ? '推荐' : 'Popular'}
+                      </div>
+                    )}
+                    
+                    <div class="flex items-start justify-between">
+                      <div class="flex items-start space-x-4">
+                        <div class="text-3xl">{option.icon}</div>
+                        <div class="flex-1">
+                          <div class="flex items-center space-x-2 mb-2">
+                            <h3 class="text-lg font-bold text-[#111827]">{option.name}</h3>
+                            <span class="text-sm text-gray-500">({option.timeRange})</span>
+                          </div>
+                          <p class="text-gray-600 mb-3">{option.description}</p>
+                          
+                          <div class="flex flex-wrap gap-2">
+                            {option.features.map((feature) => (
+                              <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs">
+                                {feature}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="text-right">
+                        <div class="text-2xl font-bold text-[#7F00FF]">
+                          ${option.basePrice}
+                        </div>
+                        <div class="text-sm text-gray-500">
+                          + ${option.weightPrice}/kg
+                        </div>
+                        {option.minWeight && (
+                          <div class="text-xs text-orange-600 mt-1">
+                            {language === 'zh' ? `最少${option.minWeight}kg` : `Min ${option.minWeight}kg`}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              ))}
+            </div>
+            
+            <!-- 物流费用计算 -->
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+              <div class="flex justify-between items-center">
+                <span class="text-gray-700">{currentText.shipping.weightEstimate}:</span>
+                <span class="font-medium">{mockOrderData.estimatedWeight} kg</span>
+              </div>
+              <div class="flex justify-between items-center mt-2">
+                <span class="text-gray-700">{currentText.shipping.finalPrice}:</span>
+                <span class="font-bold text-[#7F00FF]" id="shipping-cost">$0</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">
+                {currentText.shipping.note}
+              </p>
+            </div>
+          </div>
+
+          <!-- 收货信息 -->
+          <div class="bg-white rounded-2xl shadow-sm p-8">
+            <h2 class="text-2xl font-bold text-[#111827] mb-6">
+              📦 {currentText.delivery.title}
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {currentText.delivery.contactName} <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text"
+                  name="contactName"
+                  required
+                  placeholder={currentText.delivery.contactNamePlaceholder}
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {currentText.delivery.company}
+                </label>
+                <input 
+                  type="text"
+                  name="company"
+                  placeholder={currentText.delivery.companyPlaceholder}
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {currentText.delivery.phone} <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="tel"
+                  name="phone"
+                  required
+                  placeholder={currentText.delivery.phonePlaceholder}
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {currentText.delivery.email} <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="email"
+                  name="email"
+                  required
+                  placeholder={currentText.delivery.emailPlaceholder}
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {currentText.delivery.country} <span class="text-red-500">*</span>
+                </label>
+                <select 
+                  name="country"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200"
+                >
+                  <option value="">{currentText.delivery.countryPlaceholder}</option>
+                  <option value="CN">中国 China</option>
+                  <option value="US">美国 United States</option>
+                  <option value="DE">德国 Germany</option>
+                  <option value="JP">日本 Japan</option>
+                  <option value="KR">韩国 South Korea</option>
+                  <option value="SG">新加坡 Singapore</option>
+                  <option value="other">其他 Other</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {currentText.delivery.city} <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text"
+                  name="city"
+                  required
+                  placeholder={currentText.delivery.cityPlaceholder}
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200"
+                />
+              </div>
+            </div>
+            
+            <div class="mt-6">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {currentText.delivery.address} <span class="text-red-500">*</span>
+              </label>
+              <textarea 
+                name="address"
+                required
+                rows="3"
+                placeholder={currentText.delivery.addressPlaceholder}
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200 resize-none"
+              ></textarea>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 mt-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {currentText.delivery.postalCode} <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text"
+                  name="postalCode"
+                  required
+                  placeholder={currentText.delivery.postalCodePlaceholder}
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {currentText.delivery.note}
+                </label>
+                <input 
+                  type="text"
+                  name="note"
+                  placeholder={currentText.delivery.notePlaceholder}
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 支付方式 -->
+          <div class="bg-white rounded-2xl shadow-sm p-8">
+            <h2 class="text-2xl font-bold text-[#111827] mb-6">
+              💳 {currentText.payment.title}
+            </h2>
+            
+            <div class="space-y-4">
+              {currentText.payment.methods.map((method) => (
+                <label class="payment-method block cursor-pointer">
+                  <input 
+                    type="radio" 
+                    name="payment" 
+                    value={method.id}
+                    class="hidden"
+                    required
+                  />
+                  <div class="border-2 border-gray-200 rounded-xl p-4 hover:border-[#7F00FF] transition-colors relative">
+                    {method.popular && (
+                      <div class="absolute -top-3 left-6 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {language === 'zh' ? '推荐' : 'Recommended'}
+                      </div>
+                    )}
+                    
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center space-x-4">
+                        <div class="text-2xl">{method.icon}</div>
+                        <div>
+                          <h3 class="font-bold text-[#111827]">{method.name}</h3>
+                          <p class="text-sm text-gray-600">{method.description}</p>
+                        </div>
+                      </div>
+                      
+                      <div class="text-right">
+                        {method.fee > 0 && (
+                          <div class="text-sm text-gray-500">
+                            {typeof method.fee === 'number' && method.fee < 1 
+                              ? `${(method.fee * 100).toFixed(1)}% 费用`
+                              : `$${method.fee} 手续费`}
+                          </div>
+                        )}
+                        {method.fee === 0 && (
+                          <div class="text-sm text-green-600 font-medium">
+                            {language === 'zh' ? '免费' : 'Free'}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              ))}
+            </div>
+            
+            <!-- 分期付款说明 -->
+            <div class="mt-6 p-4 bg-yellow-50 rounded-lg">
+              <h4 class="font-semibold text-gray-800 mb-2">{language === 'zh' ? '分期付款说明' : 'Payment Schedule'}</h4>
+              <div class="grid md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <div class="text-gray-700">{currentText.payment.depositAmount}:</div>
+                  <div class="font-bold text-[#7F00FF]" id="deposit-amount">$450</div>
+                  <div class="text-xs text-gray-500 mt-1">{currentText.payment.depositNote}</div>
+                </div>
+                <div>
+                  <div class="text-gray-700">{currentText.payment.finalAmount}:</div>
+                  <div class="font-bold text-gray-800" id="final-amount">$450</div>
+                  <div class="text-xs text-gray-500 mt-1">{currentText.payment.finalNote}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 条款同意 -->
+          <div class="bg-white rounded-2xl shadow-sm p-8">
+            <div class="flex items-start space-x-3">
+              <input 
+                type="checkbox" 
+                id="terms-agreement"
+                name="termsAgreement"
+                required
+                class="w-5 h-5 text-[#7F00FF] border-gray-300 rounded focus:ring-purple-200 focus:ring-2"
+              />
+              <label for="terms-agreement" class="text-gray-700 leading-relaxed">
+                {currentText.terms.agreement}
+                <a href="/terms" class="text-[#7F00FF] hover:underline mx-1">{currentText.terms.termsOfService}</a>
+                {currentText.terms.and}
+                <a href="/privacy" class="text-[#7F00FF] hover:underline mx-1">{currentText.terms.privacyPolicy}</a>
+                {currentText.terms.and}
+                <a href="/manufacturing-terms" class="text-[#7F00FF] hover:underline mx-1">{currentText.terms.manufacturingTerms}</a>
+              </label>
+            </div>
+          </div>
+
+          <!-- 提交按钮 -->
+          <div class="flex space-x-4">
+            <button 
+              type="button"
+              onclick="history.back()"
+              class="flex-1 border-2 border-gray-300 text-gray-700 py-4 px-6 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors"
+            >
+              {currentText.buttons.backToQuote}
+            </button>
+            
+            <button 
+              type="submit"
+              id="submit-button"
+              class="flex-1 bg-[#7F00FF] text-white py-4 px-6 rounded-lg text-lg font-bold hover:bg-purple-700 transition-colors flex items-center justify-center"
+            >
+              <span id="button-text">{currentText.buttons.confirmOrder}</span>
+              <svg id="loading-icon" class="hidden w-6 h-6 ml-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 右侧：订单摘要 -->
+        <div class="space-y-6">
+          
+          <!-- 订单摘要 -->
+          <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-8">
+            <h3 class="text-xl font-bold text-[#111827] mb-4">
+              {currentText.orderSummary.title}
+            </h3>
+            
+            <div class="space-y-4">
+              <div class="text-sm text-gray-600">
+                <span>{currentText.orderSummary.quoteId}:</span>
+                <span class="font-mono ml-2">{mockOrderData.quoteId}</span>
+              </div>
+              
+              <!-- 产品列表 -->
+              <div class="border-b border-gray-100 pb-4">
+                <div class="font-medium text-[#111827] mb-2" id="summary-filename">bracket_assembly.step</div>
+                <div class="text-sm text-gray-600 space-y-1">
+                  <div>{currentText.orderSummary.quantity}: <span id="summary-quantity">5</span></div>
+                  <div>{currentText.orderSummary.material}: <span id="summary-material">6061铝合金</span></div>
+                  <div>{currentText.orderSummary.surfaceFinish}: <span id="summary-surface">机加工原样</span></div>
+                </div>
+                <div class="flex justify-between items-center mt-2">
+                  <span class="text-sm text-gray-600">$<span id="summary-unit-price">180</span> × <span id="summary-qty-calc">5</span></span>
+                  <span class="font-semibold">$<span id="summary-item-total">900</span></span>
+                </div>
+              </div>
+              
+              <!-- 费用明细 -->
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span>{currentText.orderSummary.subtotal}:</span>
+                  <span>$<span id="summary-subtotal">900</span></span>
+                </div>
+                <div class="flex justify-between">
+                  <span>{currentText.orderSummary.shippingFee}:</span>
+                  <span id="summary-shipping">$0</span>
+                </div>
+                <div class="flex justify-between font-bold text-lg border-t border-gray-200 pt-2">
+                  <span>{currentText.orderSummary.total}:</span>
+                  <span class="text-[#7F00FF]" id="summary-total">$900</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 保证信息 -->
+          <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-6">
+            <h3 class="text-lg font-bold text-[#111827] mb-4">
+              {currentText.guarantees.title}
+            </h3>
+            
+            <div class="space-y-3">
+              {currentText.guarantees.items.map((item) => (
+                <div class="flex items-center">
+                  <div class="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <span class="text-sm text-gray-700">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- 错误提示 -->
+<div id="error-message" class="hidden fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+  <div class="flex items-center">
+    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+    </svg>
+    <span id="error-text"></span>
+  </div>
+</div>
+
+<script define:vars={{ currentText, mockOrderData }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('checkout-form');
+    const shippingOptions = document.querySelectorAll('input[name="shipping"]');
+    const paymentOptions = document.querySelectorAll('input[name="payment"]');
+    const submitButton = document.getElementById('submit-button');
+    const buttonText = document.getElementById('button-text');
+    const loadingIcon = document.getElementById('loading-icon');
+
+    // 材料价格配置
+    const materialPrices = {
+      'aluminum-6061': 15,
+      'aluminum-7075': 25,
+      'stainless-304': 30,
+      'stainless-316': 45,
+      'brass': 40,
+      'copper': 50,
+      'titanium': 120
+    };
+    
+    // 表面处理价格配置
+    const surfaceFinishPrices = {
+      'as-machined': 0,
+      'anodized': 15,
+      'powder-coating': 20,
+      'chromate': 10,
+      'electroplating': 25,
+      'brushed': 8,
+      'polished': 12
+    };
+    
+    // 材料名称映射
+    const materialNames = {
+      'aluminum-6061': language === 'zh' ? '6061铝合金' : '6061 Aluminum',
+      'aluminum-7075': language === 'zh' ? '7075铝合金' : '7075 Aluminum',
+      'stainless-304': language === 'zh' ? '304不锈钢' : '304 Stainless Steel',
+      'stainless-316': language === 'zh' ? '316不锈钢' : '316 Stainless Steel',
+      'brass': language === 'zh' ? '黄铜' : 'Brass',
+      'copper': language === 'zh' ? '紫铜' : 'Copper',
+      'titanium': language === 'zh' ? '钛合金' : 'Titanium'
+    };
+    
+    // 表面处理名称映射
+    const surfaceFinishNames = {
+      'as-machined': language === 'zh' ? '机加工原样' : 'As-Machined',
+      'anodized': language === 'zh' ? '阳极氧化' : 'Anodized',
+      'powder-coating': language === 'zh' ? '喷粉处理' : 'Powder Coating',
+      'chromate': language === 'zh' ? '铬酸盐转化' : 'Chromate Conversion',
+      'electroplating': language === 'zh' ? '电镀处理' : 'Electroplating',
+      'brushed': language === 'zh' ? '拉丝处理' : 'Brushed Finish',
+      'polished': language === 'zh' ? '抛光处理' : 'Polished'
+    };
+
+    // 更新产品配置价格
+    function updateConfigPrice() {
+      const material = form.material.value;
+      const surfaceFinish = form.surfaceFinish.value;
+      const quantity = parseInt(form.quantity.value) || 1;
+      
+      const materialPrice = materialPrices[material] || 15;
+      const surfacePrice = surfaceFinishPrices[surfaceFinish] || 0;
+      const baseProcessingCost = 80; // 基础加工成本
+      
+      const unitPrice = materialPrice + surfacePrice + baseProcessingCost;
+      const totalPrice = unitPrice * quantity;
+      
+      // 更新配置价格显示
+      document.getElementById('config-price').textContent = `$${totalPrice}`;
+      
+      // 更新订单摘要
+      document.getElementById('summary-quantity').textContent = quantity;
+      document.getElementById('summary-material').textContent = materialNames[material] || material;
+      document.getElementById('summary-surface').textContent = surfaceFinishNames[surfaceFinish] || surfaceFinish;
+      document.getElementById('summary-unit-price').textContent = unitPrice;
+      document.getElementById('summary-qty-calc').textContent = quantity;
+      document.getElementById('summary-item-total').textContent = totalPrice;
+      document.getElementById('summary-subtotal').textContent = totalPrice;
+      
+      // 重新计算总价（包含物流费用）
+      updateTotalPrice(totalPrice);
+      
+      return totalPrice;
+    }
+    
+    // 更新总价
+    function updateTotalPrice(subtotal) {
+      const selectedShipping = document.querySelector('input[name="shipping"]:checked');
+      let shippingCost = 0;
+      
+      if (selectedShipping) {
+        const shippingId = selectedShipping.value;
+        const shippingOption = currentText.shipping.options.find(opt => opt.id === shippingId);
+        
+        if (shippingOption) {
+          let weight = mockOrderData.estimatedWeight;
+          // 根据数量调整重量估算
+          const quantity = parseInt(form.quantity.value) || 1;
+          weight = weight * Math.max(1, quantity / 5); // 假设5件为基准重量
+          
+          shippingCost = shippingOption.basePrice + (shippingOption.weightPrice * weight);
+          
+          // 检查最小重量要求
+          if (shippingOption.minWeight && weight < shippingOption.minWeight) {
+            shippingCost = shippingOption.basePrice + (shippingOption.weightPrice * shippingOption.minWeight);
+          }
+          
+          shippingCost = Math.round(shippingCost);
+        }
+      }
+      
+      const total = subtotal + shippingCost;
+      
+      // 更新显示
+      document.getElementById('shipping-cost').textContent = `$${shippingCost}`;
+      document.getElementById('summary-shipping').textContent = `$${shippingCost}`;
+      document.getElementById('summary-total').textContent = `$${total}`;
+      
+      // 更新分期付款金额
+      const deposit = Math.round(total * 0.5);
+      const final = total - deposit;
+      document.getElementById('deposit-amount').textContent = `$${deposit}`;
+      document.getElementById('final-amount').textContent = `$${final}`;
+    }
+
+    // 更新物流费用
+    function updateShippingCost() {
+      const selectedShipping = document.querySelector('input[name="shipping"]:checked');
+      if (!selectedShipping) return;
+
+      const shippingId = selectedShipping.value;
+      const shippingOption = currentText.shipping.options.find(opt => opt.id === shippingId);
+      
+      if (shippingOption) {
+        let shippingCost = shippingOption.basePrice + (shippingOption.weightPrice * mockOrderData.estimatedWeight);
+        
+        // 检查最小重量要求
+        if (shippingOption.minWeight && mockOrderData.estimatedWeight < shippingOption.minWeight) {
+          shippingCost = shippingOption.basePrice + (shippingOption.weightPrice * shippingOption.minWeight);
+        }
+
+        document.getElementById('shipping-cost').textContent = `$${Math.round(shippingCost)}`;
+        document.getElementById('summary-shipping').textContent = `$${Math.round(shippingCost)}`;
+        
+        // 更新总计
+        const total = mockOrderData.subtotal + Math.round(shippingCost);
+        document.getElementById('summary-total').textContent = `$${total}`;
+        
+        // 更新分期付款金额
+        const deposit = Math.round(total * 0.5);
+        const final = total - deposit;
+        document.getElementById('deposit-amount').textContent = `$${deposit}`;
+        document.getElementById('final-amount').textContent = `$${final}`;
+      }
+    }
+
+    // 物流选项样式更新
+    shippingOptions.forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.shipping-option .border-2').forEach(div => {
+          div.classList.remove('border-[#7F00FF]', 'bg-purple-50');
+          div.classList.add('border-gray-200');
+        });
+        
+        const selectedDiv = radio.closest('.shipping-option').querySelector('.border-2');
+        selectedDiv.classList.remove('border-gray-200');
+        selectedDiv.classList.add('border-[#7F00FF]', 'bg-purple-50');
+        
+        updateConfigPrice();
+      });
+    });
+    
+    // 产品配置变更事件
+    const materialSelect = document.getElementById('material');
+    const surfaceFinishSelect = document.getElementById('surface-finish');
+    const quantityInput = document.getElementById('quantity');
+    const quantityDecrease = document.getElementById('quantity-decrease');
+    const quantityIncrease = document.getElementById('quantity-increase');
+    
+    [materialSelect, surfaceFinishSelect, quantityInput].forEach(element => {
+      element.addEventListener('change', updateConfigPrice);
+    });
+    
+    // 数量调整按钮
+    quantityDecrease.addEventListener('click', () => {
+      const current = parseInt(quantityInput.value) || 1;
+      if (current > 1) {
+        quantityInput.value = current - 1;
+        updateConfigPrice();
+      }
+    });
+    
+    quantityIncrease.addEventListener('click', () => {
+      const current = parseInt(quantityInput.value) || 1;
+      if (current < 1000) {
+        quantityInput.value = current + 1;
+        updateConfigPrice();
+      }
+    });
+
+    // 支付方式样式更新
+    paymentOptions.forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.payment-method .border-2').forEach(div => {
+          div.classList.remove('border-[#7F00FF]', 'bg-purple-50');
+          div.classList.add('border-gray-200');
+        });
+        
+        const selectedDiv = radio.closest('.payment-method').querySelector('.border-2');
+        selectedDiv.classList.remove('border-gray-200');
+        selectedDiv.classList.add('border-[#7F00FF]', 'bg-purple-50');
+      });
+    });
+
+    // 表单提交
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (!validateForm()) {
+        return;
+      }
+      
+      setLoading(true);
+      
+      try {
+        // 收集表单数据
+        const formData = new FormData(form);
+        const orderData = {
+          quoteId: mockOrderData.quoteId,
+          shipping: formData.get('shipping'),
+          payment: formData.get('payment'),
+          product: {
+            material: formData.get('material'),
+            surfaceFinish: formData.get('surfaceFinish'),
+            quantity: parseInt(formData.get('quantity')),
+            specialRequirements: formData.get('specialRequirements')
+          },
+          delivery: {
+            contactName: formData.get('contactName'),
+            company: formData.get('company'),
+            phone: formData.get('phone'),
+            email: formData.get('email'),
+            country: formData.get('country'),
+            city: formData.get('city'),
+            address: formData.get('address'),
+            postalCode: formData.get('postalCode'),
+            note: formData.get('note')
+          }
+        };
+        
+        // 提交订单
+        const response = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(orderData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          // 跳转到订单确认页面
+          window.location.href = `/order-confirmation?id=${result.orderId}`;
+        } else {
+          showError(result.error || '订单创建失败，请重试');
+        }
+        
+      } catch (error) {
+        showError('网络错误，请重试');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // 表单验证
+    function validateForm() {
+      const requiredFields = ['contactName', 'phone', 'email', 'address', 'country', 'city', 'postalCode'];
+      
+      for (const field of requiredFields) {
+        const input = form[field];
+        if (!input.value.trim()) {
+          const fieldName = currentText.validation[field + 'Required'] || `${field} is required`;
+          showError(fieldName);
+          input.focus();
+          return false;
+        }
+      }
+      
+      // 验证邮箱格式
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(form.email.value)) {
+        showError(currentText.validation.emailInvalid);
+        form.email.focus();
+        return false;
+      }
+      
+      // 验证物流选择
+      if (!document.querySelector('input[name="shipping"]:checked')) {
+        showError(currentText.validation.shippingRequired);
+        return false;
+      }
+      
+      // 验证支付方式
+      if (!document.querySelector('input[name="payment"]:checked')) {
+        showError(currentText.validation.paymentRequired);
+        return false;
+      }
+      
+      // 验证条款同意
+      if (!document.getElementById('terms-agreement').checked) {
+        showError(currentText.validation.termsRequired);
+        return false;
+      }
+      
+      return true;
+    }
+
+    // 设置加载状态
+    function setLoading(loading) {
+      submitButton.disabled = loading;
+      if (loading) {
+        buttonText.textContent = currentText.buttons.processing;
+        loadingIcon.classList.remove('hidden');
+      } else {
+        buttonText.textContent = currentText.buttons.confirmOrder;
+        loadingIcon.classList.add('hidden');
+      }
+    }
+
+    // 显示错误信息
+    function showError(message) {
+      const errorDiv = document.getElementById('error-message');
+      const errorText = document.getElementById('error-text');
+      
+      errorText.textContent = message;
+      errorDiv.classList.remove('hidden');
+      
+      setTimeout(() => {
+        errorDiv.classList.add('hidden');
+      }, 5000);
+    }
+
+    // 初始化默认选项
+    if (currentText.shipping.options.find(opt => opt.popular)) {
+      const popularShipping = document.querySelector(`input[value="${currentText.shipping.options.find(opt => opt.popular).id}"]`);
+      if (popularShipping) {
+        popularShipping.click();
+      }
+    }
+    
+    if (currentText.payment.methods.find(method => method.popular)) {
+      const popularPayment = document.querySelector(`input[value="${currentText.payment.methods.find(method => method.popular).id}"]`);
+      if (popularPayment) {
+        popularPayment.click();
+      }
+    }
+    
+    // 初始化价格计算
+    updateConfigPrice();
+  });
+</script>

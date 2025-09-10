@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CheckoutForm from '../../components/checkout/CheckoutForm.astro';
+---
+
+<BaseLayout 
+  title="确认订单 - 选择物流和支付方式 | Geppetto智能制造"
+  description="确认您的CNC加工订单，选择物流方式（特快空运、标准快递、经济海运）和支付方式。透明定价，安全支付。"
+  keywords={[
+    "订单确认", "CNC制造订单", "物流选择", "支付方式选择", 
+    "特快空运", "标准快递", "经济海运", "制造订单支付",
+    "银行转账", "PayPal支付", "国际电汇", "分期付款"
+  ]}
+  ogImage="/images/og-checkout-zh.jpg"
+  structuredData={{
+    type: 'webpage',
+    data: {
+      '@type': 'CheckoutPage',
+      'name': '订单确认页面',
+      'description': '确认CNC制造订单，选择物流和支付方式',
+      'provider': {
+        '@type': 'Organization',
+        'name': 'Geppetto智能制造'
+      }
+    }
+  }}
+>
+  <CheckoutForm language="zh" />
+</BaseLayout>

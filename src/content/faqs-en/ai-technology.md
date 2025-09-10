@@ -5,7 +5,7 @@ order: 2
 featured: true
 ---
 
-Our AI manufacturing system is a complete intelligent process chain, driven by AI from blueprint analysis to finished product delivery.
+Our transparent manufacturing system is a complete intelligent process chain, driven by AI from blueprint analysis to finished product delivery.
 
 ## AI Process Planning Workflow
 

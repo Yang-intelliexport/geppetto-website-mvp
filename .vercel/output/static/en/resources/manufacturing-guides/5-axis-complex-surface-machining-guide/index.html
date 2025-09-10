@@ -1,0 +1,497 @@
+<!DOCTYPE html><html lang="en-US"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.13.2"><!-- SEO Meta Tags --><title>5-Axis Complex Surface Machining: Complete Technical Guide</title><meta name="description" content="Master advanced 5-axis CNC techniques for complex surface manufacturing. Learn programming strategies, toolpath optimization, and quality control methods for precision industrial applications."><meta name="keywords" content="5-axis CNC machining, complex surface programming, precision machining, curved surface CNC, multi-axis manufacturing"><!-- Language alternates --><link rel="alternate" hreflang="en" href="https://geppetto.studio/en/resources/manufacturing-guides/5-axis-complex-surface-machining-guide/"><link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/resources/manufacturing-guides/5-axis-complex-surface-machining-guide/"><link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/resources/manufacturing-guides/5-axis-complex-surface-machining-guide/"><!-- Open Graph --><meta property="og:title" content="5-Axis Complex Surface Machining: Complete Technical Guide"><meta property="og:description" content="Master advanced 5-axis CNC techniques for complex surface manufacturing. Learn programming strategies, toolpath optimization, and quality control methods for precision industrial applications."><meta property="og:image" content="/images/og-default.jpg"><meta property="og:type" content="website"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="5-Axis Complex Surface Machining: Complete Technical Guide"><meta name="twitter:description" content="Master advanced 5-axis CNC techniques for complex surface manufacturing. Learn programming strategies, toolpath optimization, and quality control methods for precision industrial applications."><meta name="twitter:image" content="/images/og-default.jpg"><!-- Styles import --><!-- Preload critical fonts --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><!-- Structured Data --><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"5-Axis Complex Surface Machining: Complete Technical Guide","description":"Master advanced 5-axis CNC techniques for complex surface manufacturing. Learn programming strategies, toolpath optimization, and quality control methods for precision industrial applications.","image":"https://geppetto.studio//images/resources/5-axis-complex-surface.jpg","author":{"@type":"Person","name":"Technical Engineering Team"},"publisher":{"@type":"Organization","name":"Geppetto","logo":{"@type":"ImageObject","url":"https://geppetto.studio//images/geppetto-logo.png"}},"datePublished":"2025-01-20T10:00:00.000Z","dateModified":"2025-01-20T10:00:00.000Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://geppetto.studio/en/resources/manufacturing-guides/5-axis-complex-surface-machining-guide/"},"keywords":"5-axis CNC machining, complex surface programming, precision machining, curved surface CNC, multi-axis manufacturing","articleSection":"Manufacturing Guides"}</script><!-- Default Organization Structured Data --><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=<YOUR_GA_MEASUREMENT_ID>"></script><script>(function(){const measurementId = "<YOUR_GA_MEASUREMENT_ID>";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      
+      // Initialize GA with consent-aware configuration
+      window.initializeGA = function(consentSettings) {
+        gtag('js', new Date());
+        
+        // Set consent based on user preferences or defaults
+        const consent = consentSettings || {
+          'ad_storage': 'denied',
+          'ad_user_data': 'denied', 
+          'ad_personalization': 'denied',
+          'analytics_storage': 'denied'
+        };
+        
+        gtag('consent', 'default', consent);
+        
+        // Configure GA4 with privacy settings
+        gtag('config', measurementId, {
+          anonymize_ip: true,
+          allow_google_signals: false,
+          allow_ad_personalization_signals: false,
+          debug_mode: false,
+          send_page_view: true
+        });
+        
+        // Mark GA as initialized
+        window.gaInitialized = true;
+      };
+      
+      // Check for existing consent and initialize accordingly
+      window.checkConsentAndInitialize = function() {
+        try {
+          const storedConsent = localStorage.getItem('geppetto_cookie_consent');
+          if (storedConsent) {
+            const consent = JSON.parse(storedConsent);
+            const consentSettings = {
+              'analytics_storage': consent.analytics ? 'granted' : 'denied',
+              'ad_storage': consent.marketing ? 'granted' : 'denied',
+              'ad_user_data': consent.marketing ? 'granted' : 'denied',
+              'ad_personalization': consent.marketing ? 'granted' : 'denied'
+            };
+            window.initializeGA(consentSettings);
+          } else {
+            // No consent yet, initialize with denied defaults
+            window.initializeGA();
+          }
+        } catch (e) {
+          // Fallback to denied defaults
+          window.initializeGA();
+        }
+      };
+      
+      // Initialize immediately with current consent state
+      window.checkConsentAndInitialize();
+      
+      // View Transitions support - Track page changes
+      document.addEventListener('astro:page-load', () => {
+        if (window.gaInitialized && window.gtag) {
+          gtag('js', new Date());
+          gtag('config', measurementId);
+        }
+      });
+      
+      // Listen for consent changes and update GA accordingly
+      window.addEventListener('cookieConsentChanged', (event) => {
+        const consent = event.detail;
+        const consentSettings = {
+          'analytics_storage': consent.analytics ? 'granted' : 'denied',
+          'ad_storage': consent.marketing ? 'granted' : 'denied',
+          'ad_user_data': consent.marketing ? 'granted' : 'denied',
+          'ad_personalization': consent.marketing ? 'granted' : 'denied'
+        };
+        
+        if (window.gtag) {
+          gtag('consent', 'update', consentSettings);
+        }
+      });
+      
+      // Custom tracking functions with consent check
+      window.trackQuoteRequest = function(quoteData) {
+        if (window.gtag && window.gaInitialized) {
+          gtag('event', 'generate_lead', {
+            currency: quoteData.currency || 'USD',
+            value: quoteData.estimatedValue || 0
+          });
+        }
+      };
+      
+      window.trackFileUpload = function(fileData) {
+        if (window.gtag && window.gaInitialized) {
+          gtag('event', 'file_upload', {
+            file_extension: fileData.fileType,
+            file_name: fileData.fileName
+          });
+        }
+      };
+      
+      window.trackContactForm = function(formType) {
+        if (window.gtag && window.gaInitialized) {
+          gtag('event', 'form_submit', {
+            form_type: formType || 'contact'
+          });
+        }
+      };
+    })();</script><!-- 确保自定义跟踪函数始终可用 --><script>
+  // 定义自定义跟踪函数（如果还不存在）
+  window.trackQuoteRequest = window.trackQuoteRequest || function(quoteData) {
+    if (window.gtag && window.gaInitialized) {
+      gtag('event', 'generate_lead', {
+        currency: quoteData.currency || 'USD',
+        value: quoteData.estimatedValue || 0
+      });
+    }
+  };
+  
+  window.trackFileUpload = window.trackFileUpload || function(fileData) {
+    if (window.gtag && window.gaInitialized) {
+      gtag('event', 'file_upload', {
+        file_extension: fileData.fileType,
+        file_name: fileData.fileName
+      });
+    }
+  };
+  
+  window.trackContactForm = window.trackContactForm || function(formType) {
+    if (window.gtag && window.gaInitialized) {
+      gtag('event', 'form_submit', {
+        form_type: formType || 'contact'
+      });
+    }
+  };
+</script><!-- View Transitions for smooth page transitions --><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.DuVyq0gm.js"></script><link rel="stylesheet" href="/_astro/admin.BD6AUWBG.css">
+<link rel="stylesheet" href="/_astro/_slug_.hFhtR3h5.css"><script type="module" src="/_astro/page.BNYwb576.js"></script></head> <body class="font-inter bg-white text-gray-900 antialiased"> <!-- Header --> <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100"> <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex justify-between items-center h-16"> <!-- Logo --> <div class="flex items-center"> <a href="/en" class="flex items-center space-x-2"> <img src="/images/geppetto-logo.png" alt="Geppetto Logo" class="w-8 h-8 object-contain" loading="eager"> <span class="text-xl font-bold text-[#111827]">Geppetto</span> </a> </div> <!-- Desktop Navigation --> <div class="hidden md:flex items-center space-x-6"> <a href="/en/services" class="text-[#111827] hover:text-[#7F00FF] transition-colors">Services</a> <a href="/en/why-geppetto" class="text-[#111827] hover:text-[#7F00FF] transition-colors">Why Geppetto</a> <a href="/en/track-order" class="text-[#111827] hover:text-[#7F00FF] transition-colors">Track Order</a> <a href="/en/contact" class="text-[#111827] hover:text-[#7F00FF] transition-colors">Contact</a> <a href="/en/resources" class="text-[#111827] hover:text-[#7F00FF] transition-colors">Resources</a> <div class="language-switcher relative inline-block" data-astro-cid-be57yzu3> <button id="language-button" class="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors duration-200" aria-expanded="false" aria-haspopup="true" data-astro-cid-be57yzu3> <span class="text-2xl" data-astro-cid-be57yzu3> 🌍 </span> <span class="font-medium text-gray-700" data-astro-cid-be57yzu3> English </span> <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" id="language-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-be57yzu3> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" data-astro-cid-be57yzu3></path> </svg> </button> <div id="language-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 hidden" data-astro-cid-be57yzu3> <a href="/en/resources/manufacturing-guides/5-axis-complex-surface-machining-guide/" class="flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 bg-purple-50 text-purple-700 font-medium" data-astro-cid-be57yzu3> <span class="text-xl" data-astro-cid-be57yzu3> 🌍 </span> <span data-astro-cid-be57yzu3>English</span>  <span class="text-xs text-gray-500" data-astro-cid-be57yzu3>Global Market</span> <svg class="w-4 h-4 text-purple-600 ml-auto" fill="currentColor" viewBox="0 0 20 20" data-astro-cid-be57yzu3> <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" data-astro-cid-be57yzu3></path> </svg> </a><a href="/zh/resources/manufacturing-guides/5-axis-complex-surface-machining-guide/" class="flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 text-gray-700" data-astro-cid-be57yzu3> <span class="text-xl" data-astro-cid-be57yzu3> 🇨🇳 </span> <span data-astro-cid-be57yzu3>中文</span> <span class="text-xs text-gray-500" data-astro-cid-be57yzu3>中国市场</span>   </a> <!-- Additional Info --> <div class="border-t border-gray-200 mt-2 pt-2 px-4 py-2" data-astro-cid-be57yzu3> <div class="text-xs text-gray-500 space-y-1" data-astro-cid-be57yzu3> <div class="flex items-center space-x-2" data-astro-cid-be57yzu3> <span data-astro-cid-be57yzu3>🇺🇸</span> <span data-astro-cid-be57yzu3>Global Markets</span> </div> <div class="flex items-center space-x-2" data-astro-cid-be57yzu3> <span data-astro-cid-be57yzu3>🇨🇳</span> <span data-astro-cid-be57yzu3>中国大陆市场</span> </div> </div> </div> </div> </div> <script type="module">document.addEventListener("DOMContentLoaded",()=>{const e=document.getElementById("language-button"),t=document.getElementById("language-dropdown"),d=document.getElementById("language-chevron");e&&t&&d&&(e.addEventListener("click",n=>{n.stopPropagation(),!t.classList.contains("hidden")?(t.classList.add("hidden"),d.style.transform="rotate(0deg)",e.setAttribute("aria-expanded","false")):(t.classList.remove("hidden"),d.style.transform="rotate(180deg)",e.setAttribute("aria-expanded","true"))}),document.addEventListener("click",n=>{!e.contains(n.target)&&!t.contains(n.target)&&(t.classList.add("hidden"),d.style.transform="rotate(0deg)",e.setAttribute("aria-expanded","false"))}),document.addEventListener("keydown",n=>{n.key==="Escape"&&(t.classList.add("hidden"),d.style.transform="rotate(0deg)",e.setAttribute("aria-expanded","false"))}))});</script>  <a href="/en/create-quote" class="bg-[#7F00FF] text-white px-6 py-3 rounded-lg hover:bg-[#6B00CC] transition-colors font-semibold"> Get Quote </a> </div> <!-- Mobile menu button --> <div class="md:hidden flex items-center space-x-2"> <div class="language-switcher relative inline-block" data-astro-cid-be57yzu3> <button id="language-button" class="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors duration-200" aria-expanded="false" aria-haspopup="true" data-astro-cid-be57yzu3> <span class="text-2xl" data-astro-cid-be57yzu3> 🌍 </span> <span class="font-medium text-gray-700" data-astro-cid-be57yzu3> English </span> <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" id="language-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-be57yzu3> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" data-astro-cid-be57yzu3></path> </svg> </button> <div id="language-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 hidden" data-astro-cid-be57yzu3> <a href="/en/resources/manufacturing-guides/5-axis-complex-surface-machining-guide/" class="flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 bg-purple-50 text-purple-700 font-medium" data-astro-cid-be57yzu3> <span class="text-xl" data-astro-cid-be57yzu3> 🌍 </span> <span data-astro-cid-be57yzu3>English</span>  <span class="text-xs text-gray-500" data-astro-cid-be57yzu3>Global Market</span> <svg class="w-4 h-4 text-purple-600 ml-auto" fill="currentColor" viewBox="0 0 20 20" data-astro-cid-be57yzu3> <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" data-astro-cid-be57yzu3></path> </svg> </a><a href="/zh/resources/manufacturing-guides/5-axis-complex-surface-machining-guide/" class="flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 text-gray-700" data-astro-cid-be57yzu3> <span class="text-xl" data-astro-cid-be57yzu3> 🇨🇳 </span> <span data-astro-cid-be57yzu3>中文</span> <span class="text-xs text-gray-500" data-astro-cid-be57yzu3>中国市场</span>   </a> <!-- Additional Info --> <div class="border-t border-gray-200 mt-2 pt-2 px-4 py-2" data-astro-cid-be57yzu3> <div class="text-xs text-gray-500 space-y-1" data-astro-cid-be57yzu3> <div class="flex items-center space-x-2" data-astro-cid-be57yzu3> <span data-astro-cid-be57yzu3>🇺🇸</span> <span data-astro-cid-be57yzu3>Global Markets</span> </div> <div class="flex items-center space-x-2" data-astro-cid-be57yzu3> <span data-astro-cid-be57yzu3>🇨🇳</span> <span data-astro-cid-be57yzu3>中国大陆市场</span> </div> </div> </div> </div> </div>   <button type="button" class="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-colors" id="mobile-menu-button" aria-label="Toggle mobile menu"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path> </svg> </button> </div> </div> <!-- Mobile Navigation --> <div class="md:hidden hidden" id="mobile-menu"> <div class="px-2 pt-2 pb-6 space-y-1 bg-white border-t border-gray-100 shadow-lg"> <a href="/en/services" class="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium"> Services </a> <a href="/en/why-geppetto" class="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium"> Why Geppetto </a> <a href="/en/track-order" class="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium"> Track Order </a> <a href="/en/contact" class="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium"> Contact </a> <a href="/en/resources" class="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium"> Resources </a> <div class="px-2 pt-4"> <a href="/en/create-quote" class="block bg-gradient-to-r from-[#7F00FF] to-[#00BFFF] text-white px-6 py-3 rounded-xl text-center font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"> Get Quote </a> </div> </div> </div> </nav> </header> <!-- Main Content --> <main>   <nav class="bg-gray-50 border-b border-gray-200" aria-label="Breadcrumb"> <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"> <ol class="flex items-center space-x-2 py-4 text-sm"> <li> <a href="/en" class="text-gray-500 hover:text-gray-700"> Home </a> </li> <li class="text-gray-400">/</li> <li> <a href="/en/resources" class="text-gray-500 hover:text-gray-700"> Resources </a> </li> <li class="text-gray-400">/</li> <li> <a href="/en/resources/category/manufacturing-guides" class="text-gray-500 hover:text-gray-700"> Manufacturing Guides </a> </li> <li class="text-gray-400">/</li> <li class="text-gray-900 font-medium truncate">5-Axis Complex Surface Machining: Complete Technical Guide</li> </ol> </div> </nav>  <div class="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50"> <div class="reading-progress h-full bg-gradient-to-r from-purple-600 to-blue-600 transition-all duration-150 ease-out" style="width: 0%"></div> </div> <article class="bg-white"> <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12"> <!-- 文章头部 --> <header class="mb-12"> <!-- 分类和难度标签 --> <div class="flex items-center space-x-3 mb-4"> <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800"> Manufacturing Guides </span> <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"> Advanced </span> <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+⭐ Featured </span> </div> <!-- 标题 --> <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight"> 5-Axis Complex Surface Machining: Complete Technical Guide </h1> <!-- 描述 --> <p class="text-xl text-gray-600 mb-8 leading-relaxed"> Master advanced 5-axis CNC techniques for complex surface manufacturing. Learn programming strategies, toolpath optimization, and quality control methods for precision industrial applications. </p> <!-- 文章信息 --> <div class="flex flex-wrap items-center text-sm text-gray-500 space-x-6"> <div class="flex items-center space-x-2"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path> </svg> <span>Technical Engineering Team</span> </div> <div class="flex items-center space-x-2"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path> </svg> <time datetime="2025-01-20T10:00:00.000Z"> January 20, 2025 </time> </div> <div class="flex items-center space-x-2"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path> </svg> <span> Updated January 20, 2025 </span> </div> <div class="flex items-center space-x-2"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path> </svg> <span> 12 min read </span> </div> </div> <!-- 标签 --> <div class="flex flex-wrap gap-2 mt-6"> <a href="/en/resources/tag/5-axis-machining" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+#5-axis-machining </a><a href="/en/resources/tag/complex-surfaces" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+#complex-surfaces </a><a href="/en/resources/tag/precision-manufacturing" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+#precision-manufacturing </a><a href="/en/resources/tag/cnc-programming" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+#cnc-programming </a> </div> <!-- 特色图片 --> <div class="mt-8"> <img src="/images/resources/5-axis-complex-surface.jpg" alt="5-axis CNC machine machining complex curved industrial component" class="w-full h-96 object-cover rounded-2xl shadow-lg" loading="eager"> </div> </header> <!-- 文章内容区域 --> <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12"> <!-- 主内容 --> <div class="lg:col-span-3"> <div class="prose prose-lg prose-gray max-w-none">  <h1 id="mastering-5-axis-complex-surface-machining">Mastering 5-Axis Complex Surface Machining</h1>
+<p>Complex surface machining represents the pinnacle of CNC manufacturing capability, demanding advanced programming skills, sophisticated toolpath strategies, and precise quality control. As your <strong>AI-powered expert service transparent manufacturing partner</strong>, we combine cutting-edge technology with deep domain expertise to deliver exceptional results in complex surface manufacturing with transparent pricing and flexible manufacturing response capabilities.</p>
+<p><strong>Key Value Advantages:</strong></p>
+<ul>
+<li><strong>Cost Optimization</strong>: 35-40% total project cost reduction through intelligent programming and efficient machining strategies</li>
+<li><strong>Transparent Pricing</strong>: Complete breakdown pricing system with 8-hour expert analysis for precise project quotations</li>
+<li><strong>Flexible Response</strong>: Rapid programming turnaround from 30 days to 8 hours with AI-optimized toolpath generation</li>
+</ul>
+<p>This comprehensive guide explores the technical methodologies that enable successful production of precision curved components meeting project-customized precision standards.</p>
+<h2 id="understanding-complex-surface-challenges">Understanding Complex Surface Challenges</h2>
+<h3 id="geometric-complexity-analysis">Geometric Complexity Analysis</h3>
+<p><strong>Freeform Surface Characteristics</strong>:</p>
+<ul>
+<li>Non-uniform curvature distribution</li>
+<li>Multiple intersecting surface patches</li>
+<li>Varying wall thickness requirements</li>
+<li>Transition zones between features</li>
+</ul>
+<p><strong>Typical Applications</strong>:</p>
+<ul>
+<li>Industrial machinery components (850mm × 650mm × 45mm)</li>
+<li>Turbine blade surfaces with complex wall geometries</li>
+<li>Precision tooling with organic geometries</li>
+<li>Automotive body tooling masters</li>
+</ul>
+<h3 id="manufacturing-constraints">Manufacturing Constraints</h3>
+<p><strong>Material Considerations</strong>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>7075-T651 Aluminum Alloy Properties:</span></span>
+<span class="line"><span>- Yield Strength: 503 MPa</span></span>
+<span class="line"><span>- Ultimate Tensile: 572 MPa  </span></span>
+<span class="line"><span>- Thermal Conductivity: 130 W/m·K</span></span>
+<span class="line"><span>- Expansion Coefficient: 23.6 μm/m·°C</span></span></code></pre>
+<p><strong>Geometric Limitations</strong>:</p>
+<ul>
+<li>Minimum corner radius: Project-specific requirements</li>
+<li>Maximum aspect ratio: Optimized per design</li>
+<li>Surface deviation tolerance: Industry standard precision</li>
+<li>Surface finish requirement: Customer-specified standards</li>
+</ul>
+<h2 id="5-axis-programming-strategies">5-Axis Programming Strategies</h2>
+<h3 id="multi-axis-toolpath-development">Multi-Axis Toolpath Development</h3>
+<p><strong>Surface Analysis Workflow</strong>:
+CAD Import → Surface Recognition → Machining Strategy Selection → Toolpath Generation</p>
+<p><strong>Critical Programming Decisions</strong>:</p>
+<ol>
+<li>
+<p><strong>Lead/Lag Angle Optimization</strong>:</p>
+<ul>
+<li>Forward tilt: 5-15° for roughing</li>
+<li>Backward tilt: 2-8° for finishing</li>
+<li>Side tilt: Minimize for maximum rigidity</li>
+</ul>
+</li>
+<li>
+<p><strong>Toolpath Pattern Selection</strong>:</p>
+<ul>
+<li><strong>Spiral</strong>: Continuous motion, minimal retracts</li>
+<li><strong>Parallel</strong>: Consistent step-over, predictable loads</li>
+<li><strong>Radial</strong>: Optimal for circular features</li>
+<li><strong>Flow-line</strong>: Follows part geometry naturally</li>
+</ul>
+</li>
+</ol>
+<h3 id="advanced-programming-techniques">Advanced Programming Techniques</h3>
+<p><strong>Collision Avoidance</strong>:
+Advanced algorithms ensure optimal tool positioning and gouge-free machining through sophisticated geometric analysis and real-time collision detection.</p>
+<p><strong>Tool Orientation Control</strong>:</p>
+<ul>
+<li><strong>Surface Normal</strong>: Perpendicular to surface</li>
+<li><strong>Drive Direction</strong>: Along cutting direction</li>
+<li><strong>Interpolated</strong>: Smooth transitions between surfaces</li>
+<li><strong>4+1 Indexing</strong>: Semi-continuous for deep features</li>
+</ul>
+<h2 id="material-specific-machining-parameters">Material-Specific Machining Parameters</h2>
+<h3 id="aluminum-7075-t651-optimization">Aluminum 7075-T651 Optimization</h3>
+<p><strong>Roughing Parameters</strong>:</p>
+<ul>
+<li>Spindle Speed: Optimized for material and tool combination</li>
+<li>Feed Rate: Balanced for productivity and surface quality</li>
+<li>Axial Depth: Material-specific optimal engagement</li>
+<li>Radial Width: Calculated for maximum efficiency</li>
+</ul>
+<p><strong>Finishing Parameters</strong>:</p>
+<ul>
+<li>Spindle Speed: High-speed parameters for superior finish</li>
+<li>Feed Rate: Precision-optimized for quality requirements</li>
+<li>Axial Depth: Fine-tuned for dimensional accuracy</li>
+<li>Scallop Height: Project-customized surface quality standards</li>
+</ul>
+<h3 id="heat-management-strategies">Heat Management Strategies</h3>
+<p><strong>Coolant Application</strong>:</p>
+<ul>
+<li><strong>Flood Cooling</strong>: 5-8% concentration for aluminum</li>
+<li><strong>Through-Tool</strong>: 70-80 bar pressure for deep cavities</li>
+<li><strong>Mist Systems</strong>: Environmental control for open surfaces</li>
+</ul>
+<p><strong>Thermal Distortion Prevention</strong>:</p>
+<ul>
+<li>Allow 2-hour thermal stabilization</li>
+<li>Monitor part temperature: &#x3C;40°C</li>
+<li>Implement temperature compensation</li>
+<li>Staged machining for stress relief</li>
+</ul>
+<h2 id="tooling-selection-and-management">Tooling Selection and Management</h2>
+<h3 id="cutting-tool-geometry">Cutting Tool Geometry</h3>
+<p><strong>Ball End Mills for Finishing</strong>:</p>
+<ul>
+<li>Radius: 6-16mm (balance surface quality vs. machining time)</li>
+<li>Helix Angle: 30-45° (chip evacuation vs. cutting force)</li>
+<li>Core Diameter: >50% for rigidity</li>
+<li>Coating: TiAlN for aluminum applications</li>
+</ul>
+<p><strong>Variable Pitch Tools</strong>:</p>
+<ul>
+<li>Suppress chatter in flexible setups</li>
+<li>Improved surface finish</li>
+<li>Higher metal removal rates</li>
+<li>Extended tool life</li>
+</ul>
+<h3 id="tool-path-strategies">Tool Path Strategies</h3>
+<p><strong>Constant Z-Level Machining</strong>:
+Advanced algorithms generate optimized toolpaths with intelligent z-level distribution, ensuring consistent surface quality and efficient material removal through sophisticated path optimization.</p>
+<p><strong>Parallel Plane Finishing</strong>:</p>
+<ul>
+<li>Step-over: Optimized for required surface finish quality</li>
+<li>Contact point distribution analysis</li>
+<li>Cusp height calculation and control</li>
+</ul>
+<h2 id="quality-control-and-measurement">Quality Control and Measurement</h2>
+<h3 id="in-process-monitoring">In-Process Monitoring</h3>
+<p><strong>Real-Time Quality Indicators</strong>:</p>
+<ul>
+<li><strong>Cutting Force Monitoring</strong>: Detect tool wear and deflection</li>
+<li><strong>Vibration Analysis</strong>: Identify chatter and instability</li>
+<li><strong>Surface Roughness Trending</strong>: Continuous quality feedback</li>
+<li><strong>Dimensional Probing</strong>: Critical feature verification</li>
+</ul>
+<p><strong>Statistical Process Control</strong>:</p>
+<ul>
+<li>Cpk Target: Industry-leading statistical control for critical dimensions</li>
+<li>Surface Finish Control: Project-customized surface quality standards</li>
+<li>Form Tolerance: Customer-specified precision requirements for functional surfaces</li>
+</ul>
+<h3 id="post-process-inspection">Post-Process Inspection</h3>
+<p><strong>CMM Measurement Strategy</strong>:</p>
+<ul>
+<li><strong>Point Cloud Comparison</strong>: 10,000+ measurement points</li>
+<li><strong>Surface Deviation Analysis</strong>: Color-mapped results</li>
+<li><strong>Feature Extraction</strong>: Automated GD&#x26;T verification</li>
+<li><strong>Reverse Engineering Validation</strong>: CAD model correlation</li>
+</ul>
+<p><strong>Advanced Measurement Techniques</strong>:</p>
+<ul>
+<li><strong>Laser Scanning</strong>: High-resolution measurement for complex geometries</li>
+<li><strong>Optical Probing</strong>: Non-contact measurement for delicate surfaces</li>
+<li><strong>CT Scanning</strong>: Internal geometry verification and quality assurance</li>
+</ul>
+<h2 id="case-study-industrial-machinery-support-bracket">Case Study: Industrial Machinery Support Bracket</h2>
+<h3 id="component-specifications">Component Specifications</h3>
+<p><strong>Part Details</strong>:</p>
+<ul>
+<li>Material: 7075-T651 Aluminum</li>
+<li>Dimensions: 850mm × 650mm × 45mm</li>
+<li>Features: 156 threaded holes, 24 lightening holes</li>
+<li>Weight Reduction: From 15kg raw material to 1.2kg finished part</li>
+</ul>
+<h3 id="manufacturing-challenge-resolution">Manufacturing Challenge Resolution</h3>
+<p><strong>Programming Efficiency</strong>:</p>
+<ul>
+<li><strong>Traditional Approach</strong>: 30 days for 5-axis program development</li>
+<li><strong>AI-Optimized Solution</strong>: 8-hour expert analysis with intelligent toolpath generation</li>
+<li><strong>First Part Success Rate</strong>: Improved from 60% to 95%</li>
+</ul>
+<p><strong>Machining Time Optimization</strong>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Process Improvement Results:</span></span>
+<span class="line"><span>- Roughing Time: 18hrs → 8hrs (-56%)</span></span>
+<span class="line"><span>- Finishing Time: 6hrs → 3hrs (-50%)  </span></span>
+<span class="line"><span>- Setup Time: 4hrs → 1hr (-75%)</span></span>
+<span class="line"><span>- Total Cycle Time: 28hrs → 12hrs (-57%)</span></span></code></pre>
+<h3 id="quality-achievement">Quality Achievement</h3>
+<p><strong>Dimensional Results</strong>:</p>
+<ul>
+<li>All critical dimensions within project-specified tolerances</li>
+<li>Surface finish: Exceeded customer quality requirements</li>
+<li>Form tolerances: 95% within stringent tolerance requirements</li>
+<li>Material utilization: 88% (industry standard: 70%)</li>
+</ul>
+<p><strong>Transparent Manufacturing Value Analysis</strong>:</p>
+<p><strong>Cost Reduction Factors:</strong></p>
+<ul>
+<li><strong>Programming Efficiency</strong>: 30 days → 8 hours expert analysis (96% time reduction)</li>
+<li><strong>Material Optimization</strong>: 12% → 4% waste reduction through precise toolpath planning</li>
+<li><strong>Manufacturing Time</strong>: 28hrs → 12hrs cycle time (-57% through intelligent strategies)</li>
+<li><strong>Quality Improvement</strong>: 40% → 5% rework rate (95% first-part success)</li>
+</ul>
+<p><strong>Total Project Cost Reduction: 35-40%</strong></p>
+<p><strong>Customer Value Benefits:</strong></p>
+<ul>
+<li><strong>Predictable Pricing</strong>: Complete cost transparency with detailed breakdown analysis</li>
+<li><strong>Faster Time-to-Market</strong>: Accelerated project delivery through flexible manufacturing response</li>
+<li><strong>Quality Assurance</strong>: Consistent results with statistical process control and real-time monitoring</li>
+</ul>
+<h2 id="advanced-machining-techniques">Advanced Machining Techniques</h2>
+<h3 id="high-speed-machining-hsm-principles">High-Speed Machining (HSM) Principles</h3>
+<p><strong>Trochoidal Milling</strong>:</p>
+<ul>
+<li>Constant tool engagement</li>
+<li>Reduced cutting forces</li>
+<li>Extended tool life</li>
+<li>Improved surface quality</li>
+</ul>
+<p><strong>Adaptive Clearing</strong>:</p>
+<ul>
+<li>Variable engagement control</li>
+<li>Optimized material removal rates</li>
+<li>Consistent chip loads</li>
+<li>Reduced heat generation</li>
+</ul>
+<h3 id="multi-setup-strategies">Multi-Setup Strategies</h3>
+<p><strong>Workpiece Orientation Optimization</strong>:</p>
+<ol>
+<li><strong>Analysis Phase</strong>: Accessibility study for all features</li>
+<li><strong>Setup Reduction</strong>: Minimize part handling</li>
+<li><strong>Datum Strategy</strong>: Maintain geometric relationships</li>
+<li><strong>Fixture Design</strong>: 5-axis tombstone systems</li>
+</ol>
+<h2 id="troubleshooting-common-issues">Troubleshooting Common Issues</h2>
+<h3 id="surface-quality-problems">Surface Quality Problems</h3>
+<p><strong>Chatter Marks</strong>:</p>
+<ul>
+<li><strong>Cause</strong>: Insufficient rigidity or resonance</li>
+<li><strong>Solution</strong>: Adjust spindle speed, reduce depth of cut</li>
+<li><strong>Prevention</strong>: Modal analysis and tuned damping</li>
+</ul>
+<p><strong>Tool Marks</strong>:</p>
+<ul>
+<li><strong>Cause</strong>: Excessive step-over or worn tools</li>
+<li><strong>Solution</strong>: Optimize toolpath overlap, tool replacement</li>
+<li><strong>Prevention</strong>: Real-time tool condition monitoring</li>
+</ul>
+<h3 id="dimensional-accuracy-issues">Dimensional Accuracy Issues</h3>
+<p><strong>Thermal Growth</strong>:</p>
+<ul>
+<li><strong>Monitoring</strong>: Part temperature tracking</li>
+<li><strong>Compensation</strong>: Real-time coordinate adjustment</li>
+<li><strong>Prevention</strong>: Controlled environment machining</li>
+</ul>
+<p><strong>Tool Deflection</strong>:</p>
+<ul>
+<li><strong>Calculation</strong>: Beam deflection formulas</li>
+<li><strong>Compensation</strong>: Force-based deflection models</li>
+<li><strong>Prevention</strong>: Shorter, more rigid tools</li>
+</ul>
+<h2 id="future-technology-integration">Future Technology Integration</h2>
+<h3 id="ai-enhanced-programming">AI-Enhanced Programming</h3>
+<p><strong>Machine Learning Applications</strong>:</p>
+<ul>
+<li>Automated toolpath optimization</li>
+<li>Predictive tool wear modeling</li>
+<li>Surface quality prediction</li>
+<li>Parameter optimization</li>
+</ul>
+<p><strong>Digital Twin Technology</strong>:</p>
+<ul>
+<li>Real-time process simulation</li>
+<li>Predictive maintenance</li>
+<li>Quality forecasting</li>
+<li>Process optimization</li>
+</ul>
+<h2 id="implementation-best-practices">Implementation Best Practices</h2>
+<h3 id="programming-workflow">Programming Workflow</h3>
+<ol>
+<li>
+<p><strong>Geometry Analysis</strong> (2 hours)</p>
+<ul>
+<li>Surface complexity assessment</li>
+<li>Machining strategy selection</li>
+<li>Tool accessibility analysis</li>
+</ul>
+</li>
+<li>
+<p><strong>Toolpath Generation</strong> (4 hours)</p>
+<ul>
+<li>Multi-axis programming</li>
+<li>Collision detection</li>
+<li>Optimization algorithms</li>
+</ul>
+</li>
+<li>
+<p><strong>Simulation and Verification</strong> (2 hours)</p>
+<ul>
+<li>Virtual machining</li>
+<li>Quality prediction</li>
+<li>Cycle time analysis</li>
+</ul>
+</li>
+</ol>
+<h3 id="quality-assurance-protocol">Quality Assurance Protocol</h3>
+<p><strong>Pre-Production Validation</strong>:</p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> CAD model verification</li>
+<li class="task-list-item"><input type="checkbox" disabled> Toolpath simulation complete</li>
+<li class="task-list-item"><input type="checkbox" disabled> Setup sheet approval</li>
+<li class="task-list-item"><input type="checkbox" disabled> First article inspection plan</li>
+</ul>
+<p><strong>Production Monitoring</strong>:</p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> Real-time process monitoring</li>
+<li class="task-list-item"><input type="checkbox" disabled> Statistical process control</li>
+<li class="task-list-item"><input type="checkbox" disabled> Tool condition management</li>
+<li class="task-list-item"><input type="checkbox" disabled> Quality documentation</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>5-axis complex surface machining represents the convergence of advanced programming, sophisticated tooling, and precise process control. Success requires systematic approach combining theoretical understanding with practical implementation.</p>
+<p>The integration of AI-assisted programming, real-time monitoring, and adaptive control systems enables manufacturers to achieve previously impossible combinations of quality, speed, and cost-effectiveness.</p>
+<h2 id="ready-to-implement-advanced-5-axis-manufacturing">Ready to Implement Advanced 5-Axis Manufacturing?</h2>
+<p>At Geppetto, we combine cutting-edge 5-axis machining capabilities with AI-optimized programming to deliver exceptional results for complex surface components. Our expert team leverages advanced manufacturing techniques to achieve project-customized precision standards with remarkable efficiency and transparent cost structures.</p>
+<h3 id="your-transparent-manufacturing-advantages">Your Transparent Manufacturing Advantages:</h3>
+<ul>
+<li><strong>Complete Cost Breakdown</strong>: Detailed transparent pricing analysis showing exactly where your investment goes</li>
+<li><strong>Expert Analysis</strong>: 8-hour professional review with comprehensive technical assessment and optimization recommendations</li>
+<li><strong>Flexible Manufacturing Response</strong>: Rapid programming and production capabilities that adapt to your project timeline</li>
+<li><strong>Quality Transparency</strong>: Real-time process monitoring with detailed quality documentation and statistical reporting</li>
+</ul>
+<p><strong>Start your complex surface project today</strong> - Upload your CAD files for comprehensive expert analysis and transparent breakdown pricing with 8-hour professional review.</p>  <section class="mt-16 pt-16 border-t border-gray-200"> <h2 class="text-3xl font-bold text-gray-900 mb-8">
+Related Articles
+</h2> <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> <article class="bg-gray-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300"> <img src="/images/resources/small-batch-cnc-guide.jpg" alt="Small batch CNC manufacturing setup showing flexible tooling and quality control" class="w-full h-48 object-cover" loading="lazy"> <div class="p-6"> <div class="flex items-center space-x-2 mb-3"> <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"> manufacturing-guides </span> <span class="text-xs text-gray-500"> 16 min
+</span> </div> <h3 class="text-xl font-bold text-gray-900 mb-3"> <a href="/en/resources/manufacturing-guides/small-batch-cnc-manufacturing-guide" class="hover:text-purple-600 transition-colors"> Small Batch CNC Manufacturing Guide: Optimizing Quality and Cost for Low-Volume Production </a> </h3> <p class="text-gray-600 mb-4 text-sm"> Master small batch CNC manufacturing strategies. Learn how to balance quality, cost, and lead time for prototype through low-volume production runs with expert optimization techniques. </p> <div class="flex items-center justify-between text-sm text-gray-500"> <span>Manufacturing Strategy Team</span> <time datetime="2025-01-18T10:00:00.000Z"> January 18, 2025 </time> </div> </div> </article> </div> </section> <section class="mt-16 pt-16 border-t border-gray-200"> <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 text-center border border-purple-100"> <h2 class="text-2xl font-bold text-gray-900 mb-4">
+Ready to Put Knowledge into Practice?
+</h2> <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
+Turn your designs into high-quality physical products with our expert manufacturing services. Transparent pricing, expert review, and 8-hour response.
+</p> <div class="flex flex-col sm:flex-row gap-4 justify-center"> <a href="/en/create-quote" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors shadow-sm text-sm lg:text-base">
+🚀 Upload Files for Quote
+</a> <a href="/en/contact" class="bg-white border-2 border-purple-600 text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-600 hover:text-white transition-colors text-sm lg:text-base">
+💬 Consult Expert
+</a> </div> </div> </section>  </div> </div> <!-- 侧边栏 --> <aside class="lg:col-span-1 order-first lg:order-last"> <div class="sticky top-8 space-y-6 lg:space-y-8"> <!-- 目录 --> <div class="bg-gray-50 rounded-xl p-6"> <h3 class="text-lg font-semibold text-gray-900 mb-4"> Table of Contents </h3> <div id="table-of-contents" class="space-y-2"> <!-- 目录将通过JavaScript动态生成 --> </div> </div> <!-- 分享按钮 --> <div class="bg-gray-50 rounded-xl p-6"> <h3 class="text-lg font-semibold text-gray-900 mb-4"> Share Article </h3> <div class="space-y-2"> <button onclick="window.open('https://twitter.com/intent/tweet?url=https%3A%2F%2Fgeppetto.studio%2Fen%2Fresources%2Fmanufacturing-guides%2F5-axis-complex-surface-machining-guide%2F&#38;text=5-Axis%20Complex%20Surface%20Machining%3A%20Complete%20Technical%20Guide', '_blank')" class="w-full bg-blue-500 text-white px-4 py-2.5 rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium text-center">
+Twitter
+</button> <button onclick="window.open('https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fgeppetto.studio%2Fen%2Fresources%2Fmanufacturing-guides%2F5-axis-complex-surface-machining-guide%2F', '_blank')" class="w-full bg-blue-700 text-white px-4 py-2.5 rounded-lg hover:bg-blue-800 transition-colors text-sm font-medium text-center">
+LinkedIn
+</button> </div> </div> <!-- 相关文章CTA --> <div class="bg-white rounded-xl p-6 border-2 border-purple-200 shadow-sm"> <h3 class="text-lg font-semibold text-gray-900 mb-2"> Need Manufacturing Services? </h3> <p class="text-sm text-gray-700 mb-4 leading-relaxed"> Get expert quotes with transparent pricing and 8-hour response </p> <a href="/en/create-quote" class="block w-full bg-purple-600 text-white text-center py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium shadow-sm hover:shadow-md"> Get Quote </a> </div> </div> </aside> </div> </div> </article>  <script type="module">function m(){const n=document.querySelectorAll(".prose h1, .prose h2, .prose h3, .prose h4, .prose h5"),r=document.getElementById("table-of-contents");if(!r||n.length===0)return;const t=document.createElement("ul");t.className="space-y-1",n.forEach((e,o)=>{const s=e.id||`heading-${o}`;e.id||(e.id=s);const a=document.createElement("li"),l=document.createElement("a");l.href=`#${s}`,l.textContent=e.textContent;let c="block rounded transition-all duration-200 hover:text-purple-600 hover:bg-purple-50 ";switch(e.tagName){case"H1":c+="toc-h1 text-base font-bold text-gray-900 border-b border-gray-200 mb-2 pb-1 py-2 px-3";break;case"H2":c+="toc-h2 text-sm font-semibold text-gray-900 py-2 px-3";break;case"H3":c+="toc-h3 text-sm font-medium text-gray-700 py-1 px-3 pl-6";break;case"H4":c+="toc-h4 text-xs font-normal text-gray-600 py-1 px-3 pl-8";break;case"H5":c+="toc-h5 text-xs font-light text-gray-500 py-1 px-3 pl-10";break;default:c+="toc-h6 text-xs text-gray-400 py-1 px-3 pl-12"}l.className=c,l.addEventListener("click",u=>{u.preventDefault(),e.scrollIntoView({behavior:"smooth",block:"start",inline:"nearest"}),document.querySelectorAll("#table-of-contents a").forEach(h=>{h.classList.remove("bg-purple-100","text-purple-800")}),l.classList.add("bg-purple-100","text-purple-800")}),a.appendChild(l),t.appendChild(a)}),r.appendChild(t)}document.addEventListener("DOMContentLoaded",()=>{m(),setTimeout(i,100),d()});function i(){const n=document.querySelectorAll(".prose h1, .prose h2, .prose h3, .prose h4, .prose h5"),r=document.querySelectorAll("#table-of-contents a");if(n.length===0||r.length===0)return;const t=window.scrollY+100;let e=null;if(n.forEach(o=>{o.offsetTop<=t&&(e=o)}),r.forEach(o=>{o.classList.remove("bg-purple-100","text-purple-800","font-semibold")}),e){const o=document.querySelector(`#table-of-contents a[href="#${e.id}"]`);o&&o.classList.add("bg-purple-100","text-purple-800","font-semibold")}}function d(){document.querySelector("article");const n=window.scrollY,r=document.documentElement.scrollHeight-window.innerHeight,t=Math.max(0,Math.min(100,n/r*100)),e=document.querySelector(".reading-progress");e&&(e.style.width=`${t}%`)}function p(n,r){let t;return function(...o){const s=()=>{clearTimeout(t),n(...o)};clearTimeout(t),t=setTimeout(s,r)}}const f=p(i,10),b=p(d,10);window.addEventListener("scroll",()=>{f(),b()});</script>  </main> <!-- Footer --> <footer class="bg-gray-900 text-white"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"> <div class="grid grid-cols-1 md:grid-cols-4 gap-8"> <!-- Company Info --> <div class="col-span-1 md:col-span-2"> <div class="flex items-center space-x-2 mb-4"> <img src="/images/geppetto-logo.png" alt="Geppetto Logo" class="w-8 h-8 object-contain"> <span class="text-xl font-bold">Geppetto</span> </div> <p class="text-gray-300 mb-4 max-w-md"> Geppetto Tech - AI-powered precision manufacturing service provider. Delivering intelligent quotes, 72H production + shipping, and revolutionary manufacturing experience with custom precision. </p> <div class="flex space-x-4"> <a href="tel:+8613511091304" class="text-[#7F00FF] hover:text-[#00BFFF]">+86 13511091304</a> <a href="mailto:hello@geppetto.studio" class="text-[#7F00FF] hover:text-[#00BFFF]">hello@geppetto.studio</a> </div> </div> <!-- Quick Links --> <div> <h3 class="text-lg font-semibold mb-4">Quick Links</h3> <ul class="space-y-2"> <li><a href="/en/why-geppetto" class="text-gray-300 hover:text-white">Why Geppetto</a></li> <li><a href="/en/services" class="text-gray-300 hover:text-white">Services</a></li> <li><a href="/en/track-order" class="text-gray-300 hover:text-white">Track Order</a></li> <li><a href="/no-moq" class="text-gray-300 hover:text-white">No MOQ Manufacturing</a></li> <li><a href="/en/create-quote" class="text-gray-300 hover:text-white">Get Quote</a></li> </ul> </div> <!-- Resources --> <div> <h3 class="text-lg font-semibold mb-4">More Information</h3> <ul class="space-y-2"> <li><a href="/en/case-studies" class="text-gray-300 hover:text-white">Case Studies</a></li> <li><a href="/en/about" class="text-gray-300 hover:text-white">About Us</a></li> <li><a href="/en/faq" class="text-gray-300 hover:text-white">FAQ</a></li> <li><a href="/en/contact" class="text-gray-300 hover:text-white">Contact Us</a></li> </ul> </div> </div> <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400"> <p> &amp;copy; 2024 Geppetto Technologies Ltd. All rights reserved. |
+<a href="/privacy" class="hover:text-white">Privacy Policy</a> |
+<a href="/terms" class="hover:text-white">Terms of Service</a> </p> </div> </div> </footer> <!-- Cookie Consent Banner --> <div id="cookie-consent-banner" class="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 shadow-lg z-50 transform translate-y-full transition-transform duration-300 ease-in-out" style="display: none;"><div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4"><div class="flex-1"><p class="text-sm">
+We use cookies to improve your browsing experience and analyze website traffic. By continuing to use our website, you agree to our
+<a href="/privacy" class="text-purple-400 hover:text-purple-300 underline">Privacy Policy</a>.
+</p></div><div class="flex gap-3"><button id="cookie-accept" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Accept All</button><button id="cookie-settings" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Settings</button><button id="cookie-decline" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Decline</button></div></div></div>
+
+  <!-- Cookie Settings Modal -->
+  <div id="cookie-settings-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" style="display: none;"><div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-6"><div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-gray-900">Cookie Settings</h2><button id="cookie-modal-close" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button></div><div class="space-y-6"><!-- Essential Cookies --><div class="border-b border-gray-200 pb-4"><div class="flex justify-between items-center mb-2"><h3 class="font-semibold text-gray-900">Essential Cookies</h3><div class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">Always On</div></div><p class="text-sm text-gray-600">These cookies are essential for the website to function and cannot be disabled. They are usually set in response to your actions.</p></div><!-- Analytics Cookies --><div class="border-b border-gray-200 pb-4"><div class="flex justify-between items-center mb-2"><h3 class="font-semibold text-gray-900">Analytics Cookies</h3><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="analytics-toggle" class="sr-only peer" checked><div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div></label></div><p class="text-sm text-gray-600">These cookies help us understand how visitors use our website so we can improve the user experience.</p></div><!-- Marketing Cookies --><div class="pb-4"><div class="flex justify-between items-center mb-2"><h3 class="font-semibold text-gray-900">Marketing Cookies</h3><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="marketing-toggle" class="sr-only peer"><div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div></label></div><p class="text-sm text-gray-600">These cookies are used to provide more relevant advertisements and marketing content.</p></div></div><div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200"><button id="cookie-save-settings" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Save Settings</button></div></div></div></div>
+
+  <script type="module">class i{constructor(){this.consentKey="geppetto_cookie_consent",this.consentData=this.getConsent(),this.init()}init(){this.consentData?this.applyCookieSettings(this.consentData):this.showBanner(),this.bindEvents()}showBanner(){const e=document.getElementById("cookie-consent-banner");e&&(e.style.display="block",setTimeout(()=>{e.classList.remove("translate-y-full")},100))}hideBanner(){const e=document.getElementById("cookie-consent-banner");e&&(e.classList.add("translate-y-full"),setTimeout(()=>{e.style.display="none"},300))}showModal(){const e=document.getElementById("cookie-settings-modal");if(e){e.style.display="flex";const t=this.getConsent()||{analytics:!0,marketing:!1};document.getElementById("analytics-toggle").checked=t.analytics,document.getElementById("marketing-toggle").checked=t.marketing}}hideModal(){const e=document.getElementById("cookie-settings-modal");e&&(e.style.display="none")}acceptAll(){const e={essential:!0,analytics:!0,marketing:!0,timestamp:Date.now()};this.saveConsent(e),this.applyCookieSettings(e),this.hideBanner()}declineAll(){const e={essential:!0,analytics:!1,marketing:!1,timestamp:Date.now()};this.saveConsent(e),this.applyCookieSettings(e),this.hideBanner()}saveSettings(){const e=document.getElementById("analytics-toggle").checked,t=document.getElementById("marketing-toggle").checked,s={essential:!0,analytics:e,marketing:t,timestamp:Date.now()};this.saveConsent(s),this.applyCookieSettings(s),this.hideModal(),this.hideBanner()}saveConsent(e){localStorage.setItem(this.consentKey,JSON.stringify(e)),this.consentData=e}getConsent(){try{const e=localStorage.getItem(this.consentKey);return e?JSON.parse(e):null}catch{return null}}applyCookieSettings(e){if(window.dispatchEvent(new CustomEvent("cookieConsentChanged",{detail:e})),window.gtag&&window.gaInitialized){const t={analytics_storage:e.analytics?"granted":"denied",ad_storage:e.marketing?"granted":"denied",ad_user_data:e.marketing?"granted":"denied",ad_personalization:e.marketing?"granted":"denied"};window.gtag("consent","update",t)}}bindEvents(){document.getElementById("cookie-accept")?.addEventListener("click",()=>this.acceptAll()),document.getElementById("cookie-decline")?.addEventListener("click",()=>this.declineAll()),document.getElementById("cookie-settings")?.addEventListener("click",()=>this.showModal()),document.getElementById("cookie-modal-close")?.addEventListener("click",()=>this.hideModal()),document.getElementById("cookie-save-settings")?.addEventListener("click",()=>this.saveSettings()),document.getElementById("cookie-settings-modal")?.addEventListener("click",e=>{e.target.id==="cookie-settings-modal"&&this.hideModal()})}}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",()=>new i):new i;window.getCookieConsent=function(){try{const n=localStorage.getItem("geppetto_cookie_consent");return n?JSON.parse(n):null}catch{return null}};</script> <!-- 全局模态框和Toast --> <!-- 
+  全局模态框组件 - 基于原生HTML Dialog
+  使用Nanostores进行状态管理，支持跨框架使用
+--><dialog id="global-modal" class="modal-dialog" data-astro-cid-uohfmno4> <div class="modal-backdrop" data-astro-cid-uohfmno4> <div class="modal-content bg-white rounded-2xl p-8 max-w-md mx-4 shadow-2xl" data-astro-cid-uohfmno4> <!-- 图标区域 --> <div class="modal-icon-container text-center mb-4" data-astro-cid-uohfmno4> <div id="modal-icon" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto" data-astro-cid-uohfmno4> <!-- 图标将由JavaScript动态插入 --> </div> </div> <!-- 标题 --> <h3 id="modal-title" class="text-lg font-bold text-gray-800 mb-2 text-center" data-astro-cid-uohfmno4></h3> <!-- 消息内容 --> <p id="modal-message" class="text-gray-600 mb-6 text-center leading-relaxed" data-astro-cid-uohfmno4></p> <!-- 按钮区域 --> <form method="dialog" class="modal-actions" data-astro-cid-uohfmno4> <div id="modal-buttons" class="flex justify-center space-x-4" data-astro-cid-uohfmno4> <!-- 按钮将由JavaScript动态插入 --> </div> </form> </div> </div> </dialog>  <script type="module" src="/_astro/GlobalModal.astro_astro_type_script_index_0_lang.EEUDQ5_n.js"></script> <!-- 
+  全局Toast通知组件
+  支持多个toast同时显示，自动消失
+--><div id="toast-container" class="toast-container fixed top-4 right-4 z-50 space-y-3" data-astro-cid-ljo4s4gf> <!-- Toast元素将动态插入到这里 --> </div>  <script type="module" src="/_astro/GlobalToast.astro_astro_type_script_index_0_lang.FodKj_Bm.js"></script> <!-- Enhanced Mobile Menu Script --> <script type="module">document.addEventListener("DOMContentLoaded",()=>{const e=document.getElementById("mobile-menu-button"),t=document.getElementById("mobile-menu");e?.addEventListener("click",()=>{const n=t?.classList.contains("hidden");t?.classList.toggle("hidden"),e.setAttribute("aria-expanded",(!n).toString())}),document.addEventListener("click",n=>{!e?.contains(n.target)&&!t?.contains(n.target)&&(t?.classList.add("hidden"),e?.setAttribute("aria-expanded","false"))}),document.addEventListener("keydown",n=>{n.key==="Escape"&&!t?.classList.contains("hidden")&&(t?.classList.add("hidden"),e?.setAttribute("aria-expanded","false"),e?.focus())})});</script> </body> </html>

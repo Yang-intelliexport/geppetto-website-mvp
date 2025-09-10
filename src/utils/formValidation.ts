@@ -1,4 +1,6 @@
 // 表单验证工具类
+import { SITE_CONFIG } from '../config/constants';
+
 export interface ValidationResult {
   isValid: boolean;
   errors: string[];
@@ -36,9 +38,7 @@ export function validateEmail(email: string): boolean {
 }
 
 export function validatePhone(phone: string): boolean {
-  // 支持中国大陆手机号和固话格式
-  const phoneRegex = /^(?:(?:\+|00)86)?1[3-9]\d{9}$|^(?:(?:\+|00)86)?(?:0\d{2,3}-?)?\d{7,8}$/;
-  return phoneRegex.test(phone.replace(/[\s-]/g, ''));
+  return SITE_CONFIG.validation.phone.pattern.test(phone.replace(/[\s-]/g, ''));
 }
 
 export function validateRequired(value: string): boolean {
@@ -122,10 +122,10 @@ export function validateQuoteForm(data: QuoteFormData): ValidationResult {
     errors.push('请选择材料类型');
   }
 
-  if (!data.quantity || data.quantity < 1) {
-    errors.push('请输入有效的数量（至少1件）');
-  } else if (data.quantity > 10000) {
-    warnings.push('大批量订单（>10000件）建议联系销售团队获取专门报价');
+  if (!data.quantity || data.quantity < SITE_CONFIG.validation.quantity.min) {
+    errors.push(`请输入有效的数量（至少${SITE_CONFIG.validation.quantity.min}件）`);
+  } else if (data.quantity > SITE_CONFIG.validation.quantity.max) {
+    warnings.push(`大批量订单（>${SITE_CONFIG.validation.quantity.max}件）建议联系销售团队获取专门报价`);
   }
 
   // 可选字段验证
@@ -135,7 +135,7 @@ export function validateQuoteForm(data: QuoteFormData): ValidationResult {
 
   // 业务逻辑验证
   if (data.precision === 'extreme' && data.quantity > 100) {
-    warnings.push('极限精度（±0.01mm）大批量生产成本较高，建议考虑是否所有尺寸都需要此精度');
+    warnings.push('超高精度大批量生产成本较高，建议考虑是否所有尺寸都需要此精度级别');
   }
 
   if (data.delivery === 'immediate' && data.quantity > 10) {
@@ -159,9 +159,9 @@ export function validateUploadedFiles(files: FileList | File[], options: {
   const warnings: string[] = [];
   
   const {
-    maxFiles = 10,
-    maxSizeMB = 50,
-    allowedTypes = ['.step', '.stp', '.stl', '.iges', '.igs', '.dwg', '.dxf', '.obj', '.ply', '.3mf']
+    maxFiles = SITE_CONFIG.fileUpload.maxFiles,
+    maxSizeMB = SITE_CONFIG.fileUpload.maxSize,
+    allowedTypes = SITE_CONFIG.fileUpload.allowedTypes
   } = options;
 
   const fileArray = Array.from(files);

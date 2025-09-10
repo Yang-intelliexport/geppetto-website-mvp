@@ -1,0 +1,341 @@
+---
+// 精简版成本计算器 - 适合主页嵌入
+interface Props {
+  className?: string;
+  language?: 'zh' | 'en';
+}
+
+const { className = '', language = 'zh' } = Astro.props;
+
+const text = {
+  zh: {
+    title: '成本预估参考',
+    subtitle: '基本参数粗略估算',
+    length: '长度(mm)',
+    width: '宽度(mm)', 
+    thickness: '厚度(mm)',
+    quantity: '数量',
+    material: '材料',
+    complexity: '复杂度',
+    calculate: '立即估算',
+    calculating: '计算中...',
+    getQuote: '获取专业报价',
+    materials: {
+      'aluminum-6061': '6061铝合金',
+      'aluminum-7075': '7075铝合金',
+      'steel-304': '304不锈钢',
+      'steel-316': '316不锈钢'
+    },
+    complexities: {
+      simple: '简单',
+      medium: '中等',
+      complex: '复杂'
+    }
+  },
+  en: {
+    title: 'Cost Estimation Reference',
+    subtitle: 'Basic parameters rough estimate',
+    length: 'Length(mm)',
+    width: 'Width(mm)',
+    thickness: 'Thickness(mm)',
+    quantity: 'Quantity',
+    material: 'Material',
+    complexity: 'Complexity',
+    calculate: 'Calculate Now',
+    calculating: 'Calculating...',
+    getQuote: 'Get Professional Quote',
+    materials: {
+      'aluminum-6061': 'Aluminum 6061',
+      'aluminum-7075': 'Aluminum 7075',
+      'steel-304': 'Stainless 304',
+      'steel-316': 'Stainless 316'
+    },
+    complexities: {
+      simple: 'Simple',
+      medium: 'Medium',
+      complex: 'Complex'
+    }
+  }
+};
+
+const t = text[language];
+---
+
+<div class={`bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 ${className}`}>
+  <div class="text-center mb-6">
+    <h3 class="text-2xl font-bold text-gray-800 mb-2">{t.title}</h3>
+    <p class="text-gray-600 text-sm">{t.subtitle}</p>
+  </div>
+
+  <form id="compact-calculator-form" class="space-y-4">
+    <!-- 尺寸输入 -->
+    <div class="grid grid-cols-3 gap-3">
+      <div>
+        <label class="block text-xs font-medium text-gray-700 mb-1">{t.length}</label>
+        <input 
+          type="number" 
+          id="calc-length" 
+          placeholder="100"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+          required
+        >
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-700 mb-1">{t.width}</label>
+        <input 
+          type="number" 
+          id="calc-width" 
+          placeholder="50"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+          required
+        >
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-700 mb-1">{t.thickness}</label>
+        <input 
+          type="number" 
+          id="calc-thickness" 
+          placeholder="10"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+          required
+        >
+      </div>
+    </div>
+
+    <!-- 材料和参数 -->
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-xs font-medium text-gray-700 mb-1">{t.material}</label>
+        <select 
+          id="calc-material" 
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+        >
+          <option value="aluminum-6061">{t.materials['aluminum-6061']}</option>
+          <option value="aluminum-7075">{t.materials['aluminum-7075']}</option>
+          <option value="steel-304">{t.materials['steel-304']}</option>
+          <option value="steel-316">{t.materials['steel-316']}</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-700 mb-1">{t.complexity}</label>
+        <select 
+          id="calc-complexity" 
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+        >
+          <option value="simple">{t.complexities.simple}</option>
+          <option value="medium">{t.complexities.medium}</option>
+          <option value="complex">{t.complexities.complex}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 数量 -->
+    <div>
+      <label class="block text-xs font-medium text-gray-700 mb-1">{t.quantity}</label>
+      <input 
+        type="number" 
+        id="calc-quantity" 
+        value="1"
+        min="1"
+        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+        required
+      >
+    </div>
+
+    <!-- 计算按钮 -->
+    <button 
+      type="submit" 
+      id="calc-submit"
+      class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 rounded-xl hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+    >
+      {t.calculate}
+    </button>
+  </form>
+
+  <!-- 结果显示 -->
+  <div id="calc-results" class="hidden mt-6">
+    <!-- 动态生成结果 -->
+  </div>
+</div>
+
+<script define:vars={{ language, text: t }}>
+  class CompactCalculator {
+    constructor() {
+      // 材料价格 (简化版)
+      this.materialPrices = {
+        'aluminum-6061': 18,
+        'aluminum-7075': 35,
+        'steel-304': 14,
+        'steel-316': 18
+      };
+      
+      this.materialDensities = {
+        'aluminum-6061': 2700,
+        'aluminum-7075': 2800,
+        'steel-304': 7850,
+        'steel-316': 8000
+      };
+
+      this.complexityFactors = {
+        simple: 1.0,
+        medium: 1.2,
+        complex: 1.5
+      };
+
+      this.init();
+    }
+
+    init() {
+      const form = document.getElementById('compact-calculator-form');
+      const submitBtn = document.getElementById('calc-submit');
+      
+      if (form && submitBtn) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.calculate();
+        });
+      }
+    }
+
+    calculate() {
+      const submitBtn = document.getElementById('calc-submit');
+      const resultsDiv = document.getElementById('calc-results');
+      
+      // 获取参数
+      const length = parseFloat(document.getElementById('calc-length').value) || 100;
+      const width = parseFloat(document.getElementById('calc-width').value) || 50;
+      const thickness = parseFloat(document.getElementById('calc-thickness').value) || 10;
+      const quantity = parseInt(document.getElementById('calc-quantity').value) || 1;
+      const material = document.getElementById('calc-material').value;
+      const complexity = document.getElementById('calc-complexity').value;
+
+      // 显示加载状态
+      submitBtn.disabled = true;
+      submitBtn.textContent = text.calculating;
+
+      setTimeout(() => {
+        try {
+          const costs = this.computeCosts({
+            length, width, thickness, quantity, material, complexity
+          });
+          
+          this.displayResults(costs, resultsDiv);
+          resultsDiv.classList.remove('hidden');
+          
+        } catch (error) {
+          console.error('计算错误:', error);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = text.calculate;
+        }
+      }, 800); // 模拟计算时间
+    }
+
+    computeCosts(params) {
+      // 体积和重量计算
+      const volume = (params.length * params.width * params.thickness) / 1000000000; // m³
+      const weight = volume * this.materialDensities[params.material];
+
+      // 材料成本 (简化)
+      const materialPrice = this.materialPrices[params.material];
+      const materialCost = weight * materialPrice * 3.1; // 包含损耗
+
+      // 加工成本 (简化)
+      const baseRate = 55;
+      const volumeFactor = Math.max(0.8, Math.pow(volume * 1000, 0.4) * 3.8);
+      const complexityFactor = this.complexityFactors[params.complexity];
+      const machiningCost = baseRate * volumeFactor * complexityFactor;
+
+      // 表面处理 (基础)
+      const surfaceArea = 2 * (params.length * params.width + params.length * params.thickness + params.width * params.thickness);
+      const surfaceFinishCost = 6 * surfaceArea / 10000;
+
+      // 直接成本和商业运营
+      const directCost = materialCost + machiningCost + surfaceFinishCost;
+      const businessFactor = 4.18; // 3.8 * 1.1 (上浮10%)
+      const unitCost = directCost * businessFactor;
+      const totalCost = unitCost * params.quantity;
+
+      // 黄金定价模板分解
+      return {
+        unitCost: unitCost.toFixed(0),
+        totalCost: totalCost.toFixed(0),
+        breakdown: {
+          transparentThirdParty: (materialCost + surfaceFinishCost * 0.3).toFixed(0),
+          engineeringSetup: (machiningCost * 0.4).toFixed(0),
+          professionalService: (machiningCost * 0.6 + surfaceFinishCost * 0.7).toFixed(0),
+          businessOperation: (directCost * (businessFactor - 1)).toFixed(0)
+        },
+        weight: weight.toFixed(3)
+      };
+    }
+
+    displayResults(costs, container) {
+      const quoteUrl = language === 'zh' ? '/zh/create-quote' : '/en/create-quote';
+      
+      container.innerHTML = `
+        <div class="bg-white rounded-xl p-5 shadow-lg">
+          <h4 class="text-lg font-bold text-center text-gray-800 mb-4">估算结果</h4>
+          
+          <!-- 核心价格 -->
+          <div class="text-center mb-4">
+            <div class="text-3xl font-bold text-purple-600 mb-1">¥${costs.totalCost}</div>
+            <div class="text-sm text-gray-600">总估算价格</div>
+            <div class="text-xs text-gray-500">单价 ¥${costs.unitCost}</div>
+          </div>
+
+          <!-- 精简版分解 -->
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between">
+              <span class="text-gray-600">材料与处理</span>
+              <span class="font-medium">¥${costs.breakdown.transparentThirdParty}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">工程设计</span>
+              <span class="font-medium">¥${costs.breakdown.engineeringSetup}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">制造品控</span>
+              <span class="font-medium">¥${costs.breakdown.professionalService}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">运营保障</span>
+              <span class="font-medium">¥${costs.breakdown.businessOperation}</span>
+            </div>
+          </div>
+
+          <!-- 获取专业报价按钮 -->
+          <div class="mt-5 text-center">
+            <div class="text-xs text-gray-500 mb-3">
+              注意：此为粗略估算，精准报价需专家分析CAD文件
+            </div>
+            <a 
+              href="${quoteUrl}"
+              class="inline-block w-full bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-2.5 rounded-lg hover:from-green-600 hover:to-blue-600 transition-all duration-300 text-sm"
+            >
+              ${text.getQuote}
+            </a>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  // 初始化
+  document.addEventListener('DOMContentLoaded', () => {
+    new CompactCalculator();
+  });
+</script>
+
+<style>
+  /* 组件特定样式 */
+  input:focus, select:focus {
+    outline: none;
+  }
+  
+  button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+</style>

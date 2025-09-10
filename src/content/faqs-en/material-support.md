@@ -133,4 +133,4 @@ For cost-sensitive customers, we provide:
 - **Process optimization**: Reduce material requirements through process improvements
 - **Design optimization**: Structural design optimization to reduce material usage
 
-Our material processing capabilities are certified to AS9100D, ISO 13485, ISO 9001, and other international standards, ensuring every material achieves the highest quality standards.
+Our material processing capabilities are certified to quality systemsD, quality certifications, ISO 9001, and other international standards, ensuring every material achieves the highest quality standards.

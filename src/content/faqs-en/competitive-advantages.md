@@ -14,7 +14,7 @@ Compared to foreign platforms like Xometry, Geppetto has significant advantages 
 #### Geppetto vs Xometry
 | Technology Dimension | Xometry | Geppetto |
 |---------------------|---------|----------|
-| Quote Time | 24-48 hours | 3 seconds |
+| Quote Time | 24-48 hours | 8 hours expert review |
 | AI Algorithm | Traditional algorithms | Deep learning + Reinforcement learning |
 | Process Optimization | Manual dependency | AI automatic optimization |
 | Quality Prediction | Cannot predict | 99.5% accuracy |
@@ -38,7 +38,7 @@ Geppetto Exclusive Technologies:
 ```
 
 ### Precision and Quality Advantages
-- **Ultra-high precision**: ±0.008mm (Xometry typically ±0.1mm)
+- **Ultra-high precision**: project-specific (Xometry typically project-specific)
 - **First pass rate**: 99.5% vs 85-90%
 - **Surface quality**: Ra0.3 level (exceeds traditional platforms)
 - **Batch consistency**: Cpk>1.67 (Six Sigma standard)
@@ -65,9 +65,9 @@ Xometry Model:
 Quote(2 days) → Production(7-14 days) → Delivery = 9-16 days
 
 Geppetto Model:
-Quote(3 seconds) → Production(1 day) → Delivery = 1 day
+Expert review quote(8 hours) → Production(1 day) → Delivery = 1-2 days
 
-Time-to-market improvement: 8-15 days
+Time-to-market improvement: 7-14 days
 Market opportunity value: Immeasurable (but often enormous)
 ```
 
@@ -134,10 +134,10 @@ Service Comparison:
 #### Manufacturing Capability Comparison
 | Capability Dimension | Foreign Platforms | Geppetto |
 |---------------------|-------------------|----------|
-| Machining Methods | Mainly CNC | CNC+3D Printing+Casting+Stamping |
-| Material Range | Mainstream materials | 50+ materials including specialty alloys |
+| Machining Methods | Mainly CNC | Precision CNC+Surface Treatment |
+| Material Range | Mainstream materials | Extensive materials including specialty alloys |
 | Surface Treatment | Basic processing | 20+ processes including special treatments |
-| Certification Support | ISO 9001 | AS9100D+ISO 13485+Multiple certifications |
+| Certification Support | ISO 9001 | Quality systems established, relevant certifications in progress |
 
 ### One-stop Service
 - **End-to-end service**: Complete service from design to delivery
@@ -150,9 +150,9 @@ Service Comparison:
 
 | Indicator | Xometry | Protolabs | Traditional OEM | Geppetto |
 |-----------|---------|-----------|-----------------|----------|
-| Quote Time | 24-48h | 12-24h | 3-5 days | 3 seconds |
+| Quote Time | 24-48h | 12-24h | 3-5 days | 8 hours expert review |
 | Delivery Time | 5-15 days | 3-10 days | 15-30 days | 1-3 days |
-| Highest Precision | ±0.1mm | ±0.05mm | ±0.02mm | ±0.008mm |
+| Highest Precision | project-specific | project-specific | project-specific | project-specific |
 | Minimum Order Quantity | 5 pieces | 1 piece | 50 pieces | 1 piece |
 | Cost Advantage | Baseline | +50% | -20% | -40% |
 | First Pass Rate | 85% | 90% | 80% | 99.5% |
@@ -175,7 +175,7 @@ Geppetto Future Plans:
 - Achieve digital twin factories
 
 2025:
-- New generation AI manufacturing system
+- New generation transparent manufacturing system
 - Quantum computing process optimization
 - Global service network
 ```

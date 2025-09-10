@@ -1,0 +1,484 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { getEntry } from 'astro:content';
+import { getLanguageFromUrl } from '../utils/i18n';
+
+export interface Props {
+  title: string;
+  description: string;
+  publishDate: Date;
+  updatedDate?: Date;
+  author: string;
+  image?: string;
+  imageAlt?: string;
+  tags: string[];
+  category: string;
+  readingTime: number;
+  difficulty: string;
+  seo: {
+    metaTitle?: string;
+    metaDescription?: string;
+    keywords: string[];
+    canonicalUrl?: string;
+    noindex?: boolean;
+  };
+  relatedPosts?: string[];
+  tableOfContents?: boolean;
+  featured?: boolean;
+}
+
+const { 
+  title, 
+  description, 
+  publishDate, 
+  updatedDate,
+  author, 
+  image, 
+  imageAlt,
+  tags, 
+  category,
+  readingTime,
+  difficulty,
+  seo,
+  relatedPosts = [],
+  tableOfContents = true,
+  featured = false
+} = Astro.props;
+
+const currentLang = getLanguageFromUrl(Astro.url);
+
+// SEO优化
+const finalTitle = seo.metaTitle || title;
+const finalDescription = seo.metaDescription || description;
+const canonicalUrl = seo.canonicalUrl || Astro.url.href;
+
+// 难度级别显示
+const difficultyMap = {
+  'beginner': { 
+    zh: '入门级', 
+    en: 'Beginner',
+    color: 'bg-green-100 text-green-800'
+  },
+  'intermediate': { 
+    zh: '中级', 
+    en: 'Intermediate',
+    color: 'bg-yellow-100 text-yellow-800'
+  },
+  'advanced': { 
+    zh: '高级', 
+    en: 'Advanced',
+    color: 'bg-red-100 text-red-800'
+  }
+};
+
+// 分类显示映射
+const categoryMap = {
+  'manufacturing-guides': { zh: '制造指南', en: 'Manufacturing Guides' },
+  'cnc-machining': { zh: 'CNC加工', en: 'CNC Machining' },
+  'materials-science': { zh: '材料科学', en: 'Materials Science' },
+  'design-tips': { zh: '设计技巧', en: 'Design Tips' },
+  'industry-insights': { zh: '行业洞察', en: 'Industry Insights' },
+  'automation-ai': { zh: '自动化与AI', en: 'Automation & AI' },
+  'quality-control': { zh: '质量控制', en: 'Quality Control' },
+  'cost-optimization': { zh: '成本优化', en: 'Cost Optimization' }
+};
+
+const formatDate = (date: Date) => {
+  return currentLang === 'zh' 
+    ? date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
+    : date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+
+// 结构化数据
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "image": image ? `${Astro.site}${image}` : undefined,
+  "author": {
+    "@type": "Person",
+    "name": author
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Geppetto",
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${Astro.site}/images/geppetto-logo.png`
+    }
+  },
+  "datePublished": publishDate.toISOString(),
+  "dateModified": updatedDate ? updatedDate.toISOString() : publishDate.toISOString(),
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": canonicalUrl
+  },
+  "keywords": seo.keywords.join(', '),
+  "articleSection": categoryMap[category]?.[currentLang] || category
+};
+---
+
+<BaseLayout
+  title={finalTitle}
+  description={finalDescription}
+  keywords={seo.keywords}
+  structuredData={{ type: 'application/ld+json', data: structuredData }}
+>
+  <!-- 面包屑导航 -->
+  <nav class="bg-gray-50 border-b border-gray-200" aria-label="Breadcrumb">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <ol class="flex items-center space-x-2 py-4 text-sm">
+        <li>
+          <a href={`/${currentLang}`} class="text-gray-500 hover:text-gray-700">
+            {currentLang === 'zh' ? '首页' : 'Home'}
+          </a>
+        </li>
+        <li class="text-gray-400">/</li>
+        <li>
+          <a href={`/${currentLang}/resources`} class="text-gray-500 hover:text-gray-700">
+            {currentLang === 'zh' ? '资源' : 'Resources'}
+          </a>
+        </li>
+        <li class="text-gray-400">/</li>
+        <li>
+          <a href={`/${currentLang}/resources/category/${category}`} class="text-gray-500 hover:text-gray-700">
+            {categoryMap[category]?.[currentLang] || category}
+          </a>
+        </li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 font-medium truncate">{title}</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- 阅读进度条 -->
+  <div class="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
+    <div class="reading-progress h-full bg-gradient-to-r from-purple-600 to-blue-600 transition-all duration-150 ease-out" style="width: 0%"></div>
+  </div>
+
+  <article class="bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- 文章头部 -->
+      <header class="mb-12">
+        <!-- 分类和难度标签 -->
+        <div class="flex items-center space-x-3 mb-4">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+            {categoryMap[category]?.[currentLang] || category}
+          </span>
+          <span class={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${difficultyMap[difficulty]?.color}`}>
+            {difficultyMap[difficulty]?.[currentLang] || difficulty}
+          </span>
+          {featured && (
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+              ⭐ {currentLang === 'zh' ? '推荐' : 'Featured'}
+            </span>
+          )}
+        </div>
+
+        <!-- 标题 -->
+        <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          {title}
+        </h1>
+
+        <!-- 描述 -->
+        <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+          {description}
+        </p>
+
+        <!-- 文章信息 -->
+        <div class="flex flex-wrap items-center text-sm text-gray-500 space-x-6">
+          <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <span>{author}</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <time datetime={publishDate.toISOString()}>
+              {formatDate(publishDate)}
+            </time>
+          </div>
+          {updatedDate && (
+            <div class="flex items-center space-x-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span>
+                {currentLang === 'zh' ? '更新于' : 'Updated'} {formatDate(updatedDate)}
+              </span>
+            </div>
+          )}
+          <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>
+              {readingTime} {currentLang === 'zh' ? '分钟阅读' : 'min read'}
+            </span>
+          </div>
+        </div>
+
+        <!-- 标签 -->
+        {tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mt-6">
+            {tags.map(tag => (
+              <a 
+                href={`/${currentLang}/resources/tag/${tag}`}
+                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )}
+
+        <!-- 特色图片 -->
+        {image && (
+          <div class="mt-8">
+            <img 
+              src={image} 
+              alt={imageAlt || title}
+              class="w-full h-96 object-cover rounded-2xl shadow-lg"
+              loading="eager"
+            />
+          </div>
+        )}
+      </header>
+
+      <!-- 文章内容区域 -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
+        <!-- 主内容 -->
+        <div class="lg:col-span-3">
+          <div class="prose prose-lg prose-gray max-w-none">
+            <slot />
+          </div>
+        </div>
+
+        <!-- 侧边栏 -->
+        <aside class="lg:col-span-1 order-first lg:order-last">
+          <div class="sticky top-8 space-y-6 lg:space-y-8">
+            <!-- 目录 -->
+            {tableOfContents && (
+              <div class="bg-gray-50 rounded-xl p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  {currentLang === 'zh' ? '文章目录' : 'Table of Contents'}
+                </h3>
+                <div id="table-of-contents" class="space-y-2">
+                  <!-- 目录将通过JavaScript动态生成 -->
+                </div>
+              </div>
+            )}
+
+            <!-- 分享按钮 -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                {currentLang === 'zh' ? '分享文章' : 'Share Article'}
+              </h3>
+              <div class="space-y-2">
+                <button 
+                  onclick={`window.open('https://twitter.com/intent/tweet?url=${encodeURIComponent(canonicalUrl)}&text=${encodeURIComponent(title)}', '_blank')`}
+                  class="w-full bg-blue-500 text-white px-4 py-2.5 rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium text-center"
+                >
+                  Twitter
+                </button>
+                <button 
+                  onclick={`window.open('https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalUrl)}', '_blank')`}
+                  class="w-full bg-blue-700 text-white px-4 py-2.5 rounded-lg hover:bg-blue-800 transition-colors text-sm font-medium text-center"
+                >
+                  LinkedIn
+                </button>
+              </div>
+            </div>
+
+            <!-- 相关文章CTA -->
+            <div class="bg-white rounded-xl p-6 border-2 border-purple-200 shadow-sm">
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                {currentLang === 'zh' ? '需要制造服务？' : 'Need Manufacturing Services?'}
+              </h3>
+              <p class="text-sm text-gray-700 mb-4 leading-relaxed">
+                {currentLang === 'zh' 
+                  ? '获取专家报价，透明定价，8小时快速响应'
+                  : 'Get expert quotes with transparent pricing and 8-hour response'
+                }
+              </p>
+              <a 
+                href={`/${currentLang}/create-quote`}
+                class="block w-full bg-purple-600 text-white text-center py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium shadow-sm hover:shadow-md"
+              >
+                {currentLang === 'zh' ? '获取报价' : 'Get Quote'}
+              </a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  <!-- 相关文章 -->
+  {relatedPosts.length > 0 && (
+    <section class="bg-gray-50 py-16">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
+          {currentLang === 'zh' ? '相关文章' : 'Related Articles'}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* 相关文章将通过后端逻辑动态加载 */}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <script>
+    // 自动生成目录
+    function generateTableOfContents() {
+      const headings = document.querySelectorAll('.prose h1, .prose h2, .prose h3, .prose h4, .prose h5');
+      const tocContainer = document.getElementById('table-of-contents');
+      
+      if (!tocContainer || headings.length === 0) return;
+      
+      const tocList = document.createElement('ul');
+      tocList.className = 'space-y-1';
+      
+      headings.forEach((heading, index) => {
+        // 为标题添加ID（避免重复）
+        const id = heading.id || `heading-${index}`;
+        if (!heading.id) {
+          heading.id = id;
+        }
+        
+        // 创建目录项
+        const tocItem = document.createElement('li');
+        const tocLink = document.createElement('a');
+        
+        tocLink.href = `#${id}`;
+        tocLink.textContent = heading.textContent;
+        
+        // 根据标题级别设置不同样式 - 使用自定义CSS类
+        let linkClass = 'block rounded transition-all duration-200 hover:text-purple-600 hover:bg-purple-50 ';
+        
+        switch (heading.tagName) {
+          case 'H1':
+            linkClass += 'toc-h1 text-base font-bold text-gray-900 border-b border-gray-200 mb-2 pb-1 py-2 px-3';
+            break;
+          case 'H2':
+            linkClass += 'toc-h2 text-sm font-semibold text-gray-900 py-2 px-3';
+            break;
+          case 'H3':
+            linkClass += 'toc-h3 text-sm font-medium text-gray-700 py-1 px-3 pl-6';
+            break;
+          case 'H4':
+            linkClass += 'toc-h4 text-xs font-normal text-gray-600 py-1 px-3 pl-8';
+            break;
+          case 'H5':
+            linkClass += 'toc-h5 text-xs font-light text-gray-500 py-1 px-3 pl-10';
+            break;
+          default:
+            linkClass += 'toc-h6 text-xs text-gray-400 py-1 px-3 pl-12';
+        }
+        
+        tocLink.className = linkClass;
+        
+        // 平滑滚动
+        tocLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          heading.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest'
+          });
+          
+          // 高亮当前标题
+          document.querySelectorAll('#table-of-contents a').forEach(link => {
+            link.classList.remove('bg-purple-100', 'text-purple-800');
+          });
+          tocLink.classList.add('bg-purple-100', 'text-purple-800');
+        });
+        
+        tocItem.appendChild(tocLink);
+        tocList.appendChild(tocItem);
+      });
+      
+      tocContainer.appendChild(tocList);
+    }
+    
+    // 页面加载完成后生成目录和初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      generateTableOfContents();
+      // 初始高亮当前标题
+      setTimeout(highlightCurrentHeading, 100);
+      // 初始进度条
+      updateReadingProgress();
+    });
+    
+    // 滚动时高亮当前标题
+    function highlightCurrentHeading() {
+      const headings = document.querySelectorAll('.prose h1, .prose h2, .prose h3, .prose h4, .prose h5');
+      const tocLinks = document.querySelectorAll('#table-of-contents a');
+      
+      if (headings.length === 0 || tocLinks.length === 0) return;
+      
+      const scrollTop = window.scrollY + 100; // 偏移量，提前高亮
+      
+      let currentHeading = null;
+      
+      // 找到当前可见的标题
+      headings.forEach(heading => {
+        if (heading.offsetTop <= scrollTop) {
+          currentHeading = heading;
+        }
+      });
+      
+      // 更新目录高亮
+      tocLinks.forEach(link => {
+        link.classList.remove('bg-purple-100', 'text-purple-800', 'font-semibold');
+      });
+      
+      if (currentHeading) {
+        const currentTocLink = document.querySelector(`#table-of-contents a[href="#${currentHeading.id}"]`);
+        if (currentTocLink) {
+          currentTocLink.classList.add('bg-purple-100', 'text-purple-800', 'font-semibold');
+        }
+      }
+    }
+    
+    // 阅读进度条
+    function updateReadingProgress() {
+      const article = document.querySelector('article');
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = Math.max(0, Math.min(100, (scrollTop / docHeight) * 100));
+      
+      // 更新进度条（如果有的话）
+      const progressBar = document.querySelector('.reading-progress');
+      if (progressBar) {
+        progressBar.style.width = `${scrollPercent}%`;
+      }
+    }
+    
+    // 防抖函数
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+    
+    // 滚动事件监听
+    const debouncedHighlight = debounce(highlightCurrentHeading, 10);
+    const debouncedProgress = debounce(updateReadingProgress, 10);
+    
+    window.addEventListener('scroll', () => {
+      debouncedHighlight();
+      debouncedProgress();
+    });
+  </script>
+</BaseLayout>

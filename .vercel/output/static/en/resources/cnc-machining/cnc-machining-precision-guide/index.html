@@ -1,0 +1,377 @@
+<!DOCTYPE html><html lang="en-US"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.13.2"><!-- SEO Meta Tags --><title>CNC Machining Precision: A Complete Guide to Achieving Custom Precision Standards</title><meta name="description" content="Master the fundamentals of CNC precision machining. Learn how material selection, tooling, and process optimization can achieve exceptional accuracy in your manufacturing projects."><meta name="keywords" content="CNC precision machining, manufacturing accuracy, machining tolerances, quality control, CNC optimization"><!-- Language alternates --><link rel="alternate" hreflang="en" href="https://geppetto.studio/en/resources/cnc-machining/cnc-machining-precision-guide/"><link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/resources/cnc-machining/cnc-machining-precision-guide/"><link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/resources/cnc-machining/cnc-machining-precision-guide/"><!-- Open Graph --><meta property="og:title" content="CNC Machining Precision: A Complete Guide to Achieving Custom Precision Standards"><meta property="og:description" content="Master the fundamentals of CNC precision machining. Learn how material selection, tooling, and process optimization can achieve exceptional accuracy in your manufacturing projects."><meta property="og:image" content="/images/og-default.jpg"><meta property="og:type" content="website"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="CNC Machining Precision: A Complete Guide to Achieving Custom Precision Standards"><meta name="twitter:description" content="Master the fundamentals of CNC precision machining. Learn how material selection, tooling, and process optimization can achieve exceptional accuracy in your manufacturing projects."><meta name="twitter:image" content="/images/og-default.jpg"><!-- Styles import --><!-- Preload critical fonts --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><!-- Structured Data --><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"CNC Machining Precision: A Complete Guide to Achieving Custom Precision Standards","description":"Master the fundamentals of CNC precision machining. Learn how material selection, tooling, and process optimization can achieve exceptional accuracy in your manufacturing projects.","image":"https://geppetto.studio//images/resources/cnc-precision-guide.jpg","author":{"@type":"Person","name":"Sarah Chen, Manufacturing Engineer"},"publisher":{"@type":"Organization","name":"Geppetto","logo":{"@type":"ImageObject","url":"https://geppetto.studio//images/geppetto-logo.png"}},"datePublished":"2025-01-15T10:00:00.000Z","dateModified":"2025-01-15T10:00:00.000Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://geppetto.studio/en/resources/cnc-machining/cnc-machining-precision-guide/"},"keywords":"CNC precision machining, manufacturing accuracy, machining tolerances, quality control, CNC optimization","articleSection":"CNC Machining"}</script><!-- Default Organization Structured Data --><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=<YOUR_GA_MEASUREMENT_ID>"></script><script>(function(){const measurementId = "<YOUR_GA_MEASUREMENT_ID>";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      
+      // Initialize GA with consent-aware configuration
+      window.initializeGA = function(consentSettings) {
+        gtag('js', new Date());
+        
+        // Set consent based on user preferences or defaults
+        const consent = consentSettings || {
+          'ad_storage': 'denied',
+          'ad_user_data': 'denied', 
+          'ad_personalization': 'denied',
+          'analytics_storage': 'denied'
+        };
+        
+        gtag('consent', 'default', consent);
+        
+        // Configure GA4 with privacy settings
+        gtag('config', measurementId, {
+          anonymize_ip: true,
+          allow_google_signals: false,
+          allow_ad_personalization_signals: false,
+          debug_mode: false,
+          send_page_view: true
+        });
+        
+        // Mark GA as initialized
+        window.gaInitialized = true;
+      };
+      
+      // Check for existing consent and initialize accordingly
+      window.checkConsentAndInitialize = function() {
+        try {
+          const storedConsent = localStorage.getItem('geppetto_cookie_consent');
+          if (storedConsent) {
+            const consent = JSON.parse(storedConsent);
+            const consentSettings = {
+              'analytics_storage': consent.analytics ? 'granted' : 'denied',
+              'ad_storage': consent.marketing ? 'granted' : 'denied',
+              'ad_user_data': consent.marketing ? 'granted' : 'denied',
+              'ad_personalization': consent.marketing ? 'granted' : 'denied'
+            };
+            window.initializeGA(consentSettings);
+          } else {
+            // No consent yet, initialize with denied defaults
+            window.initializeGA();
+          }
+        } catch (e) {
+          // Fallback to denied defaults
+          window.initializeGA();
+        }
+      };
+      
+      // Initialize immediately with current consent state
+      window.checkConsentAndInitialize();
+      
+      // View Transitions support - Track page changes
+      document.addEventListener('astro:page-load', () => {
+        if (window.gaInitialized && window.gtag) {
+          gtag('js', new Date());
+          gtag('config', measurementId);
+        }
+      });
+      
+      // Listen for consent changes and update GA accordingly
+      window.addEventListener('cookieConsentChanged', (event) => {
+        const consent = event.detail;
+        const consentSettings = {
+          'analytics_storage': consent.analytics ? 'granted' : 'denied',
+          'ad_storage': consent.marketing ? 'granted' : 'denied',
+          'ad_user_data': consent.marketing ? 'granted' : 'denied',
+          'ad_personalization': consent.marketing ? 'granted' : 'denied'
+        };
+        
+        if (window.gtag) {
+          gtag('consent', 'update', consentSettings);
+        }
+      });
+      
+      // Custom tracking functions with consent check
+      window.trackQuoteRequest = function(quoteData) {
+        if (window.gtag && window.gaInitialized) {
+          gtag('event', 'generate_lead', {
+            currency: quoteData.currency || 'USD',
+            value: quoteData.estimatedValue || 0
+          });
+        }
+      };
+      
+      window.trackFileUpload = function(fileData) {
+        if (window.gtag && window.gaInitialized) {
+          gtag('event', 'file_upload', {
+            file_extension: fileData.fileType,
+            file_name: fileData.fileName
+          });
+        }
+      };
+      
+      window.trackContactForm = function(formType) {
+        if (window.gtag && window.gaInitialized) {
+          gtag('event', 'form_submit', {
+            form_type: formType || 'contact'
+          });
+        }
+      };
+    })();</script><!-- 确保自定义跟踪函数始终可用 --><script>
+  // 定义自定义跟踪函数（如果还不存在）
+  window.trackQuoteRequest = window.trackQuoteRequest || function(quoteData) {
+    if (window.gtag && window.gaInitialized) {
+      gtag('event', 'generate_lead', {
+        currency: quoteData.currency || 'USD',
+        value: quoteData.estimatedValue || 0
+      });
+    }
+  };
+  
+  window.trackFileUpload = window.trackFileUpload || function(fileData) {
+    if (window.gtag && window.gaInitialized) {
+      gtag('event', 'file_upload', {
+        file_extension: fileData.fileType,
+        file_name: fileData.fileName
+      });
+    }
+  };
+  
+  window.trackContactForm = window.trackContactForm || function(formType) {
+    if (window.gtag && window.gaInitialized) {
+      gtag('event', 'form_submit', {
+        form_type: formType || 'contact'
+      });
+    }
+  };
+</script><!-- View Transitions for smooth page transitions --><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.DuVyq0gm.js"></script><link rel="stylesheet" href="/_astro/admin.BD6AUWBG.css">
+<link rel="stylesheet" href="/_astro/_slug_.hFhtR3h5.css"><script type="module" src="/_astro/page.BNYwb576.js"></script></head> <body class="font-inter bg-white text-gray-900 antialiased"> <!-- Header --> <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100"> <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex justify-between items-center h-16"> <!-- Logo --> <div class="flex items-center"> <a href="/en" class="flex items-center space-x-2"> <img src="/images/geppetto-logo.png" alt="Geppetto Logo" class="w-8 h-8 object-contain" loading="eager"> <span class="text-xl font-bold text-[#111827]">Geppetto</span> </a> </div> <!-- Desktop Navigation --> <div class="hidden md:flex items-center space-x-6"> <a href="/en/services" class="text-[#111827] hover:text-[#7F00FF] transition-colors">Services</a> <a href="/en/why-geppetto" class="text-[#111827] hover:text-[#7F00FF] transition-colors">Why Geppetto</a> <a href="/en/track-order" class="text-[#111827] hover:text-[#7F00FF] transition-colors">Track Order</a> <a href="/en/contact" class="text-[#111827] hover:text-[#7F00FF] transition-colors">Contact</a> <a href="/en/resources" class="text-[#111827] hover:text-[#7F00FF] transition-colors">Resources</a> <div class="language-switcher relative inline-block" data-astro-cid-be57yzu3> <button id="language-button" class="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors duration-200" aria-expanded="false" aria-haspopup="true" data-astro-cid-be57yzu3> <span class="text-2xl" data-astro-cid-be57yzu3> 🌍 </span> <span class="font-medium text-gray-700" data-astro-cid-be57yzu3> English </span> <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" id="language-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-be57yzu3> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" data-astro-cid-be57yzu3></path> </svg> </button> <div id="language-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 hidden" data-astro-cid-be57yzu3> <a href="/en/resources/cnc-machining/cnc-machining-precision-guide/" class="flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 bg-purple-50 text-purple-700 font-medium" data-astro-cid-be57yzu3> <span class="text-xl" data-astro-cid-be57yzu3> 🌍 </span> <span data-astro-cid-be57yzu3>English</span>  <span class="text-xs text-gray-500" data-astro-cid-be57yzu3>Global Market</span> <svg class="w-4 h-4 text-purple-600 ml-auto" fill="currentColor" viewBox="0 0 20 20" data-astro-cid-be57yzu3> <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" data-astro-cid-be57yzu3></path> </svg> </a><a href="/zh/resources/cnc-machining/cnc-machining-precision-guide/" class="flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 text-gray-700" data-astro-cid-be57yzu3> <span class="text-xl" data-astro-cid-be57yzu3> 🇨🇳 </span> <span data-astro-cid-be57yzu3>中文</span> <span class="text-xs text-gray-500" data-astro-cid-be57yzu3>中国市场</span>   </a> <!-- Additional Info --> <div class="border-t border-gray-200 mt-2 pt-2 px-4 py-2" data-astro-cid-be57yzu3> <div class="text-xs text-gray-500 space-y-1" data-astro-cid-be57yzu3> <div class="flex items-center space-x-2" data-astro-cid-be57yzu3> <span data-astro-cid-be57yzu3>🇺🇸</span> <span data-astro-cid-be57yzu3>Global Markets</span> </div> <div class="flex items-center space-x-2" data-astro-cid-be57yzu3> <span data-astro-cid-be57yzu3>🇨🇳</span> <span data-astro-cid-be57yzu3>中国大陆市场</span> </div> </div> </div> </div> </div> <script type="module">document.addEventListener("DOMContentLoaded",()=>{const e=document.getElementById("language-button"),t=document.getElementById("language-dropdown"),d=document.getElementById("language-chevron");e&&t&&d&&(e.addEventListener("click",n=>{n.stopPropagation(),!t.classList.contains("hidden")?(t.classList.add("hidden"),d.style.transform="rotate(0deg)",e.setAttribute("aria-expanded","false")):(t.classList.remove("hidden"),d.style.transform="rotate(180deg)",e.setAttribute("aria-expanded","true"))}),document.addEventListener("click",n=>{!e.contains(n.target)&&!t.contains(n.target)&&(t.classList.add("hidden"),d.style.transform="rotate(0deg)",e.setAttribute("aria-expanded","false"))}),document.addEventListener("keydown",n=>{n.key==="Escape"&&(t.classList.add("hidden"),d.style.transform="rotate(0deg)",e.setAttribute("aria-expanded","false"))}))});</script>  <a href="/en/create-quote" class="bg-[#7F00FF] text-white px-6 py-3 rounded-lg hover:bg-[#6B00CC] transition-colors font-semibold"> Get Quote </a> </div> <!-- Mobile menu button --> <div class="md:hidden flex items-center space-x-2"> <div class="language-switcher relative inline-block" data-astro-cid-be57yzu3> <button id="language-button" class="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors duration-200" aria-expanded="false" aria-haspopup="true" data-astro-cid-be57yzu3> <span class="text-2xl" data-astro-cid-be57yzu3> 🌍 </span> <span class="font-medium text-gray-700" data-astro-cid-be57yzu3> English </span> <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" id="language-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-be57yzu3> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" data-astro-cid-be57yzu3></path> </svg> </button> <div id="language-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 hidden" data-astro-cid-be57yzu3> <a href="/en/resources/cnc-machining/cnc-machining-precision-guide/" class="flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 bg-purple-50 text-purple-700 font-medium" data-astro-cid-be57yzu3> <span class="text-xl" data-astro-cid-be57yzu3> 🌍 </span> <span data-astro-cid-be57yzu3>English</span>  <span class="text-xs text-gray-500" data-astro-cid-be57yzu3>Global Market</span> <svg class="w-4 h-4 text-purple-600 ml-auto" fill="currentColor" viewBox="0 0 20 20" data-astro-cid-be57yzu3> <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" data-astro-cid-be57yzu3></path> </svg> </a><a href="/zh/resources/cnc-machining/cnc-machining-precision-guide/" class="flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 text-gray-700" data-astro-cid-be57yzu3> <span class="text-xl" data-astro-cid-be57yzu3> 🇨🇳 </span> <span data-astro-cid-be57yzu3>中文</span> <span class="text-xs text-gray-500" data-astro-cid-be57yzu3>中国市场</span>   </a> <!-- Additional Info --> <div class="border-t border-gray-200 mt-2 pt-2 px-4 py-2" data-astro-cid-be57yzu3> <div class="text-xs text-gray-500 space-y-1" data-astro-cid-be57yzu3> <div class="flex items-center space-x-2" data-astro-cid-be57yzu3> <span data-astro-cid-be57yzu3>🇺🇸</span> <span data-astro-cid-be57yzu3>Global Markets</span> </div> <div class="flex items-center space-x-2" data-astro-cid-be57yzu3> <span data-astro-cid-be57yzu3>🇨🇳</span> <span data-astro-cid-be57yzu3>中国大陆市场</span> </div> </div> </div> </div> </div>   <button type="button" class="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-colors" id="mobile-menu-button" aria-label="Toggle mobile menu"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path> </svg> </button> </div> </div> <!-- Mobile Navigation --> <div class="md:hidden hidden" id="mobile-menu"> <div class="px-2 pt-2 pb-6 space-y-1 bg-white border-t border-gray-100 shadow-lg"> <a href="/en/services" class="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium"> Services </a> <a href="/en/why-geppetto" class="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium"> Why Geppetto </a> <a href="/en/track-order" class="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium"> Track Order </a> <a href="/en/contact" class="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium"> Contact </a> <a href="/en/resources" class="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium"> Resources </a> <div class="px-2 pt-4"> <a href="/en/create-quote" class="block bg-gradient-to-r from-[#7F00FF] to-[#00BFFF] text-white px-6 py-3 rounded-xl text-center font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"> Get Quote </a> </div> </div> </div> </nav> </header> <!-- Main Content --> <main>   <nav class="bg-gray-50 border-b border-gray-200" aria-label="Breadcrumb"> <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"> <ol class="flex items-center space-x-2 py-4 text-sm"> <li> <a href="/en" class="text-gray-500 hover:text-gray-700"> Home </a> </li> <li class="text-gray-400">/</li> <li> <a href="/en/resources" class="text-gray-500 hover:text-gray-700"> Resources </a> </li> <li class="text-gray-400">/</li> <li> <a href="/en/resources/category/cnc-machining" class="text-gray-500 hover:text-gray-700"> CNC Machining </a> </li> <li class="text-gray-400">/</li> <li class="text-gray-900 font-medium truncate">CNC Machining Precision: A Complete Guide to Achieving Custom Precision Standards</li> </ol> </div> </nav>  <div class="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50"> <div class="reading-progress h-full bg-gradient-to-r from-purple-600 to-blue-600 transition-all duration-150 ease-out" style="width: 0%"></div> </div> <article class="bg-white"> <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12"> <!-- 文章头部 --> <header class="mb-12"> <!-- 分类和难度标签 --> <div class="flex items-center space-x-3 mb-4"> <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800"> CNC Machining </span> <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"> Intermediate </span> <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+⭐ Featured </span> </div> <!-- 标题 --> <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight"> CNC Machining Precision: A Complete Guide to Achieving Custom Precision Standards </h1> <!-- 描述 --> <p class="text-xl text-gray-600 mb-8 leading-relaxed"> Master the fundamentals of CNC precision machining. Learn how material selection, tooling, and process optimization can achieve exceptional accuracy in your manufacturing projects. </p> <!-- 文章信息 --> <div class="flex flex-wrap items-center text-sm text-gray-500 space-x-6"> <div class="flex items-center space-x-2"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path> </svg> <span>Sarah Chen, Manufacturing Engineer</span> </div> <div class="flex items-center space-x-2"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path> </svg> <time datetime="2025-01-15T10:00:00.000Z"> January 15, 2025 </time> </div>  <div class="flex items-center space-x-2"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path> </svg> <span> 8 min read </span> </div> </div> <!-- 标签 --> <div class="flex flex-wrap gap-2 mt-6"> <a href="/en/resources/tag/cnc-machining" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+#cnc-machining </a><a href="/en/resources/tag/precision" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+#precision </a><a href="/en/resources/tag/quality-control" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+#quality-control </a><a href="/en/resources/tag/manufacturing" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+#manufacturing </a> </div> <!-- 特色图片 --> <div class="mt-8"> <img src="/images/resources/cnc-precision-guide.jpg" alt="High-precision CNC machining setup showing measurement tools" class="w-full h-96 object-cover rounded-2xl shadow-lg" loading="eager"> </div> </header> <!-- 文章内容区域 --> <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12"> <!-- 主内容 --> <div class="lg:col-span-3"> <div class="prose prose-lg prose-gray max-w-none">  <h1 id="understanding-cnc-machining-precision">Understanding CNC Machining Precision</h1>
+<p>Precision machining is the cornerstone of modern manufacturing, enabling the production of components that meet increasingly demanding specifications. As <strong>AI赋能的专家服务的透明制造合作伙伴</strong>, we understand that achieving exceptional accuracy requires more than just advanced equipment—it demands comprehensive expertise, transparent quality control processes, and flexible manufacturing capabilities.</p>
+<p>Our approach combines three core advantages: <strong>Transparent Breakdown Pricing体系</strong> for complete cost visibility, <strong>柔性制造响应能力</strong> for rapid adaptation to your requirements, and <strong>专业领域深耕优势</strong> built through years of specialized experience. In this comprehensive guide, we’ll explore the factors that influence machining precision and practical strategies to achieve exceptional accuracy.</p>
+<h2 id="what-determines-machining-precision">What Determines Machining Precision?</h2>
+<h3 id="machine-capability-and-condition">Machine Capability and Condition</h3>
+<p>The foundation of precise machining starts with your equipment:</p>
+<ul>
+<li><strong>Spindle runout</strong>: Must meet project-specific precision standards for high-precision work</li>
+<li><strong>Machine rigidity</strong>: Affects vibration and dimensional stability</li>
+<li><strong>Linear guide accuracy</strong>: Directly impacts positioning precision</li>
+<li><strong>Temperature stability</strong>: Thermal expansion can cause significant deviations</li>
+</ul>
+<h3 id="material-properties-impact">Material Properties Impact</h3>
+<p>Different materials respond uniquely to machining forces:</p>
+<p><strong>Aluminum Alloys (6061-T6)</strong>:</p>
+<ul>
+<li>Excellent machinability with proper cooling</li>
+<li>Thermal expansion coefficient: 23.6 µm/m·°C</li>
+<li>Can achieve project-customized precision standards consistently</li>
+</ul>
+<p><strong>Stainless Steel (316L)</strong>:</p>
+<ul>
+<li>Work hardening requires careful feed rates</li>
+<li>Lower thermal conductivity affects heat dissipation</li>
+<li>Typical precision: Custom precision standards meet specific design requirements</li>
+</ul>
+<p><strong>Titanium Alloys (Ti-6Al-4V)</strong>:</p>
+<ul>
+<li>Low thermal conductivity and high strength</li>
+<li>Requires specialized tooling and parameters</li>
+<li>Achievable precision: Industry-standard precision levels with specialized expertise</li>
+</ul>
+<h2 id="tooling-selection-for-precision">Tooling Selection for Precision</h2>
+<h3 id="cutting-tool-geometry">Cutting Tool Geometry</h3>
+<p>The right tool geometry is crucial for precision:</p>
+<ul>
+<li><strong>Rake angle</strong>: Positive rake reduces cutting forces but may weaken the tool</li>
+<li><strong>Relief angle</strong>: Prevents rubbing and maintains surface finish</li>
+<li><strong>Nose radius</strong>: Larger radius improves finish but may cause chatter</li>
+</ul>
+<h3 id="tool-material-considerations">Tool Material Considerations</h3>
+<p><strong>Carbide Tools</strong>:</p>
+<ul>
+<li>Excellent for high-speed machining</li>
+<li>Superior wear resistance</li>
+<li>Best for production runs</li>
+</ul>
+<p><strong>HSS Tools</strong>:</p>
+<ul>
+<li>More forgiving for interrupted cuts</li>
+<li>Better toughness for difficult materials</li>
+<li>Ideal for prototype and small batch work</li>
+</ul>
+<p><strong>Coated Tools</strong>:</p>
+<ul>
+<li>TiAlN coating for high-temperature applications</li>
+<li>TiCN for improved wear resistance</li>
+<li>AlCrN for aluminum machining</li>
+</ul>
+<h2 id="process-optimization-strategies">Process Optimization Strategies</h2>
+<h3 id="cutting-parameters">Cutting Parameters</h3>
+<p>Optimizing cutting parameters is essential for precision:</p>
+<p><strong>Optimized Cutting Parameters for Different Materials</strong>:</p>
+<p>Our manufacturing experts optimize cutting parameters based on material characteristics and project requirements:</p>
+<ul>
+<li><strong>Aluminum Applications</strong>: High-speed operations with optimized cooling for maximum efficiency</li>
+<li><strong>Steel Components</strong>: Balanced approach ensuring durability and precision</li>
+<li><strong>Titanium Projects</strong>: Specialized low-speed techniques with advanced tooling</li>
+</ul>
+<p><strong>Feed Rate Optimization</strong>:
+Feed Rate (IPM) = Feed per Tooth × Number of Teeth × RPM</p>
+<p><strong>Strategic Depth of Cut Planning</strong>:</p>
+<ul>
+<li><strong>Roughing Operations</strong>: Aggressive material removal for efficiency (2-5mm depth)</li>
+<li><strong>Semi-finishing</strong>: Precision preparation phase (0.5-1mm depth)</li>
+<li><strong>Finishing Operations</strong>: Final precision achievement (0.1-0.3mm depth)</li>
+</ul>
+<p><em>This strategic approach ensures optimal balance between production speed and precision requirements while maintaining cost transparency through our breakdown pricing system.</em></p>
+<h3 id="coolant-and-lubrication">Coolant and Lubrication</h3>
+<p>Proper cooling prevents thermal distortion:</p>
+<ul>
+<li><strong>Flood coolant</strong>: Best for continuous cuts</li>
+<li><strong>Mist cooling</strong>: Reduces cleanup, good visibility</li>
+<li><strong>Minimum quantity lubrication (MQL)</strong>: Environmental benefits</li>
+<li><strong>Cryogenic cooling</strong>: For difficult materials like titanium</li>
+</ul>
+<h2 id="measurement-and-quality-control">Measurement and Quality Control</h2>
+<h3 id="in-process-monitoring">In-Process Monitoring</h3>
+<p>Real-time monitoring prevents scrap:</p>
+<ul>
+<li><strong>Probe systems</strong>: Automated measurement during machining</li>
+<li><strong>Load monitoring</strong>: Detects tool wear and breakage</li>
+<li><strong>Vibration analysis</strong>: Identifies chatter and instability</li>
+</ul>
+<h3 id="post-process-inspection">Post-Process Inspection</h3>
+<p>Comprehensive inspection ensures quality:</p>
+<p><strong>Advanced Quality Verification Systems</strong>:</p>
+<p><strong>Coordinate Measuring Machines (CMM)</strong>:</p>
+<ul>
+<li><strong>Project-specific precision validation</strong> ensuring your exact requirements are met</li>
+<li><strong>3D dimensional verification</strong> providing complete geometric accuracy confirmation</li>
+<li><strong>Statistical process control integration</strong> enabling predictable, repeatable quality outcomes</li>
+<li><strong>Transparent quality documentation</strong> supporting your quality audit requirements</li>
+</ul>
+<p><strong>Surface Quality Assessment</strong>:</p>
+<ul>
+<li><strong>Functional surface optimization</strong> ensuring optimal performance for your application</li>
+<li><strong>Aesthetic quality standards</strong> meeting your visual and tactile requirements</li>
+<li><strong>Performance-critical validation</strong> confirming parts meet operational demands</li>
+</ul>
+<p><em>Our comprehensive quality verification process ensures you receive detailed quality documentation with every project, supporting both your internal quality requirements and customer presentations.</em></p>
+<h2 id="common-precision-challenges">Common Precision Challenges</h2>
+<h3 id="thermal-effects">Thermal Effects</h3>
+<p>Temperature variations cause dimensional changes:</p>
+<p><strong>Solutions</strong>:</p>
+<ul>
+<li>Allow thermal stabilization time</li>
+<li>Use coolant consistently</li>
+<li>Consider material expansion coefficients</li>
+<li>Implement temperature compensation</li>
+</ul>
+<h3 id="machine-deflection">Machine Deflection</h3>
+<p>Cutting forces cause machine and workpiece deflection:</p>
+<p><strong>Mitigation Strategies</strong>:</p>
+<ul>
+<li>Reduce cutting forces through parameter optimization</li>
+<li>Increase workpiece rigidity with proper fixturing</li>
+<li>Use shorter, more rigid tools</li>
+<li>Consider climb milling to reduce forces</li>
+</ul>
+<h3 id="tool-wear-management">Tool Wear Management</h3>
+<p>Tool wear gradually degrades precision:</p>
+<p><strong>Monitoring Techniques</strong>:</p>
+<ul>
+<li>Visual inspection at regular intervals</li>
+<li>Dimensional trending of critical features</li>
+<li>Surface finish degradation monitoring</li>
+<li>Cutting force increase detection</li>
+</ul>
+<h2 id="best-practices-for-consistent-precision">Best Practices for Consistent Precision</h2>
+<h3 id="setup-and-fixturing">Setup and Fixturing</h3>
+<p>Proper workpiece setup is fundamental:</p>
+<ul>
+<li><strong>Six-point constraint</strong>: Fully constrains workpiece movement</li>
+<li><strong>Clamping force</strong>: Adequate but not excessive to avoid distortion</li>
+<li><strong>Accessibility</strong>: Allows measurement and tool access</li>
+<li><strong>Repeatability</strong>: Consistent setup for multiple parts</li>
+</ul>
+<h3 id="environmental-control">Environmental Control</h3>
+<p>Shop environment affects precision:</p>
+<ul>
+<li><strong>Temperature control</strong>: Strict environmental stability requirements maintained</li>
+<li><strong>Vibration isolation</strong>: Separate from heavy equipment</li>
+<li><strong>Humidity control</strong>: Prevents corrosion and dimensional changes</li>
+<li><strong>Cleanliness</strong>: Contaminants affect measurement accuracy</li>
+</ul>
+<h2 id="advanced-techniques">Advanced Techniques</h2>
+<h3 id="adaptive-machining">Adaptive Machining</h3>
+<p>Modern CNCs offer adaptive capabilities:</p>
+<ul>
+<li><strong>Constant surface speed</strong>: Maintains optimal cutting conditions</li>
+<li><strong>Load balancing</strong>: Adjusts feed based on material removal rate</li>
+<li><strong>Tool path optimization</strong>: Reduces air cutting time</li>
+<li><strong>Real-time compensation</strong>: Corrects for thermal and mechanical deflection</li>
+</ul>
+<h3 id="high-speed-machining-hsm">High-Speed Machining (HSM)</h3>
+<p>HSM principles for precision:</p>
+<ul>
+<li><strong>Lower cutting forces</strong>: Reduced deflection</li>
+<li><strong>Improved surface finish</strong>: Higher speeds, lighter cuts</li>
+<li><strong>Reduced cycle time</strong>: Higher productivity</li>
+<li><strong>Better dimensional stability</strong>: Less heat input</li>
+</ul>
+<h2 id="measuring-success-key-metrics">Measuring Success: Key Metrics</h2>
+<h3 id="process-capability">Process Capability</h3>
+<p>Statistical measures of precision:</p>
+<p><strong>Cp (Process Capability)</strong>:</p>
+<ul>
+<li>Cp > 1.33: Capable process</li>
+<li>Measures natural variation vs. specification</li>
+</ul>
+<p><strong>Cpk (Process Capability Index)</strong>:</p>
+<ul>
+<li>Accounts for process centering</li>
+<li>Cpk > 1.33: Acceptable for critical features</li>
+</ul>
+<h3 id="quality-indicators">Quality Indicators</h3>
+<p>Monitor these metrics:</p>
+<ul>
+<li><strong>First-pass yield</strong>: Percentage meeting specifications</li>
+<li><strong>Scrap rate</strong>: Material waste due to precision issues</li>
+<li><strong>Rework frequency</strong>: Parts requiring additional operations</li>
+<li><strong>Customer returns</strong>: Ultimate quality measure</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>Achieving exceptional CNC machining precision requires a systematic approach combining proper equipment, optimal tooling, process control, and quality measurement. As your <strong>AI赋能的专家服务的透明制造合作伙伴</strong>, we demonstrate that success comes from understanding the interplay between materials, machines, and methods, while maintaining complete transparency through our <strong>Transparent Breakdown Pricing体系</strong>.</p>
+<p>Our <strong>柔性制造响应能力</strong> enables us to adapt quickly to varying precision requirements, while our <strong>专业领域深耕优势</strong> ensures optimal outcomes across diverse applications. The key is consistent application of best practices and continuous improvement through data-driven decision making. With proper attention to these fundamentals, achieving <strong>项目定制精度标准</strong> becomes not just possible, but repeatable and economically transparent.</p>
+<h2 id="ready-to-apply-these-principles">Ready to Apply These Principles?</h2>
+<p>At Geppetto, we implement these precision machining principles daily as your <strong>AI赋能的专家服务的透明制造合作伙伴</strong>. Our expert team combines advanced equipment with proven techniques to deliver exceptional accuracy for your most demanding projects through our three core advantages:</p>
+<ul>
+<li><strong>Transparent Breakdown Pricing体系</strong>: Complete cost visibility and understanding for every manufacturing decision</li>
+<li><strong>柔性制造响应能力</strong>: Rapid adaptation to your specific requirements and changing project demands</li>
+<li><strong>专业领域深耕优势</strong>: Deep knowledge across diverse applications and industries, ensuring optimal manufacturing solutions</li>
+</ul>
+<p><strong>Get your precision machining quote today</strong> - Upload your CAD files and experience our transparent pricing system with <strong>8小时专家审核详细报价</strong>.</p>  <section class="mt-16 pt-16 border-t border-gray-200"> <h2 class="text-3xl font-bold text-gray-900 mb-8">
+Related Articles
+</h2> <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> <article class="bg-gray-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300"> <img src="/images/resources/cnc-materials-guide.jpg" alt="Various CNC machining materials including aluminum, steel, titanium samples" class="w-full h-48 object-cover" loading="lazy"> <div class="p-6"> <div class="flex items-center space-x-2 mb-3"> <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"> materials-science </span> <span class="text-xs text-gray-500"> 15 min
+</span> </div> <h3 class="text-xl font-bold text-gray-900 mb-3"> <a href="/en/resources/materials-science/cnc-machining-materials-complete-guide" class="hover:text-purple-600 transition-colors"> CNC Machining Materials Complete Guide: Selection, Properties &amp; Applications </a> </h3> <p class="text-gray-600 mb-4 text-sm"> Comprehensive guide to CNC machining materials including aluminum, steel, titanium, and plastics. Learn material properties, machining parameters, and optimal applications for your projects. </p> <div class="flex items-center justify-between text-sm text-gray-500"> <span>Materials Engineering Team</span> <time datetime="2025-01-25T10:00:00.000Z"> January 25, 2025 </time> </div> </div> </article> </div> </section> <section class="mt-16 pt-16 border-t border-gray-200"> <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 text-center border border-purple-100"> <h2 class="text-2xl font-bold text-gray-900 mb-4">
+Ready to Put Knowledge into Practice?
+</h2> <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
+Turn your designs into high-quality physical products with our expert manufacturing services. Transparent pricing, expert review, and 8-hour response.
+</p> <div class="flex flex-col sm:flex-row gap-4 justify-center"> <a href="/en/create-quote" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors shadow-sm text-sm lg:text-base">
+🚀 Upload Files for Quote
+</a> <a href="/en/contact" class="bg-white border-2 border-purple-600 text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-600 hover:text-white transition-colors text-sm lg:text-base">
+💬 Consult Expert
+</a> </div> </div> </section>  </div> </div> <!-- 侧边栏 --> <aside class="lg:col-span-1 order-first lg:order-last"> <div class="sticky top-8 space-y-6 lg:space-y-8"> <!-- 目录 --> <div class="bg-gray-50 rounded-xl p-6"> <h3 class="text-lg font-semibold text-gray-900 mb-4"> Table of Contents </h3> <div id="table-of-contents" class="space-y-2"> <!-- 目录将通过JavaScript动态生成 --> </div> </div> <!-- 分享按钮 --> <div class="bg-gray-50 rounded-xl p-6"> <h3 class="text-lg font-semibold text-gray-900 mb-4"> Share Article </h3> <div class="space-y-2"> <button onclick="window.open('https://twitter.com/intent/tweet?url=https%3A%2F%2Fgeppetto.studio%2Fen%2Fresources%2Fcnc-machining%2Fcnc-machining-precision-guide%2F&#38;text=CNC%20Machining%20Precision%3A%20A%20Complete%20Guide%20to%20Achieving%20Custom%20Precision%20Standards', '_blank')" class="w-full bg-blue-500 text-white px-4 py-2.5 rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium text-center">
+Twitter
+</button> <button onclick="window.open('https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fgeppetto.studio%2Fen%2Fresources%2Fcnc-machining%2Fcnc-machining-precision-guide%2F', '_blank')" class="w-full bg-blue-700 text-white px-4 py-2.5 rounded-lg hover:bg-blue-800 transition-colors text-sm font-medium text-center">
+LinkedIn
+</button> </div> </div> <!-- 相关文章CTA --> <div class="bg-white rounded-xl p-6 border-2 border-purple-200 shadow-sm"> <h3 class="text-lg font-semibold text-gray-900 mb-2"> Need Manufacturing Services? </h3> <p class="text-sm text-gray-700 mb-4 leading-relaxed"> Get expert quotes with transparent pricing and 8-hour response </p> <a href="/en/create-quote" class="block w-full bg-purple-600 text-white text-center py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium shadow-sm hover:shadow-md"> Get Quote </a> </div> </div> </aside> </div> </div> </article>  <script type="module">function m(){const n=document.querySelectorAll(".prose h1, .prose h2, .prose h3, .prose h4, .prose h5"),r=document.getElementById("table-of-contents");if(!r||n.length===0)return;const t=document.createElement("ul");t.className="space-y-1",n.forEach((e,o)=>{const s=e.id||`heading-${o}`;e.id||(e.id=s);const a=document.createElement("li"),l=document.createElement("a");l.href=`#${s}`,l.textContent=e.textContent;let c="block rounded transition-all duration-200 hover:text-purple-600 hover:bg-purple-50 ";switch(e.tagName){case"H1":c+="toc-h1 text-base font-bold text-gray-900 border-b border-gray-200 mb-2 pb-1 py-2 px-3";break;case"H2":c+="toc-h2 text-sm font-semibold text-gray-900 py-2 px-3";break;case"H3":c+="toc-h3 text-sm font-medium text-gray-700 py-1 px-3 pl-6";break;case"H4":c+="toc-h4 text-xs font-normal text-gray-600 py-1 px-3 pl-8";break;case"H5":c+="toc-h5 text-xs font-light text-gray-500 py-1 px-3 pl-10";break;default:c+="toc-h6 text-xs text-gray-400 py-1 px-3 pl-12"}l.className=c,l.addEventListener("click",u=>{u.preventDefault(),e.scrollIntoView({behavior:"smooth",block:"start",inline:"nearest"}),document.querySelectorAll("#table-of-contents a").forEach(h=>{h.classList.remove("bg-purple-100","text-purple-800")}),l.classList.add("bg-purple-100","text-purple-800")}),a.appendChild(l),t.appendChild(a)}),r.appendChild(t)}document.addEventListener("DOMContentLoaded",()=>{m(),setTimeout(i,100),d()});function i(){const n=document.querySelectorAll(".prose h1, .prose h2, .prose h3, .prose h4, .prose h5"),r=document.querySelectorAll("#table-of-contents a");if(n.length===0||r.length===0)return;const t=window.scrollY+100;let e=null;if(n.forEach(o=>{o.offsetTop<=t&&(e=o)}),r.forEach(o=>{o.classList.remove("bg-purple-100","text-purple-800","font-semibold")}),e){const o=document.querySelector(`#table-of-contents a[href="#${e.id}"]`);o&&o.classList.add("bg-purple-100","text-purple-800","font-semibold")}}function d(){document.querySelector("article");const n=window.scrollY,r=document.documentElement.scrollHeight-window.innerHeight,t=Math.max(0,Math.min(100,n/r*100)),e=document.querySelector(".reading-progress");e&&(e.style.width=`${t}%`)}function p(n,r){let t;return function(...o){const s=()=>{clearTimeout(t),n(...o)};clearTimeout(t),t=setTimeout(s,r)}}const f=p(i,10),b=p(d,10);window.addEventListener("scroll",()=>{f(),b()});</script>  </main> <!-- Footer --> <footer class="bg-gray-900 text-white"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"> <div class="grid grid-cols-1 md:grid-cols-4 gap-8"> <!-- Company Info --> <div class="col-span-1 md:col-span-2"> <div class="flex items-center space-x-2 mb-4"> <img src="/images/geppetto-logo.png" alt="Geppetto Logo" class="w-8 h-8 object-contain"> <span class="text-xl font-bold">Geppetto</span> </div> <p class="text-gray-300 mb-4 max-w-md"> Geppetto Tech - AI-powered precision manufacturing service provider. Delivering intelligent quotes, 72H production + shipping, and revolutionary manufacturing experience with custom precision. </p> <div class="flex space-x-4"> <a href="tel:+8613511091304" class="text-[#7F00FF] hover:text-[#00BFFF]">+86 13511091304</a> <a href="mailto:hello@geppetto.studio" class="text-[#7F00FF] hover:text-[#00BFFF]">hello@geppetto.studio</a> </div> </div> <!-- Quick Links --> <div> <h3 class="text-lg font-semibold mb-4">Quick Links</h3> <ul class="space-y-2"> <li><a href="/en/why-geppetto" class="text-gray-300 hover:text-white">Why Geppetto</a></li> <li><a href="/en/services" class="text-gray-300 hover:text-white">Services</a></li> <li><a href="/en/track-order" class="text-gray-300 hover:text-white">Track Order</a></li> <li><a href="/no-moq" class="text-gray-300 hover:text-white">No MOQ Manufacturing</a></li> <li><a href="/en/create-quote" class="text-gray-300 hover:text-white">Get Quote</a></li> </ul> </div> <!-- Resources --> <div> <h3 class="text-lg font-semibold mb-4">More Information</h3> <ul class="space-y-2"> <li><a href="/en/case-studies" class="text-gray-300 hover:text-white">Case Studies</a></li> <li><a href="/en/about" class="text-gray-300 hover:text-white">About Us</a></li> <li><a href="/en/faq" class="text-gray-300 hover:text-white">FAQ</a></li> <li><a href="/en/contact" class="text-gray-300 hover:text-white">Contact Us</a></li> </ul> </div> </div> <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400"> <p> &amp;copy; 2024 Geppetto Technologies Ltd. All rights reserved. |
+<a href="/privacy" class="hover:text-white">Privacy Policy</a> |
+<a href="/terms" class="hover:text-white">Terms of Service</a> </p> </div> </div> </footer> <!-- Cookie Consent Banner --> <div id="cookie-consent-banner" class="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 shadow-lg z-50 transform translate-y-full transition-transform duration-300 ease-in-out" style="display: none;"><div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4"><div class="flex-1"><p class="text-sm">
+We use cookies to improve your browsing experience and analyze website traffic. By continuing to use our website, you agree to our
+<a href="/privacy" class="text-purple-400 hover:text-purple-300 underline">Privacy Policy</a>.
+</p></div><div class="flex gap-3"><button id="cookie-accept" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Accept All</button><button id="cookie-settings" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Settings</button><button id="cookie-decline" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Decline</button></div></div></div>
+
+  <!-- Cookie Settings Modal -->
+  <div id="cookie-settings-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" style="display: none;"><div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-6"><div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-gray-900">Cookie Settings</h2><button id="cookie-modal-close" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button></div><div class="space-y-6"><!-- Essential Cookies --><div class="border-b border-gray-200 pb-4"><div class="flex justify-between items-center mb-2"><h3 class="font-semibold text-gray-900">Essential Cookies</h3><div class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">Always On</div></div><p class="text-sm text-gray-600">These cookies are essential for the website to function and cannot be disabled. They are usually set in response to your actions.</p></div><!-- Analytics Cookies --><div class="border-b border-gray-200 pb-4"><div class="flex justify-between items-center mb-2"><h3 class="font-semibold text-gray-900">Analytics Cookies</h3><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="analytics-toggle" class="sr-only peer" checked><div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div></label></div><p class="text-sm text-gray-600">These cookies help us understand how visitors use our website so we can improve the user experience.</p></div><!-- Marketing Cookies --><div class="pb-4"><div class="flex justify-between items-center mb-2"><h3 class="font-semibold text-gray-900">Marketing Cookies</h3><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="marketing-toggle" class="sr-only peer"><div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div></label></div><p class="text-sm text-gray-600">These cookies are used to provide more relevant advertisements and marketing content.</p></div></div><div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200"><button id="cookie-save-settings" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Save Settings</button></div></div></div></div>
+
+  <script type="module">class i{constructor(){this.consentKey="geppetto_cookie_consent",this.consentData=this.getConsent(),this.init()}init(){this.consentData?this.applyCookieSettings(this.consentData):this.showBanner(),this.bindEvents()}showBanner(){const e=document.getElementById("cookie-consent-banner");e&&(e.style.display="block",setTimeout(()=>{e.classList.remove("translate-y-full")},100))}hideBanner(){const e=document.getElementById("cookie-consent-banner");e&&(e.classList.add("translate-y-full"),setTimeout(()=>{e.style.display="none"},300))}showModal(){const e=document.getElementById("cookie-settings-modal");if(e){e.style.display="flex";const t=this.getConsent()||{analytics:!0,marketing:!1};document.getElementById("analytics-toggle").checked=t.analytics,document.getElementById("marketing-toggle").checked=t.marketing}}hideModal(){const e=document.getElementById("cookie-settings-modal");e&&(e.style.display="none")}acceptAll(){const e={essential:!0,analytics:!0,marketing:!0,timestamp:Date.now()};this.saveConsent(e),this.applyCookieSettings(e),this.hideBanner()}declineAll(){const e={essential:!0,analytics:!1,marketing:!1,timestamp:Date.now()};this.saveConsent(e),this.applyCookieSettings(e),this.hideBanner()}saveSettings(){const e=document.getElementById("analytics-toggle").checked,t=document.getElementById("marketing-toggle").checked,s={essential:!0,analytics:e,marketing:t,timestamp:Date.now()};this.saveConsent(s),this.applyCookieSettings(s),this.hideModal(),this.hideBanner()}saveConsent(e){localStorage.setItem(this.consentKey,JSON.stringify(e)),this.consentData=e}getConsent(){try{const e=localStorage.getItem(this.consentKey);return e?JSON.parse(e):null}catch{return null}}applyCookieSettings(e){if(window.dispatchEvent(new CustomEvent("cookieConsentChanged",{detail:e})),window.gtag&&window.gaInitialized){const t={analytics_storage:e.analytics?"granted":"denied",ad_storage:e.marketing?"granted":"denied",ad_user_data:e.marketing?"granted":"denied",ad_personalization:e.marketing?"granted":"denied"};window.gtag("consent","update",t)}}bindEvents(){document.getElementById("cookie-accept")?.addEventListener("click",()=>this.acceptAll()),document.getElementById("cookie-decline")?.addEventListener("click",()=>this.declineAll()),document.getElementById("cookie-settings")?.addEventListener("click",()=>this.showModal()),document.getElementById("cookie-modal-close")?.addEventListener("click",()=>this.hideModal()),document.getElementById("cookie-save-settings")?.addEventListener("click",()=>this.saveSettings()),document.getElementById("cookie-settings-modal")?.addEventListener("click",e=>{e.target.id==="cookie-settings-modal"&&this.hideModal()})}}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",()=>new i):new i;window.getCookieConsent=function(){try{const n=localStorage.getItem("geppetto_cookie_consent");return n?JSON.parse(n):null}catch{return null}};</script> <!-- 全局模态框和Toast --> <!-- 
+  全局模态框组件 - 基于原生HTML Dialog
+  使用Nanostores进行状态管理，支持跨框架使用
+--><dialog id="global-modal" class="modal-dialog" data-astro-cid-uohfmno4> <div class="modal-backdrop" data-astro-cid-uohfmno4> <div class="modal-content bg-white rounded-2xl p-8 max-w-md mx-4 shadow-2xl" data-astro-cid-uohfmno4> <!-- 图标区域 --> <div class="modal-icon-container text-center mb-4" data-astro-cid-uohfmno4> <div id="modal-icon" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto" data-astro-cid-uohfmno4> <!-- 图标将由JavaScript动态插入 --> </div> </div> <!-- 标题 --> <h3 id="modal-title" class="text-lg font-bold text-gray-800 mb-2 text-center" data-astro-cid-uohfmno4></h3> <!-- 消息内容 --> <p id="modal-message" class="text-gray-600 mb-6 text-center leading-relaxed" data-astro-cid-uohfmno4></p> <!-- 按钮区域 --> <form method="dialog" class="modal-actions" data-astro-cid-uohfmno4> <div id="modal-buttons" class="flex justify-center space-x-4" data-astro-cid-uohfmno4> <!-- 按钮将由JavaScript动态插入 --> </div> </form> </div> </div> </dialog>  <script type="module" src="/_astro/GlobalModal.astro_astro_type_script_index_0_lang.EEUDQ5_n.js"></script> <!-- 
+  全局Toast通知组件
+  支持多个toast同时显示，自动消失
+--><div id="toast-container" class="toast-container fixed top-4 right-4 z-50 space-y-3" data-astro-cid-ljo4s4gf> <!-- Toast元素将动态插入到这里 --> </div>  <script type="module" src="/_astro/GlobalToast.astro_astro_type_script_index_0_lang.FodKj_Bm.js"></script> <!-- Enhanced Mobile Menu Script --> <script type="module">document.addEventListener("DOMContentLoaded",()=>{const e=document.getElementById("mobile-menu-button"),t=document.getElementById("mobile-menu");e?.addEventListener("click",()=>{const n=t?.classList.contains("hidden");t?.classList.toggle("hidden"),e.setAttribute("aria-expanded",(!n).toString())}),document.addEventListener("click",n=>{!e?.contains(n.target)&&!t?.contains(n.target)&&(t?.classList.add("hidden"),e?.setAttribute("aria-expanded","false"))}),document.addEventListener("keydown",n=>{n.key==="Escape"&&!t?.classList.contains("hidden")&&(t?.classList.add("hidden"),e?.setAttribute("aria-expanded","false"),e?.focus())})});</script> </body> </html>

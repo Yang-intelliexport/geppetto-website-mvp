@@ -1,20 +1,20 @@
 ---
 title: "为何选择Geppetto - AI驱动制造的四大核心优势"
-description: "深入了解Geppetto智能报价承诺、24小时极速交付、±0.05mm精度保证、无MOQ限制的技术实现原理和竞争优势。"
-keywords: ["Geppetto智能报价承诺", "AI驱动制造", "CNC精密加工", "24小时交付", "无MOQ", "±0.05mm精度"]
+description: "深入了解Geppetto专家审核报价承诺、72小时生产+运输、按需定制精度保证、无MOQ限制的技术实现原理和竞争优势。"
+keywords: ["Geppetto专家审核报价承诺", "AI驱动制造", "CNC精密加工", "72小时生产+运输", "无MOQ", "按需定制精度"]
 
 seo:
   title: "为何选择Geppetto - AI驱动制造的四大核心优势"
-  description: "深入了解Geppetto智能报价承诺、24小时极速交付、±0.05mm精度保证、无MOQ限制的技术实现原理和竞争优势。"
-  keywords: ["Geppetto智能报价承诺", "AI驱动制造", "CNC精密加工", "24小时交付", "无MOQ", "±0.05mm精度"]
+  description: "深入了解Geppetto专家审核报价承诺、72小时生产+运输、按需定制精度保证、无MOQ限制的技术实现原理和竞争优势。"
+  keywords: ["Geppetto专家审核报价承诺", "AI驱动制造", "CNC精密加工", "72小时生产+运输", "无MOQ", "按需定制精度"]
 
 hero:
   title: "为何选择 Geppetto？"
-  subtitle: "🎯 深度解析核心竞争优势"
+  subtitle: "深度解析核心竞争优势"
   description: "不只是AI技术的堆砌，而是对传统制造业的根本性重构。从报价到交付的全流程创新，为您提供前所未有的制造体验。"
   cta:
     primary:
-      text: "体验Geppetto智能报价承诺"
+      text: "体验Geppetto专家审核报价承诺"
       href: "/instant-quote"
     secondary:
       text: "深入了解技术优势"
@@ -22,9 +22,9 @@ hero:
 
 advantages:
   - id: "smart-quote-detail"
-    title: "Geppetto智能报价承诺"
+    title: "Geppetto专家审核报价承诺"
     description: "AI秒级分析，专家团队4-8工作小时内完成技术复核与精确报价"
-    icon: "🧠"
+    icon: "AI"
     color: "purple"
     stats: "4-8小时 vs 传统3-7天"
     details: |
@@ -51,13 +51,13 @@ advantages:
       **核心价值:** 将传统3-7天的报价周期压缩到4-8小时，准确率95%+，让您能够快速做出采购决策，抓住市场机会。
 
   - id: "fast-delivery-detail" 
-    title: "24小时极速交付"
+    title: "工作时间极速交付"
     description: "不是牺牲质量换取速度，而是通过AI优化和智能调度，在保证质量的前提下实现行业领先的交付速度"
     icon: "⚡"
     color: "blue"
     stats: "24-48小时 vs 传统7-15天"
     details: |
-      ### 24小时交付技术保障
+      ### 工作时间交付技术保障
       
       **智能生产调度:**
       - 设备利用率优化 +35%
@@ -81,7 +81,7 @@ advantages:
   - id: "no-moq-detail"
     title: "单件起做 无MOQ限制"
     description: "AI驱动的智能制造模式，让小批量生产也具备批量生产的经济性。彻底改变制造业'规模经济'的传统逻辑"
-    icon: "🎯"
+    icon: "Target"
     color: "green"
     stats: "1件起做 vs 传统50-100件MOQ"
     details: |
@@ -107,19 +107,19 @@ advantages:
       **客户收益:** 无需为MOQ增加库存占用资金，快速验证设计可行性，降低产品开发风险。
 
   - id: "precision-detail"
-    title: "±0.05mm精度保证"
-    description: "超越行业标准±0.1mm，达到±0.05mm的稳定精度。AI算法消除人为误差，确保每一件产品的一致性"
+    title: "project-specific精度保证"
+    description: "超越行业标准project-specific，达到project-specific的稳定精度。AI算法消除人为误差，确保每一件产品的一致性"
     icon: "🔬"
     color: "orange"
-    stats: "±0.05mm vs 行业标准±0.1mm"
+    stats: "project-specific vs 行业标准project-specific"
     details: |
-      ### ±0.05mm精度技术保障
+      ### project-specific精度技术保障
       
       **精度控制体系:**
-      - 设备精度等级: ±0.005mm
-      - 温度控制精度: ±0.1°C
-      - 检测设备精度: ±0.001mm
-      - AI补偿精度: ±0.002mm
+      - 设备精度等级: project-specific
+      - 温度控制精度: 专业级别
+      - 检测设备精度: project-specific
+      - AI补偿精度: project-specific
       
       **智能质量监控:**
       - 实时尺寸监测与补偿
@@ -133,12 +133,12 @@ advantages:
       - 终检全尺寸检测
       - 第三方认证报告
       
-      **真实案例:** 某具身智能公司要求±0.05mm，我们实际达到±0.03mm，连续500件产品精度一致性>98%，获得客户高度认可。
+      **真实案例:** 某具身智能公司要求project-specific，我们实际达到project-specific，连续500件产品精度一致性>98%，获得客户高度认可。
 
 features:
   - title: "AI报价准确率"
     description: "95%+"
-    icon: "🎯"
+    icon: "Target"
   - title: "响应时间"
     description: "4-8小时"
     icon: "⚡"
@@ -146,15 +146,15 @@ features:
     description: "50-70%"
     icon: "💰"
   - title: "精度保证"
-    description: "±0.05mm"
+    description: "project-specific"
     icon: "🔬"
 
 testimonials:
   - name: "张工程师"
     company: "某具身智能公司"
-    content: "收到Geppetto的报价后很惊讶，精度要求±0.05mm，实际达到±0.03mm，而且价格比之前的供应商低了60%。现在已经成为我们的主要供应商。"
+    content: "收到Geppetto的报价后很惊讶，精度要求project-specific，实际达到project-specific，而且价格比之前的供应商低了60%。现在已经成为我们的主要供应商。"
     stats:
-      precision: "±0.03mm (要求±0.05mm)"
+      precision: "project-specific (要求project-specific)"
       cost_saving: "60% (vs传统供应商)"
       delivery_time: "2天 (vs传统15天)"
       quality_rate: "100% (连续6个月)"
@@ -164,7 +164,7 @@ navigation:
     title: "首页"
     url: "/"
   next:
-    title: "AI智能报价"
+    title: "AI检测+专家报价"
     url: "/instant-quote"
 ---
 
@@ -183,12 +183,12 @@ navigation:
 3. **交付周期不可控** - 7-15天交期，无法支持快速迭代需求
 4. **质量一致性差** - 依赖人工经验，批次间差异大
 
-#### ✅ Geppetto创新解决方案
+#### Geppetto创新解决方案
 
-1. **Geppetto智能报价承诺** - AI秒级分析，专家4-8小时确认，极速响应
+1. **Geppetto专家审核报价承诺** - AI秒级分析，专家4-8小时确认，极速响应
 2. **单件起做 无MOQ** - AI驱动效率革命，1件也有批量经济性
-3. **24小时极速交付** - 智能调度优化，支持快速产品迭代
-4. **±0.05mm精度保证** - AI算法确保一致性，超越行业标准
+3. **工作时间极速交付** - 智能调度优化，支持快速产品迭代
+4. **project-specific精度保证** - AI算法确保一致性，超越行业标准
 
 ## 竞争对比分析
 
@@ -199,18 +199,18 @@ navigation:
 | 报价速度 | **4-8小时** | 3-7天 | 即时但不准确 |
 | 最小订量(MOQ) | **1件起做** | 50-100件 | 1件(但加价) |
 | 交付周期 | **24-48小时** | 7-15天 | 3-10天 |
-| 精度保证 | **±0.05mm** | ±0.1mm | 依供应商 |
+| 精度保证 | **project-specific** | project-specific | 依供应商 |
 | 成本水平 | **50-70%节省** | 标准价格 | +20-30%溢价 |
 | 技术支持 | **AI+专家双重** | 人工经验 | 平台标准化 |
 | 质量一致性 | **AI算法保证** | 人工差异大 | 供应商不一 |
 
 ### 核心技术优势
 
-#### 1. AI智能报价系统 - 秒级vs天级的效率革命
+#### 1. AI检测+专家报价系统 - 秒级vs天级的效率革命
 
 **技术实现原理:**
 - **传统模式:** 人工分析图纸 → 经验估算 → 3-7天报价周期
-- **Geppetto模式:** AI分析图纸 → 自动规划走刀 → 秒级工时预估 → 即时报价
+- **Geppetto模式:** AI分析图纸 → 自动规划走刀 → 秒级工时预估 → 8小时详细报价
 
 **核心技术优势:**
 - 图纸自动解析：AI识别几何特征和加工要求
@@ -220,7 +220,7 @@ navigation:
 
 **竞争对比:**
 - **Xometry**: 传统人工报价，3-5天周期
-- **Protolabs**: 半自动化报价，24小时周期
+- **Protolabs**: 半自动化报价，工作时间周期
 - **Geppetto**: AI全自动报价，秒级完成
 
 #### 2. 成本结构革命 - 1/2到1/3价格如何实现
@@ -246,7 +246,7 @@ navigation:
 
 **Geppetto AI质量控制:**
 - AI实时监控，预防性质量控制
-- 自动检测，24小时不间断
+- 自动检测，工作时间不间断
 - 全程追溯，问题根源快速定位
 
 ## 客户成功案例
@@ -256,12 +256,12 @@ navigation:
 **项目详情:**
 - 产品类型: 机器人关节零件
 - 材料: 6061-T6铝合金
-- 精度要求: ±0.05mm
+- 精度要求: project-specific
 - 批量: 50件
 - 交期要求: 3天内
 
 **实际结果:**
-- 实际精度: ±0.03mm (超越要求)
+- 实际精度: project-specific (超越要求)
 - 成本降低: 60% (vs传统供应商)
 - 交付时间: 2天 (vs传统15天)
 - 质量合格率: 100% (连续6个月)
@@ -271,6 +271,6 @@ navigation:
 
 ## 结论
 
-💡 **Geppetto在速度、成本、精度、服务四个维度全面领先**
+**Geppetto在速度、成本、精度、服务四个维度全面领先**
 
 通过AI技术与制造专业知识的深度结合，Geppetto不仅解决了传统制造业的痛点，更是重新定义了制造服务的标准。我们不是在现有游戏规则下竞争，而是创造了全新的游戏规则。

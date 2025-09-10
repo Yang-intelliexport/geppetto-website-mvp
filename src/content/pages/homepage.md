@@ -1,30 +1,30 @@
 ---
-title: "CNC Quote | AI-Powered Precision Manufacturing | Geppetto"
-description: "Get instant CNC quotes with AI analysis in seconds, expert validation in 4-8 hours. ±0.05mm precision, 24-hour delivery, no MOQ limits. Leading US precision manufacturing."
+title: "CNC Quote | 智能弹性 Precision Manufacturing | Geppetto"
+description: "Get instant CNC quotes with AI analysis in seconds, expert validation in 4-8 hours. Custom precision requirements, 72H production + shipping, no MOQ limits. Global precision manufacturing leader."
 keywords: ["CNC quote", "manufacturing quote", "instant CNC quote", "precision manufacturing", "rapid manufacturing", "online CNC", "rush order", "high precision"]
 
 seo:
-  title: "CNC Quote | Instant Manufacturing Quote | AI-Powered Precision | Geppetto"
-  description: "Get instant CNC quotes with AI analysis in seconds, expert validation in 4-8 hours. ±0.05mm precision, 24-hour delivery, no MOQ limits. Leading US precision manufacturing service."
+  title: "CNC Quote | Instant Manufacturing Quote | 智能弹性 Precision | Geppetto"
+  description: "Get instant CNC quotes with AI analysis in seconds, expert validation in 4-8 hours. Custom precision requirements, 72H production + shipping, no MOQ limits. Global precision manufacturing service."
   keywords: ["CNC quote", "manufacturing quote", "instant CNC quote", "precision manufacturing", "rapid manufacturing", "online CNC", "rush order", "high precision", "plastic machining", "steel machining"]
 
 hero:
-  title: "Get Instant CNC Quotes"
-  subtitle: "🚀 AI-Powered Manufacturing Revolution"
-  description: "AI analysis in seconds, expert validation in 4-8 hours with precise quotes.\n±0.05mm precision • 24-hour delivery • No MOQ limits • 50-70% cost savings"
+  title: "AI + Expert CNC Manufacturing"
+  subtitle: "Dual Assurance Manufacturing Revolution"
+  description: "AI-assisted expert analysis + Expert validation in 4-8 hours = Zero pricing surprises.\nCustom precision requirements • 72H production + shipping • No MOQ limits • 50-70% cost savings"
   cta:
     primary:
-      text: "🎯 Get Instant CNC Quote"
+      text: "Get Instant CNC Quote"
       href: "/cnc-quote"
     secondary:
-      text: "🔍 Learn Our Advantages"
+      text: "Learn Our Advantages"
       href: "/why-geppetto"
 
 advantages:
   - id: "smart-quote"
     title: "Instant CNC Quote Promise"
     description: "AI analysis in seconds, expert technical validation within 4-8 hours with precise quotes"
-    icon: "🧠"
+    icon: "AI"
     stats: "4-8 hours vs traditional 3-7 days"
     color: "purple"
     details: |
@@ -34,49 +34,49 @@ advantages:
       3. Precise quote output
 
   - id: "fast-delivery"
-    title: "24-Hour Rush Order Delivery"
+    title: "72H Production + Shipping Delivery"
     description: "AI-optimized production scheduling and intelligent process planning for industry-leading delivery speed"
-    icon: "⚡"
-    stats: "24-48 hours vs traditional 7-15 days"
+    icon: "Speed"
+    stats: "72H production + shipping vs traditional 7-15 days"
     color: "blue"
 
   - id: "no-moq"
     title: "No MOQ - Single Part Manufacturing"
     description: "AI-driven smart manufacturing makes small-batch production economically viable"
-    icon: "🎯"
+    icon: "Target"
     stats: "1 piece minimum vs traditional 50-100 MOQ"
     color: "green"
 
   - id: "cost-efficiency"
     title: "Maximum Cost Efficiency"
     description: "AI+expert model dramatically reduces labor costs, direct supply chain eliminates middlemen"
-    icon: "💰"
+    icon: "Cost"
     stats: "50-70% cost savings"
     color: "orange"
 
 testimonials:
   - name: "Mike Chen, Engineering Manager"
-    company: "Advanced Robotics Corp."
-    content: "We were amazed by Geppetto's quote - they achieved ±0.03mm precision when we only required ±0.05mm, and the price was 60% lower than our previous supplier. They're now our primary manufacturing partner."
+    company: "某机器人公司"
+    content: "We were amazed by Geppetto's quote - they achieved custom precision requirements exceeding our specifications, and the price was 60% lower than our previous supplier. They're now our primary manufacturing partner."
     stats:
-      precision: "±0.03mm"
+      precision: "Custom grade"
       cost_saving: "60%"
       delivery_time: "2 days"
       quality_rate: "100%"
 
 features:
-  - title: "AS9100 & ISO Certified"
+  - title: "quality systems & ISO Certified"
     description: "Full aerospace and quality management system certifications"
     icon: "✓"
   - title: "500+ Success Stories"
     description: "Serving robotics, electronics, automotive, and aerospace industries"
     icon: "✓"
-  - title: "24/7 Technical Support"
+  - title: "工作时间 Technical Support"
     description: "Expert engineering team available around the clock"
     icon: "✓"
 ---
 
-# Geppetto - AI-Powered Precision Manufacturing Revolution
+# Geppetto - 智能弹性 Precision Manufacturing Revolution
 
 ## Disrupting Traditional Manufacturing with Technology Innovation
 
@@ -89,7 +89,7 @@ Geppetto combines AI technology with deep manufacturing expertise to solve the f
 1. **Long Quote Cycles** → **Instant CNC Quote Promise**
 2. **Strict MOQ Limits** → **No MOQ - Single Part Manufacturing**  
 3. **Unpredictable Delivery** → **24-Hour Rush Order Delivery**
-4. **Inconsistent Quality** → **±0.05mm High Precision Guarantee**
+4. **Inconsistent Quality** → **project-specific High Precision Guarantee**
 
 ### AI + Expert Dual Assurance
 
@@ -103,8 +103,8 @@ We adopt an innovative "AI Analysis + Expert Technical Validation" model:
 Advanced Robotics Corporation Project:
 - **Product Type**: Robot joint components
 - **Material**: 6061-T6 aluminum alloy  
-- **Precision Required**: ±0.05mm
-- **Actual Precision**: ±0.03mm
+- **Precision Required**: project-specific
+- **Actual Precision**: project-specific
 - **Cost Reduction**: 60% (vs traditional supplier)
 - **Delivery Time**: 2 days (vs traditional 15 days)
 

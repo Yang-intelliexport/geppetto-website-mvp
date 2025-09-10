@@ -84,7 +84,7 @@ Every customer is assigned a dedicated account manager:
 
 ### Customer Training Programs
 
-#### AI Manufacturing Technology Training
+#### Transparent Manufacturing Technology Training
 - **Basic courses**: AI application principles in manufacturing
 - **Hands-on training**: On-site visits and operational experience
 - **Case studies**: In-depth analysis of successful cases
@@ -122,7 +122,7 @@ Every customer is assigned a dedicated account manager:
 
 #### Data Analytics Services
 - **Quality data analysis**: Production quality trend analysis
-- **Cost structure analysis**: Detailed cost breakdown
+- **Service value analysis**: Detailed service breakdown
 - **Supplier performance**: Supplier performance evaluation reports
 - **Industry comparison**: Comparison with industry average levels
 

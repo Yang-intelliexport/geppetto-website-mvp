@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Main pages -->
+  <url>
+    <loc>https://geppetto.studio/en/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/" />
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>https://geppetto.studio/zh/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/" />
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Blue Ocean Opportunity Pages -->
+  <url>
+    <loc>https://geppetto.studio/en/startup-manufacturing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/startup-manufacturing" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/startup-manufacturing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/startup-manufacturing" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/zh/startup-manufacturing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/startup-manufacturing" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/startup-manufacturing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/startup-manufacturing" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/en/transparent-pricing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/transparent-pricing" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/transparent-pricing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/transparent-pricing" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/zh/transparent-pricing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/transparent-pricing" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/transparent-pricing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/transparent-pricing" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/en/small-batch-manufacturing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/small-batch-manufacturing" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/small-batch-manufacturing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/small-batch-manufacturing" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/zh/small-batch-manufacturing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/small-batch-manufacturing" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/small-batch-manufacturing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/small-batch-manufacturing" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Core Service Pages -->
+  <url>
+    <loc>https://geppetto.studio/en/ai-quote</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/ai-quote" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/ai-quote" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/ai-quote" />
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/zh/ai-quote</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/ai-quote" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/ai-quote" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/ai-quote" />
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/en/services</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/services" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/services" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/services" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/zh/services</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/services" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/services" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/services" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/en/case-studies</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/case-studies" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/case-studies" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/case-studies" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/zh/case-studies</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/case-studies" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/case-studies" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/case-studies" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- About and Contact Pages -->
+  <url>
+    <loc>https://geppetto.studio/en/why-geppetto</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/why-geppetto" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/why-geppetto" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/why-geppetto" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/zh/why-geppetto</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/why-geppetto" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/why-geppetto" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/why-geppetto" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/en/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/contact" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/contact" />
+    <changefreq>quarterly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/zh/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/contact" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/contact" />
+    <changefreq>quarterly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- FAQ Pages -->
+  <url>
+    <loc>https://geppetto.studio/en/faq</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/faq" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/faq" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/faq" />
+    <changefreq>quarterly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://geppetto.studio/zh/faq</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/faq" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/faq" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/faq" />
+    <changefreq>quarterly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset>

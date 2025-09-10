@@ -1,0 +1,73 @@
+/* empty css                                    */
+import { c as createComponent, r as renderComponent, a as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_Np7zNMWM.mjs';
+import 'kleur/colors';
+import { $ as $$BaseLayout } from '../../chunks/BaseLayout_3sUPClHz.mjs';
+export { renderers } from '../../renderers.mjs';
+
+const $$About = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "BaseLayout", $$BaseLayout, { "title": "About Us | Geppetto - Smart Flexible Factory", "description": "Learn about Geppetto's mission to revolutionize precision manufacturing through AI technology. Our story, team, and commitment to quality.", "keywords": ["about geppetto", "manufacturing company", "ai technology", "precision manufacturing", "company story"] }, { "default": ($$result2) => renderTemplate`  ${maybeRenderHead()}<section class="bg-gradient-to-r from-purple-600 to-blue-500 text-white py-20"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center"> <h1 class="text-4xl md:text-6xl font-bold mb-6">
+About Geppetto
+</h1> <p class="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">
+Building flexible factories powered by AI autonomous decision systems
+</p> </div> </section>  <section class="py-16 bg-white"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"> <div> <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+Our Story
+</h2> <div class="space-y-4 text-gray-600 text-lg leading-relaxed"> <p>
+Founded by Zhejiang University alumni with a vision to achieve "prompt to product" manufacturing, Geppetto combines AI autonomous decision systems with deep manufacturing expertise to build truly flexible factories.
+</p> <p>
+Our journey began with early insights into AI's manufacturing potential - our CEO predicted CUDA's AI applications as early as 2010. Today, we're realizing that vision with flexible manufacturing systems that respond to your innovation rhythm.
+</p> <p>
+From robotics components to electronics manufacturing, we focus on serving startups and SMEs with our 100+ project experience, maintaining tailored precision with single-piece minimum orders.
+</p> </div> </div> <div class="relative"> <img src="/images/facility/workshop-overview-1.jpg" alt="Geppetto Manufacturing Facility" class="rounded-lg shadow-lg"> </div> </div> </div> </section>  <section class="py-16 bg-gray-50"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="text-center mb-12"> <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+Our Mission & Values
+</h2> <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+Driven by innovation, guided by precision, committed to excellence
+</p> </div> <div class="grid grid-cols-1 md:grid-cols-3 gap-8"> <!-- Innovation --> <div class="text-center"> <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+AI
+</div> <h3 class="text-xl font-bold text-gray-900 mb-3">Innovation First</h3> <p class="text-gray-600">
+We leverage cutting-edge AI and automation to push the boundaries of what's possible in manufacturing.
+</p> </div> <!-- Quality --> <div class="text-center"> <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+Custom
+</div> <h3 class="text-xl font-bold text-gray-900 mb-3">Uncompromising Quality</h3> <p class="text-gray-600">
+Every part meets our rigorous tailored precision standard, backed by comprehensive quality assurance.
+</p> </div> <!-- Speed --> <div class="text-center"> <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+72H+
+</div> <h3 class="text-xl font-bold text-gray-900 mb-3">Lightning Fast</h3> <p class="text-gray-600">
+72H production + shipping time, because your time is valuable and deadlines matter.
+</p> </div> </div> </div> </section>  <section class="py-16 bg-white"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="text-center mb-12"> <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+Leadership Team
+</h2> <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+Experienced leaders driving innovation in manufacturing
+</p> </div> <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> <!-- CEO --> <div class="text-center"> <div class="relative mb-4"> <img src="/images/team/ceo-xianan.jpg" alt="CEO" class="w-32 h-32 rounded-full mx-auto object-cover"> </div> <h3 class="text-xl font-bold text-gray-900 mb-1">Xianan</h3> <p class="text-purple-600 font-medium mb-3">CEO & Founder</p> <p class="text-gray-600 text-sm">
+Zhejiang University Computer Science. Visionary who predicted CUDA's AI potential in 2010, now building AI-autonomous flexible factories.
+</p> </div> <!-- CTO --> <div class="text-center"> <div class="relative mb-4"> <img src="/images/team/engineer-portrait.jpg" alt="CTO" class="w-32 h-32 rounded-full mx-auto object-cover"> </div> <h3 class="text-xl font-bold text-gray-900 mb-1">Xianhua</h3> <p class="text-purple-600 font-medium mb-3">CTO & Co-Founder</p> <p class="text-gray-600 text-sm">
+Zhejiang University Computer Science. Full-stack engineer responsible for technical architecture and product development.
+</p> </div> <!-- COO --> <div class="text-center"> <div class="relative mb-4"> <div class="w-32 h-32 rounded-full mx-auto bg-gray-200 flex items-center justify-center"> <span class="text-2xl text-gray-500">👤</span> </div> </div> <h3 class="text-xl font-bold text-gray-900 mb-1">Ke Wang</h3> <p class="text-purple-600 font-medium mb-3">COO & Co-Founder</p> <p class="text-gray-600 text-sm">
+Zhejiang University Master's, studied under Academician Zheng Jinyang. Expert in major equipment manufacturing, contributed to national standards.
+</p> </div> </div> </div> </section>  <section class="py-16 bg-gray-50"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="text-center mb-12"> <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+Quality System & Technical Excellence
+</h2> <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+Building robust quality foundations with plans for formal certification expansion
+</p> </div> <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"> <!-- Quality Control --> <div class="text-center"> <div class="w-20 h-20 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4"> <span class="text-blue-600 font-bold text-sm">QC</span> </div> <h3 class="font-bold text-gray-900 mb-2">Quality Control</h3> <p class="text-gray-600 text-sm">Established tailored precision standards</p> </div> <!-- Project Experience --> <div class="text-center"> <div class="w-20 h-20 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4"> <span class="text-green-600 font-bold text-sm">100+</span> </div> <h3 class="font-bold text-gray-900 mb-2">Project Experience</h3> <p class="text-gray-600 text-sm">Robotics & Electronics Manufacturing</p> </div> <!-- AI Technology --> <div class="text-center"> <div class="w-20 h-20 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4"> <span class="text-purple-600 font-bold text-sm">AI</span> </div> <h3 class="font-bold text-gray-900 mb-2">AI-Autonomous Systems</h3> <p class="text-gray-600 text-sm">Flexible Factory Technology</p> </div> <!-- Academic Foundation --> <div class="text-center"> <div class="w-20 h-20 bg-yellow-100 rounded-lg flex items-center justify-center mx-auto mb-4"> <span class="text-yellow-600 text-2xl">🎓</span> </div> <h3 class="font-bold text-gray-900 mb-2">Academic Excellence</h3> <p class="text-gray-600 text-sm">Zhejiang University Alumni Team</p> </div> </div> </div> </section>  <section class="py-16 bg-gradient-to-r from-purple-600 to-blue-500 text-white"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center"> <h2 class="text-3xl md:text-4xl font-bold mb-6">
+Ready to Experience the Future of Manufacturing?
+</h2> <p class="text-xl mb-8 max-w-3xl mx-auto opacity-90">
+Join thousands of satisfied customers who trust Geppetto for their precision manufacturing needs.
+</p> <div class="flex flex-col sm:flex-row gap-4 justify-center"> <a href="/en/create-quote" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors">
+Get Expert Quote in 8 Hours
+</a> <a href="/en/contact" class="border-2 border-white text-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-purple-600 transition-colors">
+Contact Our Team
+</a> </div> </div> </section> ` })}`;
+}, "/Users/intelliexport/Desktop/project/think/web/geppetto-website-mvp/src/pages/en/about.astro", void 0);
+
+const $$file = "/Users/intelliexport/Desktop/project/think/web/geppetto-website-mvp/src/pages/en/about.astro";
+const $$url = "/en/about";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: $$About,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };

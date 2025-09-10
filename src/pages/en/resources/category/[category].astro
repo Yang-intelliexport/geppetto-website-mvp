@@ -1,0 +1,210 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const categories = [
+    'manufacturing-guides',
+    'cnc-machining', 
+    'materials-science',
+    'design-tips',
+    'industry-insights',
+    'automation-ai',
+    'quality-control',
+    'cost-optimization'
+  ];
+
+  return categories.map(category => ({
+    params: { category },
+    props: { category }
+  }));
+}
+
+const { category } = Astro.props;
+
+// Get all articles in this category
+const categoryResources = await getCollection('resources-en', ({ data }) => 
+  !data.draft && data.category === category
+);
+
+// Sort by publication date
+const sortedResources = categoryResources.sort((a, b) => 
+  new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+);
+
+const categoryMap = {
+  'manufacturing-guides': 'Manufacturing Guides',
+  'cnc-machining': 'CNC Machining',
+  'materials-science': 'Materials Science',
+  'design-tips': 'Design Tips',
+  'industry-insights': 'Industry Insights',
+  'automation-ai': 'Automation & AI',
+  'quality-control': 'Quality Control',
+  'cost-optimization': 'Cost Optimization'
+};
+
+const categoryName = categoryMap[category] || category;
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+
+const seoData = {
+  title: `${categoryName} - Geppetto Manufacturing Resources`,
+  description: `Browse professional manufacturing articles and guides related to ${categoryName}`,
+  keywords: [categoryName, 'CNC machining', 'manufacturing technology', 'manufacturing guides']
+};
+---
+
+<BaseLayout
+  title={seoData.title}
+  description={seoData.description}
+  keywords={seoData.keywords}
+>
+  <!-- Category Header -->
+  <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <nav class="flex justify-center mb-4">
+          <ol class="flex items-center space-x-2 text-blue-200">
+            <li><a href="/en" class="hover:text-white">Home</a></li>
+            <li><span>/</span></li>
+            <li><a href="/en/resources" class="hover:text-white">Resources</a></li>
+            <li><span>/</span></li>
+            <li class="text-white">{categoryName}</li>
+          </ol>
+        </nav>
+        
+        <h1 class="text-4xl lg:text-5xl font-bold mb-4">
+          {categoryName}
+        </h1>
+        <p class="text-xl text-blue-100 mb-6">
+          Explore professional articles and manufacturing guides related to {categoryName}
+        </p>
+        <p class="text-blue-200">
+          {sortedResources.length} articles
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Article List -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {sortedResources.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sortedResources.map((resource) => (
+            <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              {resource.data.image && (
+                <img 
+                  src={resource.data.image} 
+                  alt={resource.data.imageAlt || resource.data.title}
+                  class="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+              )}
+              <div class="p-6">
+                <div class="flex items-center space-x-2 mb-3">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                    {categoryName}
+                  </span>
+                  <span class="text-xs text-gray-500">
+                    {resource.data.readingTime} min
+                  </span>
+                  {resource.data.featured && (
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      ⭐ Featured
+                    </span>
+                  )}
+                </div>
+                
+                <h2 class="text-xl font-bold text-gray-900 mb-3">
+                  <a href={`/en/resources/${resource.data.category}/${resource.slug.split('/').pop()}`} class="hover:text-purple-600 transition-colors">
+                    {resource.data.title}
+                  </a>
+                </h2>
+                
+                <p class="text-gray-600 mb-4 line-clamp-3">
+                  {resource.data.description}
+                </p>
+                
+                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                  <span>{resource.data.author}</span>
+                  <time datetime={resource.data.publishDate.toISOString()}>
+                    {formatDate(resource.data.publishDate)}
+                  </time>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-4">
+                  {resource.data.tags.slice(0, 3).map(tag => (
+                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-gray-100 text-gray-700">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <a 
+                  href={`/en/resources/${resource.data.category}/${resource.slug.split('/').pop()}`}
+                  class="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium text-sm"
+                >
+                  Read Full Article →
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-4xl">📄</span>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">No Articles Yet</h2>
+          <p class="text-gray-600 mb-6">There are no published articles in this category yet</p>
+          <a 
+            href="/en/resources"
+            class="inline-flex items-center bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Browse All Articles
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Back to Resources CTA -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">
+        Explore More Manufacturing Knowledge
+      </h2>
+      <p class="text-xl text-gray-600 mb-8">
+        Browse professional manufacturing articles in other categories
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/en/resources"
+          class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+        >
+          📚 Browse All Resources
+        </a>
+        <a 
+          href="/en/create-quote"
+          class="border-2 border-purple-600 text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-600 hover:text-white transition-colors"
+        >
+          🚀 Get Manufacturing Quote
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

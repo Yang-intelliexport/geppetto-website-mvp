@@ -1,0 +1,170 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import ResourceLayout from '../../../../layouts/ResourceLayout.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  // Get English resources organized by category
+  const enResources = await getCollection('resources-en', ({ data }) => !data.draft);
+  
+  return enResources.map(resource => ({
+    params: { 
+      category: resource.data.category,
+      slug: resource.slug.split('/').pop() // Only use filename as slug
+    },
+    props: { 
+      resource, 
+      lang: 'en',
+      collectionName: 'resources-en'
+    }
+  }));
+}
+
+const { resource, lang, collectionName } = Astro.props;
+const { Content } = await resource.render();
+
+// Ensure props are correctly passed to ResourceLayout
+const resourceData = {
+  ...resource.data,
+  publishDate: new Date(resource.data.publishDate),
+  updatedDate: resource.data.updatedDate ? new Date(resource.data.updatedDate) : undefined
+};
+
+// Get related articles
+const getRelatedPosts = async (currentResource) => {
+  if (!currentResource.data.relatedPosts || currentResource.data.relatedPosts.length === 0) {
+    // If no related articles specified, auto-recommend based on tags and categories
+    const allResources = await getCollection(collectionName, ({ data }) => !data.draft);
+    
+    return allResources
+      .filter(resource => resource.slug !== currentResource.slug)
+      .filter(resource => {
+        // Same category or common tags
+        const sameCategory = resource.data.category === currentResource.data.category;
+        const commonTags = resource.data.tags.some(tag => 
+          currentResource.data.tags.includes(tag)
+        );
+        return sameCategory || commonTags;
+      })
+      .slice(0, 3);
+  }
+  
+  // Get specified related articles
+  const relatedPosts = [];
+  for (const slug of currentResource.data.relatedPosts) {
+    try {
+      const post = await getEntry(collectionName, slug);
+      if (post && !post.data.draft) {
+        relatedPosts.push(post);
+      }
+    } catch (error) {
+      console.warn(`Related post not found: ${slug}`);
+    }
+  }
+  return relatedPosts;
+};
+
+const relatedPosts = await getRelatedPosts(resource);
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+---
+
+<ResourceLayout
+  title={resourceData.title}
+  description={resourceData.description}
+  publishDate={resourceData.publishDate}
+  updatedDate={resourceData.updatedDate}
+  author={resourceData.author}
+  image={resourceData.image}
+  imageAlt={resourceData.imageAlt}
+  tags={resourceData.tags}
+  category={resourceData.category}
+  readingTime={resourceData.readingTime}
+  difficulty={resourceData.difficulty}
+  seo={resourceData.seo}
+  relatedPosts={resourceData.relatedPosts}
+  tableOfContents={resourceData.tableOfContents}
+  featured={resourceData.featured}
+>
+  <Content />
+  
+  <!-- Related Articles -->
+  {relatedPosts.length > 0 && (
+    <section class="mt-16 pt-16 border-t border-gray-200">
+      <h2 class="text-3xl font-bold text-gray-900 mb-8">
+        Related Articles
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {relatedPosts.map((post) => (
+          <article class="bg-gray-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            {post.data.image && (
+              <img 
+                src={post.data.image} 
+                alt={post.data.imageAlt || post.data.title}
+                class="w-full h-48 object-cover"
+                loading="lazy"
+              />
+            )}
+            <div class="p-6">
+              <div class="flex items-center space-x-2 mb-3">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                  {post.data.category}
+                </span>
+                <span class="text-xs text-gray-500">
+                  {post.data.readingTime} min
+                </span>
+              </div>
+              
+              <h3 class="text-xl font-bold text-gray-900 mb-3">
+                <a href={`/en/resources/${post.data.category}/${post.slug.split('/').pop()}`} class="hover:text-purple-600 transition-colors">
+                  {post.data.title}
+                </a>
+              </h3>
+              
+              <p class="text-gray-600 mb-4 text-sm">
+                {post.data.description}
+              </p>
+              
+              <div class="flex items-center justify-between text-sm text-gray-500">
+                <span>{post.data.author}</span>
+                <time datetime={post.data.publishDate.toISOString()}>
+                  {formatDate(post.data.publishDate)}
+                </time>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+  
+  <!-- Bottom CTA -->
+  <section class="mt-16 pt-16 border-t border-gray-200">
+    <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 text-center border border-purple-100">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+        Ready to Put Knowledge into Practice?
+      </h2>
+      <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
+        Turn your designs into high-quality physical products with our expert manufacturing services. Transparent pricing, expert review, and 8-hour response.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/en/create-quote"
+          class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors shadow-sm text-sm lg:text-base"
+        >
+          🚀 Upload Files for Quote
+        </a>
+        <a 
+          href="/en/contact"
+          class="bg-white border-2 border-purple-600 text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-600 hover:text-white transition-colors text-sm lg:text-base"
+        >
+          💬 Consult Expert
+        </a>
+      </div>
+    </div>
+  </section>
+</ResourceLayout>

@@ -1,0 +1,210 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const categories = [
+    'manufacturing-guides',
+    'cnc-machining', 
+    'materials-science',
+    'design-tips',
+    'industry-insights',
+    'automation-ai',
+    'quality-control',
+    'cost-optimization'
+  ];
+
+  return categories.map(category => ({
+    params: { category },
+    props: { category }
+  }));
+}
+
+const { category } = Astro.props;
+
+// 获取该分类的所有文章
+const categoryResources = await getCollection('resources', ({ data }) => 
+  !data.draft && data.category === category
+);
+
+// 按发布日期排序
+const sortedResources = categoryResources.sort((a, b) => 
+  new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+);
+
+const categoryMap = {
+  'manufacturing-guides': '制造指南',
+  'cnc-machining': 'CNC加工',
+  'materials-science': '材料科学',
+  'design-tips': '设计技巧',
+  'industry-insights': '行业洞察',
+  'automation-ai': '自动化与AI',
+  'quality-control': '质量控制',
+  'cost-optimization': '成本优化'
+};
+
+const categoryName = categoryMap[category] || category;
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+
+const seoData = {
+  title: `${categoryName} - Geppetto制造资源`,
+  description: `浏览${categoryName}相关的专业制造技术文章和指南`,
+  keywords: [categoryName, 'CNC加工', '制造技术', '制造指南']
+};
+---
+
+<BaseLayout
+  title={seoData.title}
+  description={seoData.description}
+  keywords={seoData.keywords}
+>
+  <!-- 分类标题 -->
+  <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <nav class="flex justify-center mb-4">
+          <ol class="flex items-center space-x-2 text-blue-200">
+            <li><a href="/zh" class="hover:text-white">首页</a></li>
+            <li><span>/</span></li>
+            <li><a href="/zh/resources" class="hover:text-white">制造资源</a></li>
+            <li><span>/</span></li>
+            <li class="text-white">{categoryName}</li>
+          </ol>
+        </nav>
+        
+        <h1 class="text-4xl lg:text-5xl font-bold mb-4">
+          {categoryName}
+        </h1>
+        <p class="text-xl text-blue-100 mb-6">
+          探索{categoryName}相关的专业技术文章和制造指南
+        </p>
+        <p class="text-blue-200">
+          共 {sortedResources.length} 篇文章
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 文章列表 -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {sortedResources.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sortedResources.map((resource) => (
+            <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              {resource.data.image && (
+                <img 
+                  src={resource.data.image} 
+                  alt={resource.data.imageAlt || resource.data.title}
+                  class="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+              )}
+              <div class="p-6">
+                <div class="flex items-center space-x-2 mb-3">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                    {categoryName}
+                  </span>
+                  <span class="text-xs text-gray-500">
+                    {resource.data.readingTime} 分钟
+                  </span>
+                  {resource.data.featured && (
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      ⭐ 推荐
+                    </span>
+                  )}
+                </div>
+                
+                <h2 class="text-xl font-bold text-gray-900 mb-3">
+                  <a href={`/zh/resources/${resource.data.category}/${resource.slug.split('/').pop()}`} class="hover:text-purple-600 transition-colors">
+                    {resource.data.title}
+                  </a>
+                </h2>
+                
+                <p class="text-gray-600 mb-4 line-clamp-3">
+                  {resource.data.description}
+                </p>
+                
+                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                  <span>{resource.data.author}</span>
+                  <time datetime={resource.data.publishDate.toISOString()}>
+                    {formatDate(resource.data.publishDate)}
+                  </time>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-4">
+                  {resource.data.tags.slice(0, 3).map(tag => (
+                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs bg-gray-100 text-gray-700">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <a 
+                  href={`/zh/resources/${resource.data.category}/${resource.slug.split('/').pop()}`}
+                  class="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium text-sm"
+                >
+                  阅读全文 →
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-4xl">📄</span>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">暂无文章</h2>
+          <p class="text-gray-600 mb-6">该分类下暂时没有发布的文章</p>
+          <a 
+            href="/zh/resources"
+            class="inline-flex items-center bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            浏览所有文章
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- 返回资源页面 CTA -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">
+        探索更多制造知识
+      </h2>
+      <p class="text-xl text-gray-600 mb-8">
+        浏览其他分类的专业制造技术文章
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/zh/resources"
+          class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+        >
+          📚 浏览所有资源
+        </a>
+        <a 
+          href="/zh/create-quote"
+          class="border-2 border-purple-600 text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-600 hover:text-white transition-colors"
+        >
+          🚀 获取制造报价
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

@@ -1,4 +1,6 @@
-// 标准化错误处理工具
+// 统一错误处理系统 - 增强版
+// 提供前端全局错误处理、用户友好的错误显示、错误上报和自动重试功能
+
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
@@ -327,4 +329,227 @@ export class LoadingManager {
       btn.disabled = isLoading;
     });
   }
+}
+
+// 统一错误处理管理器 - 新增
+export class UnifiedErrorHandler {
+  private static instance: UnifiedErrorHandler;
+  private language: 'zh' | 'en' = 'zh';
+  private errorQueue: ApiError[] = [];
+  
+  private readonly userFriendlyMessages = {
+    zh: {
+      [ErrorCode.NETWORK_ERROR]: '网络连接失败，请检查网络连接后重试',
+      [ErrorCode.TIMEOUT_ERROR]: '请求超时，请稍后重试',
+      [ErrorCode.VALIDATION_ERROR]: '输入信息有误，请检查后重新输入',
+      [ErrorCode.FILE_TOO_LARGE]: '文件过大，请选择小于50MB的文件',
+      [ErrorCode.INVALID_FILE_TYPE]: '不支持的文件格式，请选择CAD文件',
+      [ErrorCode.UPLOAD_FAILED]: '文件上传失败，请重试',
+      [ErrorCode.AUTH_REQUIRED]: '需要登录后才能继续操作',
+      [ErrorCode.SESSION_EXPIRED]: '会话已过期，请刷新页面重试',
+      [ErrorCode.DATABASE_ERROR]: '服务器暂时不可用，请稍后重试',
+      [ErrorCode.RECORD_NOT_FOUND]: '请求的数据不存在',
+      [ErrorCode.UNKNOWN_ERROR]: '发生未知错误，请联系客服'
+    },
+    en: {
+      [ErrorCode.NETWORK_ERROR]: 'Network connection failed, please check your connection and retry',
+      [ErrorCode.TIMEOUT_ERROR]: 'Request timeout, please try again later',
+      [ErrorCode.VALIDATION_ERROR]: 'Input information is incorrect, please check and re-enter',
+      [ErrorCode.FILE_TOO_LARGE]: 'File too large, please select files smaller than 50MB',
+      [ErrorCode.INVALID_FILE_TYPE]: 'Unsupported file format, please select CAD files',
+      [ErrorCode.UPLOAD_FAILED]: 'File upload failed, please retry',
+      [ErrorCode.AUTH_REQUIRED]: 'Login required to continue',
+      [ErrorCode.SESSION_EXPIRED]: 'Session expired, please refresh the page and retry',
+      [ErrorCode.DATABASE_ERROR]: 'Server temporarily unavailable, please try again later',
+      [ErrorCode.RECORD_NOT_FOUND]: 'Requested data not found',
+      [ErrorCode.UNKNOWN_ERROR]: 'Unknown error occurred, please contact support'
+    }
+  };
+
+  private constructor() {
+    this.detectLanguage();
+    this.setupGlobalErrorHandlers();
+  }
+
+  public static getInstance(): UnifiedErrorHandler {
+    if (!UnifiedErrorHandler.instance) {
+      UnifiedErrorHandler.instance = new UnifiedErrorHandler();
+    }
+    return UnifiedErrorHandler.instance;
+  }
+
+  private detectLanguage(): void {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      this.language = path.startsWith('/en') || path.includes('/en/') ? 'en' : 'zh';
+    }
+  }
+
+  private setupGlobalErrorHandlers(): void {
+    if (typeof window === 'undefined') return;
+
+    // 处理未捕获的Promise rejection
+    window.addEventListener('unhandledrejection', (event) => {
+      console.error('Unhandled promise rejection:', event.reason);
+      this.handleError({
+        code: ErrorCode.UNKNOWN_ERROR,
+        message: this.getUserFriendlyMessage(ErrorCode.UNKNOWN_ERROR),
+        details: event.reason,
+        timestamp: new Date().toISOString()
+      });
+      event.preventDefault(); // 防止控制台错误
+    });
+
+    // 处理JavaScript运行时错误
+    window.addEventListener('error', (event) => {
+      console.error('JavaScript error:', event.error);
+      this.handleError({
+        code: ErrorCode.UNKNOWN_ERROR,
+        message: this.getUserFriendlyMessage(ErrorCode.UNKNOWN_ERROR),
+        details: {
+          message: event.message,
+          filename: event.filename,
+          lineno: event.lineno,
+          colno: event.colno,
+          stack: event.error?.stack
+        },
+        timestamp: new Date().toISOString()
+      });
+    });
+  }
+
+  public setLanguage(language: 'zh' | 'en'): void {
+    this.language = language;
+  }
+
+  public handleError(error: ApiError): void {
+    // 添加到错误队列
+    this.errorQueue.push(error);
+    
+    // 控制台日志记录
+    console.error('[UnifiedErrorHandler]', error);
+    
+    // 显示用户友好的错误消息
+    this.showUserError(error);
+    
+    // 如果是严重错误，进行上报
+    if (this.isCriticalError(error.code as ErrorCode)) {
+      this.reportError(error);
+    }
+  }
+
+  public handleApiError(response: Response): Promise<ApiError> {
+    return response.json()
+      .then((data) => {
+        const error: ApiError = {
+          code: data.error?.code || ErrorCode.UNKNOWN_ERROR,
+          message: this.getUserFriendlyMessage(data.error?.code || ErrorCode.UNKNOWN_ERROR),
+          details: data,
+          timestamp: new Date().toISOString()
+        };
+        this.handleError(error);
+        return error;
+      })
+      .catch(() => {
+        const error: ApiError = {
+          code: ErrorCode.NETWORK_ERROR,
+          message: this.getUserFriendlyMessage(ErrorCode.NETWORK_ERROR),
+          timestamp: new Date().toISOString()
+        };
+        this.handleError(error);
+        return error;
+      });
+  }
+
+  public createValidationError(fieldName: string, code: ErrorCode): ApiError {
+    const error: ApiError = {
+      code,
+      message: this.getUserFriendlyMessage(code),
+      details: { fieldName },
+      timestamp: new Date().toISOString()
+    };
+    this.handleError(error);
+    return error;
+  }
+
+  private getUserFriendlyMessage(code: ErrorCode): string {
+    return this.userFriendlyMessages[this.language][code] || 
+           this.userFriendlyMessages[this.language][ErrorCode.UNKNOWN_ERROR];
+  }
+
+  private showUserError(error: ApiError): void {
+    // 使用AlertUtils显示错误（如果可用）
+    if (typeof window !== 'undefined' && (window as any).AlertUtils) {
+      (window as any).AlertUtils.show('error-alert', 'error', error.message, '操作失败');
+    } else {
+      // 降级到现有的通知系统
+      showErrorNotification(error);
+    }
+  }
+
+  private isCriticalError(code: ErrorCode): boolean {
+    const criticalErrors = [
+      ErrorCode.DATABASE_ERROR,
+      ErrorCode.AUTH_REQUIRED,
+      ErrorCode.SESSION_EXPIRED,
+      ErrorCode.UNKNOWN_ERROR
+    ];
+    return criticalErrors.includes(code);
+  }
+
+  private async reportError(error: ApiError): Promise<void> {
+    try {
+      // 在生产环境中，这里会发送到错误监控服务
+      const errorReport = {
+        ...error,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+        url: typeof window !== 'undefined' ? window.location.href : '',
+        environment: this.getEnvironment()
+      };
+
+      if (this.getEnvironment() === 'development') {
+        console.warn('[Error Report]', errorReport);
+      } else {
+        // 生产环境发送到错误监控服务
+        // 这里可以集成Sentry、LogRocket等服务
+        console.warn('Error reporting not implemented for production');
+      }
+    } catch (reportError) {
+      console.error('Failed to report error:', reportError);
+    }
+  }
+
+  private getEnvironment(): 'development' | 'production' {
+    if (typeof window === 'undefined') return 'production';
+    return window.location.hostname === 'localhost' ? 'development' : 'production';
+  }
+
+  public getErrorQueue(): ApiError[] {
+    return [...this.errorQueue];
+  }
+
+  public clearErrorQueue(): void {
+    this.errorQueue = [];
+  }
+}
+
+// 创建全局实例
+export const unifiedErrorHandler = UnifiedErrorHandler.getInstance();
+
+// 便捷函数
+export function handleUnifiedError(error: ApiError): void {
+  unifiedErrorHandler.handleError(error);
+}
+
+export function handleUnifiedApiError(response: Response): Promise<ApiError> {
+  return unifiedErrorHandler.handleApiError(response);
+}
+
+export function createUnifiedValidationError(fieldName: string, code: ErrorCode): ApiError {
+  return unifiedErrorHandler.createValidationError(fieldName, code);
+}
+
+// 使错误处理器在全局可用
+if (typeof window !== 'undefined') {
+  (window as any).UnifiedErrorHandler = unifiedErrorHandler;
 }

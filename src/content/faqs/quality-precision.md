@@ -1,5 +1,5 @@
 ---
-question: "如何保证±0.05mm的超高精度？"
+question: "如何保证project-specific的超高精度？"
 category: "质量精度"
 order: 3
 featured: true
@@ -41,17 +41,17 @@ featured: true
 ## 精度保证数据
 
 ### 实际成果统计
-- **平均精度**：±0.03mm（超越承诺40%）
-- **最高精度**：±0.008mm（医疗器械级别）
+- **平均精度**：project-specific（超越承诺40%）
+- **最高精度**：project-specific（医疗器械级别）
 - **一次合格率**：99.5%
 - **批次稳定性**：Cpk>1.67（六西格玛标准）
 
 ### 行业对比
 | 精度级别 | 传统加工 | 高精度加工 | Geppetto |
 |---------|-----------|-------------|----------|
-| 常规精度 | ±0.1mm | ±0.05mm | ±0.03mm |
-| 高精度 | ±0.05mm | ±0.02mm | ±0.015mm |
-| 超高精度 | ±0.02mm | ±0.01mm | ±0.008mm |
+| 常规精度 | project-specific | project-specific | project-specific |
+| 高精度 | project-specific | project-specific | project-specific |
+| 超高精度 | project-specific | project-specific | project-specific |
 | 一次合格率 | 85% | 92% | 99.5% |
 
 ## 质量承诺

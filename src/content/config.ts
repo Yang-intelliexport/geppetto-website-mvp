@@ -132,10 +132,88 @@ const faqsEn = defineCollection({
   })
 })
 
+// Resources博客SEO集合
+const resources = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    publishDate: z.date(),
+    updatedDate: z.date().optional(),
+    author: z.string(),
+    image: z.string().optional(),
+    imageAlt: z.string().optional(),
+    tags: z.array(z.string()),
+    category: z.enum([
+      'manufacturing-guides', 
+      'cnc-machining', 
+      'materials-science',
+      'design-tips',
+      'industry-insights',
+      'automation-ai',
+      'quality-control',
+      'cost-optimization'
+    ]),
+    readingTime: z.number(), // 阅读时间（分钟）
+    difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
+    seo: z.object({
+      metaTitle: z.string().optional(), // 如果不提供，使用title
+      metaDescription: z.string().optional(), // 如果不提供，使用description
+      keywords: z.array(z.string()),
+      canonicalUrl: z.string().optional(),
+      noindex: z.boolean().default(false)
+    }),
+    relatedPosts: z.array(z.string()).optional(), // 相关文章slug数组
+    tableOfContents: z.boolean().default(true), // 是否显示目录
+    featured: z.boolean().default(false), // 是否为推荐文章
+    draft: z.boolean().default(false) // 是否为草稿
+  })
+})
+
+// 英文Resources博客集合
+const resourcesEn = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    publishDate: z.date(),
+    updatedDate: z.date().optional(),
+    author: z.string(),
+    image: z.string().optional(),
+    imageAlt: z.string().optional(),
+    tags: z.array(z.string()),
+    category: z.enum([
+      'manufacturing-guides', 
+      'cnc-machining', 
+      'materials-science',
+      'design-tips',
+      'industry-insights',
+      'automation-ai',
+      'quality-control',
+      'cost-optimization'
+    ]),
+    readingTime: z.number(),
+    difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
+    seo: z.object({
+      metaTitle: z.string().optional(),
+      metaDescription: z.string().optional(),
+      keywords: z.array(z.string()),
+      canonicalUrl: z.string().optional(),
+      noindex: z.boolean().default(false)
+    }),
+    relatedPosts: z.array(z.string()).optional(),
+    tableOfContents: z.boolean().default(true),
+    featured: z.boolean().default(false),
+    draft: z.boolean().default(false)
+  })
+})
+
 export const collections = {
   pages,
   blog,
   'case-studies': caseStudies,
   faqs,
   'faqs-en': faqsEn,
+  resources,
+  'resources-en': resourcesEn,
 }

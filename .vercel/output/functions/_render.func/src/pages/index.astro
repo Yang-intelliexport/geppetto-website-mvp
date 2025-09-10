@@ -1,0 +1,29 @@
+---
+// Root page - redirect to language selection
+---
+
+<script>
+  // Immediate redirect to language selection
+  if (typeof window !== 'undefined') {
+    const browserLang = navigator.language || navigator.languages[0];
+    
+    if (browserLang.startsWith('zh')) {
+      window.location.replace('/zh');
+    } else {
+      window.location.replace('/en');
+    }
+  }
+</script>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="0; url=/en" />
+  <title>Redirecting...</title>
+</head>
+<body>
+  <p>Redirecting to your preferred language...</p>
+  <p><a href="/en">English</a> | <a href="/zh">中文</a></p>
+</body>
+</html>

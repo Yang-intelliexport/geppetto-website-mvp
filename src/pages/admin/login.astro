@@ -1,0 +1,136 @@
+---
+// Admin Login Page - Based on Supabase Auth
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Admin Login - Geppetto">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div>
+        <div class="mx-auto h-12 w-12 text-center">
+          <h1 class="text-3xl font-bold text-gray-900">🔧</h1>
+        </div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Geppetto Admin
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Admin Backend Login
+        </p>
+      </div>
+      
+      <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div id="error-message" class="hidden mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"></div>
+        
+        <form id="login-form" class="space-y-6">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">
+              Email Address
+            </label>
+            <div class="mt-1">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="admin@geppetto.studio"
+              />
+            </div>
+          </div>
+          
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <div class="mt-1">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+          
+          <div>
+            <button
+              type="submit"
+              id="submit-btn"
+              class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            >
+              <span id="submit-text">Login</span>
+              <span id="loading-text" class="hidden">Logging in...</span>
+            </button>
+          </div>
+        </form>
+        
+        <div class="mt-6">
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="px-2 bg-white text-gray-500">Authorized Administrators Only</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Temporary simplified login - for development use
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('login-form') as HTMLFormElement;
+      const errorDiv = document.getElementById('error-message') as HTMLDivElement;
+      const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+      const submitText = document.getElementById('submit-text') as HTMLSpanElement;
+      const loadingText = document.getElementById('loading-text') as HTMLSpanElement;
+      
+      function showError(message: string) {
+        errorDiv.textContent = message;
+        errorDiv.classList.remove('hidden');
+      }
+      
+      function hideError() {
+        errorDiv.classList.add('hidden');
+      }
+      
+      function setLoading(loading: boolean) {
+        submitBtn.disabled = loading;
+        if (loading) {
+          submitText.classList.add('hidden');
+          loadingText.classList.remove('hidden');
+        } else {
+          submitText.classList.remove('hidden');
+          loadingText.classList.add('hidden');
+        }
+      }
+      
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        hideError();
+        setLoading(true);
+        
+        const formData = new FormData(form);
+        const email = formData.get('email') as string;
+        const password = formData.get('password') as string;
+        
+        // Development stage: simple hardcoded validation
+        // TODO: Production environment needs to call backend API for verification
+        if (email === 'admin@geppetto.studio' && password === 'admin123') {
+          // Set temporary token
+          document.cookie = `sb-access-token=dev-token-${Date.now()}; path=/; max-age=3600`;
+          
+          // Redirect to admin dashboard
+          window.location.href = '/admin';
+        } else {
+          showError('Incorrect email or password. For development environment, please use: admin@geppetto.studio / admin123');
+        }
+        
+        setLoading(false);
+      });
+    });
+  </script>
+</BaseLayout>

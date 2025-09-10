@@ -1,0 +1,163 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import ResourceLayout from '../../../../layouts/ResourceLayout.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  // 获取中文资源并按分类组织
+  const zhResources = await getCollection('resources', ({ data }) => !data.draft);
+  
+  return zhResources.map(resource => ({
+    params: { 
+      category: resource.data.category,
+      slug: resource.slug.split('/').pop() // 只取文件名部分作为slug
+    },
+    props: { 
+      resource, 
+      lang: 'zh',
+      collectionName: 'resources'
+    }
+  }));
+}
+
+const { resource, lang, collectionName } = Astro.props;
+const { Content } = await resource.render();
+
+// 获取相关文章
+const getRelatedPosts = async (currentResource) => {
+  if (!currentResource.data.relatedPosts || currentResource.data.relatedPosts.length === 0) {
+    // 如果没有指定相关文章，根据标签和分类自动推荐
+    const allResources = await getCollection(collectionName, ({ data }) => !data.draft);
+    
+    return allResources
+      .filter(resource => resource.slug !== currentResource.slug)
+      .filter(resource => {
+        // 相同分类或有共同标签
+        const sameCategory = resource.data.category === currentResource.data.category;
+        const commonTags = resource.data.tags.some(tag => 
+          currentResource.data.tags.includes(tag)
+        );
+        return sameCategory || commonTags;
+      })
+      .slice(0, 3);
+  }
+  
+  // 获取指定的相关文章
+  const relatedPosts = [];
+  for (const slug of currentResource.data.relatedPosts) {
+    try {
+      const post = await getEntry(collectionName, slug);
+      if (post && !post.data.draft) {
+        relatedPosts.push(post);
+      }
+    } catch (error) {
+      console.warn(`Related post not found: ${slug}`);
+    }
+  }
+  return relatedPosts;
+};
+
+const relatedPosts = await getRelatedPosts(resource);
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+---
+
+<ResourceLayout
+  title={resource.data.title}
+  description={resource.data.description}
+  publishDate={resource.data.publishDate}
+  updatedDate={resource.data.updatedDate}
+  author={resource.data.author}
+  image={resource.data.image}
+  imageAlt={resource.data.imageAlt}
+  tags={resource.data.tags}
+  category={resource.data.category}
+  readingTime={resource.data.readingTime}
+  difficulty={resource.data.difficulty}
+  seo={resource.data.seo}
+  relatedPosts={resource.data.relatedPosts}
+  tableOfContents={resource.data.tableOfContents}
+  featured={resource.data.featured}
+>
+  <Content />
+  
+  <!-- 相关文章 -->
+  {relatedPosts.length > 0 && (
+    <section class="mt-16 pt-16 border-t border-gray-200">
+      <h2 class="text-3xl font-bold text-gray-900 mb-8">
+        相关文章
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {relatedPosts.map((post) => (
+          <article class="bg-gray-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            {post.data.image && (
+              <img 
+                src={post.data.image} 
+                alt={post.data.imageAlt || post.data.title}
+                class="w-full h-48 object-cover"
+                loading="lazy"
+              />
+            )}
+            <div class="p-6">
+              <div class="flex items-center space-x-2 mb-3">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                  {post.data.category}
+                </span>
+                <span class="text-xs text-gray-500">
+                  {post.data.readingTime} 分钟
+                </span>
+              </div>
+              
+              <h3 class="text-xl font-bold text-gray-900 mb-3">
+                <a href={`/zh/resources/${post.data.category}/${post.slug.split('/').pop()}`} class="hover:text-purple-600 transition-colors">
+                  {post.data.title}
+                </a>
+              </h3>
+              
+              <p class="text-gray-600 mb-4 text-sm">
+                {post.data.description}
+              </p>
+              
+              <div class="flex items-center justify-between text-sm text-gray-500">
+                <span>{post.data.author}</span>
+                <time datetime={post.data.publishDate.toISOString()}>
+                  {formatDate(post.data.publishDate)}
+                </time>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+  
+  <!-- 底部CTA -->
+  <section class="mt-16 pt-16 border-t border-gray-200">
+    <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 text-center border border-purple-100">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+        准备将知识付诸实践？
+      </h2>
+      <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
+        利用我们的专业制造服务，将您的设计转化为高质量的实体产品。透明定价，专家审核，8小时快速响应。
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/zh/create-quote"
+          class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+        >
+          🚀 上传文件获取报价
+        </a>
+        <a 
+          href="/zh/contact"
+          class="border-2 border-purple-600 text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-600 hover:text-white transition-colors"
+        >
+          💬 咨询制造专家
+        </a>
+      </div>
+    </div>
+  </section>
+</ResourceLayout>

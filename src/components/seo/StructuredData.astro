@@ -7,7 +7,7 @@ export interface Props {
 const { type, data } = Astro.props
 
 function generateStructuredData(type: string, data: Record<string, any>) {
-  const baseUrl = 'https://geppetto.com'
+  const baseUrl = 'https://geppetto.studio'
   
   switch (type) {
     case 'organization':
@@ -18,7 +18,7 @@ function generateStructuredData(type: string, data: Record<string, any>) {
         "alternateName": "Geppetto",
         "url": baseUrl,
         "logo": `${baseUrl}/logo.png`,
-        "description": "AI驱动的精密制造服务商，提供CNC加工、AI智能报价、±0.05mm精度制造、24小时极速交付服务",
+        "description": "AI驱动的精密制造服务商，提供CNC加工、AI检测+专家报价、project-specific精度制造、72小时生产+物流服务",
         "foundingDate": "2024",
         "address": {
           "@type": "PostalAddress",
@@ -28,9 +28,9 @@ function generateStructuredData(type: string, data: Record<string, any>) {
         },
         "contactPoint": {
           "@type": "ContactPoint",
-          "telephone": "+86-400-XXX-XXXX",
+          "telephone": "+86 13511091304",
           "contactType": "customer service",
-          "email": "hello@geppetto.com",
+          "email": "hello@geppetto.studio",
           "availableLanguage": ["zh-CN", "en"]
         },
         "sameAs": [
@@ -46,14 +46,14 @@ function generateStructuredData(type: string, data: Record<string, any>) {
               "itemOffered": {
                 "@type": "Service",
                 "name": "CNC精密加工",
-                "description": "±0.05mm精度CNC加工服务"
+                "description": "project-specific精度CNC加工服务"
               }
             },
             {
               "@type": "Offer", 
               "itemOffered": {
                 "@type": "Service",
-                "name": "AI智能报价",
+                "name": "AI检测+专家报价",
                 "description": "30秒AI分析CAD文件自动报价"
               }
             }
@@ -72,7 +72,7 @@ function generateStructuredData(type: string, data: Record<string, any>) {
           "name": "Geppetto",
           "url": baseUrl
         },
-        "description": data.description || "AI驱动的CNC精密加工服务，±0.05mm精度，24小时交付",
+        "description": data.description || "AI驱动的CNC精密加工服务，project-specific精度，72小时生产+物流",
         "serviceType": "制造服务",
         "areaServed": {
           "@type": "Country",

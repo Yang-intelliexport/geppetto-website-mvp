@@ -19,7 +19,7 @@ Our 24-hour express delivery is made possible through AI-optimized intelligent m
 - **Reserved Capacity**: 20% capacity reserved for urgent orders
 - **Priority Processing**: Express orders get priority in all workflows
 - **Streamlined Process**: Simplified approval and inspection procedures
-- **24/7 Operation**: Round-the-clock production capability
+- **工作时间 Operation**: Round-the-clock production capability
 
 ### 3. Supply Chain Integration
 - **Material Inventory**: Common materials kept in stock

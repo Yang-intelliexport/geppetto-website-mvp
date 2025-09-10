@@ -1,0 +1,28 @@
+/* empty css                                       */
+import { c as createComponent, r as renderComponent, a as renderTemplate, m as maybeRenderHead } from '../../../chunks/astro/server_Np7zNMWM.mjs';
+import 'kleur/colors';
+import { $ as $$BaseLayout } from '../../../chunks/BaseLayout_3sUPClHz.mjs';
+export { renderers } from '../../../renderers.mjs';
+
+const $$Success = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "BaseLayout", $$BaseLayout, { "title": "\u652F\u4ED8\u6210\u529F - \u60A8\u7684\u8BA2\u5355\u5DF2\u786E\u8BA4 | Geppetto\u667A\u80FD\u5236\u9020", "description": "\u652F\u4ED8\u6210\u529F\uFF01\u60A8\u7684CNC\u5236\u9020\u8BA2\u5355\u5DF2\u786E\u8BA4\uFF0C\u6211\u4EEC\u5C06\u7ACB\u5373\u5F00\u59CB\u751F\u4EA7\u3002\u611F\u8C22\u60A8\u9009\u62E9Geppetto\u667A\u80FD\u5236\u9020\u3002" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12"> <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"> <!-- Success Header --> <div class="text-center mb-12"> <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6"> <svg class="w-12 h-12 text-green-600" fill="currentColor" viewBox="0 0 20 20"> <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path> </svg> </div> <h1 class="text-4xl font-bold text-gray-900 mb-4">🎉 支付成功！</h1> <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+感谢您！您的支付已成功完成，我们正在处理您的订单。
+</p> </div> <!-- Success Content --> <div class="bg-white rounded-lg shadow-lg p-8"> <div class="grid grid-cols-1 md:grid-cols-2 gap-8"> <!-- Left: Success Info --> <div class="space-y-6"> <div class="border-l-4 border-green-500 pl-6"> <h2 class="text-2xl font-semibold text-gray-900 mb-3">✅ 订单状态</h2> <div class="space-y-2 text-gray-600"> <p>• 支付已成功处理</p> <p>• 订单已进入生产队列</p> <p>• 确认邮件已发送到您的邮箱</p> <p>• 您可以随时查看订单进度</p> </div> </div> <div class="bg-blue-50 border border-blue-200 rounded-lg p-4"> <h3 class="text-lg font-semibold text-blue-900 mb-2">📧 接下来会发生什么？</h3> <div class="text-blue-800 text-sm space-y-1"> <p>1. 我们的工程师将审核您的设计文件</p> <p>2. 生产部门将开始制造您的零件</p> <p>3. 质检部门确保产品质量</p> <p>4. 安排发货并提供物流跟踪信息</p> </div> </div> </div> <!-- Right: Actions --> <div class="space-y-6"> <div class="border border-gray-200 rounded-lg p-6"> <h3 class="text-xl font-semibold text-gray-900 mb-4">📋 管理您的订单</h3> <div class="space-y-4"> <a href="/zh/track-order" class="flex items-center justify-between w-full bg-gradient-to-r from-purple-600 to-blue-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-purple-700 hover:to-blue-600 transition-colors"> <span>查看我的订单</span> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path> </svg> </a> <a href="/zh/quote" class="flex items-center justify-between w-full border border-gray-300 text-gray-700 font-medium py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors"> <span>提交新的报价请求</span> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path> </svg> </a> </div> </div> <!-- Support Info --> <div class="bg-gray-50 border border-gray-200 rounded-lg p-4"> <h4 class="font-semibold text-gray-900 mb-2">🤝 需要帮助？</h4> <div class="text-gray-600 text-sm space-y-1"> <p>如有任何疑问，请随时联系我们：</p> <p>📧 邮箱: <a href="mailto:hello@geppetto.studio" class="text-purple-600 hover:underline">hello@geppetto.studio</a></p> <p>📱 微信: GeppettoStudio</p> <p>⏰ 工作时间: 周一至周五 9:00-18:00</p> </div> </div> </div> </div> <!-- Important Notice --> <div class="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4"> <div class="flex items-start"> <svg class="w-5 h-5 text-yellow-600 mt-0.5 mr-3" fill="currentColor" viewBox="0 0 20 20"> <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path> </svg> <div> <h4 class="text-yellow-800 font-semibold mb-1">重要提醒</h4> <p class="text-yellow-700 text-sm">
+此页面仅为方便您查看的提示。您订单的官方状态将在我们的服务器收到来自Stripe的确认信号后自动更新。
+                请保留支付确认邮件作为交易凭证。
+</p> </div> </div> </div> </div> </div> </div> ` })}`;
+}, "/Users/intelliexport/Desktop/project/think/web/geppetto-website-mvp/src/pages/zh/payment/success.astro", void 0);
+
+const $$file = "/Users/intelliexport/Desktop/project/think/web/geppetto-website-mvp/src/pages/zh/payment/success.astro";
+const $$url = "/zh/payment/success";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: $$Success,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };

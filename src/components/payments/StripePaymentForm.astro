@@ -1,0 +1,391 @@
+---
+/**
+ * 🔒 Stripe支付表单组件
+ * 
+ * 集成Stripe Payment Element，提供安全的支付界面
+ * 支持多种支付方式和国际化
+ */
+
+interface Props {
+  quoteId: string;
+  amount: number;
+  currency?: string;
+  customerEmail?: string;
+  language?: 'zh' | 'en';
+  onSuccess?: string; // 成功后跳转URL
+  onCancel?: string;  // 取消后跳转URL
+}
+
+const { 
+  quoteId, 
+  amount, 
+  currency = 'usd', 
+  customerEmail = '',
+  language = 'zh',
+  onSuccess = '/payment-success',
+  onCancel = '/payment-cancel'
+} = Astro.props;
+
+// 多语言文本
+const text = {
+  zh: {
+    title: '安全支付',
+    subtitle: '通过Stripe安全支付平台完成付款',
+    orderSummary: '订单摘要',
+    quoteId: '报价编号',
+    amount: '支付金额',
+    payButton: '立即支付',
+    processing: '处理中...',
+    securityNote: '您的支付信息通过SSL加密传输，完全安全',
+    poweredBy: '支付技术支持',
+    cancelButton: '取消支付',
+    errors: {
+      loadFailed: '支付系统加载失败，请刷新页面重试',
+      paymentFailed: '支付失败，请重试或联系客服',
+      networkError: '网络错误，请检查网络连接'
+    }
+  },
+  en: {
+    title: 'Secure Payment',
+    subtitle: 'Complete your payment through Stripe secure payment platform',
+    orderSummary: 'Order Summary',
+    quoteId: 'Quote ID',
+    amount: 'Payment Amount',
+    payButton: 'Pay Now',
+    processing: 'Processing...',
+    securityNote: 'Your payment information is transmitted via SSL encryption and is completely secure',
+    poweredBy: 'Payment powered by',
+    cancelButton: 'Cancel Payment',
+    errors: {
+      loadFailed: 'Payment system failed to load, please refresh and try again',
+      paymentFailed: 'Payment failed, please retry or contact support',
+      networkError: 'Network error, please check your connection'
+    }
+  }
+};
+
+const t = text[language];
+
+// 格式化金额显示
+const formatAmount = (cents: number, curr: string) => {
+  const amount = cents / 100;
+  const currencySymbol = {
+    'usd': '$',
+    'eur': '€',
+    'gbp': '£',
+    'cad': 'C$',
+    'aud': 'A$'
+  }[curr.toLowerCase()] || '$';
+  
+  return `${currencySymbol}${amount.toFixed(2)}`;
+};
+---
+
+<div class="max-w-lg mx-auto bg-white rounded-2xl shadow-lg p-8">
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h2 class="text-2xl font-bold text-gray-900 mb-2">🔒 {t.title}</h2>
+    <p class="text-gray-600">{t.subtitle}</p>
+  </div>
+
+  <!-- Order Summary -->
+  <div class="bg-gray-50 rounded-lg p-6 mb-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">{t.orderSummary}</h3>
+    
+    <div class="space-y-3">
+      <div class="flex justify-between">
+        <span class="text-gray-600">{t.quoteId}:</span>
+        <span class="font-mono text-sm font-medium">#{quoteId}</span>
+      </div>
+      
+      <div class="flex justify-between text-lg font-semibold border-t pt-3">
+        <span>{t.amount}:</span>
+        <span class="text-purple-600">{formatAmount(amount, currency)}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Form -->
+  <div id="payment-form" class="space-y-6">
+    <!-- Loading State -->
+    <div id="payment-loading" class="text-center py-8">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-4"></div>
+      <p class="text-gray-600">{language === 'zh' ? '加载支付系统...' : 'Loading payment system...'}</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="payment-error" class="hidden bg-red-50 border border-red-200 rounded-lg p-4">
+      <div class="flex items-center">
+        <svg class="w-5 h-5 text-red-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+        </svg>
+        <span class="text-red-800" id="error-message">{t.errors.loadFailed}</span>
+      </div>
+    </div>
+
+    <!-- Stripe Payment Element Container -->
+    <div id="payment-element" class="hidden">
+      <!-- Stripe Elements will be inserted here -->
+    </div>
+
+    <!-- Payment Button -->
+    <div id="payment-actions" class="hidden space-y-4">
+      <button 
+        id="submit-payment" 
+        class="w-full bg-purple-600 text-white py-3 px-6 rounded-lg hover:bg-purple-700 font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        disabled
+      >
+        <span id="button-text">🔒 {t.payButton}</span>
+        <span id="button-loading" class="hidden">⏳ {t.processing}</span>
+      </button>
+
+      <button 
+        id="cancel-payment"
+        class="w-full text-gray-600 hover:text-gray-800 py-2 text-sm transition-colors"
+      >
+        {t.cancelButton}
+      </button>
+    </div>
+
+    <!-- Security Notice -->
+    <div class="text-center mt-6">
+      <p class="text-xs text-gray-500 mb-2">{t.securityNote}</p>
+      <div class="flex items-center justify-center text-xs text-gray-400">
+        <span>{t.poweredBy}</span>
+        <img src="https://js.stripe.com/v3/fingerprinted/img/stripe-logo-slate_small-3d0c0f37c.png" 
+             alt="Stripe" class="h-4 ml-2 opacity-60">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Stripe.js Library -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<script define:vars={{ 
+  quoteId, 
+  amount, 
+  currency, 
+  customerEmail, 
+  language, 
+  onSuccess, 
+  onCancel,
+  text: t 
+}}>
+  /**
+   * Stripe支付表单逻辑
+   */
+  document.addEventListener('DOMContentLoaded', async function() {
+    // 获取Stripe公钥
+    const stripePublishableKey = 'pk_test_YOUR_PUBLISHABLE_KEY'; // 从环境变量获取
+    
+    // 初始化Stripe
+    const stripe = Stripe(stripePublishableKey);
+    
+    // DOM元素
+    const loadingDiv = document.getElementById('payment-loading');
+    const errorDiv = document.getElementById('payment-error');
+    const errorMessage = document.getElementById('error-message');
+    const paymentElement = document.getElementById('payment-element');
+    const paymentActions = document.getElementById('payment-actions');
+    const submitButton = document.getElementById('submit-payment');
+    const cancelButton = document.getElementById('cancel-payment');
+    const buttonText = document.getElementById('button-text');
+    const buttonLoading = document.getElementById('button-loading');
+
+    let elements;
+    let paymentIntent;
+
+    try {
+      // 1. 创建支付意图
+      console.log('Creating payment intent for quote:', quoteId);
+      
+      // 使用 Supabase Edge Function 处理支付
+      const { data, error } = await supabase.functions.invoke('stripe-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          quoteId,
+          amount,
+          currency,
+          customerEmail,
+          description: `Payment for CNC manufacturing quote #${quoteId}`
+        })
+      });
+
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.message || 'Failed to create payment intent');
+      }
+
+      paymentIntent = result.data;
+      console.log('Payment intent created:', paymentIntent.paymentIntentId);
+
+      // 2. 创建Stripe Elements
+      elements = stripe.elements({
+        clientSecret: paymentIntent.clientSecret,
+        appearance: {
+          theme: 'stripe',
+          variables: {
+            colorPrimary: '#7C3AED', // Purple-600
+            colorBackground: '#ffffff',
+            colorText: '#111827',
+            colorDanger: '#DC2626',
+            fontFamily: 'system-ui, sans-serif',
+            spacingUnit: '4px',
+            borderRadius: '8px'
+          }
+        }
+      });
+
+      // 3. 创建Payment Element
+      const paymentElementInstance = elements.create('payment', {
+        layout: 'tabs',
+        paymentMethodOrder: ['card', 'paypal', 'apple_pay', 'google_pay']
+      });
+
+      // 4. 挂载Payment Element
+      paymentElementInstance.mount('#payment-element');
+
+      // 5. 监听Payment Element状态变化
+      paymentElementInstance.on('ready', () => {
+        console.log('Payment Element ready');
+        showPaymentForm();
+      });
+
+      paymentElementInstance.on('change', (event) => {
+        if (event.complete) {
+          submitButton.disabled = false;
+        } else {
+          submitButton.disabled = true;
+        }
+      });
+
+      // 6. 处理支付提交
+      submitButton.addEventListener('click', handlePaymentSubmit);
+      
+      // 7. 处理取消支付
+      cancelButton.addEventListener('click', () => {
+        if (confirm(language === 'zh' ? '确定要取消支付吗？' : 'Are you sure you want to cancel payment?')) {
+          window.location.href = onCancel;
+        }
+      });
+
+    } catch (error) {
+      console.error('Payment initialization error:', error);
+      showError(error.message || text.errors.loadFailed);
+    }
+
+    /**
+     * 显示支付表单
+     */
+    function showPaymentForm() {
+      loadingDiv.classList.add('hidden');
+      errorDiv.classList.add('hidden');
+      paymentElement.classList.remove('hidden');
+      paymentActions.classList.remove('hidden');
+    }
+
+    /**
+     * 显示错误信息
+     */
+    function showError(message) {
+      loadingDiv.classList.add('hidden');
+      paymentElement.classList.add('hidden');
+      paymentActions.classList.add('hidden');
+      errorMessage.textContent = message;
+      errorDiv.classList.remove('hidden');
+    }
+
+    /**
+     * 处理支付提交
+     */
+    async function handlePaymentSubmit(event) {
+      event.preventDefault();
+      
+      if (!stripe || !elements) {
+        showError(text.errors.loadFailed);
+        return;
+      }
+
+      // 设置加载状态
+      submitButton.disabled = true;
+      buttonText.classList.add('hidden');
+      buttonLoading.classList.remove('hidden');
+
+      try {
+        // 确认支付
+        const { error } = await stripe.confirmPayment({
+          elements,
+          confirmParams: {
+            return_url: `${window.location.origin}${onSuccess}?quote_id=${quoteId}`,
+            receipt_email: customerEmail,
+          },
+        });
+
+        if (error) {
+          console.error('Payment confirmation error:', error);
+          
+          // 特殊错误处理
+          if (error.type === 'card_error' || error.type === 'validation_error') {
+            showError(error.message);
+          } else {
+            showError(text.errors.paymentFailed);
+          }
+        }
+
+      } catch (error) {
+        console.error('Payment processing error:', error);
+        showError(text.errors.networkError);
+      } finally {
+        // 恢复按钮状态
+        submitButton.disabled = false;
+        buttonText.classList.remove('hidden');
+        buttonLoading.classList.add('hidden');
+      }
+    }
+  });
+</script>
+
+<!-- 样式优化 -->
+<style>
+  /* Stripe Elements自定义样式 */
+  #payment-element {
+    min-height: 200px;
+  }
+  
+  /* Loading动画 */
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  /* 支付按钮悬停效果 */
+  #submit-payment:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+  }
+
+  #submit-payment:not(:disabled):active {
+    transform: translateY(0);
+  }
+
+  /* 响应式设计 */
+  @media (max-width: 640px) {
+    .max-w-lg {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+  }
+</style>

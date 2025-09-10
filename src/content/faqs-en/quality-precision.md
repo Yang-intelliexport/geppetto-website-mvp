@@ -1,5 +1,5 @@
 ---
-question: "How do you guarantee ±0.05mm ultra-high precision?"
+question: "How do you guarantee project-specific ultra-high precision?"
 category: "Quality & Precision"
 order: 3
 featured: true
@@ -41,17 +41,17 @@ Our ultra-high precision is achieved through multiple technical measures and str
 ## Precision Guarantee Data
 
 ### Actual Achievement Statistics
-- **Average Precision**: ±0.03mm (40% better than promised)
-- **Highest Precision**: ±0.008mm (medical device level)
+- **Average Precision**: project-specific (40% better than promised)
+- **Highest Precision**: project-specific (medical device level)
 - **First Pass Rate**: 99.5%
 - **Batch Stability**: Cpk>1.67 (Six Sigma standard)
 
 ### Industry Comparison
 | Precision Level | Traditional | High Precision | Geppetto |
 |----------------|-------------|----------------|----------|
-| Regular Precision | ±0.1mm | ±0.05mm | ±0.03mm |
-| High Precision | ±0.05mm | ±0.02mm | ±0.015mm |
-| Ultra-High Precision | ±0.02mm | ±0.01mm | ±0.008mm |
+| Regular Precision | project-specific | project-specific | project-specific |
+| High Precision | project-specific | project-specific | project-specific |
+| Ultra-High Precision | project-specific | project-specific | project-specific |
 | First Pass Rate | 85% | 92% | 99.5% |
 
 ## Quality Commitment

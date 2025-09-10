@@ -1,0 +1,672 @@
+---
+// 极简报价表单组件 - 基于报价文档V1.0设计
+// 只有4个必填项：文件上传、材料、数量、联系邮箱
+
+interface Props {
+  language?: 'zh' | 'en';
+}
+
+const { language = 'zh' } = Astro.props;
+
+// 多语言文本配置
+const text = {
+  zh: {
+    title: '获取8小时详细报价',
+    subtitle: '上传您的CAD文件，2分钟内收到专业报价',
+    
+    // 表单字段
+    fileUpload: {
+      label: '上传CAD文件',
+      placeholder: '点击或拖拽文件到这里',
+      supportedFormats: '支持格式：STEP, STP, IGES, STL',
+      required: true
+    },
+    material: {
+      label: '材料选择',
+      placeholder: '请选择材料',
+      options: [
+        { value: 'aluminum-6061', label: '6061铝合金（最常用）', popular: true },
+        { value: 'aluminum-7075', label: '7075铝合金（高强度）' },
+        { value: 'stainless-304', label: '304不锈钢（耐腐蚀）' },
+        { value: 'stainless-316', label: '316不锈钢（医疗级）' },
+        { value: 'brass', label: '黄铜（导电性好）' },
+        { value: 'copper', label: '紫铜（导热性好）' },
+        { value: 'other', label: '其他材料（请在备注中说明）' }
+      ],
+      required: true
+    },
+    quantity: {
+      label: '数量',
+      placeholder: '请输入数量',
+      unit: '件',
+      required: true
+    },
+    email: {
+      label: '联系邮箱',
+      placeholder: '请输入您的邮箱地址',
+      description: '我们将在2分钟内发送报价到您的邮箱',
+      required: true
+    },
+    
+    // 可选字段
+    surfaceFinish: {
+      label: '表面处理',
+      placeholder: '请选择表面处理方式',
+      options: [
+        { value: 'as-machined', label: '机加工原样（标准）', isDefault: true },
+        { value: 'anodized', label: '阳极氧化' },
+        { value: 'powder-coating', label: '喷粉处理' },
+        { value: 'chromate', label: '铬酸盐转化' },
+        { value: 'advice-needed', label: '请给我建议', isAdvice: true }
+      ],
+      required: false,
+      note: '如不确定，我们会根据您的零件推荐最适合的表面处理'
+    },
+    
+    // 按钮和提示
+    submitButton: '获取专业报价',
+    processing: '正在处理...',
+    
+    // 承诺信息
+    promises: [
+      '2分钟内邮件回复',
+      '价格透明，无隐藏费用',
+      '72小时交付保证'
+    ],
+    
+    // 验证消息
+    validation: {
+      fileRequired: '请上传CAD文件',
+      materialRequired: '请选择材料',
+      quantityRequired: '请输入数量',
+      quantityInvalid: '数量必须大于0',
+      emailRequired: '请输入邮箱地址',
+      emailInvalid: '请输入有效的邮箱地址'
+    },
+    
+    // 成功消息
+    success: {
+      title: '提交成功！',
+      message: '我们已收到您的询盘，预计2分钟内将报价发送到您的邮箱。',
+      nextSteps: '接下来会发生什么：',
+      steps: [
+        '我们的AI系统正在分析您的CAD文件',
+        '2分钟内您将收到初步市场参考报价',
+        '工作时间内工程师团队将审核并可能提供优化建议'
+      ]
+    }
+  },
+  en: {
+    title: 'Get Expert Quote',
+    subtitle: 'Upload your CAD files, receive professional quote in 2 minutes',
+    
+    fileUpload: {
+      label: 'Upload CAD Files',
+      placeholder: 'Click or drag files here',
+      supportedFormats: 'Supported: STEP, STP, IGES, STL',
+      required: true
+    },
+    material: {
+      label: 'Material Selection',
+      placeholder: 'Please select material',
+      options: [
+        { value: 'aluminum-6061', label: '6061 Aluminum (Most Popular)', popular: true },
+        { value: 'aluminum-7075', label: '7075 Aluminum (High Strength)' },
+        { value: 'stainless-304', label: '304 Stainless Steel (Corrosion Resistant)' },
+        { value: 'stainless-316', label: '316 Stainless Steel (Medical Grade)' },
+        { value: 'brass', label: 'Brass (Conductive)' },
+        { value: 'copper', label: 'Copper (Thermal Conductive)' },
+        { value: 'other', label: 'Other Materials (Please specify in notes)' }
+      ],
+      required: true
+    },
+    quantity: {
+      label: 'Quantity',
+      placeholder: 'Enter quantity',
+      unit: 'pcs',
+      required: true
+    },
+    email: {
+      label: 'Contact Email',
+      placeholder: 'Enter your email address',
+      description: 'We will send the quote to your email within 2 minutes',
+      required: true
+    },
+    
+    surfaceFinish: {
+      label: 'Surface Finish',
+      placeholder: 'Select surface finish',
+      options: [
+        { value: 'as-machined', label: 'As-Machined (Standard)', isDefault: true },
+        { value: 'anodized', label: 'Anodized' },
+        { value: 'powder-coating', label: 'Powder Coating' },
+        { value: 'chromate', label: 'Chromate Conversion' },
+        { value: 'advice-needed', label: 'Please Advise Me', isAdvice: true }
+      ],
+      required: false,
+      note: 'If unsure, we will recommend the best surface finish for your parts'
+    },
+    
+    submitButton: 'Get Professional Quote',
+    processing: 'Processing...',
+    
+    promises: [
+      '2-minute email response',
+      'Transparent pricing, no hidden fees',
+      '72-hour delivery guarantee'
+    ],
+    
+    validation: {
+      fileRequired: 'Please upload CAD files',
+      materialRequired: 'Please select material',
+      quantityRequired: 'Please enter quantity',
+      quantityInvalid: 'Quantity must be greater than 0',
+      emailRequired: 'Please enter email address',
+      emailInvalid: 'Please enter a valid email address'
+    },
+    
+    success: {
+      title: 'Submission Successful!',
+      message: 'We have received your inquiry and will send the quote to your email within 2 minutes.',
+      nextSteps: 'What happens next:',
+      steps: [
+        'Our AI system is analyzing your CAD files',
+        'You will receive initial market reference quote within 2 minutes',
+        'Our engineering team will review and may provide optimization suggestions within 24 hours'
+      ]
+    }
+  }
+};
+
+const currentText = text[language];
+---
+
+<section class="py-16 bg-gradient-to-br from-gray-50 to-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- 标题区域 -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-[#111827] mb-4">
+          {currentText.title}
+        </h1>
+        <p class="text-xl text-gray-600">
+          {currentText.subtitle}
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-12">
+        
+        <!-- 左侧：表单 -->
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+          <form id="simple-quote-form" class="space-y-6">
+            
+            <!-- 1. 文件上传（必填） -->
+            <div class="space-y-2">
+              <label class="flex items-center text-lg font-semibold text-[#111827]">
+                {currentText.fileUpload.label}
+                <span class="text-red-500 ml-1">*</span>
+              </label>
+              
+              <div 
+                id="file-upload-zone"
+                class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#7F00FF] transition-colors cursor-pointer"
+              >
+                <input 
+                  type="file" 
+                  id="cad-files"
+                  name="files"
+                  multiple
+                  accept=".step,.stp,.iges,.igs,.stl,.dwg"
+                  class="hidden"
+                  required
+                />
+                <div id="upload-content">
+                  <svg class="w-12 h-12 text-[#7F00FF] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                  </svg>
+                  <p class="text-lg font-medium text-[#111827] mb-2">
+                    {currentText.fileUpload.placeholder}
+                  </p>
+                  <p class="text-sm text-gray-600">
+                    {currentText.fileUpload.supportedFormats}
+                  </p>
+                </div>
+                <div id="file-list" class="mt-4 space-y-2 hidden"></div>
+              </div>
+            </div>
+
+            <!-- 2. 材料选择（必填） -->
+            <div class="space-y-2">
+              <label for="material" class="flex items-center text-lg font-semibold text-[#111827]">
+                {currentText.material.label}
+                <span class="text-red-500 ml-1">*</span>
+              </label>
+              
+              <select 
+                id="material"
+                name="material"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200 transition-colors text-lg"
+              >
+                <option value="">{currentText.material.placeholder}</option>
+                {currentText.material.options.map((option) => (
+                  <option value={option.value}>
+                    {option.label}
+                    {option.popular ? ' ⭐' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <!-- 3. 数量（必填） -->
+            <div class="space-y-2">
+              <label for="quantity" class="flex items-center text-lg font-semibold text-[#111827]">
+                {currentText.quantity.label}
+                <span class="text-red-500 ml-1">*</span>
+              </label>
+              
+              <div class="relative">
+                <input 
+                  type="number"
+                  id="quantity"
+                  name="quantity"
+                  min="1"
+                  required
+                  placeholder={currentText.quantity.placeholder}
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200 transition-colors text-lg pr-12"
+                />
+                <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500">
+                  {currentText.quantity.unit}
+                </span>
+              </div>
+            </div>
+
+            <!-- 4. 联系邮箱（必填） -->
+            <div class="space-y-2">
+              <label for="email" class="flex items-center text-lg font-semibold text-[#111827]">
+                {currentText.email.label}
+                <span class="text-red-500 ml-1">*</span>
+              </label>
+              
+              <input 
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder={currentText.email.placeholder}
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200 transition-colors text-lg"
+              />
+              
+              <p class="text-sm text-gray-600 flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+                {currentText.email.description}
+              </p>
+            </div>
+
+            <!-- 5. 表面处理（可选） -->
+            <div class="space-y-2">
+              <label for="surface-finish" class="text-lg font-semibold text-[#111827]">
+                {currentText.surfaceFinish.label}
+                <span class="text-gray-500 text-sm ml-2">（可选）</span>
+              </label>
+              
+              <select 
+                id="surface-finish"
+                name="surfaceFinish"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#7F00FF] focus:ring-2 focus:ring-purple-200 transition-colors text-lg"
+              >
+                {currentText.surfaceFinish.options.map((option) => (
+                  <option value={option.value} selected={option.isDefault}>
+                    {option.label}
+                    {option.isAdvice ? ' 💡' : ''}
+                  </option>
+                ))}
+              </select>
+              
+              <p class="text-sm text-gray-600">
+                {currentText.surfaceFinish.note}
+              </p>
+            </div>
+
+            <!-- 提交按钮 -->
+            <button 
+              type="submit"
+              id="submit-button"
+              class="w-full bg-[#7F00FF] text-white py-4 px-6 rounded-lg text-xl font-bold hover:bg-purple-700 transition-colors duration-200 flex items-center justify-center"
+            >
+              <span id="button-text">{currentText.submitButton}</span>
+              <svg id="loading-icon" class="hidden w-6 h-6 ml-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+            </button>
+
+            <!-- 错误提示 -->
+            <div id="error-message" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 text-red-800"></div>
+            
+          </form>
+        </div>
+
+        <!-- 右侧：承诺信息 -->
+        <div class="space-y-8">
+          
+          <!-- 核心承诺 -->
+          <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h3 class="text-2xl font-bold text-[#111827] mb-6">我们的承诺</h3>
+            
+            <div class="space-y-4">
+              {currentText.promises.map((promise) => (
+                <div class="flex items-center">
+                  <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <span class="text-lg text-gray-700">{promise}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- 流程说明 -->
+          <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8">
+            <h3 class="text-2xl font-bold text-[#111827] mb-6">报价流程</h3>
+            
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <div class="w-8 h-8 bg-[#7F00FF] text-white rounded-full flex items-center justify-center text-sm font-bold mr-4 mt-1">1</div>
+                <div>
+                  <div class="font-semibold text-[#111827]">立即响应</div>
+                  <div class="text-gray-600 text-sm">提交后2分钟内收到市场参考报价</div>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="w-8 h-8 bg-[#7F00FF] text-white rounded-full flex items-center justify-center text-sm font-bold mr-4 mt-1">2</div>
+                <div>
+                  <div class="font-semibold text-[#111827]">专家审核</div>
+                  <div class="text-gray-600 text-sm">工作时间内工程师团队深度分析优化</div>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="w-8 h-8 bg-[#7F00FF] text-white rounded-full flex items-center justify-center text-sm font-bold mr-4 mt-1">3</div>
+                <div>
+                  <div class="font-semibold text-[#111827]">最优报价</div>
+                  <div class="text-gray-600 text-sm">获得经过优化的最终专业报价</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 成功提示模态框 -->
+<div id="success-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+    <div class="text-center">
+      <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+        </svg>
+      </div>
+      
+      <h3 class="text-2xl font-bold text-[#111827] mb-2" id="success-title">
+        {currentText.success.title}
+      </h3>
+      
+      <p class="text-gray-600 mb-6" id="success-message">
+        {currentText.success.message}
+      </p>
+      
+      <div class="text-left mb-6">
+        <div class="font-semibold text-[#111827] mb-3" id="success-next-steps">
+          {currentText.success.nextSteps}
+        </div>
+        
+        <div class="space-y-2">
+          {currentText.success.steps.map((step, index) => (
+            <div class="flex items-start">
+              <div class="w-6 h-6 bg-[#7F00FF] text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-0.5">
+                {index + 1}
+              </div>
+              <div class="text-sm text-gray-600">{step}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <button 
+        onclick="closeSuccessModal()"
+        class="w-full bg-[#7F00FF] text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+      >
+        了解了
+      </button>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ currentText, language }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('simple-quote-form');
+    const fileUploadZone = document.getElementById('file-upload-zone');
+    const fileInput = document.getElementById('cad-files');
+    const fileList = document.getElementById('file-list');
+    const uploadContent = document.getElementById('upload-content');
+    const submitButton = document.getElementById('submit-button');
+    const buttonText = document.getElementById('button-text');
+    const loadingIcon = document.getElementById('loading-icon');
+    const errorMessage = document.getElementById('error-message');
+    const successModal = document.getElementById('success-modal');
+
+    let selectedFiles = [];
+
+    // 文件上传区域点击事件
+    fileUploadZone.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    // 文件拖拽功能
+    fileUploadZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      fileUploadZone.classList.add('border-[#7F00FF]', 'bg-purple-50');
+    });
+
+    fileUploadZone.addEventListener('dragleave', () => {
+      fileUploadZone.classList.remove('border-[#7F00FF]', 'bg-purple-50');
+    });
+
+    fileUploadZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      fileUploadZone.classList.remove('border-[#7F00FF]', 'bg-purple-50');
+      
+      const files = Array.from(e.dataTransfer.files);
+      handleFiles(files);
+    });
+
+    // 文件选择事件
+    fileInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files);
+      handleFiles(files);
+    });
+
+    // 处理文件选择
+    function handleFiles(files) {
+      selectedFiles = files;
+      displayFiles();
+    }
+
+    // 显示已选择的文件
+    function displayFiles() {
+      if (selectedFiles.length === 0) {
+        fileList.classList.add('hidden');
+        uploadContent.classList.remove('hidden');
+        return;
+      }
+
+      uploadContent.classList.add('hidden');
+      fileList.classList.remove('hidden');
+      fileList.innerHTML = '';
+
+      selectedFiles.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg';
+        
+        fileItem.innerHTML = `
+          <div class="flex items-center">
+            <svg class="w-5 h-5 text-[#7F00FF] mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm2 2a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+            </svg>
+            <div>
+              <div class="font-medium text-sm">${file.name}</div>
+              <div class="text-xs text-gray-500">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            onclick="removeFile(${index})"
+            class="text-red-500 hover:text-red-700 ml-2"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        `;
+        
+        fileList.appendChild(fileItem);
+      });
+    }
+
+    // 移除文件
+    window.removeFile = (index) => {
+      selectedFiles.splice(index, 1);
+      displayFiles();
+    };
+
+    // 表单提交
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // 清除之前的错误信息
+      errorMessage.classList.add('hidden');
+      
+      // 验证表单
+      if (!validateForm()) {
+        return;
+      }
+      
+      // 显示加载状态
+      setLoading(true);
+      
+      try {
+        // 构建FormData
+        const formData = new FormData();
+        
+        // 添加文件
+        selectedFiles.forEach((file, index) => {
+          formData.append(`file${index}`, file);
+        });
+        
+        // 添加其他字段
+        formData.append('material', form.material.value);
+        formData.append('quantity', form.quantity.value);
+        formData.append('email', form.email.value);
+        formData.append('surfaceFinish', form.surfaceFinish.value);
+        formData.append('language', language);
+        
+        // 提交到报价API
+        const response = await fetch('/api/submit-quote', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          showSuccess();
+        } else {
+          showError(result.error || '提交失败，请重试');
+        }
+        
+      } catch (error) {
+        showError('网络错误，请重试');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // 表单验证
+    function validateForm() {
+      // 文件验证
+      if (selectedFiles.length === 0) {
+        showError(currentText.validation.fileRequired);
+        return false;
+      }
+      
+      // 材料验证
+      if (!form.material.value) {
+        showError(currentText.validation.materialRequired);
+        return false;
+      }
+      
+      // 数量验证
+      if (!form.quantity.value || parseInt(form.quantity.value) <= 0) {
+        showError(currentText.validation.quantityRequired);
+        return false;
+      }
+      
+      // 邮箱验证
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!form.email.value) {
+        showError(currentText.validation.emailRequired);
+        return false;
+      } else if (!emailRegex.test(form.email.value)) {
+        showError(currentText.validation.emailInvalid);
+        return false;
+      }
+      
+      return true;
+    }
+
+    // 设置加载状态
+    function setLoading(loading) {
+      submitButton.disabled = loading;
+      if (loading) {
+        buttonText.textContent = currentText.processing;
+        loadingIcon.classList.remove('hidden');
+      } else {
+        buttonText.textContent = currentText.submitButton;
+        loadingIcon.classList.add('hidden');
+      }
+    }
+
+    // 显示错误信息
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.remove('hidden');
+      errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // 显示成功信息
+    function showSuccess() {
+      successModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // 关闭成功模态框
+    window.closeSuccessModal = () => {
+      successModal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+      
+      // 重置表单
+      form.reset();
+      selectedFiles = [];
+      displayFiles();
+    };
+  });
+</script>

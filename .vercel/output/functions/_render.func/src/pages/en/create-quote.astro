@@ -1,0 +1,251 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import QuoteCreationFlow from '../../components/QuoteCreationFlow.tsx';
+---
+
+<BaseLayout 
+  title="Professional CNC Quote - Fast Response | Geppetto Smart Manufacturing"
+  description="Upload your CAD files to get professional CNC machining quotes. We guarantee fast response with transparent pricing and quality assurance for aluminum, steel, and more materials."
+  keywords={[
+    "CNC quote", "machining quote", "precision manufacturing", "CAD file quote",
+    "aluminum machining", "steel machining", "rapid quote", "professional manufacturing",
+    "fast response", "transparent pricing", "quality guarantee", "smart manufacturing"
+  ]}
+  ogImage="/images/og-create-quote-en.jpg"
+  structuredData={{
+    type: 'service',
+    data: {
+      '@type': 'Service',
+      'name': 'Professional CNC Manufacturing Quote Service',
+      'description': 'Fast professional CNC manufacturing quotes supporting multiple materials and processes with transparent pricing and quality guarantee',
+      'provider': {
+        '@type': 'Organization',
+        'name': 'Geppetto Smart Manufacturing',
+        'url': 'https://geppetto.com'
+      },
+      'serviceType': 'Manufacturing Quote Service',
+      'areaServed': ['China', 'Global'],
+      'offers': {
+        '@type': 'Offer',
+        'name': 'CNC Manufacturing Quote',
+        'description': 'Professional CNC manufacturing quote service',
+        'price': '0',
+        'priceCurrency': 'USD'
+      }
+    }
+  }}
+>
+  <div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Hero Section -->
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-600 to-blue-500 rounded-full mb-6">
+          <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a3 3 0 003 3h2a3 3 0 003-3V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zM8 8a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1zm1 3a1 1 0 100 2h2a1 1 0 100-2H9z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          Get Professional <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500">CNC Manufacturing</span> Quote
+        </h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+          Simply upload your CAD files and our engineering team will provide detailed, professional manufacturing quotes and technical recommendations during business hours
+        </p>
+        
+        <!-- Key Features -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12">
+          <div class="flex flex-col items-center p-4">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
+              <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">Fast Response</h3>
+            <p class="text-sm text-gray-600 text-center">Professional engineer rapid response</p>
+          </div>
+          
+          <div class="flex flex-col items-center p-4">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+              <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
+                <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">Transparent Pricing</h3>
+            <p class="text-sm text-gray-600 text-center">No hidden fees, clear pricing</p>
+          </div>
+          
+          <div class="flex flex-col items-center p-4">
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
+              <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">Quality Guarantee</h3>
+            <p class="text-sm text-gray-600 text-center">Strict quality control, reliable</p>
+          </div>
+          
+          <div class="flex flex-col items-center p-4">
+            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-2">
+              <svg class="w-6 h-6 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">Expert Team</h3>
+            <p class="text-sm text-gray-600 text-center">Senior engineer technical support</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quote Form Section -->
+      <QuoteCreationFlow client:load language="en" />
+
+      <!-- Additional Info Sections -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
+        <!-- Supported Materials -->
+        <div class="bg-white rounded-2xl shadow-sm p-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">🔧 Supported Materials</h2>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+              <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                <span class="text-blue-600 text-sm font-bold">Al</span>
+              </div>
+              <div>
+                <div class="font-medium text-gray-900">Aluminum</div>
+                <div class="text-sm text-gray-600">6061, 7075</div>
+              </div>
+            </div>
+            
+            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+              <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                <span class="text-gray-600 text-sm font-bold">SS</span>
+              </div>
+              <div>
+                <div class="font-medium text-gray-900">Stainless Steel</div>
+                <div class="text-sm text-gray-600">304, 316</div>
+              </div>
+            </div>
+            
+            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+              <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
+                <span class="text-yellow-600 text-sm font-bold">Cu</span>
+              </div>
+              <div>
+                <div class="font-medium text-gray-900">Copper Alloy</div>
+                <div class="text-sm text-gray-600">Brass, Copper</div>
+              </div>
+            </div>
+            
+            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+              <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                <span class="text-purple-600 text-sm font-bold">Ti</span>
+              </div>
+              <div>
+                <div class="font-medium text-gray-900">Titanium</div>
+                <div class="text-sm text-gray-600">Aerospace Grade</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Process Capabilities -->
+        <div class="bg-white rounded-2xl shadow-sm p-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">⚙️ Process Capabilities</h2>
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-gray-900">CNC Milling (3/4/5-axis)</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-gray-900">CNC Turning</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-gray-900">Precision Grinding</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-gray-900">Surface Treatment (Anodizing, Coating)</span>
+            </div>
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-gray-900">Assembly & Inspection</span>
+            </div>
+          </div>
+          
+          <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+            <h3 class="font-semibold text-blue-900 mb-2">Tolerance Range</h3>
+            <div class="text-blue-800 text-sm">
+              <div>• Standard: General tolerance requirements</div>
+              <div>• Precision: Project-customized precision</div>
+              <div>• Ultra-precision: Strict tolerance standards</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="bg-white rounded-2xl shadow-sm p-8 mt-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">❓ Frequently Asked Questions</h2>
+        <div class="max-w-3xl mx-auto">
+          <div class="space-y-6">
+            <div class="border-l-4 border-purple-500 pl-6">
+              <h3 class="font-semibold text-gray-900 mb-2">How long does it take to get a quote?</h3>
+              <p class="text-gray-600">We guarantee a professional quote during business hours. For complex projects, we will inform you of detailed quote timeline within 2 hours.</p>
+            </div>
+            
+            <div class="border-l-4 border-purple-500 pl-6">
+              <h3 class="font-semibold text-gray-900 mb-2">What CAD file formats are supported?</h3>
+              <p class="text-gray-600">We support mainstream formats including STEP (.stp, .step), IGES (.igs, .iges), STL, DWG, DXF with file size limit of 50MB.</p>
+            </div>
+            
+            <div class="border-l-4 border-purple-500 pl-6">
+              <h3 class="font-semibold text-gray-900 mb-2">What is the minimum order quantity?</h3>
+              <p class="text-gray-600">We accept all orders from prototype (1 piece) to volume production with no minimum quantity limit.</p>
+            </div>
+            
+            <div class="border-l-4 border-purple-500 pl-6">
+              <h3 class="font-semibold text-gray-900 mb-2">How do you ensure file security?</h3>
+              <p class="text-gray-600">We use enterprise-grade security measures to protect your CAD files, sign confidentiality agreements, and ensure your design secrets are safe.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="text-center mt-12">
+        <div class="bg-gradient-to-r from-purple-600 to-blue-500 rounded-2xl p-8 text-white">
+          <h2 class="text-2xl font-bold mb-4">Need More Help?</h2>
+          <p class="text-lg mb-6 opacity-90">Our professional team is ready to answer your technical questions</p>
+          <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <a href="mailto:hello@geppetto.studio" class="flex items-center text-white hover:text-blue-200">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+              </svg>
+              hello@geppetto.studio
+            </a>
+            <span class="text-white opacity-50 hidden sm:inline">|</span>
+            <a href="tel:+8613511091304" class="flex items-center text-white hover:text-blue-200">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+              </svg>
+              +86 13511091304
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,265 @@
+<!-- 
+  全局模态框组件 - 基于原生HTML Dialog
+  使用Nanostores进行状态管理，支持跨框架使用
+-->
+
+<dialog id="global-modal" class="modal-dialog">
+  <div class="modal-backdrop">
+    <div class="modal-content bg-white rounded-2xl p-8 max-w-md mx-4 shadow-2xl">
+      <!-- 图标区域 -->
+      <div class="modal-icon-container text-center mb-4">
+        <div id="modal-icon" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto">
+          <!-- 图标将由JavaScript动态插入 -->
+        </div>
+      </div>
+      
+      <!-- 标题 -->
+      <h3 id="modal-title" class="text-lg font-bold text-gray-800 mb-2 text-center"></h3>
+      
+      <!-- 消息内容 -->
+      <p id="modal-message" class="text-gray-600 mb-6 text-center leading-relaxed"></p>
+      
+      <!-- 按钮区域 -->
+      <form method="dialog" class="modal-actions">
+        <div id="modal-buttons" class="flex justify-center space-x-4">
+          <!-- 按钮将由JavaScript动态插入 -->
+        </div>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .modal-dialog {
+    padding: 0;
+    border: none;
+    background: transparent;
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+
+  .modal-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+  }
+
+  .modal-content {
+    animation: modal-enter 0.3s ease-out;
+    position: relative;
+    z-index: 51;
+  }
+
+  @keyframes modal-enter {
+    from {
+      opacity: 0;
+      transform: scale(0.9) translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .modal-dialog[open] .modal-content {
+    animation: modal-enter 0.3s ease-out;
+  }
+
+  /* 加载动画 */
+  .loading-spinner {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+</style>
+
+<script>
+  import { modalState, closeModal } from '../../stores/modalStore.js'
+
+  const dialog = document.getElementById('global-modal')
+  const titleEl = document.getElementById('modal-title')
+  const messageEl = document.getElementById('modal-message')
+  const iconEl = document.getElementById('modal-icon')
+  const buttonsEl = document.getElementById('modal-buttons')
+
+  // 图标和样式配置
+  const modalConfig = {
+    success: {
+      iconBg: 'bg-green-100',
+      iconColor: 'text-green-600',
+      buttonClass: 'bg-green-600 hover:bg-green-700',
+      icon: `<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+      </svg>`
+    },
+    error: {
+      iconBg: 'bg-red-100',
+      iconColor: 'text-red-600',
+      buttonClass: 'bg-red-600 hover:bg-red-700',
+      icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>`
+    },
+    warning: {
+      iconBg: 'bg-yellow-100',
+      iconColor: 'text-yellow-600',
+      buttonClass: 'bg-yellow-600 hover:bg-yellow-700',
+      icon: `<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+      </svg>`
+    },
+    info: {
+      iconBg: 'bg-blue-100',
+      iconColor: 'text-blue-600',
+      buttonClass: 'bg-blue-600 hover:bg-blue-700',
+      icon: `<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+      </svg>`
+    },
+    confirm: {
+      iconBg: 'bg-purple-100',
+      iconColor: 'text-purple-600',
+      buttonClass: 'bg-purple-600 hover:bg-purple-700',
+      icon: `<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
+      </svg>`
+    },
+    loading: {
+      iconBg: 'bg-blue-100',
+      iconColor: 'text-blue-600',
+      buttonClass: 'bg-blue-600 hover:bg-blue-700',
+      icon: `<svg class="w-8 h-8 loading-spinner" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>`
+    }
+  }
+
+  // 订阅模态框状态变化
+  modalState.subscribe((state) => {
+    if (state.isOpen) {
+      updateModalContent(state)
+      dialog.showModal()
+    } else {
+      dialog.close()
+    }
+  })
+
+  // 更新模态框内容
+  function updateModalContent(state) {
+    const { type, title, message, options } = state
+    const config = modalConfig[type]
+
+    // 更新标题
+    titleEl.textContent = title
+    titleEl.style.display = title ? 'block' : 'none'
+
+    // 更新消息
+    messageEl.textContent = message
+
+    // 更新图标
+    iconEl.className = `w-16 h-16 ${config.iconBg} ${config.iconColor} rounded-full flex items-center justify-center mx-auto`
+    iconEl.innerHTML = config.icon
+
+    // 更新按钮
+    updateButtons(type, config, options)
+  }
+
+  // 更新按钮
+  function updateButtons(type, config, options) {
+    buttonsEl.innerHTML = ''
+
+    if (type === 'confirm') {
+      // 确认对话框 - 两个按钮
+      const cancelBtn = createButton(
+        options.cancelText || '取消',
+        'bg-gray-300 text-gray-700 hover:bg-gray-400',
+        () => {
+          if (options.onCancel) options.onCancel()
+          closeModal()
+        }
+      )
+      
+      const confirmBtn = createButton(
+        options.confirmText || '确认',
+        `${config.buttonClass} text-white`,
+        () => {
+          if (options.onConfirm) options.onConfirm()
+          closeModal()
+        }
+      )
+
+      buttonsEl.appendChild(cancelBtn)
+      buttonsEl.appendChild(confirmBtn)
+
+    } else if (type === 'loading') {
+      // 加载对话框 - 可选择是否显示取消按钮
+      if (options.closable !== false) {
+        const cancelBtn = createButton(
+          options.cancelText || '取消',
+          'bg-gray-300 text-gray-700 hover:bg-gray-400',
+          () => closeModal()
+        )
+        buttonsEl.appendChild(cancelBtn)
+      }
+
+    } else {
+      // 其他类型 - 单个确定按钮
+      const okBtn = createButton(
+        options.buttonText || '确定',
+        `${config.buttonClass} text-white`,
+        () => {
+          if (options.onOk) options.onOk()
+          closeModal()
+        }
+      )
+      buttonsEl.appendChild(okBtn)
+    }
+  }
+
+  // 创建按钮元素
+  function createButton(text, className, onClick) {
+    const button = document.createElement('button')
+    button.type = 'button'
+    button.textContent = text
+    button.className = `${className} px-6 py-3 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2`
+    button.addEventListener('click', onClick)
+    return button
+  }
+
+  // 处理ESC键和backdrop点击
+  dialog.addEventListener('cancel', (e) => {
+    const state = modalState.get()
+    if (state.options.closable === false) {
+      e.preventDefault() // 阻止ESC关闭
+    } else {
+      closeModal()
+    }
+  })
+
+  dialog.addEventListener('click', (e) => {
+    const rect = dialog.getBoundingClientRect()
+    const isInDialog = (
+      rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+      rect.left <= e.clientX && e.clientX <= rect.left + rect.width
+    )
+    
+    if (!isInDialog) {
+      const state = modalState.get()
+      if (state.options.closable !== false) {
+        closeModal()
+      }
+    }
+  })
+</script>

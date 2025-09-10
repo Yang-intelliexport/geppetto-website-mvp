@@ -440,7 +440,7 @@ class CADFileProcessor {
     this.handleProgress({
       stage: 'quote',
       progress: 100,
-      message: '生成智能报价中...'
+      message: '生成专家报价中...'
     });
     
     const quote = {
@@ -536,7 +536,7 @@ class CADFileProcessor {
     return [
       {
         title: '精度保证',
-        detail: '±0.05mm加工精度，不合格100%重做',
+        detail: '按需定制精度，不合格100%重做',
         icon: 'precision'
       },
       {

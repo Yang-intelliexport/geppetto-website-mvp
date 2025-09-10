@@ -1,0 +1,327 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="邮件管理系统 - 管理后台 | Geppetto"
+  description="邮件队列管理和触发器测试系统"
+>
+  <div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-6">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">邮件管理系统</h1>
+            <p class="text-gray-600">数据库触发器邮件管理</p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <button onclick="processEmailQueue()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+              发送队列邮件
+            </button>
+            <button onclick="refreshStatus()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+              刷新状态
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Status Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex items-center">
+            <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+              <span class="text-yellow-600 text-sm font-bold">⏳</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-500">待发送</p>
+              <p class="text-2xl font-semibold text-gray-900" id="pending-emails">-</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex items-center">
+            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+              <span class="text-green-600 text-sm font-bold">✓</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-500">已发送</p>
+              <p class="text-2xl font-semibold text-gray-900" id="sent-emails">-</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex items-center">
+            <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+              <span class="text-red-600 text-sm font-bold">✗</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-500">失败</p>
+              <p class="text-2xl font-semibold text-gray-900" id="failed-emails">-</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex items-center">
+            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+              <span class="text-blue-600 text-sm font-bold">🔄</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-500">重试中</p>
+              <p class="text-2xl font-semibold text-gray-900" id="retry-emails">-</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email Queue Table -->
+      <div class="bg-white rounded-lg shadow-sm mb-8">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">邮件队列</h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200" id="email-queue-table">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">收件人</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">主题</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">状态</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">创建时间</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">尝试次数</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">操作</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200" id="email-queue-body">
+              <!-- 动态填充 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quote Status Trigger Test -->
+      <div class="bg-white rounded-lg shadow-sm">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">触发器测试</h2>
+          <p class="text-sm text-gray-600 mt-1">通过修改报价状态测试自动邮件发送</p>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">选择报价</label>
+              <select id="quote-select" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">请选择报价...</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">更改状态为</label>
+              <select id="status-select" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="pending">待处理</option>
+                <option value="reviewing">审核中</option>
+                <option value="quoted">已报价</option>
+                <option value="ordered">已下单</option>
+                <option value="archived">已归档</option>
+              </select>
+            </div>
+            <div class="flex items-end">
+              <button onclick="updateQuoteStatus()" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                更新状态（触发邮件）
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Messages -->
+    <div id="status-message" class="fixed bottom-4 right-4 hidden">
+      <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+        <span id="status-text">操作成功</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 全局变量
+    let quotes = [];
+    
+    // 页面加载时初始化
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadQuotes();
+      await refreshStatus();
+      // 每30秒自动刷新状态
+      setInterval(refreshStatus, 30000);
+    });
+
+    // 加载报价列表
+    async function loadQuotes() {
+      try {
+        // 这里需要创建一个API端点来获取quotes
+        // 暂时使用模拟数据
+        quotes = [
+          { id: '1', customer_email: 'test@example.com', customer_name: 'Test User', status: 'pending' },
+          { id: '2', customer_email: 'demo@company.com', customer_name: 'Demo User', status: 'reviewing' }
+        ];
+        
+        const select = document.getElementById('quote-select');
+        select.innerHTML = '<option value="">请选择报价...</option>';
+        
+        quotes.forEach(quote => {
+          const option = document.createElement('option');
+          option.value = quote.id;
+          option.textContent = `${quote.customer_name} (${quote.customer_email}) - ${quote.status}`;
+          select.appendChild(option);
+        });
+      } catch (error) {
+        showMessage('加载报价列表失败: ' + error.message, 'error');
+      }
+    }
+
+    // 刷新邮件队列状态
+    async function refreshStatus() {
+      try {
+        const response = await fetch('/api/email/process-queue', {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer your-token-here' // 需要配置认证
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch status');
+        }
+        
+        const data = await response.json();
+        
+        // 更新状态卡片
+        const statusCounts = {
+          pending: 0,
+          sent: 0,
+          failed: 0,
+          retry: 0
+        };
+        
+        if (data.queue_status) {
+          data.queue_status.forEach(status => {
+            statusCounts[status.status] = status.count;
+          });
+        }
+        
+        document.getElementById('pending-emails').textContent = statusCounts.pending;
+        document.getElementById('sent-emails').textContent = statusCounts.sent;
+        document.getElementById('failed-emails').textContent = statusCounts.failed;
+        document.getElementById('retry-emails').textContent = statusCounts.retry;
+        
+        // 刷新邮件队列表格（需要额外的API端点）
+        await loadEmailQueue();
+        
+      } catch (error) {
+        console.error('刷新状态失败:', error);
+        showMessage('刷新状态失败: ' + error.message, 'error');
+      }
+    }
+
+    // 加载邮件队列
+    async function loadEmailQueue() {
+      // 这里需要创建API端点获取邮件队列详细信息
+      // 暂时显示占位信息
+      const tbody = document.getElementById('email-queue-body');
+      tbody.innerHTML = `
+        <tr>
+          <td class="px-6 py-4 text-sm text-gray-900">暂无数据</td>
+          <td class="px-6 py-4 text-sm text-gray-900">-</td>
+          <td class="px-6 py-4 text-sm text-gray-900">-</td>
+          <td class="px-6 py-4 text-sm text-gray-900">-</td>
+          <td class="px-6 py-4 text-sm text-gray-900">-</td>
+          <td class="px-6 py-4 text-sm text-gray-900">-</td>
+        </tr>
+      `;
+    }
+
+    // 处理邮件队列
+    async function processEmailQueue() {
+      try {
+        showMessage('正在处理邮件队列...', 'info');
+        
+        const response = await fetch('/api/email/process-queue', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer your-token-here', // 需要配置认证
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('邮件处理失败');
+        }
+        
+        const result = await response.json();
+        
+        showMessage(
+          `邮件处理完成: 成功${result.results.processed}封, 失败${result.results.failed}封, 待处理${result.results.pending}封`, 
+          'success'
+        );
+        
+        // 刷新状态
+        await refreshStatus();
+        
+      } catch (error) {
+        showMessage('邮件处理失败: ' + error.message, 'error');
+      }
+    }
+
+    // 更新报价状态（测试触发器）
+    async function updateQuoteStatus() {
+      const quoteId = document.getElementById('quote-select').value;
+      const newStatus = document.getElementById('status-select').value;
+      
+      if (!quoteId) {
+        showMessage('请先选择一个报价', 'error');
+        return;
+      }
+      
+      try {
+        showMessage('正在更新报价状态...', 'info');
+        
+        // 这里需要创建API端点来更新报价状态
+        // 暂时显示模拟成功消息
+        showMessage(`报价状态已更新为: ${newStatus}，邮件将自动发送`, 'success');
+        
+        // 延迟刷新状态以等待触发器执行
+        setTimeout(refreshStatus, 2000);
+        
+      } catch (error) {
+        showMessage('更新状态失败: ' + error.message, 'error');
+      }
+    }
+
+    // 显示状态消息
+    function showMessage(message, type = 'success') {
+      const messageDiv = document.getElementById('status-message');
+      const textSpan = document.getElementById('status-text');
+      const container = messageDiv.querySelector('div');
+      
+      // 设置消息内容
+      textSpan.textContent = message;
+      
+      // 设置颜色
+      container.className = `px-6 py-3 rounded-lg shadow-lg ${
+        type === 'error' ? 'bg-red-500 text-white' :
+        type === 'info' ? 'bg-blue-500 text-white' :
+        'bg-green-500 text-white'
+      }`;
+      
+      // 显示消息
+      messageDiv.classList.remove('hidden');
+      
+      // 3秒后自动隐藏
+      setTimeout(() => {
+        messageDiv.classList.add('hidden');
+      }, 3000);
+    }
+  </script>
+</BaseLayout>

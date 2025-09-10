@@ -1,0 +1,516 @@
+---
+// 重构后的报价表单主容器
+// 拆分为模块化组件，提高可维护性
+
+import FileUploadSection from './sections/FileUploadSection.astro';
+import ContactInfoSection from './sections/ContactInfoSection.astro';
+import ProductSpecSection from './sections/ProductSpecSection.astro';
+import AlertMessage from './ui/AlertMessage.astro';
+
+interface Props {
+  language?: 'zh' | 'en';
+}
+
+const { language = 'zh' } = Astro.props;
+
+const text = {
+  zh: {
+    title: '获取专业报价',
+    subtitle: '上传您的CAD文件，我们将在8小时内回复专业报价',
+    submitButton: '提交报价申请',
+    loadingButton: '提交中...',
+    guarantee: {
+      title: '服务承诺',
+      items: [
+        '8小时专家审核回复',
+        '价格透明无隐藏费用', 
+        '质量保证',
+        '免费技术咨询'
+      ]
+    },
+    modal: {
+      title: '🎉 提交成功！',
+      message: '您的报价申请已成功提交！我们将在8小时内通过邮件回复您专业报价。',
+      quoteId: '申请编号',
+      closeBtn: '✅ 好的',
+      submitAgainBtn: '📋 再次提交',
+      contactText: '如有紧急需求，请联系: '
+    },
+    validation: {
+      generalError: '请检查表单中的错误信息',
+      submitError: '提交失败，请稍后重试或联系客服'
+    }
+  },
+  en: {
+    title: 'Get Professional Quote',
+    subtitle: 'Upload your CAD files and get professional quote within 8 hours',
+    submitButton: 'Submit Quote Request',
+    loadingButton: 'Submitting...',
+    guarantee: {
+      title: 'Our Promise',
+      items: [
+        '8-hour expert review',
+        'Transparent pricing', 
+        'Quality guarantee',
+        'Free technical consultation'
+      ]
+    },
+    modal: {
+      title: '🎉 Success!',
+      message: 'Your quote request has been submitted successfully! We will reply via email within 8 hours.',
+      quoteId: 'Quote ID',
+      closeBtn: '✅ OK',
+      submitAgainBtn: '📋 Submit Again',
+      contactText: 'For urgent needs, contact: '
+    },
+    validation: {
+      generalError: 'Please check the errors in the form',
+      submitError: 'Submission failed, please try again or contact support'
+    }
+  }
+};
+
+const t = text[language];
+---
+
+<div class="quote-form-container max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-bold text-gray-900 mb-2">{t.title}</h2>
+    <p class="text-gray-600">{t.subtitle}</p>
+  </div>
+
+  <!-- Form -->
+  <form id="create-quote-form" class="space-y-8">
+    <!-- File Upload Section -->
+    <div class="form-section">
+      <FileUploadSection language={language} required={true} />
+    </div>
+
+    <!-- Contact Info Section -->
+    <div class="form-section">
+      <ContactInfoSection language={language} />
+    </div>
+
+    <!-- Product Spec Section -->
+    <div class="form-section">
+      <ProductSpecSection language={language} />
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center">
+      <button
+        type="submit"
+        id="submit-btn"
+        class="w-full sm:w-auto px-8 py-3 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <span id="submit-text">{t.submitButton}</span>
+        <svg id="submit-spinner" class="hidden animate-spin ml-2 h-5 w-5 text-white inline" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="m12 2a10 10 0 0 1 10 10h-4a6 6 0 0 0-6-6v-4z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Form Messages -->
+    <div id="form-messages" class="space-y-4">
+      <!-- Success Message (Hidden by default) -->
+      <div id="success-message" class="hidden">
+        <AlertMessage 
+          type="success"
+          title={t.modal.title}
+          message=""
+          id="success-alert"
+          dismissible={false}
+        />
+      </div>
+
+      <!-- Error Message (Hidden by default) -->
+      <div id="error-message" class="hidden">
+        <AlertMessage 
+          type="error"
+          title="提交失败"
+          message=""
+          id="error-alert"
+          dismissible={true}
+        />
+      </div>
+    </div>
+  </form>
+
+  <!-- Service Guarantee -->
+  <div class="mt-8 p-6 bg-gray-50 rounded-lg">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">{t.guarantee.title}</h3>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {t.guarantee.items.map(item => (
+        <div class="flex items-center space-x-2">
+          <svg class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span class="text-sm text-gray-700">{item}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div id="success-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-lg max-w-md w-full p-6">
+      <div class="text-center">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+          <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2" id="modal-title">{t.modal.title}</h3>
+        <p class="text-gray-500 mb-4" id="modal-message">{t.modal.message}</p>
+        <div class="bg-gray-50 rounded p-3 mb-4">
+          <p class="text-sm text-gray-700">
+            <strong>{t.modal.quoteId}:</strong> 
+            <span id="modal-quote-id" class="font-mono"></span>
+          </p>
+        </div>
+        <div class="flex space-x-3">
+          <button
+            type="button"
+            id="modal-close-btn"
+            class="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            {t.modal.closeBtn}
+          </button>
+          <button
+            type="button"
+            id="modal-submit-again-btn"
+            class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          >
+            {t.modal.submitAgainBtn}
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 mt-4">
+          {t.modal.contactText} <span class="font-medium">service@geppetto.studio</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ language }}>
+class QuoteFormController {
+  constructor() {
+    this.language = language;
+    this.isSubmitting = false;
+    
+    this.text = {
+      zh: {
+        submitButton: '提交报价申请',
+        loadingButton: '提交中...',
+        generalError: '请检查表单中的错误信息',
+        submitError: '提交失败，请稍后重试或联系客服',
+        submitSuccess: '您的报价申请已成功提交！',
+        networkError: '网络连接失败，请检查网络后重试'
+      },
+      en: {
+        submitButton: 'Submit Quote Request',
+        loadingButton: 'Submitting...',
+        generalError: 'Please check the errors in the form',
+        submitError: 'Submission failed, please try again or contact support',
+        submitSuccess: 'Your quote request has been submitted successfully!',
+        networkError: 'Network connection failed, please check and retry'
+      }
+    };
+    
+    this.t = this.text[this.language];
+    this.initializeForm();
+  }
+
+  initializeForm() {
+    const form = document.getElementById('create-quote-form');
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (form) {
+      form.addEventListener('submit', (e) => this.handleSubmit(e));
+    }
+
+    // Modal event listeners
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const modalSubmitAgainBtn = document.getElementById('modal-submit-again-btn');
+
+    if (modalCloseBtn) {
+      modalCloseBtn.addEventListener('click', () => this.closeModal());
+    }
+
+    if (modalSubmitAgainBtn) {
+      modalSubmitAgainBtn.addEventListener('click', () => {
+        this.closeModal();
+        this.resetForm();
+      });
+    }
+  }
+
+  async handleSubmit(e) {
+    e.preventDefault();
+    
+    if (this.isSubmitting) return;
+
+    // Validate all sections
+    if (!this.validateForm()) {
+      this.showError(this.t.generalError);
+      return;
+    }
+
+    this.setSubmitting(true);
+    
+    try {
+      const formData = this.collectFormData();
+      const response = await this.submitQuote(formData);
+      
+      if (response.success) {
+        this.showSuccessModal(response.data);
+      } else {
+        this.showError(response.message || this.t.submitError);
+      }
+    } catch (error) {
+      console.error('Quote submission error:', error);
+      this.showError(this.t.networkError);
+    } finally {
+      this.setSubmitting(false);
+    }
+  }
+
+  validateForm() {
+    let isValid = true;
+    
+    // Validate contact info
+    if (window.contactInfoValidator && !window.contactInfoValidator.validateAll()) {
+      isValid = false;
+    }
+    
+    // Validate product specs
+    if (window.productSpecValidator && !window.productSpecValidator.validateAll()) {
+      isValid = false;
+    }
+    
+    // Validate file upload
+    if (window.fileUploadHandler && window.fileUploadHandler.selectedFiles.length === 0) {
+      window.fileUploadHandler.showError(
+        this.language === 'zh' ? '请上传至少一个CAD文件' : 'Please upload at least one CAD file'
+      );
+      isValid = false;
+    }
+    
+    return isValid;
+  }
+
+  collectFormData() {
+    const contactData = window.contactInfoValidator ? window.contactInfoValidator.getContactData() : {};
+    const productData = window.productSpecValidator ? window.productSpecValidator.getProductData() : {};
+    const files = window.fileUploadHandler ? window.fileUploadHandler.getFiles() : [];
+    
+    return {
+      ...contactData,
+      ...productData,
+      files,
+      language: this.language,
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  async submitQuote(formData) {
+    // V1.1版本：按文档要求实现匿名认证
+    try {
+      // 动态导入Supabase工具函数
+      const { createAnonymousUser, createQuote, uploadCADFile } = await import('/src/utils/supabase.js');
+      
+      console.log('🚀 开始提交报价申请 (V1.1):', formData);
+      
+      // Step 1: 创建匿名用户 (V1.1要求)
+      const anonymousUser = await createAnonymousUser();
+      
+      // Step 2: 上传所有CAD文件
+      let uploadedFiles = [];
+      if (formData.files && formData.files.length > 0) {
+        console.log('📁 开始上传CAD文件...');
+        
+        for (const file of formData.files) {
+          try {
+            const uploadResult = await uploadCADFile(file, anonymousUser.id);
+            uploadedFiles.push(uploadResult);
+          } catch (uploadError) {
+            console.error('❌ 文件上传失败:', file.name, uploadError);
+            throw new Error(`文件"${file.name}"上传失败: ${uploadError.message}`);
+          }
+        }
+      }
+      
+      // Step 3: 创建报价记录 (V1.1标准流程)
+      const quoteData = {
+        material: formData.material || 'aluminum',
+        quantity: parseInt(formData.quantity) || 1,
+        customer_notes: formData.notes || formData.requirements || null,
+        cad_file_path: uploadedFiles.length > 0 ? uploadedFiles[0].path : null,
+        // 添加客户信息到备注中 
+        customer_info: JSON.stringify({
+          email: formData.email,
+          name: formData.name,
+          company: formData.company || null,
+          phone: formData.phone || null,
+          country: formData.country || null
+        })
+      };
+      
+      const quote = await createQuote(quoteData, anonymousUser.id);
+      
+      console.log('✅ 报价创建成功 (V1.1):', quote);
+      
+      // Return success response
+      return {
+        success: true,
+        data: {
+          id: quote.id,
+          token: quote.token || quote.id,
+          message: this.t.submitSuccess
+        }
+      };
+      
+    } catch (error) {
+      console.error('❌ V1.1 API提交失败:', error);
+      throw error;
+    }
+  }
+
+  setSubmitting(isSubmitting) {
+    this.isSubmitting = isSubmitting;
+    
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const submitSpinner = document.getElementById('submit-spinner');
+    
+    if (submitBtn && submitText && submitSpinner) {
+      if (isSubmitting) {
+        submitBtn.disabled = true;
+        submitText.textContent = this.t.loadingButton;
+        submitSpinner.classList.remove('hidden');
+      } else {
+        submitBtn.disabled = false;
+        submitText.textContent = this.t.submitButton;
+        submitSpinner.classList.add('hidden');
+      }
+    }
+  }
+
+  showError(message) {
+    this.hideMessages();
+    
+    if (window.AlertUtils) {
+      window.AlertUtils.show('error-alert', 'error', message, 
+        this.language === 'zh' ? '提交失败' : 'Submission Failed');
+    }
+    
+    const errorMessage = document.getElementById('error-message');
+    if (errorMessage) {
+      errorMessage.classList.remove('hidden');
+    }
+  }
+
+  showSuccessModal(data) {
+    this.hideMessages();
+    
+    const modal = document.getElementById('success-modal');
+    const modalQuoteId = document.getElementById('modal-quote-id');
+    
+    if (modalQuoteId && data.id) {
+      modalQuoteId.textContent = data.id;
+    }
+    
+    if (modal) {
+      modal.classList.remove('hidden');
+    }
+  }
+
+  closeModal() {
+    const modal = document.getElementById('success-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  }
+
+  resetForm() {
+    const form = document.getElementById('create-quote-form');
+    if (form) {
+      form.reset();
+    }
+    
+    // Reset file upload
+    if (window.fileUploadHandler) {
+      window.fileUploadHandler.selectedFiles = [];
+      window.fileUploadHandler.displayFileList();
+      window.fileUploadHandler.hideMessages();
+    }
+    
+    // Clear validators
+    if (window.contactInfoValidator) {
+      ['email', 'name', 'phone'].forEach(field => {
+        window.contactInfoValidator.clearError(field);
+      });
+    }
+    
+    if (window.productSpecValidator) {
+      ['material', 'quantity', 'notes'].forEach(field => {
+        window.productSpecValidator.clearError(field);
+      });
+    }
+    
+    this.hideMessages();
+  }
+
+  hideMessages() {
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('error-message');
+    
+    if (successMessage) successMessage.classList.add('hidden');
+    if (errorMessage) errorMessage.classList.add('hidden');
+  }
+}
+
+// Initialize form controller when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  window.quoteFormController = new QuoteFormController();
+});
+</script>
+
+<style>
+.quote-form-container {
+  @apply relative;
+}
+
+.form-section {
+  @apply p-6 border border-gray-200 rounded-lg bg-gray-50;
+}
+
+.form-section:last-of-type {
+  @apply mb-0;
+}
+
+/* Loading state styles */
+.loading {
+  @apply opacity-75 pointer-events-none;
+}
+
+/* Modal backdrop */
+#success-modal {
+  backdrop-filter: blur(4px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .quote-form-container {
+    @apply p-4 shadow-none rounded-none;
+  }
+  
+  .form-section {
+    @apply p-4;
+  }
+}
+</style>

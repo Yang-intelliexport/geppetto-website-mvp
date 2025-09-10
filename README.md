@@ -1,178 +1,268 @@
-# Geppetto Website MVP
+# 🏭 Geppetto CNC 智能制造网站
 
-AI驱动的精密制造服务网站 - MVP版本
+> AI驱动的精密制造服务平台 - 专为初创企业设计的透明制造解决方案
 
-## 🚀 项目概览
+## 📖 项目概述
 
-基于Astro构建的高性能静态网站，展示Geppetto的四大核心优势：
-- **Geppetto智能报价承诺** - AI秒级分析，专家4-8小时确认
-- **24小时极速交付** - 行业领先的交付速度
-- **单件起做无MOQ** - AI驱动的经济性革命
-- **±0.05mm精度保证** - 超越行业标准的质量承诺
+Geppetto 是一个现代化的CNC制造服务网站，专注于为初创企业和机器人行业提供透明、快速、高质量的制造服务。采用 "AI检测+专家报价" 的创新模式，72小时生产完成，无MOQ限制。
 
-## 🛠 技术栈
+### 🎯 核心价值主张
 
-- **框架**: Astro 5.x + SSG
-- **样式**: Tailwind CSS 3.x
-- **交互**: React 19 + Vue 3 (按需加载)
-- **部署**: Vercel/Netlify + GitHub Actions
-- **内容**: Markdown + Front Matter
+1. **双重验证体系** - AI辅助分析 + 专家技术审核 = 透明报价体系
+2. **初创企业友好** - 1件起做，72小时生产完成，无MOQ限制
+3. **项目定制精度** - 满足工业制造、电子设备等行业精度要求
+4. **全程透明沟通** - 8小时专家审核报价，实时生产进度更新
+
+## 🛠️ 技术栈
+
+### 前端框架
+- **Astro 5.13+** - 现代化全栈框架，SSR支持
+- **React 19** - 动态组件和交互功能
+- **TypeScript** - 类型安全开发
+- **Tailwind CSS** - 实用优先的CSS框架
+
+### 后端服务
+- **Supabase** - 数据库、认证、实时功能
+- **Vercel** - 部署和托管平台
+- **Vercel Edge Functions** - 服务端逻辑
+
+### 集成服务
+- **Stripe** - 支付处理 (测试模式)
+- **Resend** - 邮件服务
+- **Magic Link** - 无密码认证
+
+## 🌟 主要功能
+
+### 🔐 用户功能
+- ✅ Magic Link 无密码登录
+- ✅ 报价申请和文件上传
+- ✅ 订单追踪和状态查看
+- ✅ 实时消息沟通
+- ✅ 多语言支持 (中文/英文)
+
+### 💼 业务功能
+- ✅ AI辅助报价分析
+- ✅ 专家审核工作流
+- ✅ 透明定价系统
+- ✅ 支付集成 (Stripe)
+- ✅ 邮件通知系统
+
+### 🎨 设计特色
+- ✅ 响应式设计，移动端优化
+- ✅ 现代化UI，符合制造业专业形象
+- ✅ 紫色梯度品牌色调
+- ✅ 直观的用户体验流程
+
+## 🚀 快速开始
+
+### 环境要求
+- Node.js 18+
+- npm 或 yarn
+- Supabase 账户
+- Vercel 账户 (部署)
+
+### 安装步骤
+
+```bash
+# 克隆项目
+git clone https://github.com/your-repo/geppetto-website-mvp.git
+cd geppetto-website-mvp
+
+# 安装依赖
+npm install
+
+# 配置环境变量
+cp .env.example .env
+# 编辑 .env 文件，填入必要的配置
+
+# 启动开发服务器
+npm run dev
+```
+
+### 环境变量配置
+
+```bash
+# Supabase 配置
+PUBLIC_SUPABASE_URL=your-supabase-url
+PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+
+# 网站配置
+SITE_URL=http://localhost:4321
+PUBLIC_SITE_URL=http://localhost:4321
+
+# Stripe 配置 (可选)
+STRIPE_SECRET_KEY=your-stripe-secret-key
+
+# 邮件服务 (可选)
+RESEND_API_KEY=your-resend-api-key
+```
 
 ## 📁 项目结构
 
 ```
 src/
-├── components/          # 可复用组件
-│   ├── ui/             # 基础UI组件
-│   ├── marketing/      # 营销组件
-│   ├── interactive/    # 交互功能组件 (React)
-│   └── calculators/    # 计算器组件 (Vue)
-├── layouts/            # 页面布局模板
-├── pages/              # 路由页面
-│   ├── index.astro     # 首页
-│   ├── why-geppetto/   # 核心营销页面
-│   ├── services/       # 服务页面
-│   └── instant-quote/  # AI报价工具
+├── components/           # React 组件
+│   ├── QuoteCreationFlow.tsx    # 报价创建流程
+│   ├── MessageThread.tsx       # 消息线程
+│   └── sections/               # 页面模块组件
+├── layouts/             # Astro 布局模板
+│   └── BaseLayout.astro        # 基础布局
+├── pages/               # 页面路由
+│   ├── en/             # 英文页面
+│   ├── zh/             # 中文页面
+│   └── api/            # API 端点
+├── lib/                # 工具库
+│   ├── supabase.ts     # Supabase 客户端
+│   └── utils.ts        # 通用工具函数
 ├── styles/             # 样式文件
-└── utils/              # 工具函数
+└── types/              # TypeScript 类型定义
 ```
 
-## 🚀 快速开始
+## 🌍 多语言支持
 
-### 1. 安装依赖
+### 支持语言
+- 🇨🇳 简体中文 (默认) - `/zh/`
+- 🇺🇸 English - `/en/`
 
-```bash
-npm install
-```
+### 语言切换
+用户可以通过顶部导航栏的语言切换器在中英文之间切换。URL重定向规则确保了SEO友好的多语言体验。
 
-### 2. 启动开发服务器
+## 📊 数据库架构
 
-```bash
-npm run dev
-```
+### 主要数据表
 
-网站将在 `http://localhost:4321` 启动
-
-### 3. 构建生产版本
-
-```bash
-npm run build
-```
-
-### 4. 预览生产版本
-
-```bash
-npm run preview
+#### quotes 表
+```sql
+- id: UUID (主键)
+- token: TEXT (唯一访问令牌)
+- email: TEXT (客户邮箱)
+- contact_name: TEXT (联系人姓名)
+- product_name: TEXT (产品名称)
+- material: TEXT (材料类型)
+- quantity: INTEGER (数量)
+- status: TEXT (状态: pending/processing/quoted/approved)
+- total_price: DECIMAL (总价格)
+- created_at: TIMESTAMPTZ (创建时间)
 ```
 
 ## 🎨 设计系统
 
 ### 品牌色彩
+- **主色调**: AI渐变 `linear-gradient(90deg, #7F00FF, #00BFFF)`
+- **行动色**: 活力紫 `#7F00FF`
+- **背景色**: 纯净白 `#FFFFFF`
+- **文本色**: 深度灰黑 `#111827`
 
-```css
-:root {
-  --color-brand-purple: #7F00FF;  /* Geppetto主品牌色 */
-  --color-brand-blue: #00BFFF;    /* 辅助品牌色 */
-  --color-text-primary: #111827;   /* 主文本色 */
-  --color-background: #FFFFFF;     /* 背景色 */
-}
-```
+### 响应式断点
+- Mobile: `< 768px`
+- Tablet: `768px - 1024px`
+- Desktop: `> 1024px`
 
-### 核心组件
+## 🔒 安全特性
 
-- `BaseLayout.astro` - 统一的页面布局
-- `HeroSection` - 首页Hero区域
-- `AdvantagesGrid` - 四大优势展示
-- `QuoteEngine` - AI报价工具 (React)
-- `CostCalculator` - 成本分析器 (Vue)
+- ✅ Row Level Security (RLS) 数据库安全
+- ✅ 环境变量安全存储
+- ✅ HTTPS 强制重定向
+- ✅ 输入验证和消毒
+- ✅ Magic Link 安全认证
 
-## 📱 响应式设计
+## 📈 性能优化
 
-- **移动优先** - Mobile-first设计方法
-- **断点系统** - 基于Tailwind的响应式断点
-- **性能优化** - 图片懒加载、组件按需加载
+- ✅ 图片懒加载和 WebP 格式
+- ✅ CSS 和 JS 代码分割
+- ✅ 预取关键资源
+- ✅ CDN 内容分发
+- ✅ 服务端渲染 (SSR)
 
-## 🚀 部署
-
-### Vercel (推荐)
-
-1. 连接GitHub仓库到Vercel
-2. 设置环境变量
-3. 自动部署配置
-
-### 环境变量
-
-复制 `.env.example` 到 `.env` 并配置以下环境变量：
-
-#### 必需配置
+## 🔧 开发命令
 
 ```bash
-# Google Analytics 4 (生产环境必需)
-PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+# 开发服务器
+npm run dev
 
-# Supabase数据库 (如果使用数据库功能)
-PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+# 构建生产版本
+npm run build
+
+# 预览构建结果
+npm run preview
+
+# 类型检查
+npm run type-check
+
+# 代码格式化
+npm run format
 ```
 
-#### 可选配置
+## 🧪 测试
 
-```bash
-# 开发环境Google Analytics测试
-PUBLIC_GA_ENABLE_DEV=false
+### 测试邮箱
+- 开发测试：`zn.yang@intelliexport.com`
 
-# Cookie同意横幅
-PUBLIC_COOKIE_CONSENT_ENABLED=true
+### Stripe 测试卡
+- 测试卡号：`4242 4242 4242 4242`
+- 过期日期：任意未来日期
+- CVC：任意3位数字
 
-# 网站URL
-PUBLIC_SITE_URL=https://geppetto.com
-```
+## 📋 部署检查清单
 
-#### 如何获取配置值
+- [ ] 环境变量配置完成
+- [ ] Supabase 数据库初始化
+- [ ] 域名和SSL证书配置
+- [ ] 邮件服务测试
+- [ ] 支付功能测试
+- [ ] 移动端兼容性测试
+- [ ] SEO 配置验证
 
-1. **Google Analytics**: 在[Google Analytics](https://analytics.google.com)创建GA4属性获取Measurement ID
-2. **Supabase**: 在[Supabase Dashboard](https://supabase.com/dashboard)项目设置中获取URL和API密钥
+## 🎯 品牌信息
 
-**注意**: 生产环境请确保设置真实的GA Measurement ID以启用网站分析。
+### 公司信息
+- **公司名称**: 奇塑科技(深圳)有限公司
+- **品牌名称**: Geppetto智能制造
+- **服务时间**: 工作时间 10:00-19:00 (UTC+8)
 
-## 📊 性能优化
+### 联系方式
+- **通用邮箱**: hello@geppetto.studio
+- **商务邮箱**: business@geppetto.studio
+- **客服电话**: +86 13511091304
 
-- **静态生成** - 所有页面预生成HTML
-- **代码分割** - 按路由和组件分割
-- **图片优化** - WebP格式和懒加载
-- **CDN缓存** - 静态资源CDN加速
+## 🤝 贡献指南
 
-## 🔍 SEO优化
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 打开 Pull Request
 
-- **元数据管理** - 统一的SEO配置
-- **结构化数据** - Schema.org标记
-- **性能指标** - Core Web Vitals优化
-- **语义化HTML** - 良好的可访问性
+## 📄 许可证
 
-## 📈 Analytics & 隐私
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
-### Google Analytics 4集成
+## 🆘 支持
 
-网站集成了隐私优先的Google Analytics 4：
+### 技术支持
+- 📧 Email: hello@geppetto.studio
+- 📱 Phone: +86 13511091304
 
-- **GDPR合规** - Cookie同意横幅和精细权限控制
-- **隐私保护** - IP匿名化，禁用广告功能
-- **自定义事件** - B2B转化跟踪（报价请求、文件上传、联系表单）
-- **多语言支持** - 中英文cookie同意界面
-
-### 隐私功能
-
-- 默认拒绝所有跟踪，需要用户明确同意
-- 支持分类同意（必需、分析、营销）
-- 用户可随时撤回同意
-- 开发环境自动禁用追踪
-
-## 📞 联系我们
-
-- **官网**: https://geppetto.com
-- **邮箱**: hello@geppetto.com  
-- **电话**: 400-XXX-XXXX
+### 文档链接
+- [部署指南](DEPLOYMENT.md)
+- [API 文档](docs/API.md)
+- [设计系统](docs/DESIGN_SYSTEM.md)
 
 ---
 
-**体验Geppetto智能报价承诺，感受AI驱动制造的革命性变革！** 🚀
+## 🏆 项目特色
+
+这个项目展示了现代全栈开发的最佳实践：
+- 🚀 **现代技术栈** - Astro + React + TypeScript + Supabase
+- 🎨 **优秀设计** - 符合制造业专业形象的现代UI
+- 🌍 **国际化** - 完整的中英文双语支持
+- 📱 **移动优先** - 响应式设计，完美适配所有设备
+- 🔒 **企业级安全** - 完整的安全措施和最佳实践
+- ⚡ **高性能** - 优化的加载速度和用户体验
+
+**由 Claude Code 和团队协作开发** ⚡
+
+---
+
+*最后更新: 2025年1月*

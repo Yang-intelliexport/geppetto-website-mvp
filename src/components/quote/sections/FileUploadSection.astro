@@ -1,0 +1,312 @@
+---
+interface Props {
+  language?: 'zh' | 'en';
+  required?: boolean;
+}
+
+const { language = 'zh', required = true } = Astro.props;
+
+const text = {
+  zh: {
+    label: '上传CAD文件',
+    placeholder: '点击上传CAD文件 或拖拽文件到此处',
+    supportedFormats: '支持: STEP, STL, IGES, DWG, DXF, OBJ, PLY, 3MF (最大50MB)',
+    selectFiles: '选择文件',
+    maxFiles: '最多可选择10个文件',
+    fileSelected: '个文件已选择',
+    removeFile: '移除',
+    fileTooLarge: '文件过大，最大支持50MB',
+    invalidFormat: '不支持的文件格式'
+  },
+  en: {
+    label: 'Upload CAD Files',
+    placeholder: 'Click or drag files here',
+    supportedFormats: 'Supported: STEP, STL, IGES, DWG, DXF, OBJ, PLY, 3MF (Max 50MB)',
+    selectFiles: 'Select Files',
+    maxFiles: 'Maximum 10 files allowed',
+    fileSelected: 'file(s) selected',
+    removeFile: 'Remove',
+    fileTooLarge: 'File too large, max 50MB supported',
+    invalidFormat: 'Unsupported file format'
+  }
+}
+
+const t = text[language];
+---
+
+<div class="file-upload-section">
+  <label class="block text-sm font-medium text-gray-700 mb-2">
+    {t.label}
+    {required && <span class="text-red-500 ml-1">*</span>}
+  </label>
+  
+  <!-- 隐藏的文件输入 -->
+  <input
+    type="file"
+    id="file-input"
+    name="files"
+    multiple
+    accept=".step,.stp,.stl,.iges,.igs,.dwg,.dxf,.obj,.ply,.3mf"
+    style="display: none;"
+    required={required}
+  />
+  
+  <!-- 可点击的上传区域 -->
+  <label 
+    for="file-input"
+    id="upload-zone" 
+    class="block border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-500 hover:bg-indigo-50 transition-colors duration-200 cursor-pointer"
+  >
+    
+    <div id="upload-content" class="space-y-2">
+      <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <div class="text-gray-600">
+        <span class="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer">
+          {t.selectFiles}
+        </span>
+        {language === 'zh' ? '或拖拽文件到此处' : 'or drag files here'}
+      </div>
+      <p class="text-xs text-gray-500">{t.supportedFormats}</p>
+      <p class="text-xs text-gray-400">{t.maxFiles}</p>
+    </div>
+  </label>
+
+  <!-- File List Display -->
+  <div id="file-list" class="mt-4 hidden">
+    <h4 class="text-sm font-medium text-gray-700 mb-2">
+      <span id="file-count">0</span> {t.fileSelected}
+    </h4>
+    <div id="file-items" class="space-y-2 max-h-40 overflow-y-auto">
+      <!-- Files will be populated by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Upload Messages -->
+  <div id="file-upload-message" class="mt-2 hidden">
+    <div id="file-success" class="text-green-600 text-sm hidden"></div>
+    <div id="file-error" class="text-red-600 text-sm hidden"></div>
+  </div>
+</div>
+
+<script define:vars={{ language }}>
+class FileUploadHandler {
+  constructor() {
+    this.selectedFiles = [];
+    this.maxSize = 50 * 1024 * 1024; // 50MB
+    this.maxFiles = 10;
+    this.allowedTypes = ['.step', '.stp', '.stl', '.iges', '.igs', '.dwg', '.dxf', '.obj', '.ply', '.3mf'];
+    
+    this.text = {
+      zh: {
+        fileSelected: '个文件已选择',
+        removeFile: '移除',
+        fileTooLarge: '文件过大，最大支持50MB',
+        invalidFormat: '不支持的文件格式',
+        tooManyFiles: '文件数量过多，最多支持10个文件',
+        uploadSuccess: '文件上传成功'
+      },
+      en: {
+        fileSelected: 'file(s) selected',
+        removeFile: 'Remove',
+        fileTooLarge: 'File too large, max 50MB supported',
+        invalidFormat: 'Unsupported file format',
+        tooManyFiles: 'Too many files, maximum 10 files allowed',
+        uploadSuccess: 'Files uploaded successfully'
+      }
+    };
+    
+    this.t = this.text[language];
+    this.initializeEventListeners();
+  }
+
+  initializeEventListeners() {
+    const fileInput = document.getElementById('file-input');
+    const uploadZone = document.getElementById('upload-zone');
+    
+    console.log('🔧 初始化文件上传组件');
+    
+    if (!fileInput) {
+      console.error('❌ 找不到file-input元素');
+      return;
+    }
+
+    // File selection - 这是主要的事件处理
+    fileInput.addEventListener('change', (e) => {
+      console.log('📁 文件选择改变:', e.target.files.length, '个文件');
+      this.handleFiles(e.target.files);
+    });
+
+    // Drag & Drop (如果需要的话)
+    if (uploadZone) {
+      uploadZone.addEventListener('dragover', (e) => this.handleDragOver(e));
+      uploadZone.addEventListener('dragleave', (e) => this.handleDragLeave(e));
+      uploadZone.addEventListener('drop', (e) => this.handleDrop(e));
+    }
+  }
+
+  handleDragOver(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    document.getElementById('upload-zone').classList.add('border-indigo-500', 'bg-indigo-50');
+  }
+
+  handleDragLeave(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    document.getElementById('upload-zone').classList.remove('border-indigo-500', 'bg-indigo-50');
+  }
+
+  handleDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    document.getElementById('upload-zone').classList.remove('border-indigo-500', 'bg-indigo-50');
+    this.handleFiles(e.dataTransfer.files);
+  }
+
+  handleFiles(files) {
+    const fileArray = Array.from(files);
+    
+    if (fileArray.length > this.maxFiles) {
+      this.showError(this.t.tooManyFiles);
+      return;
+    }
+    
+    if (!this.validateFiles(fileArray)) {
+      return;
+    }
+
+    this.selectedFiles = fileArray;
+    this.displayFileList();
+    this.showSuccess(`${this.t.uploadSuccess}: ${fileArray.length} ${this.t.fileSelected}`);
+  }
+
+  validateFiles(files) {
+    for (const file of files) {
+      // Check file size
+      if (file.size > this.maxSize) {
+        this.showError(`${file.name}: ${this.t.fileTooLarge}`);
+        return false;
+      }
+
+      // Check file format
+      const fileName = file.name.toLowerCase();
+      const hasValidExtension = this.allowedTypes.some(ext => fileName.endsWith(ext));
+      
+      if (!hasValidExtension) {
+        this.showError(`${file.name}: ${this.t.invalidFormat}`);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  displayFileList() {
+    const fileList = document.getElementById('file-list');
+    const fileItems = document.getElementById('file-items');
+    const fileCount = document.getElementById('file-count');
+    
+    if (!fileList || !fileItems || !fileCount) return;
+
+    if (this.selectedFiles.length === 0) {
+      fileList.classList.add('hidden');
+      return;
+    }
+
+    fileList.classList.remove('hidden');
+    fileCount.textContent = this.selectedFiles.length;
+
+    fileItems.innerHTML = this.selectedFiles.map((file, index) => `
+      <div class="flex items-center justify-between p-2 bg-gray-50 rounded border">
+        <div class="flex items-center space-x-2">
+          <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M4 3a2 2 0 00-2 2v1.5h12V5a2 2 0 00-2-2H4z"></path>
+            <path d="M2 8.5V15a2 2 0 002 2h8a2 2 0 002-2V8.5H2z"></path>
+          </svg>
+          <span class="text-sm text-gray-700">${file.name}</span>
+          <span class="text-xs text-gray-500">(${this.formatFileSize(file.size)})</span>
+        </div>
+        <button 
+          type="button" 
+          onclick="fileUploadHandler.removeFile(${index})"
+          class="text-red-500 hover:text-red-700 text-sm"
+        >
+          ${this.t.removeFile}
+        </button>
+      </div>
+    `).join('');
+  }
+
+  removeFile(index) {
+    this.selectedFiles.splice(index, 1);
+    this.displayFileList();
+    
+    // Update the file input
+    const fileInput = document.getElementById('file-input');
+    if (fileInput && this.selectedFiles.length === 0) {
+      fileInput.value = '';
+    }
+  }
+
+  formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  showSuccess(message) {
+    this.hideMessages();
+    const successEl = document.getElementById('file-success');
+    if (successEl) {
+      successEl.textContent = message;
+      successEl.classList.remove('hidden');
+      document.getElementById('file-upload-message').classList.remove('hidden');
+    }
+  }
+
+  showError(message) {
+    this.hideMessages();
+    const errorEl = document.getElementById('file-error');
+    if (errorEl) {
+      errorEl.textContent = message;
+      errorEl.classList.remove('hidden');
+      document.getElementById('file-upload-message').classList.remove('hidden');
+    }
+  }
+
+  hideMessages() {
+    const successEl = document.getElementById('file-success');
+    const errorEl = document.getElementById('file-error');
+    if (successEl) successEl.classList.add('hidden');
+    if (errorEl) errorEl.classList.add('hidden');
+  }
+
+  getFiles() {
+    return this.selectedFiles;
+  }
+}
+
+// 初始化文件上传处理器
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.fileUploadHandler) {
+    console.log('✅ 文件上传处理器已存在');
+    return;
+  }
+  
+  window.fileUploadHandler = new FileUploadHandler();
+  console.log('✅ 文件上传处理器初始化成功');
+});
+</script>
+
+<style>
+.file-upload-section {
+  @apply w-full;
+}
+
+#upload-zone.drag-over {
+  @apply border-indigo-500 bg-indigo-50;
+}
+</style>

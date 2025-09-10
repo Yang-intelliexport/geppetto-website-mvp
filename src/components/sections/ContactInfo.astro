@@ -1,5 +1,10 @@
 ---
 // 联系信息展示组件
+interface Props {
+  currentLang?: string;
+}
+
+const { currentLang = 'zh' } = Astro.props;
 ---
 
 <div class="space-y-8">
@@ -19,9 +24,9 @@
         </div>
         <div>
           <h4 class="font-semibold text-gray-800 mb-1">全国客服热线</h4>
-          <p class="text-2xl font-bold text-blue-600">400-XXX-XXXX</p>
+          <p class="text-2xl font-bold text-blue-600">+86 13511091304</p>
           <p class="text-sm text-gray-600">工作时间：周一至周五 9:00-18:00</p>
-          <p class="text-sm text-green-600 font-medium">紧急项目：24小时在线支持</p>
+          <p class="text-sm text-green-600 font-medium">紧急项目：工作时间优先支持</p>
         </div>
       </div>
 
@@ -36,11 +41,11 @@
         <div>
           <h4 class="font-semibold text-gray-800 mb-1">商务合作邮箱</h4>
           <div class="space-y-1">
-            <p><span class="text-purple-600 font-medium">business@geppetto.com</span> - 商务合作</p>
-            <p><span class="text-purple-600 font-medium">support@geppetto.com</span> - 技术支持</p>
-            <p><span class="text-purple-600 font-medium">partners@geppetto.com</span> - 合作伙伴</p>
+            <p><span class="text-purple-600 font-medium">business@geppetto.studio</span> - 商务合作</p>
+            <p><span class="text-purple-600 font-medium">hello@geppetto.studio</span> - 技术支持</p>
+            <p><span class="text-purple-600 font-medium">business@geppetto.studio</span> - 合作伙伴</p>
           </div>
-          <p class="text-sm text-gray-600 mt-1">24小时内回复</p>
+          <p class="text-sm text-gray-600 mt-1">工作时间回复 (10:00-19:00 UTC+8)</p>
         </div>
       </div>
 
@@ -73,11 +78,11 @@
     <div class="space-y-6">
       <!-- 总部 -->
       <div class="border-l-4 border-purple-500 pl-6">
-        <h4 class="font-bold text-gray-800 mb-2">🏢 总部 - 广州</h4>
-        <p class="text-gray-600 mb-2">广州市天河区科技园创新大厦A座15楼</p>
+        <h4 class="font-bold text-gray-800 mb-2">🏢 总部 - 杭州</h4>
+        <p class="text-gray-600 mb-2">杭州余杭区制高科技创客谷E座一楼</p>
         <div class="flex items-center space-x-4 text-sm text-gray-500">
-          <span>🚇 地铁3号线 科技园站A出口</span>
-          <span>🚗 免费停车位</span>
+          <span>📍 1F, Building E, Zhigao Technology Makers Valley</span>
+          <span>🅿️ 园区停车</span>
         </div>
       </div>
 
@@ -133,15 +138,15 @@
         <div class="space-y-2 text-sm">
           <div class="flex justify-between">
             <span class="text-gray-600">紧急项目</span>
-            <span class="font-medium text-green-600">24小时</span>
+            <span class="font-medium text-green-600">工作时间</span>
           </div>
           <div class="flex justify-between">
             <span class="text-gray-600">在线客服</span>
-            <span class="font-medium text-green-600">24小时</span>
+            <span class="font-medium text-green-600">工作时间</span>
           </div>
           <div class="flex justify-between">
             <span class="text-gray-600">技术支持</span>
-            <span class="font-medium text-green-600">随时待命</span>
+            <span class="font-medium text-green-600">工作时间</span>
           </div>
         </div>
       </div>
@@ -201,15 +206,15 @@
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="space-y-3">
-        <a href="/ai-quote" class="flex items-center space-x-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors duration-300">
+        <a href="/create-quote" class="flex items-center space-x-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors duration-300">
           <span class="text-2xl">🤖</span>
           <div>
-            <div class="font-semibold">AI智能报价</div>
-            <div class="text-sm text-blue-200">3秒获得精准报价</div>
+            <div class="font-semibold">AI检测+专家报价</div>
+            <div class="text-sm text-blue-200">AI辅助检测，专家8小时报价</div>
           </div>
         </a>
         
-        <a href="/services" class="flex items-center space-x-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors duration-300">
+        <a href={`/${currentLang}/services`} class="flex items-center space-x-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors duration-300">
           <span class="text-2xl">🔧</span>
           <div>
             <div class="font-semibold">服务详情</div>
@@ -219,7 +224,7 @@
       </div>
       
       <div class="space-y-3">
-        <a href="/case-studies" class="flex items-center space-x-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors duration-300">
+        <a href={`/${currentLang}/case-studies`} class="flex items-center space-x-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors duration-300">
           <span class="text-2xl">📈</span>
           <div>
             <div class="font-semibold">客户案例</div>
@@ -227,7 +232,7 @@
           </div>
         </a>
         
-        <a href="/faq" class="flex items-center space-x-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors duration-300">
+        <a href={`/${currentLang}/faq`} class="flex items-center space-x-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors duration-300">
           <span class="text-2xl">❓</span>
           <div>
             <div class="font-semibold">常见问题</div>

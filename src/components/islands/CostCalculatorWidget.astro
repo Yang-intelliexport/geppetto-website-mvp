@@ -1,0 +1,716 @@
+---
+// CostCalculator Island组件 - 成本计算核心逻辑
+// 使用client:idle指令按需加载，优化首屏性能
+
+interface Props {
+  className?: string;
+  initialValues?: {
+    projectName?: string;
+    quantity?: number;
+    length?: number;
+    width?: number;
+    thickness?: number;
+  };
+}
+
+const { className = "", initialValues = {} } = Astro.props;
+---
+
+<div id="cost-calculator-widget" class={`cost-calculator-container ${className}`}>
+  <!-- 计算器表单UI -->
+  <form id="cost-calculator-form" class="space-y-6">
+    <!-- 项目基本信息 -->
+    <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6">
+      <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        📐 项目信息
+      </h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <label for="project-name" class="block text-sm font-semibold text-gray-700 mb-2">
+            项目名称
+          </label>
+          <input 
+            type="text" 
+            id="project-name" 
+            value={initialValues.projectName || ""}
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+            placeholder="请输入项目名称"
+          >
+        </div>
+        
+        <div>
+          <label for="quantity" class="block text-sm font-semibold text-gray-700 mb-2">
+            数量
+          </label>
+          <input 
+            type="number" 
+            id="quantity" 
+            value={initialValues.quantity || 1}
+            min="1"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+            placeholder="1"
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- 尺寸信息 -->
+    <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-6">
+      <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        📏 零件尺寸 (mm)
+      </h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label for="length" class="block text-sm font-semibold text-gray-700 mb-2">
+            长度 (L)
+          </label>
+          <input 
+            type="number" 
+            id="length" 
+            value={initialValues.length || 100}
+            step="0.1"
+            min="0.1"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+            placeholder="100"
+          >
+        </div>
+        
+        <div>
+          <label for="width" class="block text-sm font-semibold text-gray-700 mb-2">
+            宽度 (W)
+          </label>
+          <input 
+            type="number" 
+            id="width" 
+            value={initialValues.width || 50}
+            step="0.1"
+            min="0.1"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+            placeholder="50"
+          >
+        </div>
+        
+        <div>
+          <label for="thickness" class="block text-sm font-semibold text-gray-700 mb-2">
+            厚度 (T)
+          </label>
+          <input 
+            type="number" 
+            id="thickness" 
+            value={initialValues.thickness || 10}
+            step="0.1"
+            min="0.1"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+            placeholder="10"
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- 材料选择 -->
+    <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6">
+      <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        🔧 材料规格
+      </h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="material-type" class="block text-sm font-semibold text-gray-700 mb-2">
+            材料类型
+          </label>
+          <select 
+            id="material-type"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+          >
+            <option value="aluminum">铝合金</option>
+            <option value="steel">不锈钢</option>
+            <option value="titanium">钛合金</option>
+            <option value="brass">黄铜</option>
+            <option value="plastic">工程塑料</option>
+          </select>
+        </div>
+        
+        <div>
+          <label for="material-grade" class="block text-sm font-semibold text-gray-700 mb-2">
+            牌号规格
+          </label>
+          <select 
+            id="material-grade"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+          >
+            <option value="6061-t6">6061-T6</option>
+            <option value="7075-t6">7075-T6</option>
+            <option value="2024-t3">2024-T3</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 加工要求 -->
+    <div class="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-6">
+      <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        ⚙️ 加工要求
+      </h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="tolerance-level" class="block text-sm font-semibold text-gray-700 mb-2">
+            公差等级
+          </label>
+          <select 
+            id="tolerance-level"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
+          >
+            <option value="standard">Standard (General tolerance requirements)</option>
+            <option value="high">Precision (Project-customized precision)</option>
+            <option value="ultra">Ultra-precision (Strict tolerance standards)</option>
+            <option value="extreme">Extreme (Maximum precision standards)</option>
+          </select>
+        </div>
+        
+        <div>
+          <label for="complexity" class="block text-sm font-semibold text-gray-700 mb-2">
+            复杂程度
+          </label>
+          <select 
+            id="complexity"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
+          >
+            <option value="simple">简单 (基础几何)</option>
+            <option value="medium">中等 (多特征)</option>
+            <option value="complex">复杂 (精密特征)</option>
+            <option value="very-complex">极复杂 (超精密)</option>
+          </select>
+        </div>
+        
+        <div>
+          <label for="surface-finish" class="block text-sm font-semibold text-gray-700 mb-2">
+            表面处理
+          </label>
+          <select 
+            id="surface-finish"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
+          >
+            <option value="none">无需处理</option>
+            <option value="anodizing">阳极氧化</option>
+            <option value="powder-coating">喷粉涂装</option>
+            <option value="plating">电镀处理</option>
+            <option value="polishing">抛光处理</option>
+          </select>
+        </div>
+        
+        <div>
+          <label for="delivery-time" class="block text-sm font-semibold text-gray-700 mb-2">
+            交付要求
+          </label>
+          <select 
+            id="delivery-time"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
+          >
+            <option value="standard">标准交付 (7-10天)</option>
+            <option value="fast">快速交付 (3-5天)</option>
+            <option value="express">加急交付 (1-2天)</option>
+            <option value="immediate">极速交付 (工作时间)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 质量认证 -->
+    <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6">
+      <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        📜 质量认证
+      </h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-indigo-50 transition-colors cursor-pointer">
+          <input type="checkbox" id="iso9001" class="form-checkbox text-indigo-600">
+          <span class="text-sm font-medium text-gray-700">ISO 9001 质量管理</span>
+        </label>
+        
+        <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-indigo-50 transition-colors cursor-pointer">
+          <input type="checkbox" id="as9100" class="form-checkbox text-indigo-600">
+          <span class="text-sm font-medium text-gray-700">AS 9100 航空航天</span>
+        </label>
+        
+        <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-indigo-50 transition-colors cursor-pointer">
+          <input type="checkbox" id="quality_certifications" class="form-checkbox text-indigo-600">
+          <span class="text-sm font-medium text-gray-700">quality certifications 医疗器械</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 计算按钮 -->
+    <div class="flex justify-center">
+      <button 
+        type="button" 
+        id="calculate-cost"
+        class="px-12 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-2xl hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-2xl"
+      >
+        🧮 智能成本分析
+      </button>
+    </div>
+  </form>
+
+  <!-- 计算结果显示区域 -->
+  <div id="calculation-results" class="hidden mt-8">
+    <!-- 结果内容将通过JavaScript动态生成 -->
+  </div>
+
+  <!-- 错误提示 -->
+  <div id="error-message" class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+    <div class="flex items-center">
+      <svg class="w-5 h-5 text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+      </svg>
+      <span id="error-text" class="text-red-700 font-medium"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // CostCalculator Island组件的JavaScript逻辑
+  // 使用client:idle按需加载，优化性能
+  
+  class CostCalculatorIsland {
+    constructor() {
+      this.materialPrices = {
+        aluminum: {
+          '6061-t6': 18, '7075-t6': 35, '2024-t3': 22
+        },
+        steel: {
+          '304': 14, '316l': 18, '17-4ph': 35
+        },
+        titanium: {
+          'ti-6al-4v': 120, 'grade-2': 100, 'grade-5': 140
+        },
+        brass: {
+          'c360': 25, 'c464': 30
+        },
+        plastic: {
+          'peek': 80, 'pom': 15, 'pa6': 10
+        }
+      };
+
+      this.complexityFactors = {
+        simple: 1.0,
+        medium: 1.2,
+        complex: 1.5,
+        'very-complex': 1.8
+      };
+
+      this.toleranceFactors = {
+        standard: 1.0,
+        high: 1.15,
+        ultra: 1.35,
+        extreme: 1.6
+      };
+
+      this.deliveryFactors = {
+        standard: 1.0,
+        fast: 1.2,
+        express: 1.5,
+        immediate: 2.0
+      };
+
+      this.surfaceFinishCosts = {
+        none: 0,
+        anodizing: 6,         // 阳极氧化 约6-8元/dm² (调整至与实际报价匹配)
+        'powder-coating': 8,  // 粉末涂装 约8-10元/dm²
+        plating: 12,          // 电镀 约12-15元/dm²
+        polishing: 4          // 抛光 约4-6元/dm²
+      };
+
+      this.initializeEventListeners();
+    }
+
+    initializeEventListeners() {
+      const calculateBtn = document.getElementById('calculate-cost');
+      const form = document.getElementById('cost-calculator-form');
+      
+      if (!calculateBtn || !form) return;
+      
+      calculateBtn.addEventListener('click', () => this.calculateCost());
+      
+      // 实时计算（当参数改变时）
+      const inputs = form.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        input.addEventListener('change', () => this.debounceCalculate());
+      });
+
+      // 材料类型改变时更新牌号选项
+      const materialType = document.getElementById('material-type');
+      if (materialType) {
+        materialType.addEventListener('change', (e) => {
+          this.updateMaterialGrades(e.target.value);
+        });
+        
+        // 初始化材料牌号选项
+        this.updateMaterialGrades(materialType.value);
+      }
+    }
+
+    updateMaterialGrades(materialType) {
+      const gradeSelect = document.getElementById('material-grade');
+      if (!gradeSelect) return;
+      
+      gradeSelect.innerHTML = '';
+      
+      const grades = Object.keys(this.materialPrices[materialType] || {});
+      grades.forEach(grade => {
+        const option = document.createElement('option');
+        option.value = grade;
+        option.textContent = grade.toUpperCase();
+        gradeSelect.appendChild(option);
+      });
+    }
+
+    debounceCalculate() {
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => this.calculateCost(), 500);
+    }
+
+    calculateCost() {
+      try {
+        const params = this.getFormParameters();
+        const costs = this.computeCosts(params);
+        this.displayResults(costs, params);
+        this.hideError();
+      } catch (error) {
+        console.error('计算出错:', error);
+        this.showError('计算过程中出现错误，请检查输入参数');
+      }
+    }
+
+    getFormParameters() {
+      return {
+        projectName: document.getElementById('project-name')?.value || '未命名项目',
+        quantity: parseInt(document.getElementById('quantity')?.value) || 1,
+        length: parseFloat(document.getElementById('length')?.value) || 100,
+        width: parseFloat(document.getElementById('width')?.value) || 50,
+        thickness: parseFloat(document.getElementById('thickness')?.value) || 10,
+        materialType: document.getElementById('material-type')?.value || 'aluminum',
+        materialGrade: document.getElementById('material-grade')?.value || '6061-t6',
+        toleranceLevel: document.getElementById('tolerance-level')?.value || 'standard',
+        surfaceFinish: document.getElementById('surface-finish')?.value || 'none',
+        complexity: document.getElementById('complexity')?.value || 'simple',
+        deliveryTime: document.getElementById('delivery-time')?.value || 'standard',
+        iso9001: document.getElementById('iso9001')?.checked || false,
+        as9100: document.getElementById('as9100')?.checked || false,
+        quality_certifications: document.getElementById('quality_certifications')?.checked || false
+      };
+    }
+
+    computeCosts(params) {
+      // 计算体积和重量 (长宽高单位：mm)
+      const volume = (params.length * params.width * params.thickness) / 1000000000; // mm³转换为m³
+      const materialDensity = this.getMaterialDensity(params.materialType);
+      const weight = volume * materialDensity; // kg
+
+      // 基础材料成本 (包含损耗、库存等成本)
+      const materialPricePerKg = this.materialPrices[params.materialType][params.materialGrade] || 20;
+      const materialWasteFactor = 3.1; // 考虑材料损耗、库存、管理成本、切削工具损耗
+      const materialCost = weight * materialPricePerKg * materialWasteFactor;
+
+      // 加工成本
+      const baseMachiningCost = this.calculateMachiningCost(params, volume);
+      const complexityFactor = this.complexityFactors[params.complexity] || 1.0;
+      const toleranceFactor = this.toleranceFactors[params.toleranceLevel] || 1.0;
+      const deliveryFactor = this.deliveryFactors[params.deliveryTime] || 1.0;
+      
+      const machiningCost = baseMachiningCost * complexityFactor * toleranceFactor * deliveryFactor;
+
+      // 表面处理成本 (表面积单位：mm²，转换为dm²进行计算)
+      const surfaceArea = this.calculateSurfaceArea(params);
+      const surfaceFinishCost = (this.surfaceFinishCosts[params.surfaceFinish] || 0) * surfaceArea / 10000;
+
+      // 质量认证成本
+      let certificationCost = 0;
+      if (params.iso9001) certificationCost += 50;
+      if (params.as9100) certificationCost += 100;
+      if (params.quality_certifications) certificationCost += 150;
+
+      // 直接制造成本
+      const directCost = materialCost + machiningCost + surfaceFinishCost + certificationCost;
+      
+      // 商业运营系数 (包含工厂运营、设备折旧、质量管理、利润等)
+      const businessOperationFactor = 4.18; // 3.8 * 1.1 (上浮10%)
+      const unitCost = directCost * businessOperationFactor;
+      
+      // 批量折扣
+      const quantityDiscount = this.calculateQuantityDiscount(params.quantity);
+      const discountedUnitCost = unitCost * (1 - quantityDiscount);
+      
+      // 总成本
+      const totalCost = discountedUnitCost * params.quantity;
+
+      return {
+        materialCost: materialCost.toFixed(2),
+        machiningCost: machiningCost.toFixed(2),
+        surfaceFinishCost: surfaceFinishCost.toFixed(2),
+        certificationCost: certificationCost.toFixed(2),
+        directCost: directCost.toFixed(2),
+        businessFactor: businessOperationFactor,
+        unitCost: discountedUnitCost.toFixed(2),
+        totalCost: totalCost.toFixed(2),
+        quantityDiscount: (quantityDiscount * 100).toFixed(1),
+        weight: weight.toFixed(3),
+        volume: volume.toFixed(6),
+        breakdown: {
+          // 黄金定价模板 - 四大成本模块
+          transparentThirdParty: (materialCost + (surfaceFinishCost * 0.3)).toFixed(2),  // 透明第三方成本(材料+部分表面处理)
+          engineeringSetup: (machiningCost * 0.4).toFixed(2),                           // 一次性工程费(设计分析+编程)  
+          professionalService: (machiningCost * 0.6 + surfaceFinishCost * 0.7 + certificationCost).toFixed(2), // 专业制造与品控服务
+          businessOperation: (directCost * (businessOperationFactor - 1)).toFixed(2),    // 运营管理费用
+          
+          // 保留原始分解用于内部分析
+          _internal: {
+            material: materialCost.toFixed(2),
+            machining: machiningCost.toFixed(2),
+            surface: surfaceFinishCost.toFixed(2),
+            certification: certificationCost.toFixed(2),
+            direct: directCost.toFixed(2)
+          }
+        }
+      };
+    }
+
+    getMaterialDensity(materialType) {
+      const densities = {
+        aluminum: 2700,
+        steel: 7850,
+        titanium: 4500,
+        brass: 8500,
+        plastic: 1200
+      };
+      return densities[materialType] || 2700;
+    }
+
+    calculateMachiningCost(params, volume) {
+      // 根据复杂度设定不同的基础费率 (基于市场调研数据)
+      const complexityRates = {
+        simple: 45,    // 简单零件 40-50元/小时
+        medium: 55,    // 中等复杂 50-60元/小时  
+        complex: 65,   // 复杂零件 60-70元/小时
+        'very-complex': 75  // 极复杂零件 70-80元/小时
+      };
+      
+      const baseRate = complexityRates[params.complexity] || 55;
+      
+      // 基于实际加工时间估算：需要考虑机器准备、编程、检验等时间
+      const volumeFactor = Math.max(0.8, Math.pow(volume * 1000, 0.4) * 3.8); // 调整体积系数以匹配目标加工费
+      return baseRate * volumeFactor;
+    }
+
+    calculateSurfaceArea(params) {
+      const { length, width, thickness } = params;
+      return 2 * (length * width + length * thickness + width * thickness);
+    }
+
+    calculateQuantityDiscount(quantity) {
+      if (quantity >= 1000) return 0.15;
+      if (quantity >= 500) return 0.12;
+      if (quantity >= 100) return 0.08;
+      if (quantity >= 50) return 0.05;
+      return 0;
+    }
+
+    displayResults(costs, params) {
+      const resultsDiv = document.getElementById('calculation-results');
+      if (!resultsDiv) return;
+
+      resultsDiv.innerHTML = `
+        <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8">
+          <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center">
+            💰 智能成本分析结果
+          </h3>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- 成本概览 -->
+            <div class="bg-white rounded-xl p-6 shadow-lg">
+              <h4 class="text-lg font-bold text-gray-800 mb-4">💎 成本概览</h4>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                  <span class="text-gray-600">项目名称</span>
+                  <span class="font-semibold text-gray-800">${params.projectName}</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                  <span class="text-gray-600">数量</span>
+                  <span class="font-semibold text-gray-800">${params.quantity} 件</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                  <span class="text-gray-600">单件成本</span>
+                  <span class="font-bold text-green-600 text-lg">¥${costs.unitCost}</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-200 border-b-2">
+                  <span class="text-gray-800 font-semibold">总成本</span>
+                  <span class="font-bold text-purple-600 text-2xl">¥${costs.totalCost}</span>
+                </div>
+                ${costs.quantityDiscount > 0 ? `
+                <div class="bg-green-50 p-3 rounded-lg">
+                  <div class="text-green-700 text-sm">
+                    🎉 批量优惠：${costs.quantityDiscount}% 折扣已应用
+                  </div>
+                </div>
+                ` : ''}
+              </div>
+            </div>
+
+            <!-- 黄金定价模板分解 -->
+            <div class="bg-white rounded-xl p-6 shadow-lg">
+              <h4 class="text-lg font-bold text-gray-800 mb-4">📋 专业制造服务包</h4>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center py-2">
+                  <span class="text-gray-600 flex items-center">
+                    <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                    材料与基础处理
+                  </span>
+                  <span class="font-semibold text-blue-600">¥${costs.breakdown.transparentThirdParty}</span>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                  <span class="text-gray-600 flex items-center">
+                    <span class="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                    工程设计与编程
+                  </span>
+                  <span class="font-semibold text-orange-600">¥${costs.breakdown.engineeringSetup}</span>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                  <span class="text-gray-600 flex items-center">
+                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    制造与品控服务
+                  </span>
+                  <span class="font-semibold text-green-600">¥${costs.breakdown.professionalService}</span>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                  <span class="text-gray-600 flex items-center">
+                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                    运营管理费用
+                  </span>
+                  <span class="font-semibold text-purple-600">¥${costs.breakdown.businessOperation}</span>
+                </div>
+              </div>
+              
+              <div class="mt-4 pt-4 border-t border-gray-200">
+                <div class="text-xs text-gray-400">
+                  技术参数：${costs.weight} kg | ${costs.volume} m³
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 黄金定价模板：价值解释 -->
+          <div class="mt-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6">
+            <h4 class="text-lg font-bold text-gray-800 mb-3 text-center">💎 专业制造服务价值</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div class="space-y-2">
+                <div class="flex items-start">
+                  <span class="w-2 h-2 bg-blue-500 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                  <span class="text-gray-600"><strong>透明第三方成本</strong>：实时材料价格 + 标准表面处理，可验证无水分</span>
+                </div>
+                <div class="flex items-start">
+                  <span class="w-2 h-2 bg-orange-500 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                  <span class="text-gray-600"><strong>工程设计服务</strong>：CAD分析 + CNC编程 + 工艺优化</span>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-start">
+                  <span class="w-2 h-2 bg-green-500 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                  <span class="text-gray-600"><strong>Manufacturing & Quality Control</strong>：Project-customized precision machining + Full quality monitoring</span>
+                </div>
+                <div class="flex items-start">
+                  <span class="w-2 h-2 bg-purple-500 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                  <span class="text-gray-600"><strong>运营保障</strong>：设备维护 + 专家团队 + 交付承诺</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6 text-center">
+            <div class="mb-4 text-sm text-gray-600">
+              ⚡ 8小时专家审核详细报价 | 🔒 零隐藏费用保证 | ✅ ±5%精度承诺
+            </div>
+            <button 
+              onclick="window.location.href='/zh/create-quote'"
+              class="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-xl hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+            >
+              🚀 上传CAD获取专业报价
+            </button>
+          </div>
+        </div>
+      `;
+      
+      resultsDiv.classList.remove('hidden');
+      resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    showError(message) {
+      const errorDiv = document.getElementById('error-message');
+      const errorText = document.getElementById('error-text');
+      if (errorDiv && errorText) {
+        errorText.textContent = message;
+        errorDiv.classList.remove('hidden');
+      }
+    }
+
+    hideError() {
+      const errorDiv = document.getElementById('error-message');
+      if (errorDiv) {
+        errorDiv.classList.add('hidden');
+      }
+    }
+  }
+
+  // 组件初始化
+  document.addEventListener('DOMContentLoaded', () => {
+    new CostCalculatorIsland();
+  });
+</script>
+
+<style>
+  .cost-calculator-container {
+    max-width: 100%;
+  }
+  
+  /* 自定义滚动条样式 */
+  .cost-calculator-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .cost-calculator-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  .cost-calculator-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #7c3aed, #3b82f6);
+    border-radius: 10px;
+  }
+  
+  .cost-calculator-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #6d28d9, #2563eb);
+  }
+
+  /* 表单聚焦样式增强 */
+  .cost-calculator-container input:focus,
+  .cost-calculator-container select:focus {
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  }
+
+  /* 结果动画 */
+  #calculation-results {
+    animation: fadeInUp 0.5s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

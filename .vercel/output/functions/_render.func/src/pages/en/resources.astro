@@ -1,0 +1,264 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Get all English resource articles (non-draft)
+const allResources = await getCollection('resources-en', ({ data }) => {
+  return !data.draft;
+});
+
+// Sort by publication date
+const sortedResources = allResources.sort((a, b) => 
+  new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+);
+
+// Get featured articles
+const featuredResources = sortedResources.filter(resource => resource.data.featured);
+
+// Group by category
+const categories = [
+  'manufacturing-guides',
+  'cnc-machining', 
+  'materials-science',
+  'design-tips',
+  'industry-insights',
+  'automation-ai',
+  'quality-control',
+  'cost-optimization'
+];
+
+const categoryMap = {
+  'manufacturing-guides': 'Manufacturing Guides',
+  'cnc-machining': 'CNC Machining',
+  'materials-science': 'Materials Science',
+  'design-tips': 'Design Tips',
+  'industry-insights': 'Industry Insights',
+  'automation-ai': 'Automation & AI',
+  'quality-control': 'Quality Control',
+  'cost-optimization': 'Cost Optimization'
+};
+
+const resourcesByCategory = categories.reduce((acc, category) => {
+  acc[category] = sortedResources.filter(resource => resource.data.category === category);
+  return acc;
+}, {});
+
+const seoData = {
+  title: 'Geppetto Manufacturing Resources - CNC Guides & Industry Insights',
+  description: 'Deep dive into CNC machining, materials science, design optimization and manufacturing expertise. Get professional manufacturing guides to improve quality and efficiency.',
+  keywords: ['CNC machining guide', 'manufacturing knowledge', 'materials science', 'design optimization', 'quality control', 'cost optimization', 'smart manufacturing', 'transparent manufacturing']
+};
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+---
+
+<BaseLayout
+  title={seoData.title}
+  description={seoData.description}
+  keywords={seoData.keywords}
+>
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h1 class="text-5xl lg:text-6xl font-bold mb-6">
+          Manufacturing Knowledge Hub
+        </h1>
+        <p class="text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
+          Deep Manufacturing Insights • Expert Guides • Industry Best Practices
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/en/create-quote"
+            class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+          >
+            Get Expert Quote
+          </a>
+          <a 
+            href="#categories"
+            class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-colors"
+          >
+            Browse Resources
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Articles -->
+  {featuredResources.length > 0 && (
+    <section class="py-20 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-gray-900 mb-4">
+            Featured Articles
+          </h2>
+          <p class="text-xl text-gray-600">
+            Expert insights to power your manufacturing decisions
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuredResources.slice(0, 6).map((resource) => (
+            <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              {resource.data.image && (
+                <img 
+                  src={resource.data.image} 
+                  alt={resource.data.imageAlt || resource.data.title}
+                  class="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+              )}
+              <div class="p-6">
+                <div class="flex items-center space-x-2 mb-3">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                    {categoryMap[resource.data.category] || resource.data.category}
+                  </span>
+                  <span class="text-xs text-gray-500">
+                    {resource.data.readingTime} min
+                  </span>
+                </div>
+                
+                <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+                  <a href={`/en/resources/${resource.slug}`} class="hover:text-purple-600 transition-colors">
+                    {resource.data.title}
+                  </a>
+                </h3>
+                
+                <p class="text-gray-600 mb-4 line-clamp-3">
+                  {resource.data.description}
+                </p>
+                
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                  <span>{resource.data.author}</span>
+                  <time datetime={resource.data.publishDate.toISOString()}>
+                    {formatDate(resource.data.publishDate)}
+                  </time>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Browse by Category -->
+  <section id="categories" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">
+          Browse by Category
+        </h2>
+        <p class="text-xl text-gray-600">
+          Deep dive into manufacturing knowledge by expertise area
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {categories.map((category) => {
+          const categoryResources = resourcesByCategory[category] || [];
+          const categoryName = categoryMap[category];
+          
+          if (categoryResources.length === 0) return null;
+          
+          return (
+            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col">
+              <div class="p-6 flex flex-col h-full">
+                <!-- Header Section - Fixed Height -->
+                <div class="text-center mb-4 flex-shrink-0">
+                  <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl">
+                      {category === 'manufacturing-guides' ? '🏭' :
+                       category === 'cnc-machining' ? '⚙️' :
+                       category === 'materials-science' ? '🧪' :
+                       category === 'design-tips' ? '✏️' :
+                       category === 'industry-insights' ? '📈' :
+                       category === 'automation-ai' ? '🤖' :
+                       category === 'quality-control' ? '🎯' :
+                       category === 'cost-optimization' ? '💰' : '📚'}
+                    </span>
+                  </div>
+                  <h3 class="text-xl font-bold text-gray-900 mb-2 min-h-[2.5rem] flex items-center justify-center">
+                    {categoryName}
+                  </h3>
+                  <p class="text-gray-600 text-sm">
+                    {categoryResources.length} articles
+                  </p>
+                </div>
+                
+                <!-- Content Section - Flexible Height -->
+                <div class="flex-grow mb-6">
+                  <div class="space-y-3">
+                    {categoryResources.slice(0, 3).map((resource) => (
+                      <a 
+                        href={`/en/resources/${resource.slug}`}
+                        class="block text-sm text-gray-700 hover:text-purple-600 transition-colors line-clamp-2 hover:bg-purple-50 p-2 rounded leading-tight"
+                      >
+                        {resource.data.title}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+                
+                <!-- Footer Button - Fixed at Bottom -->
+                <div class="flex-shrink-0 mt-auto">
+                  <a 
+                    href={`/en/resources/category/${category}`}
+                    class="block w-full text-center bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                  >
+                    View All
+                  </a>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bg-gradient-to-r from-purple-600 to-blue-600 py-16">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+        Turn Knowledge into Real Production
+      </h2>
+      <p class="text-xl text-blue-100 mb-8">
+        Get transparent quotes and experience expert manufacturing services
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/en/create-quote"
+          class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
+          Upload Files for Quote
+        </a>
+        <a 
+          href="/en/contact"
+          class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-colors"
+        >
+          💬 Consult Expert
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

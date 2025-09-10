@@ -124,10 +124,10 @@
           name="precision"
           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
         >
-          <option value="standard">标准精度 (±0.1mm)</option>
-          <option value="high">高精度 (±0.05mm)</option>
-          <option value="ultra">超高精度 (±0.02mm)</option>
-          <option value="extreme">极限精度 (±0.01mm)</option>
+          <option value="standard">标准精度 (按需定制)</option>
+          <option value="high">高精度 (项目要求)</option>
+          <option value="ultra">超高精度 (特殊要求)</option>
+          <option value="extreme">极限精度 (最高标准)</option>
         </select>
       </div>
       
@@ -142,7 +142,7 @@
         >
           <option value="standard">标准交期 (3-5天)</option>
           <option value="fast">加急交期 (1-2天)</option>
-          <option value="express">特急交期 (24小时)</option>
+          <option value="express">特急交期 (工作时间)</option>
           <option value="immediate">极急交期 (12小时)</option>
         </select>
       </div>
@@ -202,7 +202,7 @@
       id="ai-submit-btn"
       class="bg-gradient-to-r from-yellow-400 to-orange-500 text-purple-900 px-12 py-4 rounded-full text-xl font-bold hover:from-yellow-300 hover:to-orange-400 transform hover:scale-105 transition-all duration-300 shadow-2xl"
     >
-      <span id="ai-submit-text">🚀 获取AI智能报价</span>
+      <span id="ai-submit-text">🚀 获取AI检测+专家报价</span>
       <span id="ai-loading-text" class="hidden">🔄 正在处理...</span>
     </button>
     
@@ -243,8 +243,8 @@
           抱歉，提交过程中出现了问题。请重试或直接联系我们。
         </p>
         <div class="space-y-1 text-sm text-red-600">
-          <div>• 技术支持：<strong>400-XXX-XXXX</strong></div>
-          <div>• 邮箱：<strong>support@geppetto.com</strong></div>
+          <div>• 技术支持：<strong>+86 13511091304</strong></div>
+          <div>• 邮箱：<strong>hello@geppetto.studio</strong></div>
         </div>
       </div>
     </div>
@@ -253,6 +253,8 @@
 
 <script>
   import { submitQuoteRequest, uploadFile } from '../../utils/supabase.js';
+  import { hasValidAuth, requireEmailVerification, checkUserPermission, handleAuthCallback } from '../../utils/authUtils.js';
+  import { showError, showSuccess, showInfo, showLoading, closeModal } from '../../stores/modalStore.js';
 
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('ai-quote-form');
@@ -267,6 +269,98 @@
     const errorText = document.getElementById('ai-error-text');
 
     let selectedFiles = [];
+    const FORM_DATA_KEY = 'geppetto_quote_form_data';
+
+    // 页面加载时检查是否有验证回调和表单数据恢复
+    checkAuthCallbackAndRestoreForm();
+
+    // 保存表单数据到localStorage
+    function saveFormData() {
+      try {
+        const formData = new FormData(form);
+        const data = {
+          name: formData.get('name') || '',
+          email: formData.get('email') || '',
+          company: formData.get('company') || '',
+          phone: formData.get('phone') || '',
+          material: formData.get('material') || '',
+          quantity: formData.get('quantity') || '1',
+          precision: formData.get('precision') || '',
+          delivery: formData.get('delivery') || '',
+          requirements: formData.get('requirements') || '',
+          timestamp: Date.now()
+        };
+        localStorage.setItem(FORM_DATA_KEY, JSON.stringify(data));
+        console.log('💾 表单数据已保存');
+      } catch (error) {
+        console.error('❌ 保存表单数据失败:', error);
+      }
+    }
+
+    // 恢复表单数据
+    function restoreFormData() {
+      try {
+        const savedData = localStorage.getItem(FORM_DATA_KEY);
+        if (!savedData) return false;
+
+        const data = JSON.parse(savedData);
+        
+        // 检查数据是否过期（1小时）
+        if (Date.now() - data.timestamp > 60 * 60 * 1000) {
+          clearFormData();
+          return false;
+        }
+
+        // 恢复表单字段
+        Object.keys(data).forEach(key => {
+          if (key === 'timestamp') return;
+          const field = form.querySelector(`[name="${key}"]`);
+          if (field && data[key]) {
+            field.value = data[key];
+          }
+        });
+
+        console.log('📋 表单数据已恢复');
+        return true;
+      } catch (error) {
+        console.error('❌ 恢复表单数据失败:', error);
+        clearFormData();
+        return false;
+      }
+    }
+
+    // 清除保存的表单数据
+    function clearFormData() {
+      try {
+        localStorage.removeItem(FORM_DATA_KEY);
+        console.log('🧹 表单数据已清除');
+      } catch (error) {
+        console.error('❌ 清除表单数据失败:', error);
+      }
+    }
+
+    // 检查认证回调并恢复表单
+    async function checkAuthCallbackAndRestoreForm() {
+      const urlParams = new URLSearchParams(window.location.search);
+      
+      // 检查是否是认证回调
+      const authResult = await handleAuthCallback(urlParams);
+      if (authResult && authResult.purpose === 'quote_submit') {
+        console.log('✅ 邮箱验证成功，恢复表单数据');
+        
+        // 恢复表单数据
+        const restored = restoreFormData();
+        if (restored) {
+          // 显示验证成功消息
+          showSuccess('验证成功', '邮箱验证成功！您可以继续提交报价申请。');
+          
+          // 清理URL参数
+          const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+          window.history.replaceState({}, document.title, cleanUrl);
+        }
+      }
+    }
+
 
     // 文件上传处理
     fileInput.addEventListener('change', (e) => {
@@ -358,13 +452,13 @@
       
       for (const file of selectedFiles) {
         if (file.size > maxSize) {
-          showError(`文件 "${file.name}" 超过50MB大小限制`);
+          showError('文件过大', `文件 "${file.name}" 超过50MB大小限制`);
           return false;
         }
         
         const extension = '.' + file.name.split('.').pop().toLowerCase();
         if (!allowedTypes.includes(extension)) {
-          showError(`文件 "${file.name}" 格式不支持`);
+          showError('文件格式不支持', `文件 "${file.name}" 格式不支持。请使用STEP、STL、IGES等CAD格式。`);
           return false;
         }
       }
@@ -377,7 +471,7 @@
       
       // 验证文件
       if (selectedFiles.length === 0) {
-        showError('请至少上传一个CAD文件');
+        showError('文件缺失', '请至少上传一个CAD文件');
         return;
       }
 
@@ -385,6 +479,57 @@
         return;
       }
 
+      // 获取邮箱并检查权限
+      const formData = new FormData(form);
+      const email = formData.get('email');
+      
+      if (!email) {
+        showError('信息缺失', '请输入邮箱地址');
+        return;
+      }
+
+      // 检查邮箱是否已验证
+      const permissionCheck = checkUserPermission(email, '提交报价申请');
+      if (!permissionCheck.hasPermission) {
+        if (permissionCheck.reason === 'need_verification') {
+          // 需要验证邮箱，先保存表单数据
+          saveFormData();
+          
+          try {
+            // 发送验证邮件
+            const loadingId = showLoading('正在发送验证邮件...');
+            const currentUrl = window.location.href;
+            await requireEmailVerification(email, 'quote_submit', currentUrl);
+            
+            // 关闭加载提示并显示验证提示
+            closeModal();
+            showVerificationPrompt(email);
+            return;
+          } catch (error) {
+            closeModal();
+            showError('发送失败', '发送验证邮件失败: ' + error.message);
+            return;
+          }
+        } else {
+          showError('权限错误', permissionCheck.message);
+          return;
+        }
+      }
+
+      // 邮箱已验证，继续提交
+      await submitQuote();
+    });
+
+    // 显示验证提示
+    function showVerificationPrompt(email) {
+      showInfo(
+        '验证邮件已发送',
+        `我们已向 ${email} 发送了验证邮件。请检查您的邮箱（包括垃圾邮件箱），点击邮件中的链接完成验证。验证完成后，您的表单内容会自动恢复，可以继续提交。`
+      );
+    }
+
+    // 实际提交报价函数
+    async function submitQuote() {
       // 显示加载状态
       submitBtn.disabled = true;
       submitText.classList.add('hidden');
@@ -398,8 +543,7 @@
         // 先上传文件
         const uploadPromises = selectedFiles.map(file => uploadFile(file));
         const uploadResults = await Promise.all(uploadPromises);
-        const fileUrls = uploadResults.map(result => result.url);
-
+        
         // 准备报价请求数据
         const formData = new FormData(form);
         const quoteData = {
@@ -410,7 +554,8 @@
           material: formData.get('material'),
           quantity: parseInt(formData.get('quantity')),
           requirements: formData.get('requirements') || '',
-          file_urls: fileUrls,
+          file_uploads: uploadResults, // 传递完整的上传结果而不只是URL
+          file_urls: uploadResults.map(result => result.url), // 保持向后兼容
           status: 'pending'
         };
 
@@ -418,10 +563,16 @@
         const result = await submitQuoteRequest(quoteData);
 
         // 成功
-        successMessage.classList.remove('hidden');
+        showSuccess(
+          '报价请求提交成功！',
+          '您的CAD文件已上传成功，我们的AI系统正在进行分析。AI分析完成后，将显示详细的成本分解。专业工程师将在4-8小时内进行技术复核，最终报价将通过邮件发送给您。'
+        );
         form.reset();
         selectedFiles = [];
         displayFileList();
+        
+        // 清除保存的表单数据
+        clearFormData();
         
         // 追踪转化事件
         if (typeof gtag !== 'undefined') {
@@ -440,22 +591,15 @@
 
       } catch (error) {
         console.error('AI报价提交错误:', error);
-        showError(error.message || '提交失败，请稍后重试');
+        showError('提交失败', error.message || '提交失败，请稍后重试。如需帮助，请联系技术支持：+86 13511091304');
       } finally {
         // 恢复按钮状态
         submitBtn.disabled = false;
         submitText.classList.remove('hidden');
         loadingText.classList.add('hidden');
       }
-    });
-
-    function showError(message) {
-      errorText.textContent = message;
-      errorMessage.classList.remove('hidden');
-      
-      // 滚动到错误消息
-      errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+
 
     function formatFileSize(bytes) {
       if (bytes === 0) return '0 Bytes';
@@ -464,6 +608,22 @@
       const i = Math.floor(Math.log(bytes) / Math.log(k));
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
+
+    // 表单字段自动保存
+    const formFields = form.querySelectorAll('input, select, textarea');
+    formFields.forEach(field => {
+      field.addEventListener('input', () => {
+        // 延迟保存，避免频繁操作
+        clearTimeout(field.saveTimeout);
+        field.saveTimeout = setTimeout(() => {
+          saveFormData();
+        }, 1000);
+      });
+      
+      field.addEventListener('change', () => {
+        saveFormData();
+      });
+    });
 
     // 全局函数用于删除文件
     window.removeFile = (index) => {

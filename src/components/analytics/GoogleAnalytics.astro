@@ -92,7 +92,7 @@ const isDev = import.meta.env.DEV
       window.trackQuoteRequest = function(quoteData) {
         if (window.gtag && window.gaInitialized) {
           gtag('event', 'generate_lead', {
-            currency: 'USD',
+            currency: quoteData.currency || 'USD',
             value: quoteData.estimatedValue || 0
           });
         }
@@ -124,7 +124,7 @@ const isDev = import.meta.env.DEV
   window.trackQuoteRequest = window.trackQuoteRequest || function(quoteData) {
     if (window.gtag && window.gaInitialized) {
       gtag('event', 'generate_lead', {
-        currency: 'USD',
+        currency: quoteData.currency || 'USD',
         value: quoteData.estimatedValue || 0
       });
     }

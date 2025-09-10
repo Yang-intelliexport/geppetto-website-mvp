@@ -1,0 +1,222 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="支付方式 | 安全便捷的支付处理 | Geppetto智能制造"
+  description="为您的CNC制造订单提供安全灵活的支付选择。支持多种支付方式，采用行业标准安全保护。"
+>
+  <div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+          <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
+            <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">💳 安全支付</h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          使用我们安全的支付处理系统完成您的订单。支持多种支付方式。
+        </p>
+      </div>
+
+      <!-- Payment Options -->
+      <div class="bg-white rounded-2xl shadow-sm p-8 mb-8">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-6">支付方式</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <!-- Credit Card -->
+          <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-blue-500 transition-colors cursor-pointer">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">信用卡/借记卡</h3>
+                <p class="text-sm text-gray-600">Visa, Mastercard, 银联</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600">SSL加密安全支付处理</p>
+          </div>
+
+          <!-- Bank Transfer -->
+          <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-blue-500 transition-colors cursor-pointer">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M5,6H23V18H5V6M14,9A3,3 0 0,1 17,12A3,3 0 0,1 14,15A3,3 0 0,1 11,12A3,3 0 0,1 14,9M9,8A2,2 0 0,1 7,10V14A2,2 0 0,1 9,16H19A2,2 0 0,1 21,14V10A2,2 0 0,1 19,8H9Z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">银行转账</h3>
+                <p class="text-sm text-gray-600">适用于大额订单</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600">直接银行对银行转账</p>
+          </div>
+
+          <!-- Alipay -->
+          <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-blue-500 transition-colors cursor-pointer">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <span class="text-blue-600 font-bold text-sm">支</span>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">支付宝</h3>
+                <p class="text-sm text-gray-600">使用支付宝账户支付</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600">快速安全的支付宝结账</p>
+          </div>
+
+          <!-- WeChat Pay -->
+          <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-blue-500 transition-colors cursor-pointer">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                <span class="text-green-600 font-bold text-sm">微</span>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">微信支付</h3>
+                <p class="text-sm text-gray-600">使用微信支付</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600">便捷的微信支付方式</p>
+          </div>
+
+          <!-- Terms Payment -->
+          <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-blue-500 transition-colors cursor-pointer">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M9,5V9H21V5M9,19H21V15H9M9,14H21V10H9M4,9H8V5H4M4,19H8V15H4M4,14H8V10H4V14Z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">月结30天</h3>
+                <p class="text-sm text-gray-600">适用于长期合作客户</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600">发票后30天内支付</p>
+          </div>
+
+          <!-- Corporate Payment -->
+          <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-blue-500 transition-colors cursor-pointer">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12,7V3H2V21H22V7H12M6,19H4V17H6V19M6,15H4V13H6V15M6,11H4V9H6V11M6,7H4V5H6V7M10,19H8V17H10V19M10,15H8V13H10V15M10,11H8V9H10V11M10,7H8V5H10V7M20,19H12V17H20V19M20,15H12V13H20V15M20,11H12V9H20V11Z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">对公转账</h3>
+                <p class="text-sm text-gray-600">企业对公账户支付</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600">支持开具增值税发票</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Information -->
+      <div class="bg-blue-50 rounded-2xl p-8 mb-8">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
+          <svg class="w-6 h-6 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          安全保障
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex items-start space-x-3">
+            <div class="w-3 h-3 bg-blue-500 rounded-full mt-2"></div>
+            <div>
+              <h3 class="font-semibold text-gray-900 mb-1">SSL加密</h3>
+              <p class="text-sm text-gray-600">256位SSL加密保护您的支付数据</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start space-x-3">
+            <div class="w-3 h-3 bg-blue-500 rounded-full mt-2"></div>
+            <div>
+              <h3 class="font-semibold text-gray-900 mb-1">PCI合规</h3>
+              <p class="text-sm text-gray-600">符合PCI DSS标准的支付处理</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start space-x-3">
+            <div class="w-3 h-3 bg-blue-500 rounded-full mt-2"></div>
+            <div>
+              <h3 class="font-semibold text-gray-900 mb-1">防欺诈保护</h3>
+              <p class="text-sm text-gray-600">先进的欺诈检测和防护</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start space-x-3">
+            <div class="w-3 h-3 bg-blue-500 rounded-full mt-2"></div>
+            <div>
+              <h3 class="font-semibold text-gray-900 mb-1">数据隐私</h3>
+              <p class="text-sm text-gray-600">我们从不存储您的支付信息</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Terms -->
+      <div class="bg-white rounded-2xl shadow-sm p-8 mb-8">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-6">支付条款</h2>
+        
+        <div class="space-y-4 text-gray-700">
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">支付进度</h3>
+            <ul class="space-y-2 text-sm">
+              <li>• 开始生产需支付50%定金</li>
+              <li>• 完成后发货前支付余下50%</li>
+              <li>• 加急订单需100%预付款</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">货币</h3>
+            <p class="text-sm">所有价格以人民币报价。国际订单可能产生货币转换费用。</p>
+          </div>
+          
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">退款政策</h3>
+            <p class="text-sm">如我们无法达到约定规格，定金可退还。已完成工作除质量缺陷外不予退款。</p>
+          </div>
+          
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">逾期付款</h3>
+            <p class="text-sm">逾期付款可能产生每月1.5%的服务费。订单可能因付款问题被暂停。</p>
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">发票开具</h3>
+            <p class="text-sm">支持开具增值税专用发票和普通发票，请在下单时提供开票信息。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Support -->
+      <div class="bg-gray-100 rounded-2xl p-8 text-center">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">支付遇到问题？</h2>
+        <p class="text-gray-600 mb-6">
+          我们的支付专员随时为您解答任何问题或特殊需求。
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="/zh/contact" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+            联系客服
+          </a>
+          <a href="mailto:billing@geppetto.studio" class="border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors">
+            billing@geppetto.studio
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

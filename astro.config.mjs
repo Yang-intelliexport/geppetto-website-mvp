@@ -8,7 +8,11 @@ import react from '@astrojs/react'
 export default defineConfig({
   // Astro官方Supabase集成 - 启用SSR按需渲染
   output: 'server',
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+  }),
   
   site: process.env.SITE_URL || 'https://geppetto.studio',
   
@@ -102,11 +106,6 @@ export default defineConfig({
   },
   
   vite: {
-    build: {
-      rollupOptions: {
-        external: ['resend', 'stripe']
-      }
-    },
     // CSS优化
     css: {
       devSourcemap: true

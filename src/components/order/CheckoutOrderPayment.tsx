@@ -200,35 +200,73 @@ export default function CheckoutOrderPayment({ orderId, language = 'zh' }: Check
     console.log('🛒 开始支付流程:', { 
       quoteId: quote.id, 
       totalAmount: quote.total_amount,
-      email: quote.email 
+      email: quote.email,
+      userId: user?.id,
+      sessionExists: !!session,
+      timestamp: new Date().toISOString()
     });
 
     setPaymentLoading(true);
     setMessage('');
 
     try {
-      console.log('🔄 创建支付会话，订单ID:', quote.id);
+      console.log('🔄 创建支付会话，订单详情:', {
+        quoteId: quote.id,
+        quoteIdType: typeof quote.id,
+        stringQuoteId: String(quote.id),
+        hasUser: !!user,
+        userID: user?.id,
+        sessionAccessToken: session?.access_token ? '已设置' : '未设置'
+      });
       
       // 调用现有的 createPaymentSession 函数
       const paymentData = await createPaymentSession(String(quote.id));
       
-      console.log('📋 支付数据返回:', paymentData);
+      console.log('📋 支付数据返回 - 详细信息:', {
+        hasData: !!paymentData,
+        dataKeys: paymentData ? Object.keys(paymentData) : null,
+        url: paymentData?.url,
+        dataType: typeof paymentData,
+        fullData: paymentData
+      });
       
       if (paymentData && paymentData.url) {
-        console.log('✅ 支付会话创建成功，跳转到:', paymentData.url);
+        console.log('✅ 支付会话创建成功，准备跳转:', {
+          url: paymentData.url,
+          urlType: typeof paymentData.url,
+          urlLength: paymentData.url.length
+        });
+        
+        // 添加跳转前的最后确认
+        console.log('🚀 即将执行页面跳转...');
         window.location.href = paymentData.url;
       } else {
-        console.error('❌ 支付数据格式错误:', paymentData);
+        console.error('❌ 支付数据格式错误 - 详细分析:', {
+          paymentData,
+          hasPaymentData: !!paymentData,
+          hasUrl: !!(paymentData && paymentData.url),
+          dataStructure: paymentData ? Object.keys(paymentData) : 'null',
+          expectedFormat: '{ url: string }'
+        });
         throw new Error('未返回支付URL');
       }
       
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       const errorStack = error instanceof Error ? error.stack : undefined;
-      console.error('❌ 创建支付会话失败:', {
-        error: errorMessage,
-        stack: errorStack,
-        quoteId: quote.id
+      console.error('❌ 创建支付会话失败 - 完整错误分析:', {
+        errorType: error instanceof Error ? error.constructor.name : typeof error,
+        errorMessage,
+        errorStack,
+        quoteId: quote.id,
+        userId: user?.id,
+        timestamp: new Date().toISOString(),
+        context: {
+          hasQuote: !!quote,
+          hasUser: !!user,
+          hasSession: !!session,
+          paymentLoading
+        }
       });
       setMessage(errorMessage || t.paymentFailed);
     } finally {

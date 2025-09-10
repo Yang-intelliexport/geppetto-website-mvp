@@ -1,7 +1,10 @@
 // Supabase 集成工具模块
 // 用于Astro组件和JavaScript脚本
 
-import { supabase } from '../lib/supabase.ts';
+import { createClient } from '../lib/supabase/client.ts';
+
+// 创建统一的Supabase客户端实例
+const supabase = createClient();
 
 /**
  * 提交报价请求到Supabase数据库
@@ -398,21 +401,53 @@ export function subscribeToQuoteMessages(quoteId, callback) {
 export async function createPaymentSession(quoteId) {
   try {
     console.log('💳 创建支付会话 (V1.1):', quoteId);
+    console.log('🔗 Supabase项目URL:', supabase.supabaseUrl);
+    console.log('🌐 准备调用Edge Function: stripe-payment');
+    
+    // 添加调用前的详细日志
+    const requestPayload = { quote_id: quoteId };
+    console.log('📤 Edge Function请求参数:', requestPayload);
+    
+    // 记录调用开始时间
+    const callStartTime = Date.now();
+    console.log('⏰ Edge Function调用开始时间:', new Date(callStartTime).toISOString());
     
     // 正确的架构：调用现有的Supabase Edge Function
     const { data, error } = await supabase.functions.invoke('stripe-payment', {
-      body: { quote_id: quoteId }
+      body: requestPayload
     });
 
+    // 记录调用结束时间和耗时
+    const callEndTime = Date.now();
+    const duration = callEndTime - callStartTime;
+    console.log('⏰ Edge Function调用结束时间:', new Date(callEndTime).toISOString());
+    console.log('⏱️ Edge Function调用耗时:', duration + 'ms');
+
     if (error) {
-      console.error('❌ 创建支付会话失败:', error);
+      console.error('❌ 创建支付会话失败 - 详细错误信息:', {
+        errorMessage: error.message,
+        errorCode: error.code,
+        errorDetails: error.details,
+        errorHint: error.hint,
+        fullError: error,
+        duration: duration + 'ms'
+      });
       throw new Error(`创建支付失败: ${error.message}`);
     }
 
-    console.log('✅ 支付会话创建成功 (V1.1):', data);
+    console.log('✅ 支付会话创建成功 (V1.1):', {
+      data,
+      duration: duration + 'ms',
+      responseTime: new Date().toISOString()
+    });
     return data;
   } catch (error) {
-    console.error('❌ 创建支付会话错误:', error);
+    console.error('❌ 创建支付会话错误 - 捕获到异常:', {
+      errorType: error.constructor.name,
+      errorMessage: error.message,
+      errorStack: error.stack,
+      timestamp: new Date().toISOString()
+    });
     throw error;
   }
 }

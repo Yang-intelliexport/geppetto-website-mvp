@@ -3,148 +3,30 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID
 const isDev = import.meta.env.DEV
 ---
 
-{measurementId && (
+{measurementId && !isDev && (
   <>
-    <!-- Google tag (gtag.js) - Consent-aware initialization -->
-    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
-    <script is:inline define:vars={{ measurementId }}>
+    <!-- Google tag (gtag.js) -->
+    <script type="text/partytown" async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
+    <script type="text/partytown" define:vars={{ measurementId }}>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      window.gtag = gtag;
-      
-      // Initialize GA with consent-aware configuration
-      window.initializeGA = function(consentSettings) {
-        gtag('js', new Date());
-        
-        // Set consent based on user preferences or defaults
-        const consent = consentSettings || {
-          'ad_storage': 'denied',
-          'ad_user_data': 'denied', 
-          'ad_personalization': 'denied',
-          'analytics_storage': 'denied'
-        };
-        
-        gtag('consent', 'default', consent);
-        
-        // Configure GA4 with privacy settings
-        gtag('config', measurementId, {
-          anonymize_ip: true,
-          allow_google_signals: false,
-          allow_ad_personalization_signals: false,
-          debug_mode: false,
-          send_page_view: true
-        });
-        
-        // Mark GA as initialized
-        window.gaInitialized = true;
-      };
-      
-      // Check for existing consent and initialize accordingly
-      window.checkConsentAndInitialize = function() {
-        try {
-          const storedConsent = localStorage.getItem('geppetto_cookie_consent');
-          if (storedConsent) {
-            const consent = JSON.parse(storedConsent);
-            const consentSettings = {
-              'analytics_storage': consent.analytics ? 'granted' : 'denied',
-              'ad_storage': consent.marketing ? 'granted' : 'denied',
-              'ad_user_data': consent.marketing ? 'granted' : 'denied',
-              'ad_personalization': consent.marketing ? 'granted' : 'denied'
-            };
-            window.initializeGA(consentSettings);
-          } else {
-            // No consent yet, initialize with denied defaults
-            window.initializeGA();
-          }
-        } catch (e) {
-          // Fallback to denied defaults
-          window.initializeGA();
-        }
-      };
-      
-      // Initialize immediately with current consent state
-      window.checkConsentAndInitialize();
-      
-      // View Transitions support - Track page changes
-      document.addEventListener('astro:page-load', () => {
-        if (window.gaInitialized && window.gtag) {
-          gtag('js', new Date());
-          gtag('config', measurementId);
-        }
+      gtag('js', new Date());
+
+      gtag('config', measurementId, {
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false
       });
-      
-      // Listen for consent changes and update GA accordingly
-      window.addEventListener('cookieConsentChanged', (event) => {
-        const consent = event.detail;
-        const consentSettings = {
-          'analytics_storage': consent.analytics ? 'granted' : 'denied',
-          'ad_storage': consent.marketing ? 'granted' : 'denied',
-          'ad_user_data': consent.marketing ? 'granted' : 'denied',
-          'ad_personalization': consent.marketing ? 'granted' : 'denied'
-        };
-        
-        if (window.gtag) {
-          gtag('consent', 'update', consentSettings);
-        }
-      });
-      
-      // Custom tracking functions with consent check
-      window.trackQuoteRequest = function(quoteData) {
-        if (window.gtag && window.gaInitialized) {
-          gtag('event', 'generate_lead', {
-            currency: quoteData.currency || 'USD',
-            value: quoteData.estimatedValue || 0
-          });
-        }
-      };
-      
-      window.trackFileUpload = function(fileData) {
-        if (window.gtag && window.gaInitialized) {
-          gtag('event', 'file_upload', {
-            file_extension: fileData.fileType,
-            file_name: fileData.fileName
-          });
-        }
-      };
-      
-      window.trackContactForm = function(formType) {
-        if (window.gtag && window.gaInitialized) {
-          gtag('event', 'form_submit', {
-            form_type: formType || 'contact'
-          });
-        }
-      };
     </script>
   </>
 )}
 
-<!-- 确保自定义跟踪函数始终可用 -->
+<!-- View Transitions支持 -->
 <script is:inline>
-  // 定义自定义跟踪函数（如果还不存在）
-  window.trackQuoteRequest = window.trackQuoteRequest || function(quoteData) {
-    if (window.gtag && window.gaInitialized) {
-      gtag('event', 'generate_lead', {
-        currency: quoteData.currency || 'USD',
-        value: quoteData.estimatedValue || 0
-      });
+  // 页面变化监听用于View Transitions
+  document.addEventListener('astro:page-load', () => {
+    if (typeof gtag !== 'undefined') {
+      gtag('config', import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
     }
-  };
-  
-  window.trackFileUpload = window.trackFileUpload || function(fileData) {
-    if (window.gtag && window.gaInitialized) {
-      gtag('event', 'file_upload', {
-        file_extension: fileData.fileType,
-        file_name: fileData.fileName
-      });
-    }
-  };
-  
-  window.trackContactForm = window.trackContactForm || function(formType) {
-    if (window.gtag && window.gaInitialized) {
-      gtag('event', 'form_submit', {
-        form_type: formType || 'contact'
-      });
-    }
-  };
+  });
 </script>
-

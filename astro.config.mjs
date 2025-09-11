@@ -3,6 +3,7 @@ import tailwind from '@astrojs/tailwind'
 import sitemap from '@astrojs/sitemap'
 import vercel from '@astrojs/vercel'
 import react from '@astrojs/react'
+import partytown from '@astrojs/partytown'
 
 // https://astro.build/config
 export default defineConfig({
@@ -44,6 +45,11 @@ export default defineConfig({
   integrations: [
     react(),
     tailwind(),
+    partytown({
+      config: {
+        forward: ["dataLayer.push"],
+      },
+    }),
     sitemap({
       changefreq: 'weekly',
       priority: 0.7,

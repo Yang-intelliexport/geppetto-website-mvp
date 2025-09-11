@@ -5,28 +5,32 @@ const isDev = import.meta.env.DEV
 
 {measurementId && !isDev && (
   <>
-    <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) with Partytown -->
     <script type="text/partytown" async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
     <script type="text/partytown" define:vars={{ measurementId }}>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag() { dataLayer.push(arguments); }
       gtag('js', new Date());
-
+      
       gtag('config', measurementId, {
         anonymize_ip: true,
         allow_google_signals: false,
-        allow_ad_personalization_signals: false
+        allow_ad_personalization_signals: false,
+        send_page_view: true
       });
     </script>
   </>
 )}
 
-<!-- View Transitions支持 -->
-<script is:inline>
-  // 页面变化监听用于View Transitions
+<!-- View Transitions & Main Thread Support -->
+<script is:inline define:vars={{ measurementId }}>
+  // 确保dataLayer在主线程可用
+  window.dataLayer = window.dataLayer || [];
+  
+  // View Transitions支持
   document.addEventListener('astro:page-load', () => {
-    if (typeof gtag !== 'undefined') {
-      gtag('config', import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
+    if (window.dataLayer && measurementId) {
+      window.dataLayer.push(['config', measurementId]);
     }
   });
 </script>

@@ -18,6 +18,7 @@ export default defineConfig({
   }),
 
   site: SITE,
+  trailingSlash: 'never', // 🔧 修复Vercel 301重定向循环：顺从Vercel默认行为，不强制加斜杠
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'zh'],

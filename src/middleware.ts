@@ -28,11 +28,39 @@ const shouldBypassLocale = (pathname: string) => {
     || pathname.startsWith('/assets');
 };
 
-// 暂时禁用主机重定向，避免与Vercel域名设置冲突
-const primaryHostRedirect = defineMiddleware(async (context, next) => {
+// 🔒 Security Headers + 主机重定向
+const securityAndHostRedirect = defineMiddleware(async (context, next) => {
+  // 🔒 Critical Security: 强制HTTPS (生产环境)
+  if (!IS_DEV && context.request.url.startsWith('http://')) {
+    const httpsUrl = context.request.url.replace('http://', 'https://');
+    return context.redirect(httpsUrl, 301);
+  }
+
   // 生产环境禁用自定义主机重定向，交由Vercel处理
   if (!IS_DEV) {
-    return next();
+    const response = await next();
+    
+    // 🔒 Critical Security: 添加安全头
+    response.headers.set('X-Frame-Options', 'DENY');
+    response.headers.set('X-Content-Type-Options', 'nosniff');
+    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+    response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+    response.headers.set('X-XSS-Protection', '1; mode=block');
+    response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+    
+    // 🔒 CSP Header (根据需要调整)
+    const cspPolicy = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      "img-src 'self' data: https: blob:",
+      "connect-src 'self' https: wss:",
+      "frame-ancestors 'none'"
+    ].join('; ');
+    response.headers.set('Content-Security-Policy', cspPolicy);
+    
+    return response;
   }
   
   // 开发环境保留原逻辑
@@ -79,15 +107,38 @@ const adminGuard = defineMiddleware(async (context, next) => {
     if (!accessToken) {
       return context.redirect('/admin/login');
     }
-    // Attach a lightweight admin marker; cast to satisfy types
-    (context.locals as any).user = { email: 'admin@geppetto.studio' };
+
+    // 🔒 Critical Security Fix: 验证token有效性
+    try {
+      const supabase = createClient(context);
+      const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+      
+      if (error || !user) {
+        console.warn('🚨 Invalid admin token detected:', error?.message);
+        // 清除无效token
+        context.cookies.delete('sb-access-token');
+        return context.redirect('/admin/login');
+      }
+
+      // 验证用户是否为管理员
+      if (user.email !== 'admin@geppetto.studio') {
+        console.warn('🚨 Non-admin user attempted admin access:', user.email);
+        return context.redirect('/admin/login');
+      }
+
+      (context.locals as any).user = { email: user.email, id: user.id };
+    } catch (err: any) {
+      console.error('🚨 Admin auth validation failed:', err.message);
+      context.cookies.delete('sb-access-token');
+      return context.redirect('/admin/login');
+    }
   }
   
   return next();
 });
 
 export const onRequest = sequence(
-  primaryHostRedirect,
+  securityAndHostRedirect,
   supabaseSession,
   adminGuard
 );

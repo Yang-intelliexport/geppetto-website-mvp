@@ -58,35 +58,45 @@ const alternateZh = getAbsoluteLocaleUrl('zh', relativePath)
 const currentPathWithQuery = `${Astro.url.pathname}${Astro.url.search}`
 
 let initialUserEmail: string | null = null
+const IS_DEV = import.meta.env.DEV
+
 try {
-  // 详细调试服务器端认证状态检查
-  console.debug('[BaseLayout] 🔍 Checking server-side auth state:', {
-    url: Astro.url.toString(),
-    cookies: Astro.request.headers.get('cookie') ? 'present' : 'none',
-    cookieHeader: Astro.request.headers.get('cookie')?.substring(0, 100) + '...' || 'none',
-    timestamp: new Date().toISOString()
-  })
+  // 🔒 Security Fix: 只在开发环境输出详细调试信息
+  if (IS_DEV) {
+    console.debug('[BaseLayout] 🔍 Checking server-side auth state:', {
+      url: Astro.url.toString(),
+      cookies: Astro.request.headers.get('cookie') ? 'present' : 'none',
+      timestamp: new Date().toISOString()
+    })
+  }
   
   const supabaseServerClient = createServerSupabaseClient(Astro)
   const { data, error } = await supabaseServerClient.auth.getSession()
   
-  console.debug('[BaseLayout] 📊 Server session check result:', {
-    hasSession: !!data.session,
-    hasUser: !!data.session?.user,
-    userEmail: data.session?.user?.email || 'none',
-    userId: data.session?.user?.id || 'none',
-    expiresAt: data.session?.expires_at || 'none',
-    error: error ? error.message : 'none',
-    timestamp: new Date().toISOString()
-  })
+  // 🔒 Security Fix: 生产环境不输出敏感信息
+  if (IS_DEV) {
+    console.debug('[BaseLayout] 📊 Server session check result:', {
+      hasSession: !!data.session,
+      hasUser: !!data.session?.user,
+      userEmail: data.session?.user?.email || 'none',
+      error: error ? error.message : 'none',
+      timestamp: new Date().toISOString()
+    })
+  } else if (error) {
+    // 生产环境只记录错误，不含敏感信息
+    console.error('[BaseLayout] Auth check failed in production')
+  }
   
   initialUserEmail = data.session?.user?.email ?? null
 } catch (err: any) {
-  console.error('❌ [BaseLayout] Failed to fetch session:', {
-    error: err?.message,
-    stack: err?.stack,
-    timestamp: new Date().toISOString()
-  })
+  if (IS_DEV) {
+    console.error('❌ [BaseLayout] Failed to fetch session:', {
+      error: err?.message,
+      timestamp: new Date().toISOString()
+    })
+  } else {
+    console.error('[BaseLayout] Session fetch failed in production')
+  }
   initialUserEmail = null
 }
 ---

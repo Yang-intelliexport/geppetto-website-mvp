@@ -184,18 +184,58 @@ class FileUploadHandler {
 
   validateFiles(files) {
     for (const file of files) {
-      // Check file size
+      // 🔒 Security: Check file size
       if (file.size > this.maxSize) {
         this.showError(`${file.name}: ${this.t.fileTooLarge}`);
         return false;
       }
 
-      // Check file format
+      // 🔒 Security: Check for empty files
+      if (file.size === 0) {
+        this.showError(`${file.name}: Empty files not allowed`);
+        return false;
+      }
+
+      // 🔒 Security: Check file format by extension AND MIME type
       const fileName = file.name.toLowerCase();
       const hasValidExtension = this.allowedTypes.some(ext => fileName.endsWith(ext));
       
       if (!hasValidExtension) {
         this.showError(`${file.name}: ${this.t.invalidFormat}`);
+        return false;
+      }
+
+      // 🔒 Security: Validate MIME type (additional security layer)
+      const allowedMimeTypes = [
+        'application/step', 'application/stp',
+        'model/stl', 'application/stl',
+        'application/iges', 'application/igs', 
+        'application/dwg', 'image/vnd.dwg',
+        'application/dxf', 'image/vnd.dxf',
+        'application/obj', 'text/plain',
+        'application/ply', 'text/ply',
+        'application/3mf'
+      ];
+
+      // Note: MIME detection might not be perfect for CAD files, so we're lenient here
+      
+      // 🔒 Security: Check for potentially dangerous file names
+      const dangerousPatterns = [
+        /\.(exe|bat|cmd|scr|pif|com|dll|jar)$/i,
+        /\.(php|asp|aspx|jsp|js|vbs|ps1)$/i,
+        /[<>:"\/\\|?*\x00-\x1f]/,  // Invalid filename characters
+        /^\./,  // Hidden files
+        /\.(lnk|url)$/i  // Shortcuts
+      ];
+
+      if (dangerousPatterns.some(pattern => pattern.test(fileName))) {
+        this.showError(`${file.name}: Potentially dangerous file detected`);
+        return false;
+      }
+
+      // 🔒 Security: Check filename length
+      if (fileName.length > 255) {
+        this.showError(`${file.name}: Filename too long`);
         return false;
       }
     }

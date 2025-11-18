@@ -28,6 +28,7 @@ export default defineConfig({
   },
 
   redirects: {
+    '/': '/en',
     '/ai-quote': '/en/create-quote',
     '/zh/ai-quote': '/zh/create-quote',
     '/instant-quote': '/en/create-quote',

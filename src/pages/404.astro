@@ -1,0 +1,150 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { t, type Language } from '../utils/i18n'
+
+const currentLang = (Astro.currentLocale ?? 'en') as Language
+---
+
+<BaseLayout 
+  title={currentLang === 'zh' ? '页面未找到 - Geppetto' : 'Page Not Found - Geppetto'}
+  description={currentLang === 'zh' ? '抱歉，您访问的页面不存在' : 'Sorry, the page you are looking for does not exist'}
+  noIndex={true}
+>
+  <div class="min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-gray-50 to-white">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <!-- 404 大数字 -->
+      <div class="mb-8">
+        <h1 class="text-8xl md:text-9xl font-bold text-gray-900 opacity-20">404</h1>
+      </div>
+
+      <!-- 主要内容 -->
+      <div class="mb-8 -mt-16 relative z-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          {currentLang === 'zh' ? '页面未找到' : 'Page Not Found'}
+        </h2>
+        
+        <p class="text-lg text-gray-600 mb-6">
+          {currentLang === 'zh' 
+            ? '抱歉，您访问的页面可能已被移动、删除或不存在。' 
+            : 'Sorry, the page you are looking for might have been removed, had its name changed, or is temporarily unavailable.'}
+        </p>
+
+        <!-- 建议操作 -->
+        <div class="space-y-4 mb-8">
+          <p class="text-sm text-gray-500">
+            {currentLang === 'zh' ? '您可以尝试：' : 'You can try:'}
+          </p>
+          <ul class="text-left max-w-md mx-auto space-y-2 text-gray-600">
+            <li class="flex items-start">
+              <span class="text-[#7F00FF] mr-2">•</span>
+              {currentLang === 'zh' ? '检查网址拼写是否正确' : 'Check the URL for typos'}
+            </li>
+            <li class="flex items-start">
+              <span class="text-[#7F00FF] mr-2">•</span>
+              {currentLang === 'zh' ? '返回首页重新导航' : 'Go back to homepage and navigate again'}
+            </li>
+            <li class="flex items-start">
+              <span class="text-[#7F00FF] mr-2">•</span>
+              {currentLang === 'zh' ? '使用搜索功能查找内容' : 'Use search to find what you are looking for'}
+            </li>
+          </ul>
+        </div>
+
+        <!-- 行动按钮 -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a 
+            href={`/${currentLang}`}
+            class="bg-gradient-to-r from-[#7F00FF] to-[#00BFFF] text-white px-8 py-3 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+          >
+            {currentLang === 'zh' ? '返回首页' : 'Go Home'}
+          </a>
+          
+          <a 
+            href={`/${currentLang}/contact`}
+            class="border-2 border-[#7F00FF] text-[#7F00FF] px-8 py-3 rounded-xl font-semibold text-lg hover:bg-[#7F00FF] hover:text-white transition-all duration-200"
+          >
+            {currentLang === 'zh' ? '联系我们' : 'Contact Us'}
+          </a>
+        </div>
+      </div>
+
+      <!-- 快速链接 -->
+      <div class="border-t border-gray-200 pt-8">
+        <p class="text-sm text-gray-500 mb-4">
+          {currentLang === 'zh' ? '热门页面：' : 'Popular pages:'}
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <a href={`/${currentLang}/services`} class="text-[#7F00FF] hover:underline text-sm">
+            {currentLang === 'zh' ? '服务能力' : 'Services'}
+          </a>
+          <a href={`/${currentLang}/create-quote`} class="text-[#7F00FF] hover:underline text-sm">
+            {currentLang === 'zh' ? '获取报价' : 'Get Quote'}
+          </a>
+          <a href={`/${currentLang}/resources`} class="text-[#7F00FF] hover:underline text-sm">
+            {currentLang === 'zh' ? '技术资源' : 'Resources'}
+          </a>
+          <a href={`/${currentLang}/case-studies`} class="text-[#7F00FF] hover:underline text-sm">
+            {currentLang === 'zh' ? '客户案例' : 'Case Studies'}
+          </a>
+        </div>
+      </div>
+
+      <!-- 装饰元素 -->
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -z-10 opacity-5">
+        <div class="w-96 h-96 border-4 border-[#7F00FF] rounded-full"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 额外的帮助信息 -->
+  <div class="bg-gray-50 py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- 制造服务 -->
+        <div class="text-center">
+          <div class="w-16 h-16 bg-gradient-to-r from-[#7F00FF] to-[#00BFFF] rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">
+            {currentLang === 'zh' ? 'CNC加工服务' : 'CNC Machining'}
+          </h3>
+          <p class="text-gray-600 text-sm">
+            {currentLang === 'zh' ? '专业精密加工，8小时报价' : 'Professional precision machining with 8-hour quotes'}
+          </p>
+        </div>
+
+        <!-- AI报价 -->
+        <div class="text-center">
+          <div class="w-16 h-16 bg-gradient-to-r from-[#7F00FF] to-[#00BFFF] rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">
+            {currentLang === 'zh' ? 'AI智能报价' : 'AI Smart Quotes'}
+          </h3>
+          <p class="text-gray-600 text-sm">
+            {currentLang === 'zh' ? 'AI预审+专家复核，透明报价' : 'AI pre-check plus expert validation'}
+          </p>
+        </div>
+
+        <!-- 技术支持 -->
+        <div class="text-center">
+          <div class="w-16 h-16 bg-gradient-to-r from-[#7F00FF] to-[#00BFFF] rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 109.75 9.75c0-1.856-.511-3.595-1.4-5.09l-4.78 4.78a3 3 0 01-4.474-4.474l4.78-4.78C15.595 2.761 13.856 2.25 12 2.25z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">
+            {currentLang === 'zh' ? '技术支持' : 'Technical Support'}
+          </h3>
+          <p class="text-gray-600 text-sm">
+            {currentLang === 'zh' ? '专业团队在线答疑解惑' : 'Expert team providing online support'}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

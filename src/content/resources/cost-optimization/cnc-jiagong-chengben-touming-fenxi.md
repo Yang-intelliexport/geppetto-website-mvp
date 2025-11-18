@@ -11,6 +11,8 @@ category: "cost-optimization"
 readingTime: 20
 difficulty: "advanced"
 seo:
+  metaDescription: "解构黄金报价模板理论，理解透明定价如何结合认知心理学与AI专家服务实现CNC成本重塑。"
+  canonicalUrl: "https://www.geppetto.studio/zh/resources/cnc-jiagong-chengben-touming-fenxi"
   keywords: ["Golden Quote Template Theory", "黄金报价模板理论", "Transparent Breakdown Pricing", "认知锚定效应", "价值感知理论", "制造成本心理学", "AI辅助专家服务", "认知重构策略", "信任转移机制", "专业服务包装"]
   noindex: false
 relatedPosts: []

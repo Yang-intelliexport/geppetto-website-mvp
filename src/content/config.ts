@@ -104,9 +104,57 @@ const caseStudies = defineCollection({
       content: z.string(),
       author: z.string(),
       position: z.string(),
-    }),
+    }).optional(),
     featured: z.boolean().default(false),
     pubDate: z.date(),
+    disclaimer: z.string().optional(),
+    order: z.number().default(0),
+    icon: z.string().optional(),
+    note: z.string().optional(),
+    summary: z.string(),
+    bullets: z.array(z.string()).default([]),
+    metrics: z.array(z.object({
+      label: z.string(),
+      value: z.string()
+    })).default([]),
+    resultTitle: z.string().default('项目成果'),
+    resultDescription: z.string()
+  })
+})
+
+const caseStudiesEn = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    company: z.string(),
+    industry: z.string(),
+    challenge: z.string(),
+    solution: z.string(),
+    results: z.object({
+      precision: z.string().optional(),
+      cost_saving: z.string().optional(),
+      delivery_time: z.string().optional(),
+      quality_improvement: z.string().optional()
+    }),
+    testimonial: z.object({
+      content: z.string(),
+      author: z.string(),
+      position: z.string(),
+    }).optional(),
+    featured: z.boolean().default(false),
+    pubDate: z.date(),
+    disclaimer: z.string().optional(),
+    order: z.number().default(0),
+    icon: z.string().optional(),
+    note: z.string().optional(),
+    summary: z.string(),
+    bullets: z.array(z.string()).default([]),
+    metrics: z.array(z.object({
+      label: z.string(),
+      value: z.string()
+    })).default([]),
+    resultTitle: z.string().default('Result'),
+    resultDescription: z.string()
   })
 })
 
@@ -212,6 +260,7 @@ export const collections = {
   pages,
   blog,
   'case-studies': caseStudies,
+  'case-studies-en': caseStudiesEn,
   faqs,
   'faqs-en': faqsEn,
   resources,

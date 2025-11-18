@@ -162,7 +162,7 @@ const formatAmount = (cents: number, curr: string) => {
 <!-- Stripe.js Library -->
 <script src="https://js.stripe.com/v3/"></script>
 
-<script define:vars={{ 
+<script type="module" define:vars={{ 
   quoteId, 
   amount, 
   currency, 
@@ -176,8 +176,27 @@ const formatAmount = (cents: number, curr: string) => {
    * Stripe支付表单逻辑
    */
   document.addEventListener('DOMContentLoaded', async function() {
+    // 获取全局 Supabase 客户端（由 AuthManager 初始化）
+    const supabase = (window).supabaseClient;
+    if (!supabase) {
+      console.error('Supabase client not initialized on window');
+      const errorDiv = document.getElementById('payment-error');
+      const errorMessage = document.getElementById('error-message');
+      errorMessage.textContent = '初始化错误：认证模块未加载，请刷新页面重试';
+      errorDiv.classList.remove('hidden');
+      return;
+    }
+
     // 获取Stripe公钥
-    const stripePublishableKey = 'pk_test_YOUR_PUBLISHABLE_KEY'; // 从环境变量获取
+    const stripePublishableKey = import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
+    if (!stripePublishableKey) {
+      console.error('Missing PUBLIC_STRIPE_PUBLISHABLE_KEY');
+      const errorDiv = document.getElementById('payment-error');
+      const errorMessage = document.getElementById('error-message');
+      errorMessage.textContent = '配置错误：缺少 Stripe 公钥';
+      errorDiv.classList.remove('hidden');
+      return;
+    }
     
     // 初始化Stripe
     const stripe = Stripe(stripePublishableKey);
@@ -209,16 +228,20 @@ const formatAmount = (cents: number, curr: string) => {
         body: JSON.stringify({
           quoteId,
           amount,
-          currency,
+          currency: (currency || 'usd').toLowerCase(),
           customerEmail,
           description: `Payment for CNC manufacturing quote #${quoteId}`
         })
       });
 
-      const result = await response.json();
+      if (error) {
+        throw new Error(error.message || 'Failed to create payment intent');
+      }
+
+      const result = data;
       
-      if (!result.success) {
-        throw new Error(result.message || 'Failed to create payment intent');
+      if (!result?.success) {
+        throw new Error(result?.message || 'Failed to create payment intent');
       }
 
       paymentIntent = result.data;

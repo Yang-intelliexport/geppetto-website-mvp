@@ -31,34 +31,37 @@ const text = {
 
 const currentText = text[language]
 
-const getColorClasses = (color: string) => {
-  const colorMap = {
-    purple: {
-      bg: 'from-purple-50 to-purple-100',
-      icon: 'bg-purple-600',
-      text: 'text-purple-600',
-      detail: 'bg-purple-50 text-purple-800'
-    },
-    blue: {
-      bg: 'from-blue-50 to-blue-100', 
-      icon: 'bg-blue-500',
-      text: 'text-blue-600',
-      detail: 'bg-blue-50 text-blue-800'
-    },
-    green: {
-      bg: 'from-green-50 to-green-100',
-      icon: 'bg-green-500', 
-      text: 'text-green-600',
-      detail: 'bg-green-50 text-green-800'
-    },
-    orange: {
-      bg: 'from-orange-50 to-orange-100',
-      icon: 'bg-orange-500',
-      text: 'text-orange-600', 
-      detail: 'bg-orange-50 text-orange-800'
-    }
+const colorMap = {
+  purple: {
+    bg: 'from-purple-50 to-purple-100',
+    icon: 'bg-purple-600',
+    text: 'text-purple-600',
+    detail: 'bg-purple-50 text-purple-800'
+  },
+  blue: {
+    bg: 'from-blue-50 to-blue-100', 
+    icon: 'bg-blue-500',
+    text: 'text-blue-600',
+    detail: 'bg-blue-50 text-blue-800'
+  },
+  green: {
+    bg: 'from-green-50 to-green-100',
+    icon: 'bg-green-500', 
+    text: 'text-green-600',
+    detail: 'bg-green-50 text-green-800'
+  },
+  orange: {
+    bg: 'from-orange-50 to-orange-100',
+    icon: 'bg-orange-500',
+    text: 'text-orange-600', 
+    detail: 'bg-orange-50 text-orange-800'
   }
-  return colorMap[color] || colorMap.purple
+} as const
+
+type ColorKey = keyof typeof colorMap
+
+const getColorClasses = (color: string) => {
+  return colorMap[(color as ColorKey)] || colorMap.purple
 }
 ---
 

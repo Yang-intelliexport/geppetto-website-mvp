@@ -87,11 +87,39 @@
 <script>
   import { modalState, closeModal } from '../../stores/modalStore.js'
 
+  type ModalType = 'success' | 'error' | 'warning' | 'info' | 'confirm' | 'loading'
+  type ModalOptions = {
+    cancelText?: string
+    confirmText?: string
+    buttonText?: string
+    onCancel?: () => void
+    onConfirm?: () => void
+    onOk?: () => void
+    closable?: boolean
+  }
+  type ModalState = {
+    isOpen: boolean
+    type: ModalType
+    title: string
+    message: string
+    options: ModalOptions
+  }
+
   const dialog = document.getElementById('global-modal')
   const titleEl = document.getElementById('modal-title')
   const messageEl = document.getElementById('modal-message')
   const iconEl = document.getElementById('modal-icon')
   const buttonsEl = document.getElementById('modal-buttons')
+
+  if (
+    !(dialog instanceof HTMLDialogElement) ||
+    !(titleEl instanceof HTMLElement) ||
+    !(messageEl instanceof HTMLElement) ||
+    !(iconEl instanceof HTMLElement) ||
+    !(buttonsEl instanceof HTMLElement)
+  ) {
+    console.warn('[GlobalModal] Required modal elements missing')
+  }
 
   // 图标和样式配置
   const modalConfig = {
@@ -144,10 +172,21 @@
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
       </svg>`
     }
-  }
+  } as const satisfies Record<ModalType, {
+    iconBg: string
+    iconColor: string
+    buttonClass: string
+    icon: string
+  }>
+
+  type ModalConfig = (typeof modalConfig)[ModalType]
 
   // 订阅模态框状态变化
-  modalState.subscribe((state) => {
+  modalState.subscribe((stateRaw) => {
+    const state = stateRaw as ModalState
+    if (!(dialog instanceof HTMLDialogElement)) {
+      return
+    }
     if (state.isOpen) {
       updateModalContent(state)
       dialog.showModal()
@@ -157,27 +196,32 @@
   })
 
   // 更新模态框内容
-  function updateModalContent(state) {
-    const { type, title, message, options } = state
-    const config = modalConfig[type]
+  function updateModalContent(state: ModalState) {
+    const { type, title, message, options = {} } = state
+    const config = modalConfig[type] || modalConfig.info
 
-    // 更新标题
-    titleEl.textContent = title
-    titleEl.style.display = title ? 'block' : 'none'
+    if (titleEl instanceof HTMLElement) {
+      titleEl.textContent = title
+      titleEl.style.display = title ? 'block' : 'none'
+    }
 
-    // 更新消息
-    messageEl.textContent = message
+    if (messageEl instanceof HTMLElement) {
+      messageEl.textContent = message
+    }
 
-    // 更新图标
-    iconEl.className = `w-16 h-16 ${config.iconBg} ${config.iconColor} rounded-full flex items-center justify-center mx-auto`
-    iconEl.innerHTML = config.icon
+    if (iconEl instanceof HTMLElement) {
+      iconEl.className = `w-16 h-16 ${config.iconBg} ${config.iconColor} rounded-full flex items-center justify-center mx-auto`
+      iconEl.innerHTML = config.icon
+    }
 
-    // 更新按钮
     updateButtons(type, config, options)
   }
 
   // 更新按钮
-  function updateButtons(type, config, options) {
+  function updateButtons(type: ModalType, config: ModalConfig, options: ModalOptions = {}) {
+    if (!(buttonsEl instanceof HTMLElement)) {
+      return
+    }
     buttonsEl.innerHTML = ''
 
     if (type === 'confirm') {
@@ -229,37 +273,41 @@
   }
 
   // 创建按钮元素
-  function createButton(text, className, onClick) {
+  function createButton(text: string, className: string, onClick?: () => void) {
     const button = document.createElement('button')
     button.type = 'button'
     button.textContent = text
     button.className = `${className} px-6 py-3 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2`
-    button.addEventListener('click', onClick)
+    if (onClick) {
+      button.addEventListener('click', onClick)
+    }
     return button
   }
 
   // 处理ESC键和backdrop点击
-  dialog.addEventListener('cancel', (e) => {
-    const state = modalState.get()
-    if (state.options.closable === false) {
-      e.preventDefault() // 阻止ESC关闭
-    } else {
-      closeModal()
-    }
-  })
-
-  dialog.addEventListener('click', (e) => {
-    const rect = dialog.getBoundingClientRect()
-    const isInDialog = (
-      rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
-      rect.left <= e.clientX && e.clientX <= rect.left + rect.width
-    )
-    
-    if (!isInDialog) {
-      const state = modalState.get()
-      if (state.options.closable !== false) {
+  if (dialog instanceof HTMLDialogElement) {
+    dialog.addEventListener('cancel', (e) => {
+    const state = modalState.get() as ModalState
+    if (state.options?.closable === false) {
+      e.preventDefault()
+      } else {
         closeModal()
       }
-    }
-  })
+    })
+
+    dialog.addEventListener('click', (e) => {
+      const rect = dialog.getBoundingClientRect()
+      const isInDialog = (
+        rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+        rect.left <= e.clientX && e.clientX <= rect.left + rect.width
+      )
+      
+      if (!isInDialog) {
+      const state = modalState.get() as ModalState
+      if (state.options?.closable !== false) {
+          closeModal()
+        }
+      }
+    })
+  }
 </script>

@@ -6,6 +6,16 @@ interface Props {
 }
 
 const { className = '', language = 'zh' } = Astro.props;
+const instanceId = `compact-calculator-${Math.random().toString(36).slice(2, 9)}`;
+const formId = `${instanceId}-form`;
+const submitId = `${instanceId}-submit`;
+const resultsId = `${instanceId}-results`;
+const lengthId = `${instanceId}-length`;
+const widthId = `${instanceId}-width`;
+const thicknessId = `${instanceId}-thickness`;
+const quantityId = `${instanceId}-quantity`;
+const materialId = `${instanceId}-material`;
+const complexityId = `${instanceId}-complexity`;
 
 const text = {
   zh: {
@@ -67,14 +77,14 @@ const t = text[language];
     <p class="text-gray-600 text-sm">{t.subtitle}</p>
   </div>
 
-  <form id="compact-calculator-form" class="space-y-4">
+  <form id={formId} class="space-y-4">
     <!-- 尺寸输入 -->
     <div class="grid grid-cols-3 gap-3">
       <div>
         <label class="block text-xs font-medium text-gray-700 mb-1">{t.length}</label>
         <input 
           type="number" 
-          id="calc-length" 
+          id={lengthId} 
           placeholder="100"
           class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
           required
@@ -84,7 +94,7 @@ const t = text[language];
         <label class="block text-xs font-medium text-gray-700 mb-1">{t.width}</label>
         <input 
           type="number" 
-          id="calc-width" 
+          id={widthId} 
           placeholder="50"
           class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
           required
@@ -94,7 +104,7 @@ const t = text[language];
         <label class="block text-xs font-medium text-gray-700 mb-1">{t.thickness}</label>
         <input 
           type="number" 
-          id="calc-thickness" 
+          id={thicknessId} 
           placeholder="10"
           class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
           required
@@ -107,7 +117,7 @@ const t = text[language];
       <div>
         <label class="block text-xs font-medium text-gray-700 mb-1">{t.material}</label>
         <select 
-          id="calc-material" 
+          id={materialId} 
           class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
         >
           <option value="aluminum-6061">{t.materials['aluminum-6061']}</option>
@@ -119,7 +129,7 @@ const t = text[language];
       <div>
         <label class="block text-xs font-medium text-gray-700 mb-1">{t.complexity}</label>
         <select 
-          id="calc-complexity" 
+          id={complexityId} 
           class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
         >
           <option value="simple">{t.complexities.simple}</option>
@@ -134,7 +144,7 @@ const t = text[language];
       <label class="block text-xs font-medium text-gray-700 mb-1">{t.quantity}</label>
       <input 
         type="number" 
-        id="calc-quantity" 
+        id={quantityId} 
         value="1"
         min="1"
         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
@@ -145,7 +155,7 @@ const t = text[language];
     <!-- 计算按钮 -->
     <button 
       type="submit" 
-      id="calc-submit"
+      id={submitId}
       class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 rounded-xl hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
     >
       {t.calculate}
@@ -153,12 +163,12 @@ const t = text[language];
   </form>
 
   <!-- 结果显示 -->
-  <div id="calc-results" class="hidden mt-6">
+  <div id={resultsId} class="hidden mt-6">
     <!-- 动态生成结果 -->
   </div>
 </div>
 
-<script define:vars={{ language, text: t }}>
+<script is:inline define:vars={{ language, text: t, formId, submitId, resultsId, lengthId, widthId, thicknessId, quantityId, materialId, complexityId }}>
   class CompactCalculator {
     constructor() {
       // 材料价格 (简化版)
@@ -182,36 +192,42 @@ const t = text[language];
         complex: 1.5
       };
 
+      this.form = document.getElementById(formId);
+      this.submitBtn = document.getElementById(submitId);
+      this.resultsDiv = document.getElementById(resultsId);
+      this.lengthInput = document.getElementById(lengthId);
+      this.widthInput = document.getElementById(widthId);
+      this.thicknessInput = document.getElementById(thicknessId);
+      this.quantityInput = document.getElementById(quantityId);
+      this.materialSelect = document.getElementById(materialId);
+      this.complexitySelect = document.getElementById(complexityId);
+
       this.init();
     }
 
     init() {
-      const form = document.getElementById('compact-calculator-form');
-      const submitBtn = document.getElementById('calc-submit');
-      
-      if (form && submitBtn) {
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          this.calculate();
-        });
-      }
+      if (!this.form || !this.submitBtn) return;
+
+      this.form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        this.calculate();
+      });
     }
 
     calculate() {
-      const submitBtn = document.getElementById('calc-submit');
-      const resultsDiv = document.getElementById('calc-results');
-      
+      if (!this.submitBtn || !this.resultsDiv) return;
+
       // 获取参数
-      const length = parseFloat(document.getElementById('calc-length').value) || 100;
-      const width = parseFloat(document.getElementById('calc-width').value) || 50;
-      const thickness = parseFloat(document.getElementById('calc-thickness').value) || 10;
-      const quantity = parseInt(document.getElementById('calc-quantity').value) || 1;
-      const material = document.getElementById('calc-material').value;
-      const complexity = document.getElementById('calc-complexity').value;
+      const length = parseFloat(this.lengthInput?.value || '') || 100;
+      const width = parseFloat(this.widthInput?.value || '') || 50;
+      const thickness = parseFloat(this.thicknessInput?.value || '') || 10;
+      const quantity = parseInt(this.quantityInput?.value || '1', 10) || 1;
+      const material = this.materialSelect?.value || 'aluminum-6061';
+      const complexity = this.complexitySelect?.value || 'simple';
 
       // 显示加载状态
-      submitBtn.disabled = true;
-      submitBtn.textContent = text.calculating;
+      this.submitBtn.disabled = true;
+      this.submitBtn.textContent = text.calculating;
 
       setTimeout(() => {
         try {
@@ -219,14 +235,14 @@ const t = text[language];
             length, width, thickness, quantity, material, complexity
           });
           
-          this.displayResults(costs, resultsDiv);
-          resultsDiv.classList.remove('hidden');
+          this.displayResults(costs, this.resultsDiv);
+          this.resultsDiv.classList.remove('hidden');
           
         } catch (error) {
           console.error('计算错误:', error);
         } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = text.calculate;
+          this.submitBtn.disabled = false;
+          this.submitBtn.textContent = text.calculate;
         }
       }, 800); // 模拟计算时间
     }
@@ -322,9 +338,13 @@ const t = text[language];
   }
 
   // 初始化
-  document.addEventListener('DOMContentLoaded', () => {
-    new CompactCalculator();
-  });
+  const initCalculator = () => new CompactCalculator();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCalculator, { once: true });
+  } else {
+    initCalculator();
+  }
 </script>
 
 <style>

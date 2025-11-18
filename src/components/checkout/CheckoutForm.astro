@@ -2,10 +2,9 @@
 // 结算支付页面组件 - 包含物流选项选择
 interface Props {
   language?: 'zh' | 'en';
-  quoteData?: any; // 从报价页面传入的数据
 }
 
-const { language = 'zh', quoteData } = Astro.props;
+const { language = 'zh' } = Astro.props;
 
 // 多语言文本配置
 const text = {
@@ -889,7 +888,7 @@ const mockOrderData = {
   </div>
 </div>
 
-<script define:vars={{ currentText, mockOrderData }}>
+<script is:inline define:vars={{ currentText, mockOrderData }}>
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('checkout-form');
     const shippingOptions = document.querySelectorAll('input[name="shipping"]');
@@ -1011,37 +1010,6 @@ const mockOrderData = {
       const final = total - deposit;
       document.getElementById('deposit-amount').textContent = `$${deposit}`;
       document.getElementById('final-amount').textContent = `$${final}`;
-    }
-
-    // 更新物流费用
-    function updateShippingCost() {
-      const selectedShipping = document.querySelector('input[name="shipping"]:checked');
-      if (!selectedShipping) return;
-
-      const shippingId = selectedShipping.value;
-      const shippingOption = currentText.shipping.options.find(opt => opt.id === shippingId);
-      
-      if (shippingOption) {
-        let shippingCost = shippingOption.basePrice + (shippingOption.weightPrice * mockOrderData.estimatedWeight);
-        
-        // 检查最小重量要求
-        if (shippingOption.minWeight && mockOrderData.estimatedWeight < shippingOption.minWeight) {
-          shippingCost = shippingOption.basePrice + (shippingOption.weightPrice * shippingOption.minWeight);
-        }
-
-        document.getElementById('shipping-cost').textContent = `$${Math.round(shippingCost)}`;
-        document.getElementById('summary-shipping').textContent = `$${Math.round(shippingCost)}`;
-        
-        // 更新总计
-        const total = mockOrderData.subtotal + Math.round(shippingCost);
-        document.getElementById('summary-total').textContent = `$${total}`;
-        
-        // 更新分期付款金额
-        const deposit = Math.round(total * 0.5);
-        const final = total - deposit;
-        document.getElementById('deposit-amount').textContent = `$${deposit}`;
-        document.getElementById('final-amount').textContent = `$${final}`;
-      }
     }
 
     // 物流选项样式更新

@@ -11,6 +11,9 @@ category: "manufacturing-guides"
 readingTime: 16
 difficulty: "intermediate"
 seo:
+  title: "Small Batch CNC Manufacturing: Low Volume Production | Geppetto"
+  metaDescription: "Best practices for prototype-to-production CNC runs, covering pricing transparency, flexibility, and quality assurance for low volumes."
+  canonicalUrl: "https://www.geppetto.studio/en/resources/small-batch-cnc-manufacturing-guide"
   keywords: ["small batch CNC manufacturing", "low volume CNC", "prototype machining", "small batch production", "custom CNC parts", "flexible manufacturing"]
 tableOfContents: true
 featured: true
@@ -643,5 +646,7 @@ Ready to experience optimized small batch manufacturing? At Geppetto, we special
 - **Technical Support**: 8-hour expert review with detailed manufacturing analysis
 
 **Get your expert-reviewed small batch quote in 8 hours** - Upload your CAD files and receive detailed manufacturing analysis with transparent cost breakdown, optimized for your exact volume requirements.
+
+Looking for more guidance? Our [startup manufacturing pitfalls guide](/resources-en/startup-manufacturing/hardware-startups-prototyping-pitfalls-guide) helps you avoid common small batch mistakes, while our [72-hour delivery process](/resources-en/rapid-delivery/72-hour-delivery-process-revealed) shows exactly how we achieve rapid turnaround for your urgent projects.
 
 [Image placeholder: Small batch manufacturing team and satisfied customers reviewing completed projects]

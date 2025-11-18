@@ -42,3 +42,11 @@ declare namespace App {
     };
   }
 }
+
+declare global {
+  interface Window {
+    supabaseClient?: ReturnType<typeof import('./lib/supabase/client').createClient>;
+  }
+}
+
+export {};

@@ -156,8 +156,13 @@ export default function MessageThread({
     }
   };
 
-  const isUserMessage = (message: Message) => {
-    return message.sender_id === userId;
+  const isUserMessage = (message: Message) => message.sender_id === userId;
+
+  const getSenderLabel = (message: Message) => {
+    if (isUserMessage(message)) {
+      return userName?.trim() || (currentLang === 'zh' ? '我' : 'You');
+    }
+    return t.customerService;
   };
 
   return (
@@ -191,9 +196,8 @@ export default function MessageThread({
                       : 'text-gray-500'
                   }`}
                 >
-                  {!isUserMessage(message) && (
-                    <span className="font-medium">{t.customerService} · </span>
-                  )}
+                  <span className="font-medium">{getSenderLabel(message)}</span>
+                  <span aria-hidden="true"> · </span>
                   {formatTimestamp(message.created_at)}
                 </div>
               </div>

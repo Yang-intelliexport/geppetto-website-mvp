@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { aboutContent } from '../../data/i18n/about';
+import type { Locale } from '../../data/i18n/about';
+
+const locale = (Astro.currentLocale ?? 'en') as Locale;
+const content = aboutContent[locale];
+const localized = (path: string) => `/${locale}${path}`;
+---
+
+<BaseLayout title={content.seo.title} description={content.seo.description}>
+  <div class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-20">
+    <div class="max-w-6xl mx-auto px-6 grid gap-12 lg:grid-cols-2 items-center">
+      <div>
+        <h1 class="text-4xl lg:text-5xl font-bold mb-6">{content.hero.title}</h1>
+        <p class="text-xl text-blue-100 mb-8">{content.hero.subtitle}</p>
+        <div class="grid grid-cols-2 gap-4">
+          {content.hero.stats.map((stat) => (
+            <div class="bg-white/10 rounded-xl p-4 text-center">
+              <div class="text-3xl font-bold text-yellow-300">{stat.value}</div>
+              <div class="text-sm text-blue-200">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 text-base leading-relaxed space-y-4">
+        {content.story.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">{locale === 'zh' ? '使命与价值观' : 'Mission & Values'}</h2>
+      <p class="text-xl text-gray-600 mb-12">{content.missionSubtitle}</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {content.values.map((value) => (
+          <div class="bg-gray-50 rounded-2xl p-8 shadow-sm">
+            <div class="text-4xl mb-4">{value.icon}</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
+            <p class="text-gray-600 text-sm">{value.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">{locale === 'zh' ? '核心团队' : 'Leadership Team'}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {content.leadership.map((leader) => (
+          <div class="bg-white rounded-2xl p-6 shadow-sm text-center">
+            <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center text-2xl text-gray-500">👤</div>
+            <h3 class="text-xl font-bold text-gray-900">{leader.name}</h3>
+            <p class="text-purple-600 font-medium mb-3">{leader.role}</p>
+            <p class="text-gray-600 text-sm">{leader.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold text-gray-900 mb-12">{locale === 'zh' ? '质量体系与技术沉淀' : 'Quality & Technical Excellence'}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {content.qualityHighlights.map((highlight) => (
+          <div class="bg-gray-50 rounded-2xl p-6 shadow-sm">
+            <div class="text-3xl mb-3">{highlight.icon}</div>
+            <h3 class="font-bold text-gray-900 mb-2">{highlight.title}</h3>
+            <p class="text-gray-600 text-sm">{highlight.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-gradient-to-r from-purple-600 to-blue-500 text-white text-center">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-4">{content.cta.title}</h2>
+      <p class="text-xl text-blue-100 mb-8">{content.cta.subtitle}</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href={localized(content.cta.primary.href)} class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+          {content.cta.primary.label}
+        </a>
+        <a href={localized(content.cta.secondary.href)} class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-colors">
+          {content.cta.secondary.label}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import { getEntry } from 'astro:content';
-import { getLanguageFromUrl } from '../utils/i18n';
+import StructuredData from '../components/seo/StructuredData.astro';
+import type { Language } from '../utils/i18n';
 
 export interface Props {
   title: string;
@@ -45,7 +45,7 @@ const {
   featured = false
 } = Astro.props;
 
-const currentLang = getLanguageFromUrl(Astro.url);
+const currentLang = (Astro.currentLocale ?? 'en') as Language;
 
 // SEO优化
 const finalTitle = seo.metaTitle || title;
@@ -71,6 +71,14 @@ const difficultyMap = {
   }
 };
 
+type DifficultyKey = keyof typeof difficultyMap;
+
+const getDifficultyStyles = (value: string) => {
+  const entry = difficultyMap[value as DifficultyKey];
+  if (!entry) return null;
+  return entry;
+};
+
 // 分类显示映射
 const categoryMap = {
   'manufacturing-guides': { zh: '制造指南', en: 'Manufacturing Guides' },
@@ -81,6 +89,13 @@ const categoryMap = {
   'automation-ai': { zh: '自动化与AI', en: 'Automation & AI' },
   'quality-control': { zh: '质量控制', en: 'Quality Control' },
   'cost-optimization': { zh: '成本优化', en: 'Cost Optimization' }
+};
+
+type CategoryKey = keyof typeof categoryMap;
+
+const getCategoryLabel = (value: string) => {
+  const entry = categoryMap[value as CategoryKey];
+  return entry ? entry[currentLang as 'zh' | 'en'] : value;
 };
 
 const formatDate = (date: Date) => {
@@ -115,7 +130,16 @@ const structuredData = {
     "@id": canonicalUrl
   },
   "keywords": seo.keywords.join(', '),
-  "articleSection": categoryMap[category]?.[currentLang] || category
+  "articleSection": getCategoryLabel(category)
+};
+
+const breadcrumbStructuredData = {
+  items: [
+    { name: currentLang === 'zh' ? '首页' : 'Home', url: `/${currentLang}` },
+    { name: currentLang === 'zh' ? '资源' : 'Resources', url: `/${currentLang}/resources` },
+    { name: getCategoryLabel(category), url: `/${currentLang}/resources/category/${category}` },
+    { name: title, url: canonicalUrl }
+  ]
 };
 ---
 
@@ -123,8 +147,9 @@ const structuredData = {
   title={finalTitle}
   description={finalDescription}
   keywords={seo.keywords}
-  structuredData={{ type: 'application/ld+json', data: structuredData }}
+  structuredData={{ type: 'article', data: structuredData }}
 >
+  <StructuredData type="breadcrumb" data={breadcrumbStructuredData} />
   <!-- 面包屑导航 -->
   <nav class="bg-gray-50 border-b border-gray-200" aria-label="Breadcrumb">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -143,7 +168,7 @@ const structuredData = {
         <li class="text-gray-400">/</li>
         <li>
           <a href={`/${currentLang}/resources/category/${category}`} class="text-gray-500 hover:text-gray-700">
-            {categoryMap[category]?.[currentLang] || category}
+            {getCategoryLabel(category)}
           </a>
         </li>
         <li class="text-gray-400">/</li>
@@ -164,10 +189,10 @@ const structuredData = {
         <!-- 分类和难度标签 -->
         <div class="flex items-center space-x-3 mb-4">
           <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-            {categoryMap[category]?.[currentLang] || category}
+            {getCategoryLabel(category)}
           </span>
-          <span class={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${difficultyMap[difficulty]?.color}`}>
-            {difficultyMap[difficulty]?.[currentLang] || difficulty}
+          <span class={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getDifficultyStyles(difficulty)?.color || ''}`}>
+            {getDifficultyStyles(difficulty)?.[currentLang as 'zh' | 'en'] || difficulty}
           </span>
           {featured && (
             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
@@ -416,19 +441,22 @@ const structuredData = {
     
     // 滚动时高亮当前标题
     function highlightCurrentHeading() {
-      const headings = document.querySelectorAll('.prose h1, .prose h2, .prose h3, .prose h4, .prose h5');
-      const tocLinks = document.querySelectorAll('#table-of-contents a');
+      const headingNodes = Array.from(document.querySelectorAll('.prose h1, .prose h2, .prose h3, .prose h4, .prose h5'));
+      const tocLinkNodes = Array.from(document.querySelectorAll('#table-of-contents a'));
+      
+      const headings = headingNodes.filter((node) => node instanceof HTMLElement);
+      const tocLinks = tocLinkNodes.filter((node) => node instanceof HTMLElement);
       
       if (headings.length === 0 || tocLinks.length === 0) return;
       
       const scrollTop = window.scrollY + 100; // 偏移量，提前高亮
       
-      let currentHeading = null;
+      let currentHeadingId = '';
       
       // 找到当前可见的标题
-      headings.forEach(heading => {
-        if (heading.offsetTop <= scrollTop) {
-          currentHeading = heading;
+      headings.forEach((heading) => {
+        if (heading instanceof HTMLElement && heading.offsetTop <= scrollTop) {
+          currentHeadingId = heading.id || '';
         }
       });
       
@@ -437,37 +465,41 @@ const structuredData = {
         link.classList.remove('bg-purple-100', 'text-purple-800', 'font-semibold');
       });
       
-      if (currentHeading) {
-        const currentTocLink = document.querySelector(`#table-of-contents a[href="#${currentHeading.id}"]`);
-        if (currentTocLink) {
-          currentTocLink.classList.add('bg-purple-100', 'text-purple-800', 'font-semibold');
-        }
+      if (!currentHeadingId) {
+        return;
+      }
+      const currentTocLink = document.querySelector(`#table-of-contents a[href="#${currentHeadingId}"]`);
+      if (currentTocLink instanceof HTMLElement) {
+        currentTocLink.classList.add('bg-purple-100', 'text-purple-800', 'font-semibold');
       }
     }
     
     // 阅读进度条
     function updateReadingProgress() {
-      const article = document.querySelector('article');
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = Math.max(0, Math.min(100, (scrollTop / docHeight) * 100));
       
       // 更新进度条（如果有的话）
       const progressBar = document.querySelector('.reading-progress');
-      if (progressBar) {
+      if (progressBar instanceof HTMLElement) {
         progressBar.style.width = `${scrollPercent}%`;
       }
     }
     
     // 防抖函数
-    function debounce(func, wait) {
-      let timeout;
-      return function executedFunction(...args) {
+    function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
+      let timeout: ReturnType<typeof setTimeout> | undefined;
+      return function executedFunction(this: unknown, ...args: Parameters<T>) {
         const later = () => {
-          clearTimeout(timeout);
-          func(...args);
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          func.apply(this, args);
         };
-        clearTimeout(timeout);
+        if (timeout) {
+          clearTimeout(timeout);
+        }
         timeout = setTimeout(later, wait);
       };
     }

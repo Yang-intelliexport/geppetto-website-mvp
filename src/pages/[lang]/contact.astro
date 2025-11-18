@@ -1,0 +1,287 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TransparentPromise from '../../components/sections/TransparentPromise.astro';
+import { contactContent, type Locale } from '../../data/i18n/contact';
+
+const locale = (Astro.currentLocale ?? 'en') as Locale;
+const content = contactContent[locale];
+
+const formId = content.form.id;
+const submitBtnId = `${formId}-submit`;
+const formMessageClass = `${formId}-message`;
+const hiddenLanguage = locale;
+---
+
+<BaseLayout 
+  title={content.metaTitle}
+  description={content.metaDescription}
+>
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-20">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="text-5xl font-bold mb-6">
+            {content.heroTitle}
+          </h1>
+          <p class="text-2xl text-blue-100 mb-8">
+            {content.heroSubtitle}
+          </p>
+          
+          <!-- Quick Contact Methods -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+            {content.quickContacts.map((contact) => (
+              <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+                {contact.icon && (
+                  <div class="text-3xl mb-4">{contact.icon}</div>
+                )}
+                <h3 class="text-xl font-bold mb-2">{contact.title}</h3>
+                {contact.href ? (
+                  <a href={contact.href} class="text-yellow-300 hover:text-yellow-200 transition-colors">
+                    {contact.value}
+                  </a>
+                ) : (
+                  <p class="text-blue-100">{contact.value}</p>
+                )}
+                <p class="text-sm text-blue-200">{contact.note}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <TransparentPromise language={locale} />
+
+    <!-- Contact Form -->
+    <section class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          
+          <!-- Contact Form -->
+          <div class="bg-white rounded-3xl shadow-2xl p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">
+              {locale === 'zh' ? '📝 获取专业咨询' : '📝 Get Professional Consultation'}
+            </h2>
+            <form id={formId} class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {content.form.fields
+                  .filter((field) => field.span === 'half')
+                  .map((field) => (
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">{field.label}</label>
+                      {field.type === 'textarea' ? (
+                        <textarea
+                          rows="4"
+                          name={field.name}
+                          placeholder={field.placeholder}
+                          required={field.required}
+                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        ></textarea>
+                      ) : (
+                        <input
+                          type={field.type}
+                          name={field.name}
+                          placeholder={field.placeholder}
+                          required={field.required}
+                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        />
+                      )}
+                    </div>
+                  ))}
+              </div>
+              
+              {content.form.fields
+                .filter((field) => field.span !== 'half')
+                .map((field) => (
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{field.label}</label>
+                    {field.type === 'textarea' ? (
+                      <textarea
+                        rows="4"
+                        name={field.name}
+                        placeholder={field.placeholder}
+                        required={field.required}
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      ></textarea>
+                    ) : (
+                      <input
+                        type={field.type}
+                        name={field.name}
+                        placeholder={field.placeholder}
+                        required={field.required}
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      />
+                    )}
+                  </div>
+                ))}
+              
+              <input type="hidden" name="language" value={hiddenLanguage} />
+              <button
+                type="submit"
+                id={submitBtnId}
+                class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                <span class="submit-text">{content.form.submitText}</span>
+                <span class="loading-text hidden">{content.form.submittingText}</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="space-y-8">
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+              <div class="mb-6 rounded-lg overflow-hidden">
+                <img 
+                  src={content.infoCard.image}
+                  alt={content.infoCard.imageAlt}
+                  class="w-full h-48 object-cover"
+                />
+              </div>
+              
+              <h3 class="text-2xl font-bold text-gray-900 mb-6">{content.infoCard.title}</h3>
+              <div class="space-y-4">
+                {content.infoCard.items.map((item) => (
+                  <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h4 class="font-semibold text-gray-900">{item.title}</h4>
+                      <p class="text-gray-600 whitespace-pre-line">{item.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <!-- Why Contact Us -->
+            <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8">
+              <h3 class="text-2xl font-bold text-gray-900 mb-6">{content.whyUsTitle}</h3>
+              <div class="space-y-4">
+                {content.whyUsItems.map((item) => (
+                  <div class="flex items-center space-x-3">
+                    <span class="text-green-500 text-xl">✓</span>
+                    <span class="text-gray-700">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional Sections -->
+    {content.sections.map((section) => (
+      <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+              {section.title}
+            </h2>
+            {section.description && (
+              <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                {section.description}
+              </p>
+            )}
+          </div>
+          
+          <div class={section.variant === 'grid4' ? 'grid md:grid-cols-2 lg:grid-cols-4 gap-6' : 'grid md:grid-cols-3 gap-8'}>
+            {section.cards.map((card) => (
+              <div class="text-center p-6">
+                <div class={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl ${
+                  section.variant === 'grid4' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'
+                }`}>
+                  {card.icon}
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">{card.title}</h3>
+                <p class="text-gray-600">{card.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    ))}
+  </main>
+</BaseLayout>
+
+<script is:inline define:vars={{ formId, submitBtnId, formMessageClass, successMessage: content.form.successMessage, errorMessage: content.form.errorMessage, networkError: content.form.networkError }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById(formId);
+    const submitBtn = document.getElementById(submitBtnId);
+
+    if (!(form instanceof HTMLFormElement) || !(submitBtn instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    const submitText = form.querySelector('.submit-text');
+    const loadingText = form.querySelector('.loading-text');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      submitBtn.disabled = true;
+      if (submitText instanceof HTMLElement) {
+        submitText.classList.add('hidden');
+      }
+      if (loadingText instanceof HTMLElement) {
+        loadingText.classList.remove('hidden');
+      }
+
+      try {
+        const formData = new FormData(form);
+
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (result?.success) {
+          showMessage(result.message ?? successMessage, 'success', formMessageClass);
+          form.reset();
+        } else {
+          showMessage(result?.error || errorMessage, 'error', formMessageClass);
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        showMessage(networkError, 'error', formMessageClass);
+      } finally {
+        submitBtn.disabled = false;
+        if (submitText instanceof HTMLElement) {
+          submitText.classList.remove('hidden');
+        }
+        if (loadingText instanceof HTMLElement) {
+          loadingText.classList.add('hidden');
+        }
+      }
+    });
+  });
+  
+  function showMessage(message, type, messageClass) {
+    document.querySelectorAll(`.${messageClass}`).forEach((msg) => msg.remove());
+    
+    const messageEl = document.createElement('div');
+    messageEl.className = `${messageClass} p-4 rounded-lg mb-6 ${
+      type === 'success' 
+        ? 'bg-green-100 text-green-800 border border-green-200' 
+        : 'bg-red-100 text-red-800 border border-red-200'
+    }`;
+    messageEl.textContent = message;
+    
+    const form = document.getElementById(formId);
+    if (!(form instanceof HTMLFormElement) || !form.parentNode) {
+      return;
+    }
+
+    form.parentNode.insertBefore(messageEl, form);
+    
+    setTimeout(() => {
+      messageEl.remove();
+    }, 5000);
+    
+    messageEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>

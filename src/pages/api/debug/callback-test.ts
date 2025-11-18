@@ -1,6 +1,9 @@
 import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async (context) => {
+  if (!import.meta.env.DEV) {
+    return new Response('Not Found', { status: 404 });
+  }
   const { url, request } = context;
   
   // 收集所有请求信息
@@ -27,10 +30,21 @@ export const GET: APIRoute = async (context) => {
       PROD: import.meta.env.PROD,
       DEV: import.meta.env.DEV
     },
-    cookies: {
-      raw: request.headers.get('Cookie') || 'none',
-      parsed: context.cookies.getAll()
-    }
+    cookies: (() => {
+      const raw = request.headers.get('Cookie') || ''
+      const parsed = raw
+        ? Object.fromEntries(
+            raw.split(';').map(cookie => {
+              const [key, ...rest] = cookie.split('=')
+              return [key.trim(), decodeURIComponent(rest.join('=').trim())]
+            })
+          )
+        : {}
+      return {
+        raw: raw || 'none',
+        parsed
+      }
+    })()
   };
 
   return new Response(JSON.stringify(debugInfo, null, 2), {

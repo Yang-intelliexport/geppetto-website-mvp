@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { createClient } from '../lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
+import { quoteFormTexts } from '../utils/i18n-components';
 
 interface QuoteFormProps {
   user: User;
@@ -16,175 +17,7 @@ export default function QuoteForm({ user, language = 'zh' }: QuoteFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
 
   const supabase = createClient();
-
-  const text = {
-    zh: {
-      title: '提交报价请求',
-      contactSection: '联系信息',
-      emailLabel: '邮箱地址',
-      emailPlaceholder: 'your@email.com',
-      contactNameLabel: '联系人姓名',
-      contactNamePlaceholder: '请输入您的姓名',
-      companyNameLabel: '公司名称',
-      companyNamePlaceholder: '请输入公司名称 (可选)',
-      phoneLabel: '电话号码',
-      phonePlaceholder: '+86 138 0000 0000 (可选)',
-      productSection: '产品规格',
-      materialLabel: '材料',
-      quantityLabel: '数量',
-      quantityPlaceholder: '请输入数量',
-      fileSection: '模型文件',
-      fileLabel: 'CAD文件上传',
-      fileHelp: '支持格式: STEP, STL, IGES, DWG, DXF 等',
-      notesLabel: '特殊要求 / 备注',
-      notesPlaceholder: '请描述表面处理、公差要求、交期等特殊要求...',
-      submitButton: '提交报价请求',
-      submitting: '正在提交...',
-      fileRequired: '请上传至少一个CAD文件',
-      emailRequired: '请输入邮箱地址',
-      contactNameRequired: '请输入联系人姓名',
-      successMessage: '您的报价请求已成功提交！我们将在24小时内回复。',
-      materials: {
-        // 铝合金系列
-        'aluminum_6061': '铝合金 6061-T6 (通用结构件)',
-        'aluminum_7075': '铝合金 7075-T6 (高强度航空)',
-        'aluminum_2024': '铝合金 2024-T3 (航空结构)',
-        'aluminum_5052': '铝合金 5052-H32 (耐腐蚀)',
-        'aluminum_6063': '铝合金 6063-T6 (挤压型材)',
-        
-        // 不锈钢系列
-        'stainless_304': '不锈钢 304 (通用耐腐蚀)',
-        'stainless_316': '不锈钢 316 (海洋级耐腐蚀)',
-        'stainless_316L': '不锈钢 316L (低碳耐腐蚀)',
-        'stainless_17_4PH': '不锈钢 17-4PH (析出硬化)',
-        
-        // 碳钢系列
-        'steel_1018': '碳钢 1018 (低碳钢)',
-        'steel_1045': '碳钢 1045 (中碳钢)',
-        'steel_4140': '合金钢 4140 (高强度)',
-        'steel_a36': '结构钢 A36 (焊接结构)',
-        
-        // 工具钢系列
-        'tool_steel_d2': '工具钢 D2 (高碳高铬)',
-        'tool_steel_a2': '工具钢 A2 (空气硬化)',
-        'tool_steel_o1': '工具钢 O1 (油淬)',
-        
-        // 钛合金系列
-        'titanium_gr2': '钛合金 Grade 2 (商业纯钛)',
-        'titanium_6al4v': '钛合金 Ti-6Al-4V (航空级)',
-        
-        // 黄铜铜合金系列
-        'brass_360': '黄铜 360 (易切削)',
-        'brass_c110': '紫铜 C110 (导电)',
-        'bronze_932': '青铜 932 (轴承合金)',
-        
-        // 工程塑料系列
-        'plastic_abs': '工程塑料 ABS',
-        'plastic_pom': '工程塑料 POM (聚甲醛)',
-        'plastic_nylon6': '工程塑料 PA6 (尼龙6)',
-        'plastic_peek': '工程塑料 PEEK (高性能)',
-        'plastic_pei': '工程塑料 PEI (琥珀色)',
-        
-        other: '其他材料 (请在下方详细说明)'
-      },
-      customMaterialLabel: '请输入材料名称',
-      customMaterialPlaceholder: '例如：碳纤维、陶瓷等',
-      materialGroups: {
-        aluminum: '铝合金系列',
-        stainless: '不锈钢系列',
-        carbon_steel: '碳钢系列',
-        tool_steel: '工具钢系列',
-        titanium: '钛合金系列',
-        copper_alloy: '铜合金系列',
-        engineering_plastic: '工程塑料',
-        other: '其他'
-      }
-    },
-    en: {
-      title: 'Submit Quote Request',
-      contactSection: 'Contact Information',
-      emailLabel: 'Email Address',
-      emailPlaceholder: 'your@email.com',
-      contactNameLabel: 'Contact Name',
-      contactNamePlaceholder: 'Enter your name',
-      companyNameLabel: 'Company Name',
-      companyNamePlaceholder: 'Enter company name (optional)',
-      phoneLabel: 'Phone Number',
-      phonePlaceholder: '+1 (555) 123-4567 (optional)',
-      productSection: 'Product Specifications',
-      materialLabel: 'Material',
-      quantityLabel: 'Quantity',
-      quantityPlaceholder: 'Enter quantity',
-      fileSection: 'Model File',
-      fileLabel: 'CAD File Upload',
-      fileHelp: 'Supported formats: STEP, STL, IGES, DWG, DXF, etc.',
-      notesLabel: 'Special Requirements / Notes',
-      notesPlaceholder: 'Please describe surface finish, tolerances, delivery requirements, etc...',
-      submitButton: 'Submit Quote Request',
-      submitting: 'Submitting...',
-      fileRequired: 'Please upload at least one CAD file',
-      emailRequired: 'Please enter email address',
-      contactNameRequired: 'Please enter contact name',
-      successMessage: 'Your quote request has been submitted successfully! We will respond within 24 hours.',
-      materials: {
-        // Aluminum Series
-        'aluminum_6061': 'Aluminum 6061-T6 (General Structural)',
-        'aluminum_7075': 'Aluminum 7075-T6 (High Strength Aviation)',
-        'aluminum_2024': 'Aluminum 2024-T3 (Aircraft Structure)',
-        'aluminum_5052': 'Aluminum 5052-H32 (Corrosion Resistant)',
-        'aluminum_6063': 'Aluminum 6063-T6 (Extrusion)',
-        
-        // Stainless Steel Series
-        'stainless_304': 'Stainless Steel 304 (General Corrosion Resistant)',
-        'stainless_316': 'Stainless Steel 316 (Marine Grade)',
-        'stainless_316L': 'Stainless Steel 316L (Low Carbon)',
-        'stainless_17_4PH': 'Stainless Steel 17-4PH (Precipitation Hardening)',
-        
-        // Carbon Steel Series
-        'steel_1018': 'Carbon Steel 1018 (Low Carbon)',
-        'steel_1045': 'Carbon Steel 1045 (Medium Carbon)',
-        'steel_4140': 'Alloy Steel 4140 (High Strength)',
-        'steel_a36': 'Structural Steel A36 (Weldable)',
-        
-        // Tool Steel Series
-        'tool_steel_d2': 'Tool Steel D2 (High Carbon Chromium)',
-        'tool_steel_a2': 'Tool Steel A2 (Air Hardening)',
-        'tool_steel_o1': 'Tool Steel O1 (Oil Hardening)',
-        
-        // Titanium Series
-        'titanium_gr2': 'Titanium Grade 2 (Commercial Pure)',
-        'titanium_6al4v': 'Titanium Ti-6Al-4V (Aviation Grade)',
-        
-        // Brass & Copper Series
-        'brass_360': 'Brass 360 (Free Machining)',
-        'brass_c110': 'Copper C110 (Electrical)',
-        'bronze_932': 'Bronze 932 (Bearing Alloy)',
-        
-        // Engineering Plastics
-        'plastic_abs': 'Engineering Plastic ABS',
-        'plastic_pom': 'Engineering Plastic POM (Acetal)',
-        'plastic_nylon6': 'Engineering Plastic PA6 (Nylon 6)',
-        'plastic_peek': 'Engineering Plastic PEEK (High Performance)',
-        'plastic_pei': 'Engineering Plastic PEI (Amber)',
-        
-        other: 'Other Material (please specify below)'
-      },
-      customMaterialLabel: 'Please enter material name',
-      customMaterialPlaceholder: 'e.g. Carbon Fiber, Ceramic, etc.',
-      materialGroups: {
-        aluminum: 'Aluminum Series',
-        stainless: 'Stainless Steel Series',
-        carbon_steel: 'Carbon Steel Series',
-        tool_steel: 'Tool Steel Series',
-        titanium: 'Titanium Series',
-        copper_alloy: 'Copper Alloy Series',
-        engineering_plastic: 'Engineering Plastics',
-        other: 'Other'
-      }
-    }
-  };
-
-  const t = text[language];
+  const t = quoteFormTexts[language];
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -199,7 +32,7 @@ export default function QuoteForm({ user, language = 'zh' }: QuoteFormProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!user || !formRef.current) {
-      setMessage(language === 'zh' ? "错误：表单或用户会话尚未准备好。" : "Error: Form or user session is not ready.");
+      setMessage(t.sessionNotReady);
       setMessageType('error');
       return;
     }
@@ -214,65 +47,54 @@ export default function QuoteForm({ user, language = 'zh' }: QuoteFormProps) {
     setMessageType('');
 
     try {
-      // --- 第 1 步: 从表单一次性收集所有数据 ---
+      // 构建FormData发送到API端点
       const formData = new FormData(formRef.current);
+      
+      // 字段名映射 (表单字段名 -> API字段名)
       const contactName = formData.get('contact_name')?.toString();
       const companyName = formData.get('company_name')?.toString();
       const phoneNumber = formData.get('phone_number')?.toString();
-      const materialSelect = formData.get('material')?.toString() || '';
-      const customMaterial = formData.get('custom_material')?.toString() || '';
-      const material = materialSelect === 'other' ? customMaterial : materialSelect;
-      const quantity = Number(formData.get('quantity'));
-      const notes = formData.get('notes')?.toString() || '';
-
-      // --- 第 2 步: 更新 'profiles' 表中的个人联系信息 ---
-      setMessage(language === 'zh' ? '正在更新联系人档案...' : 'Updating contact profile...');
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({
-          contact_name: contactName,
-          phone_number: phoneNumber,
-          company_name: companyName
-        })
-        .eq('id', user.id);
-
-      if (profileError) throw profileError;
-
-      // --- 第 3 步: 上传文件 ---
-      setMessage(language === 'zh' ? '正在上传文件...' : 'Uploading files...');
-      const file = files[0];
-      const fileExtension = file.name.split('.').pop() || '';
-      const safeFileName = `${Date.now()}_${crypto.randomUUID()}.${fileExtension}`;
-      const filePath = `public/${user.id}/${safeFileName}`;
       
-      const { error: uploadError } = await supabase
-        .storage
-        .from('cad-files')
-        .upload(filePath, file);
+      // 添加文件到FormData
+      files.forEach((file, index) => {
+        formData.append(`file${index}`, file);
+      });
+      
+      // 添加API需要的字段
+      formData.append('email', user?.email ?? '');
+      formData.append('language', language);
+      if (contactName) formData.append('name', contactName);
+      if (companyName) formData.append('company', companyName);
+      if (phoneNumber) formData.append('phone', phoneNumber);
 
-      if (uploadError) throw new Error(language === 'zh' ? `文件上传失败: ${uploadError.message}` : `File upload failed: ${uploadError.message}`);
+      console.debug('🚀 [QuoteForm] Submitting to API:', {
+        fileCount: files.length,
+        material: formData.get('material'),
+        email: user.email,
+        timestamp: new Date().toISOString()
+      });
 
-      // --- 第 4 步: 将报价单专属信息插入 'quotes' 表 ---
-      setMessage(language === 'zh' ? '正在提交报价请求...' : 'Submitting quote request...');
-      const { data: quoteData, error: insertError } = await supabase
-        .from('quotes')
-        .insert({
-          user_id: user.id,
-          material: material,
-          quantity: quantity,
-          customer_notes: notes,
-          cad_file_path: filePath,
-          status: 'new'
-        })
-        .select()
-        .single();
+      // 调用API端点
+      const response = await fetch('/api/functions/create-quote', {
+        method: 'POST',
+        body: formData
+      });
 
-      if (insertError) throw insertError;
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Submit failed');
+      }
 
       setMessage(language === 'zh' 
-        ? `${t.successMessage} 报价ID: #${quoteData.id}`
-        : `${t.successMessage} Quote ID: #${quoteData.id}`);
+        ? `${t.successMessage} 报价ID: #${result.data.id}`
+        : `${t.successMessage} Quote ID: #${result.data.id}`);
       setMessageType('success');
+      
+      console.debug('✅ [QuoteForm] Submission successful:', {
+        quoteId: result.data.id,
+        token: result.data.token
+      });
       
       // 延迟重置表单，让用户看到成功消息
       setTimeout(() => {
@@ -282,9 +104,9 @@ export default function QuoteForm({ user, language = 'zh' }: QuoteFormProps) {
       }, 3000);
 
     } catch (e: any) {
-      setMessage(language === 'zh' ? `提交失败: ${e.message}` : `Submission failed: ${e.message}`);
+      setMessage(`${t.submitFailedPrefix}: ${e.message}`);
       setMessageType('error');
-      console.error('Submit failed:', e);
+      console.error('❌ [QuoteForm] Submit failed:', e);
     } finally {
       setLoading(false);
     }

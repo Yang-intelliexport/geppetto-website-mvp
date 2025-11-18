@@ -1,0 +1,332 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import StructuredData from '../../../components/seo/StructuredData.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import {
+  resourceCategories,
+  resourceCategoryIcons,
+  resourceCategoryLabels,
+  resourceCollections,
+  resourcesPageContent,
+  type ResourceCategory,
+  type ResourcesLocale
+} from '../../../data/i18n/resources';
+
+const locale = (Astro.currentLocale ?? 'en') as ResourcesLocale;
+const content = resourcesPageContent[locale];
+const collectionName = resourceCollections[locale];
+
+type ResourceEntry = CollectionEntry<'resources'> | CollectionEntry<'resources-en'>;
+
+const allResources = (await getCollection(collectionName as 'resources' | 'resources-en', ({ data }) => !data.draft)) as ResourceEntry[];
+
+const sortedResources = [...allResources].sort(
+  (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+);
+
+type TagStat = { label: string; count: number; latestDate: number };
+
+const tagStatsMap = new Map<string, TagStat>();
+sortedResources.forEach((resource) => {
+  (resource.data.tags ?? []).forEach((tag) => {
+    const key = tag.toLowerCase();
+    const publishTime = new Date(resource.data.publishDate).getTime();
+    const existing = tagStatsMap.get(key);
+    if (existing) {
+      tagStatsMap.set(key, {
+        label: existing.label,
+        count: existing.count + 1,
+        latestDate: publishTime > existing.latestDate ? publishTime : existing.latestDate
+      });
+    } else {
+      tagStatsMap.set(key, { label: tag, count: 1, latestDate: publishTime });
+    }
+  });
+});
+
+const rawTagParam = Astro.url.searchParams.get('tag');
+const decodedTag = rawTagParam ? decodeURIComponent(rawTagParam).trim() : '';
+const normalizedSelectedTag = decodedTag ? decodedTag.toLowerCase() : '';
+const hasTagFilter = Boolean(normalizedSelectedTag);
+
+const filteredResources = hasTagFilter
+  ? sortedResources.filter((resource) => (resource.data.tags ?? []).some((tag) => tag.toLowerCase() === normalizedSelectedTag))
+  : sortedResources;
+
+const selectedTagLabel = hasTagFilter ? tagStatsMap.get(normalizedSelectedTag)?.label ?? decodedTag : '';
+const displayTag = hasTagFilter ? selectedTagLabel || decodedTag || normalizedSelectedTag : '';
+const formattedDisplayTag = displayTag ? (displayTag.startsWith('#') ? displayTag : `#${displayTag}`) : '';
+const activeFilterText = formattedDisplayTag
+  ? content.popularTagsSection.activeFilterLabel.replace('{tag}', formattedDisplayTag)
+  : '';
+const clearFilterUrl = `/${locale}/resources`;
+const analyticsTagValue = hasTagFilter ? (selectedTagLabel || decodedTag || normalizedSelectedTag) : '';
+
+const popularTags = Array.from(tagStatsMap.values())
+  .sort((a, b) => {
+    if (b.count !== a.count) return b.count - a.count;
+    return b.latestDate - a.latestDate;
+  })
+  .slice(0, 10);
+
+const featuredResources = filteredResources.filter((resource) => resource.data.featured);
+
+const resourcesByCategory = resourceCategories.reduce<Record<ResourceCategory, ResourceEntry[]>>((acc, category) => {
+  acc[category] = filteredResources.filter((resource) => resource.data.category === category);
+  return acc;
+}, {} as Record<ResourceCategory, ResourceEntry[]>);
+
+const categoryEntries = resourceCategories.map((category) => ({
+  key: category,
+  label: resourceCategoryLabels[locale][category],
+  icon: resourceCategoryIcons[category],
+  resources: resourcesByCategory[category] ?? []
+}));
+
+const formatDate = (date: Date | string) => {
+  return new Date(date).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+
+const formatCTA = (href: string) => (href.startsWith('#') ? href : `/${locale}${href}`);
+const formatTagUrl = (tag: string) => `/${locale}/resources?tag=${encodeURIComponent(tag)}`;
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://www.geppetto.studio';
+const collectionItems = filteredResources.slice(0, 12).map((resource) => ({
+  type: 'Article',
+  name: resource.data.title,
+  headline: resource.data.title,
+  description: resource.data.description,
+  url: `${siteUrl}/${locale}/resources/${resource.slug}`,
+  datePublished: resource.data.publishDate,
+  author: resource.data.author
+}));
+const collectionStructuredData = {
+  type: 'collection',
+  data: {
+    title: content.hero.title,
+    description: content.seo.description,
+    url: Astro.url.href,
+    inLanguage: locale === 'zh' ? 'zh-CN' : 'en-US',
+    items: collectionItems
+  }
+} as const;
+const breadcrumbStructuredData = {
+  type: 'breadcrumb',
+  data: {
+    items: [
+      { name: locale === 'zh' ? '首页' : 'Home', url: `${siteUrl}/${locale}` },
+      { name: locale === 'zh' ? '资源中心' : 'Resources', url: `${siteUrl}/${locale}/resources` }
+    ]
+  }
+} as const;
+---
+
+<BaseLayout title={content.seo.title} description={content.seo.description} keywords={content.seo.keywords} structuredData={collectionStructuredData}>
+  <StructuredData type="breadcrumb" data={breadcrumbStructuredData.data} />
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h1 class="text-5xl lg:text-6xl font-bold mb-6">{content.hero.title}</h1>
+        <p class="text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">{content.hero.subtitle}</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href={formatCTA(content.hero.primary.href)} class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+            {content.hero.primary.text}
+          </a>
+          <a href={content.hero.secondary.isAnchor ? content.hero.secondary.href : formatCTA(content.hero.secondary.href)} class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-colors">
+            {content.hero.secondary.text}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {(popularTags.length > 0 || hasTagFilter) && (
+    <section class="py-16 bg-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8">
+          <p class="text-sm uppercase tracking-[0.4em] text-purple-500 mb-3">{content.popularTagsSection.title}</p>
+          <h2 class="text-3xl font-bold text-gray-900 mb-3">
+            {content.popularTagsSection.subtitle}
+          </h2>
+        </div>
+
+        <div class="flex flex-wrap gap-3 justify-center">
+          {popularTags.map((tag) => (
+            <a
+              href={formatTagUrl(tag.label)}
+              class="inline-flex items-center space-x-2 px-5 py-2 rounded-full border border-purple-200 bg-purple-50 text-sm font-medium text-purple-700 hover:bg-purple-100 transition"
+            >
+              <span>#{tag.label}</span>
+              <span class="text-xs text-purple-500 bg-white px-2 py-0.5 rounded-full">{tag.count}</span>
+            </a>
+          ))}
+        </div>
+
+        {hasTagFilter && (
+          <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <p class="text-sm text-gray-600">{activeFilterText}</p>
+            <a href={clearFilterUrl} class="text-sm font-semibold text-purple-600 hover:text-purple-700">
+              {content.popularTagsSection.clearFilterLabel}
+            </a>
+          </div>
+        )}
+
+        {hasTagFilter && filteredResources.length === 0 && (
+          <div class="mt-6 rounded-2xl border border-dashed border-purple-200 bg-purple-50/60 px-6 py-4 text-center text-sm text-gray-600">
+            {content.popularTagsSection.emptyLabel}
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  <!-- Featured Articles -->
+  {featuredResources.length > 0 && (
+    <section class="py-20 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-gray-900 mb-4">{content.featured.title}</h2>
+          <p class="text-xl text-gray-600">{content.featured.subtitle}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuredResources.slice(0, 6).map((resource) => (
+            <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              {resource.data.image && (
+                <img src={resource.data.image} alt={resource.data.imageAlt || resource.data.title} class="w-full h-48 object-cover" loading="lazy" />
+              )}
+              <div class="p-6">
+                <div class="flex items-center space-x-2 mb-3">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                    {resourceCategoryLabels[locale][resource.data.category as ResourceCategory] ?? resource.data.category}
+                  </span>
+                  <span class="text-xs text-gray-500">{resource.data.readingTime} {content.readingTimeUnit}</span>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+                  <a href={`/${locale}/resources/${resource.slug}`} class="hover:text-purple-600 transition-colors">
+                    {resource.data.title}
+                  </a>
+                </h3>
+
+                <p class="text-gray-600 mb-4 line-clamp-3">{resource.data.description}</p>
+
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                  <span>{resource.data.author}</span>
+                  <time datetime={resource.data.publishDate.toISOString()}>{formatDate(resource.data.publishDate)}</time>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Browse by Category -->
+  <section id="categories" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">{content.categoriesSection.title}</h2>
+        <p class="text-xl text-gray-600">{content.categoriesSection.subtitle}</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {categoryEntries.map(({ key, label, icon, resources }) => {
+          if (!resources || resources.length === 0) return null;
+
+          return (
+            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col">
+              <div class="p-6 flex flex-col h-full">
+                <div class="text-center mb-4 flex-shrink-0">
+                  <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl">{icon}</span>
+                  </div>
+                  <h3 class="text-xl font-bold text-gray-900 mb-2 min-h-[2.5rem] flex items-center justify-center">{label}</h3>
+                  <p class="text-gray-600 text-sm">{resources.length} {content.categoriesSection.countSuffix}</p>
+                </div>
+
+                <div class="flex-grow mb-6">
+                  <div class="space-y-3">
+                    {resources.slice(0, 3).map((resource) => (
+                      <a href={`/${locale}/resources/${resource.slug}`} class="block text-sm text-gray-700 hover:text-purple-600 transition-colors line-clamp-2 hover:bg-purple-50 p-2 rounded leading-tight">
+                        {resource.data.title}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                <div class="flex-shrink-0 mt-auto">
+                  <a href={`/${locale}/resources/category/${key}`} class="block w-full text-center bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">
+                    {content.categoriesSection.viewAllLabel}
+                  </a>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">{content.internalLinksSection.title}</h2>
+        <p class="text-xl text-gray-600">{content.internalLinksSection.subtitle}</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {content.internalLinksSection.cards.map((card) => (
+          <a
+            href={formatCTA(card.href)}
+            class="border border-gray-100 rounded-3xl p-6 shadow-sm hover:shadow-lg transition group bg-white"
+          >
+            <div class="text-4xl mb-4">{card.icon}</div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{card.title}</h3>
+            <p class="text-gray-600 mb-4">{card.description}</p>
+            <span class="text-purple-600 font-semibold inline-flex items-center gap-2">
+              {card.linkLabel}
+              <svg class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bg-gradient-to-r from-purple-600 to-blue-600 py-16">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">{content.cta.title}</h2>
+      <p class="text-xl text-blue-100 mb-8">{content.cta.subtitle}</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href={formatCTA(content.cta.primary.href)} class="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+          {content.cta.primary.text}
+        </a>
+        <a href={formatCTA(content.cta.secondary.href)} class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-colors">
+          {content.cta.secondary.text}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+{hasTagFilter && (
+  <script is:inline define:vars={{ analyticsTagValue, locale }}>
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'resources_tag_filter',
+        locale,
+        tag: analyticsTagValue
+      });
+    }
+  </script>
+)}

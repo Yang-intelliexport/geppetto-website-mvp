@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录测试页面</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 500px; 
+            margin: 50px auto; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border: 1px solid #ddd; 
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background: linear-gradient(135deg, #7C3AED, #3B82F6); 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover { opacity: 0.9; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .message { 
+            padding: 12px; 
+            margin: 15px 0; 
+            border-radius: 5px; 
+            font-size: 14px;
+            display: none;
+        }
+        .success { 
+            background: #f0f9ff; 
+            color: #0369a1; 
+            border: 1px solid #bae6fd; 
+        }
+        .error { 
+            background: #fef2f2; 
+            color: #dc2626; 
+            border: 1px solid #fecaca; 
+        }
+        .debug { 
+            background: #f3f4f6; 
+            padding: 10px; 
+            border-radius: 5px; 
+            font-size: 12px; 
+            margin-top: 20px;
+            border-left: 4px solid #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔐 Supabase登录测试</h2>
+        
+        <form id="loginForm">
+            <div>
+                <label>邮箱地址:</label>
+                <input type="email" id="email" placeholder="test@example.com" required>
+            </div>
+            
+            <button type="submit" id="submitBtn">发送登录链接</button>
+        </form>
+        
+        <div id="message" class="message"></div>
+        
+        <div class="debug">
+            <h4>调试信息:</h4>
+            <div id="debug"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        const SUPABASE_URL = 'https://phwzmhsotoajyoiqrwvn.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBod3ptaHNvdG9hanlvaXFyd3ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxNjg4MzAsImV4cCI6MjA3Mjc0NDgzMH0.prStGMzRhVQqA-P16Q9mtU4m0QY_Ll57N4fwxEeRq1E';
+        
+        // 动态加载Supabase
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+        document.head.appendChild(script);
+        
+        script.onload = function() {
+            const { createClient } = supabase;
+            const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            
+            const debugDiv = document.getElementById('debug');
+            const messageDiv = document.getElementById('message');
+            
+            function showMessage(text, type) {
+                messageDiv.textContent = text;
+                messageDiv.className = `message ${type}`;
+                messageDiv.style.display = 'block';
+                
+                debugDiv.innerHTML += `<br>[${new Date().toLocaleTimeString()}] UI: ${type.toUpperCase()} - ${text}`;
+            }
+            
+            function addDebug(text) {
+                debugDiv.innerHTML += `<br>[${new Date().toLocaleTimeString()}] ${text}`;
+            }
+            
+            addDebug(`✅ Supabase客户端初始化成功`);
+            addDebug(`📡 URL: ${SUPABASE_URL}`);
+            addDebug(`🔑 Key: ${SUPABASE_ANON_KEY.substring(0, 20)}...`);
+            
+            document.getElementById('loginForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value.trim();
+                const submitBtn = document.getElementById('submitBtn');
+                
+                if (!email) {
+                    showMessage('请输入邮箱地址', 'error');
+                    return;
+                }
+                
+                submitBtn.disabled = true;
+                submitBtn.textContent = '发送中...';
+                messageDiv.style.display = 'none';
+                
+                addDebug(`📧 开始发送登录链接到: ${email}`);
+                
+                try {
+                    const callbackUrl = `${window.location.origin}/api/auth/callback?next=/zh/create-quote`;
+                    addDebug(`🔗 回调URL: ${callbackUrl}`);
+                    
+                    const { data, error } = await client.auth.signInWithOtp({
+                        email: email,
+                        options: {
+                            emailRedirectTo: callbackUrl
+                        }
+                    });
+                    
+                    addDebug(`📨 Supabase API响应:`);
+                    addDebug(`   - Data: ${JSON.stringify(data, null, 2)}`);
+                    addDebug(`   - Error: ${error ? JSON.stringify(error, null, 2) : 'null'}`);
+                    
+                    if (error) {
+                        throw error;
+                    }
+                    
+                    showMessage('✅ 登录链接已发送！请检查您的邮箱（包括垃圾邮件文件夹）', 'success');
+                    addDebug(`✅ 邮件发送成功`);
+                    
+                } catch (error) {
+                    addDebug(`❌ 发送失败: ${error.message}`);
+                    addDebug(`   - 错误详情: ${JSON.stringify(error, null, 2)}`);
+                    showMessage(`❌ 发送失败: ${error.message}`, 'error');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '发送登录链接';
+                }
+            });
+        };
+        
+        script.onerror = function() {
+            document.getElementById('debug').innerHTML = '❌ Supabase库加载失败';
+        };
+    </script>
+</body>
+</html>

@@ -36,6 +36,14 @@ const text = {
       submitAgainBtn: '📋 再次提交',
       contactText: '如有紧急需求，请联系: '
     },
+    loginRequired: '请先登录，我们已经保存了您填写的内容，登录完成后会自动恢复。',
+    draft: {
+      title: '已为你恢复上次填写的草稿',
+      description: '为了保证文件安全，系统只自动保存文字信息，请重新上传 CAD 文件后再提交即可。',
+      filesLabel: '上次选择的文件（需重新上传）：',
+      noFiles: '上次未选择任何文件',
+      dismiss: '知道了'
+    },
     validation: {
       generalError: '请检查表单中的错误信息',
       submitError: '提交失败，请稍后重试或联系客服'
@@ -63,6 +71,14 @@ const text = {
       submitAgainBtn: '📋 Submit Again',
       contactText: 'For urgent needs, contact: '
     },
+    loginRequired: 'Please sign in first. Your inputs are saved and will auto-restore after login.',
+    draft: {
+      title: 'We restored your last draft',
+      description: 'For security reasons we only keep text fields. Please re-upload the CAD files before submitting.',
+      filesLabel: 'Previously selected files (need re-upload):',
+      noFiles: 'No files were selected last time.',
+      dismiss: 'Got it'
+    },
     validation: {
       generalError: 'Please check the errors in the form',
       submitError: 'Submission failed, please try again or contact support'
@@ -78,6 +94,24 @@ const t = text[language];
   <div class="text-center mb-8">
     <h2 class="text-3xl font-bold text-gray-900 mb-2">{t.title}</h2>
     <p class="text-gray-600">{t.subtitle}</p>
+  </div>
+
+  <div id="draft-restore-banner" class="hidden mb-6 rounded-xl border border-amber-200 bg-amber-50 text-amber-900">
+    <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-6 px-5 py-4">
+      <div class="flex-1">
+        <p id="draft-banner-title" class="text-base font-semibold"></p>
+        <p id="draft-banner-description" class="mt-1 text-sm"></p>
+        <ul id="draft-banner-files" class="mt-3 space-y-1 text-xs text-amber-800"></ul>
+      </div>
+      <button
+        type="button"
+        id="draft-banner-dismiss"
+        class="self-start text-sm font-semibold text-amber-600 hover:text-amber-800 transition-colors"
+        aria-label="Dismiss draft restore banner"
+      >
+        ✕
+      </button>
+    </div>
   </div>
 
   <!-- Form -->
@@ -197,10 +231,94 @@ const t = text[language];
 </div>
 
 <script define:vars={{ language }}>
+// Inline quote submission function
+async function submitQuoteForm({ files, language, contactData, productData }) {
+  const formData = new FormData();
+  formData.append('language', language);
+  formData.append('email', (contactData.email ?? '').toString());
+
+  const appendOptional = (key, value) => {
+    if (value === undefined || value === null || value === '') return;
+    formData.append(key, typeof value === 'number' ? value.toString() : value);
+  };
+
+  appendOptional('name', contactData.name);
+  appendOptional('company', contactData.company);
+  appendOptional('phone', contactData.phone);
+  appendOptional('country', contactData.country);
+
+  formData.append('material', (productData.material ?? '').toString());
+  appendOptional('quantity', Number(productData.quantity) || 1);
+  appendOptional('notes', productData.notes || productData.requirements);
+
+  files.forEach((file, index) => {
+    formData.append(`file${index}`, file);
+  });
+
+  console.debug('🚀 [submitQuoteForm] Submitting to API:', {
+    fileCount: files.length,
+    email: contactData.email,
+    material: productData.material,
+    timestamp: new Date().toISOString()
+  });
+
+  const response = await fetch('/api/functions/create-quote', {
+    method: 'POST',
+    body: formData
+  });
+
+  const result = await response.json().catch(() => null);
+
+  console.debug('📨 [submitQuoteForm] API Response:', {
+    status: response.status,
+    ok: response.ok,
+    success: result?.success,
+    hasData: !!result?.data,
+    error: result?.error,
+    timestamp: new Date().toISOString()
+  });
+
+  if (!response.ok || !result?.success || !result.data) {
+    const errorMsg = result?.error || 'Quote submission failed.';
+    console.error('❌ [submitQuoteForm] Submission failed:', errorMsg);
+    throw new Error(errorMsg);
+  }
+
+  console.debug('✅ [submitQuoteForm] Submission successful:', result.data);
+  return result.data;
+}
+
+// Inline Supabase client
+function createSupabaseBrowserClient() {
+  if (window.supabaseClient) {
+    return window.supabaseClient;
+  }
+
+  // 兜底客户端：每次调用时都会尝试获取真实客户端
+  return {
+    auth: {
+      getSession: async () => {
+        if (window.supabaseClient?.auth?.getSession) {
+          return window.supabaseClient.auth.getSession();
+        }
+        return { data: { session: null }, error: null };
+      }
+    }
+  };
+}
+
+const STORAGE_PREFIX = `quoteFormDraft:${language}`;
+
 class QuoteFormController {
   constructor() {
     this.language = language;
     this.isSubmitting = false;
+    this.redirecting = false;
+    this.storageKey = `${STORAGE_PREFIX}:data`;
+    this.fileMetaKey = `${STORAGE_PREFIX}:files`;
+    this.restoreFlagKey = `${STORAGE_PREFIX}:restore`;
+    this.supabaseClient = createSupabaseBrowserClient();
+    this.cachedSession = undefined;
     
     this.text = {
       zh: {
@@ -209,7 +327,13 @@ class QuoteFormController {
         generalError: '请检查表单中的错误信息',
         submitError: '提交失败，请稍后重试或联系客服',
         submitSuccess: '您的报价申请已成功提交！',
-        networkError: '网络连接失败，请检查网络后重试'
+        networkError: '网络连接失败，请检查网络后重试',
+        loginRequired: '请先登录，我们已经保存了您填写的内容，登录后会自动恢复。',
+        draftTitle: '已为你恢复上次填写的草稿',
+        draftDescription: '系统已填充文字内容，请重新上传 CAD 文件后再提交。',
+        draftFilesLabel: '需重新上传的文件：',
+        draftNoFiles: '上次未选择任何文件。',
+        draftDismiss: '知道了'
       },
       en: {
         submitButton: 'Submit Quote Request',
@@ -217,20 +341,31 @@ class QuoteFormController {
         generalError: 'Please check the errors in the form',
         submitError: 'Submission failed, please try again or contact support',
         submitSuccess: 'Your quote request has been submitted successfully!',
-        networkError: 'Network connection failed, please check and retry'
+        networkError: 'Network connection failed, please check and retry',
+        loginRequired: 'Please sign in first. Your inputs are saved and will auto-restore after login.',
+        draftTitle: 'We restored your last draft',
+        draftDescription: 'Text fields are back in place. Please re-upload the CAD files before submitting.',
+        draftFilesLabel: 'Previously selected files (re-upload required):',
+        draftNoFiles: 'No files were selected last time.',
+        draftDismiss: 'Got it'
       }
     };
     
     this.t = this.text[this.language];
     this.initializeForm();
+    this.restoreDraftIfAvailable();
   }
 
   initializeForm() {
     const form = document.getElementById('create-quote-form');
-    const submitBtn = document.getElementById('submit-btn');
 
     if (form) {
       form.addEventListener('submit', (e) => this.handleSubmit(e));
+    }
+
+    const dismissBannerBtn = document.getElementById('draft-banner-dismiss');
+    if (dismissBannerBtn) {
+      dismissBannerBtn.addEventListener('click', () => this.hideDraftBanner());
     }
 
     // Modal event listeners
@@ -254,7 +389,6 @@ class QuoteFormController {
     
     if (this.isSubmitting) return;
 
-    // Validate all sections
     if (!this.validateForm()) {
       this.showError(this.t.generalError);
       return;
@@ -264,6 +398,16 @@ class QuoteFormController {
     
     try {
       const formData = this.collectFormData();
+      this.saveDraft(formData);
+
+      const isAuthenticated = await this.ensureAuthenticated();
+      if (!isAuthenticated) {
+        this.showError(this.t.loginRequired);
+        this.markRestoreFlag();
+        this.redirectToLogin();
+        return;
+      }
+
       const response = await this.submitQuote(formData);
       
       if (response.success) {
@@ -275,7 +419,9 @@ class QuoteFormController {
       console.error('Quote submission error:', error);
       this.showError(this.t.networkError);
     } finally {
-      this.setSubmitting(false);
+      if (!this.redirecting) {
+        this.setSubmitting(false);
+      }
     }
   }
 
@@ -309,75 +455,151 @@ class QuoteFormController {
     const files = window.fileUploadHandler ? window.fileUploadHandler.getFiles() : [];
     
     return {
-      ...contactData,
-      ...productData,
-      files,
-      language: this.language,
-      timestamp: new Date().toISOString()
+      contact: contactData,
+      product: productData,
+      files
     };
   }
 
   async submitQuote(formData) {
-    // V1.1版本：按文档要求实现匿名认证
     try {
-      // 动态导入Supabase工具函数
-      const { createAnonymousUser, createQuote, uploadCADFile } = await import('/src/utils/supabase.js');
-      
-      console.log('🚀 开始提交报价申请 (V1.1):', formData);
-      
-      // Step 1: 创建匿名用户 (V1.1要求)
-      const anonymousUser = await createAnonymousUser();
-      
-      // Step 2: 上传所有CAD文件
-      let uploadedFiles = [];
-      if (formData.files && formData.files.length > 0) {
-        console.log('📁 开始上传CAD文件...');
-        
-        for (const file of formData.files) {
-          try {
-            const uploadResult = await uploadCADFile(file, anonymousUser.id);
-            uploadedFiles.push(uploadResult);
-          } catch (uploadError) {
-            console.error('❌ 文件上传失败:', file.name, uploadError);
-            throw new Error(`文件"${file.name}"上传失败: ${uploadError.message}`);
-          }
-        }
+      // 显示提交开始toast
+      if (window.modalStore) {
+        window.modalStore.showToast(
+          this.language === 'zh' ? '正在提交报价申请...' : 'Submitting quote request...',
+          'info',
+          8000
+        );
       }
-      
-      // Step 3: 创建报价记录 (V1.1标准流程)
-      const quoteData = {
-        material: formData.material || 'aluminum',
-        quantity: parseInt(formData.quantity) || 1,
-        customer_notes: formData.notes || formData.requirements || null,
-        cad_file_path: uploadedFiles.length > 0 ? uploadedFiles[0].path : null,
-        // 添加客户信息到备注中 
-        customer_info: JSON.stringify({
-          email: formData.email,
-          name: formData.name,
-          company: formData.company || null,
-          phone: formData.phone || null,
-          country: formData.country || null
-        })
-      };
-      
-      const quote = await createQuote(quoteData, anonymousUser.id);
-      
-      console.log('✅ 报价创建成功 (V1.1):', quote);
-      
-      // Return success response
+
+      const quoteResult = await submitQuoteForm({
+        files: formData.files || [],
+        language: this.language,
+        contactData: {
+          email: formData.contact?.email,
+          name: formData.contact?.name,
+          company: formData.contact?.company,
+          phone: formData.contact?.phone,
+          country: formData.contact?.country
+        },
+        productData: {
+          material: formData.product?.material,
+          quantity: parseInt(formData.product?.quantity ?? 1, 10) || 1,
+          notes: formData.product?.notes || null
+        }
+      });
+
+      this.clearDraft();
+      this.hideDraftBanner();
+
+      // 显示成功toast和modal
+      if (window.modalStore) {
+        window.modalStore.clearAllToasts();
+        window.modalStore.showToast(
+          this.language === 'zh' 
+            ? `✅ 报价申请提交成功！ID: #${quoteResult.id}`
+            : `✅ Quote request submitted! ID: #${quoteResult.id}`,
+          'success',
+          6000
+        );
+        
+        window.modalStore.showSuccess(
+          this.language === 'zh' ? '🎉 提交成功！' : '🎉 Success!',
+          this.language === 'zh' 
+            ? `您的报价申请已成功提交！报价ID: #${quoteResult.id}\n我们将在8小时内通过邮件回复专业报价。`
+            : `Your quote request has been submitted successfully! Quote ID: #${quoteResult.id}\nWe will reply via email within 8 hours.`,
+          {
+            confirmText: this.language === 'zh' ? '好的' : 'OK',
+            onConfirm: () => window.modalStore?.closeModal()
+          }
+        );
+      }
+
       return {
         success: true,
         data: {
-          id: quote.id,
-          token: quote.token || quote.id,
+          id: quoteResult.id,
+          token: quoteResult.token || quoteResult.id,
           message: this.t.submitSuccess
         }
       };
-      
     } catch (error) {
-      console.error('❌ V1.1 API提交失败:', error);
+      console.error('❌ [QuoteFormController] 提交失败:', error);
+      
+      // 显示错误toast和modal
+      if (window.modalStore) {
+        window.modalStore.clearAllToasts();
+        window.modalStore.showToast(
+          this.language === 'zh' ? `❌ 提交失败: ${error.message}` : `❌ Failed: ${error.message}`,
+          'error',
+          8000
+        );
+        
+        let errorMessage = error.message || 'Unknown error';
+        if (errorMessage.includes('log in')) {
+          errorMessage = this.language === 'zh' 
+            ? '请先登录后再提交报价申请' 
+            : 'Please log in before submitting quote';
+        }
+        
+        window.modalStore.showError(
+          this.language === 'zh' ? '❌ 提交失败' : '❌ Submission Failed',
+          errorMessage,
+          {
+            confirmText: this.language === 'zh' ? '确定' : 'OK',
+            onConfirm: () => window.modalStore?.closeModal()
+          }
+        );
+      }
+      
       throw error;
     }
+  }
+
+  async ensureAuthenticated() {
+    try {
+      if (typeof this.cachedSession === 'boolean') {
+        return this.cachedSession;
+      }
+
+      if (window.supabaseClient && window.supabaseClient !== this.supabaseClient) {
+        this.supabaseClient = window.supabaseClient;
+      }
+
+      if (!this.supabaseClient?.auth?.getSession) {
+        this.cachedSession = false;
+        return false;
+      }
+
+      const { data, error } = await this.supabaseClient.auth.getSession();
+      if (error) {
+        console.error('Supabase session error:', error);
+        this.cachedSession = false;
+        return false;
+      }
+
+      this.cachedSession = Boolean(data?.session);
+      return this.cachedSession;
+    } catch (err) {
+      console.error('Failed to verify session:', err);
+      this.cachedSession = false;
+      return false;
+    }
+  }
+
+  markRestoreFlag() {
+    try {
+      sessionStorage.setItem(this.restoreFlagKey, 'pending');
+    } catch (err) {
+      console.warn('Unable to set restore flag:', err);
+    }
+  }
+
+  redirectToLogin() {
+    this.redirecting = true;
+    const target = `${window.location.pathname}${window.location.search}`;
+    const loginPath = `/${this.language}/login?redirect=${encodeURIComponent(target)}`;
+    window.location.href = loginPath;
   }
 
   setSubmitting(isSubmitting) {
@@ -442,6 +664,9 @@ class QuoteFormController {
       form.reset();
     }
     
+    this.clearDraft();
+    this.hideDraftBanner();
+    
     // Reset file upload
     if (window.fileUploadHandler) {
       window.fileUploadHandler.selectedFiles = [];
@@ -471,6 +696,161 @@ class QuoteFormController {
     
     if (successMessage) successMessage.classList.add('hidden');
     if (errorMessage) errorMessage.classList.add('hidden');
+  }
+
+  saveDraft(formData) {
+    try {
+      const payload = {
+        contact: formData.contact,
+        product: formData.product,
+        savedAt: new Date().toISOString()
+      };
+      localStorage.setItem(this.storageKey, JSON.stringify(payload));
+      this.saveFileMeta(formData.files || []);
+    } catch (error) {
+      console.warn('Unable to save draft:', error);
+    }
+  }
+
+  saveFileMeta(files) {
+    try {
+      if (!files.length) {
+        localStorage.removeItem(this.fileMetaKey);
+        return;
+      }
+      const meta = files.map((file) => ({
+        name: file.name,
+        size: file.size
+      }));
+      localStorage.setItem(this.fileMetaKey, JSON.stringify(meta));
+    } catch (error) {
+      console.warn('Unable to save file meta:', error);
+    }
+  }
+
+  clearDraft() {
+    try {
+      localStorage.removeItem(this.storageKey);
+      localStorage.removeItem(this.fileMetaKey);
+    } catch (error) {
+      console.warn('Unable to clear draft:', error);
+    }
+  }
+
+  restoreDraftIfAvailable() {
+    try {
+      const raw = localStorage.getItem(this.storageKey);
+      if (!raw) {
+        this.hideDraftBanner();
+        return;
+      }
+
+      const draft = JSON.parse(raw);
+      this.applyDraftToForm(draft);
+      const fileMetaRaw = localStorage.getItem(this.fileMetaKey);
+      const fileMeta = fileMetaRaw ? JSON.parse(fileMetaRaw) : [];
+
+      const highlight = sessionStorage.getItem(this.restoreFlagKey) === 'pending';
+      if (highlight) {
+        sessionStorage.removeItem(this.restoreFlagKey);
+      }
+      this.showDraftBanner(fileMeta);
+    } catch (error) {
+      console.warn('Unable to restore draft:', error);
+      this.hideDraftBanner();
+    }
+  }
+
+  applyDraftToForm(draft) {
+    const contact = draft?.contact || {};
+    const product = draft?.product || {};
+    const setValue = (id, value) => {
+      const el = document.getElementById(id);
+      if (el && typeof value === 'string') {
+        el.value = value;
+      }
+    };
+
+    setValue('email', contact.email || '');
+    setValue('name', contact.name || '');
+    setValue('company', contact.company || '');
+    setValue('phone', contact.phone || '');
+    setValue('material', product.material || '');
+
+    const quantityEl = document.getElementById('quantity');
+    if (quantityEl && product.quantity !== undefined && product.quantity !== null) {
+      quantityEl.value = `${product.quantity}`;
+    }
+
+    const notesEl = document.getElementById('notes');
+    if (notesEl && typeof product.notes === 'string') {
+      notesEl.value = product.notes;
+      if (window.productSpecValidator?.updateNotesCount) {
+        window.productSpecValidator.updateNotesCount();
+      }
+    }
+  }
+
+  showDraftBanner(fileMeta = []) {
+    const banner = document.getElementById('draft-restore-banner');
+    if (!banner) return;
+
+    banner.classList.remove('hidden');
+
+    const titleEl = document.getElementById('draft-banner-title');
+    const descEl = document.getElementById('draft-banner-description');
+    const filesEl = document.getElementById('draft-banner-files');
+
+    if (titleEl) titleEl.textContent = this.t.draftTitle;
+    if (descEl) descEl.textContent = this.t.draftDescription;
+
+    if (filesEl) {
+      filesEl.innerHTML = '';
+
+      const labelItem = document.createElement('li');
+      labelItem.classList.add('font-semibold');
+      labelItem.textContent = this.t.draftFilesLabel;
+      filesEl.appendChild(labelItem);
+
+      if (fileMeta.length) {
+        fileMeta.forEach((file) => {
+          const li = document.createElement('li');
+          li.textContent = `${file.name} (${this.formatFileSize(file.size)})`;
+          filesEl.appendChild(li);
+        });
+      } else {
+        const li = document.createElement('li');
+        li.textContent = this.t.draftNoFiles;
+        filesEl.appendChild(li);
+      }
+    }
+
+    const dismissBtn = document.getElementById('draft-banner-dismiss');
+    if (dismissBtn) {
+      dismissBtn.title = this.t.draftDismiss;
+    }
+  }
+
+  hideDraftBanner() {
+    const banner = document.getElementById('draft-restore-banner');
+    if (banner) {
+      banner.classList.add('hidden');
+    }
+  }
+
+  formatFileSize(bytes = 0) {
+    if (!bytes) return '0 B';
+    const thresh = 1024;
+    if (Math.abs(bytes) < thresh) {
+      return `${bytes} B`;
+    }
+    const units = ['KB', 'MB', 'GB', 'TB'];
+    let u = -1;
+    do {
+      bytes /= thresh;
+      ++u;
+    } while (Math.abs(bytes) >= thresh && u < units.length - 1);
+    return `${bytes.toFixed(1)} ${units[u]}`;
   }
 }
 

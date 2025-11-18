@@ -1,0 +1,193 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import StructuredData from '../../../../components/seo/StructuredData.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import {
+  resourceCategories,
+  resourceCategoryLabels,
+  resourceCollections,
+  resourcesPageContent,
+  type ResourceCategory,
+  type ResourcesLocale
+} from '../../../../data/i18n/resources';
+
+const locale = (Astro.currentLocale ?? 'en') as ResourcesLocale;
+const { category } = Astro.params;
+
+if (!category || !resourceCategories.includes(category as ResourceCategory)) {
+  return new Response('Category not found', { status: 404 });
+}
+
+const collectionName = resourceCollections[locale];
+const content = resourcesPageContent[locale];
+const categoryLabel = resourceCategoryLabels[locale][category as ResourceCategory];
+
+type ResourceEntry = CollectionEntry<'resources'> | CollectionEntry<'resources-en'>;
+
+const posts = (await getCollection(collectionName as 'resources' | 'resources-en', ({ data }) => !data.draft && data.category === category)) as ResourceEntry[];
+const tagStatsMap = new Map<string, { label: string; count: number; latestDate: number }>();
+posts.forEach((post) => {
+  (post.data.tags ?? []).forEach((tag) => {
+    const key = tag.toLowerCase();
+    const publishTime = new Date(post.data.publishDate).getTime();
+    const existing = tagStatsMap.get(key);
+    if (existing) {
+      tagStatsMap.set(key, {
+        label: existing.label,
+        count: existing.count + 1,
+        latestDate: publishTime > existing.latestDate ? publishTime : existing.latestDate
+      });
+    } else {
+      tagStatsMap.set(key, { label: tag, count: 1, latestDate: publishTime });
+    }
+  });
+});
+
+const popularTags = Array.from(tagStatsMap.values())
+  .sort((a, b) => {
+    if (b.count !== a.count) return b.count - a.count;
+    return b.latestDate - a.latestDate;
+  })
+  .slice(0, 8);
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://www.geppetto.studio';
+const collectionStructuredData = {
+  type: 'collection',
+  data: {
+    title: `${categoryLabel} ${locale === 'zh' ? '文章' : 'Articles'}`,
+    description: `${content.categoryPage.heroDescriptionPrefix}${categoryLabel}${content.categoryPage.heroDescriptionSuffix}`,
+    url: Astro.url.href,
+    inLanguage: locale === 'zh' ? 'zh-CN' : 'en-US',
+    items: posts.slice(0, 12).map((post) => ({
+      type: 'Article',
+      name: post.data.title,
+      headline: post.data.title,
+      description: post.data.description,
+      url: `${siteUrl}/${locale}/resources/${post.slug}`,
+      datePublished: post.data.publishDate,
+      author: post.data.author
+    }))
+  }
+} as const;
+const breadcrumbStructuredData = {
+  items: [
+    { name: locale === 'zh' ? '首页' : 'Home', url: `${siteUrl}/${locale}` },
+    { name: locale === 'zh' ? '资源中心' : 'Resources', url: `${siteUrl}/${locale}/resources` },
+    { name: categoryLabel, url: `${siteUrl}/${locale}/resources/category/${category}` }
+  ]
+};
+
+const formatCTA = (href: string) => (href.startsWith('#') ? href : `/${locale}${href}`);
+---
+
+<BaseLayout title={`${categoryLabel} | ${content.hero.title}`} description={content.seo.description} structuredData={collectionStructuredData}>
+  <StructuredData type="breadcrumb" data={breadcrumbStructuredData} />
+  <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <p class="text-sm uppercase tracking-[0.3em] text-purple-200 mb-3">
+        {locale === 'zh' ? '资源分类' : 'Resource Category'}
+      </p>
+      <h1 class="text-4xl font-bold mb-4">{categoryLabel}</h1>
+      <p class="text-lg text-blue-100">
+        {content.categoryPage.heroDescriptionPrefix}{categoryLabel}{content.categoryPage.heroDescriptionSuffix}
+      </p>
+      <p class="text-sm text-blue-200 mt-3">
+        {posts.length} {content.categoryPage.articleCountSuffix}
+      </p>
+    </div>
+  </section>
+
+  {(popularTags.length > 0) && (
+    <section class="py-12 bg-white border-b border-gray-100">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-3">
+          {content.popularTagsSection.title}
+        </h2>
+        <p class="text-gray-600 mb-6">{content.popularTagsSection.subtitle}</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          {popularTags.map((tag) => (
+            <a
+              href={formatCTA(`/resources?tag=${encodeURIComponent(tag.label)}`)}
+              class="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-purple-200 text-purple-700 text-sm hover:bg-purple-50 transition"
+            >
+              <span>#{tag.label}</span>
+              <span class="text-xs text-purple-500 bg-purple-50 px-2 py-0.5 rounded-full">{tag.count}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      {posts.length === 0 ? (
+        <div class="text-center py-16">
+          <h2 class="text-2xl font-semibold text-gray-900 mb-3">{content.categoryPage.emptyTitle}</h2>
+          <p class="text-gray-600 mb-6">{content.categoryPage.emptyDescription}</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href={`/${locale}/resources`} class="px-6 py-3 rounded-lg bg-purple-600 text-white font-semibold hover:bg-purple-700 transition">
+              {content.categoryPage.browseAllLabel}
+            </a>
+            <a href={`/${locale}/create-quote`} class="px-6 py-3 rounded-lg border border-purple-600 text-purple-600 font-semibold hover:bg-purple-50 transition">
+              {content.categoryPage.getQuoteLabel}
+            </a>
+          </div>
+        </div>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {posts.map((post) => (
+            <article class="border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
+              <div class="text-sm text-gray-500 flex items-center justify-between mb-3">
+                <span>{post.data.author}</span>
+                <time datetime={post.data.publishDate.toISOString()}>
+                  {new Date(post.data.publishDate).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                </time>
+              </div>
+              <h2 class="text-xl font-semibold text-gray-900 mb-3">
+                <a href={`/${locale}/resources/${post.slug}`} class="hover:text-purple-600 transition">
+                  {post.data.title}
+                </a>
+              </h2>
+              <p class="text-gray-600 mb-4 line-clamp-3">{post.data.description}</p>
+              <div class="flex items-center justify-between text-sm text-gray-500">
+                <span>{post.data.readingTime} {content.categoryPage.readingTimeUnit}</span>
+                <a href={`/${locale}/resources/${post.slug}`} class="text-purple-600 font-semibold text-sm">
+                  {content.categoryPage.readMoreLabel}
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">{content.internalLinksSection.title}</h2>
+        <p class="text-lg text-gray-600">{content.internalLinksSection.subtitle}</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {content.internalLinksSection.cards.map((card) => (
+          <a
+            href={formatCTA(card.href)}
+            class="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm hover:shadow-lg transition group"
+          >
+            <div class="text-3xl mb-4">{card.icon}</div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{card.title}</h3>
+            <p class="text-gray-600 mb-4">{card.description}</p>
+            <span class="text-purple-600 font-semibold inline-flex items-center gap-2">
+              {card.linkLabel}
+              <svg class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

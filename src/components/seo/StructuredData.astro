@@ -1,12 +1,14 @@
 ---
+type StructuredDataType = 'organization' | 'service' | 'article' | 'faq' | 'product' | 'breadcrumb' | 'webpage' | 'caseStudy' | 'collection';
+
 export interface Props {
-  type: 'organization' | 'service' | 'article' | 'faq' | 'product' | 'breadcrumb'
+  type: StructuredDataType
   data: Record<string, any>
 }
 
 const { type, data } = Astro.props
 
-function generateStructuredData(type: string, data: Record<string, any>) {
+function generateStructuredData(type: StructuredDataType, data: Record<string, any>) {
   const baseUrl = import.meta.env.PUBLIC_SITE_URL || 'https://www.geppetto.studio'
   
   switch (type) {
@@ -17,7 +19,7 @@ function generateStructuredData(type: string, data: Record<string, any>) {
         "name": "奇塑科技(深圳)有限公司",
         "alternateName": "Geppetto",
         "url": baseUrl,
-        "logo": `${baseUrl}/logo.png`,
+        "logo": `${baseUrl}/images/geppetto-logo.png`,
         "description": "AI驱动的精密制造服务商，提供CNC加工、AI检测+专家报价、project-specific精度制造、72小时生产+物流服务",
         "foundingDate": "2024",
         "address": {
@@ -54,7 +56,7 @@ function generateStructuredData(type: string, data: Record<string, any>) {
               "itemOffered": {
                 "@type": "Service",
                 "name": "AI检测+专家报价",
-                "description": "30秒AI分析CAD文件自动报价"
+                "description": "AI辅助分析CAD文件，专家8小时内提供透明报价"
               }
             }
           ]
@@ -70,7 +72,11 @@ function generateStructuredData(type: string, data: Record<string, any>) {
         "provider": {
           "@type": "Organization",
           "name": "Geppetto",
-          "url": baseUrl
+          "url": baseUrl,
+          "logo": {
+            "@type": "ImageObject",
+            "url": `${baseUrl}/images/geppetto-logo.png`
+          }
         },
         "description": data.description || "AI驱动的CNC精密加工服务，project-specific精度，72小时生产+物流",
         "serviceType": "制造服务",
@@ -116,7 +122,7 @@ function generateStructuredData(type: string, data: Record<string, any>) {
           "name": "Geppetto",
           "logo": {
             "@type": "ImageObject", 
-            "url": `${baseUrl}/logo.png`
+            "url": `${baseUrl}/images/geppetto-logo.png`
           }
         },
         "datePublished": data.publishDate || new Date().toISOString(),
@@ -125,7 +131,7 @@ function generateStructuredData(type: string, data: Record<string, any>) {
           "@type": "WebPage",
           "@id": data.url || baseUrl
         },
-        "image": data.image || `${baseUrl}/og-default.jpg`,
+        "image": data.image || `${baseUrl}/images/manufacturing/machining-process-1.jpg`,
         ...data
       }
 
@@ -185,6 +191,54 @@ function generateStructuredData(type: string, data: Record<string, any>) {
         ...data
       }
 
+    case 'webpage':
+      return {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": data.title || "Geppetto",
+        "description": data.description || "AI-driven precision manufacturing services.",
+        "url": data.url || baseUrl,
+        ...data
+      }
+    case 'caseStudy':
+      return {
+        "@context": "https://schema.org",
+        "@type": "CaseStudy",
+        "name": data.name,
+        "description": data.description,
+        "industry": data.industry,
+        "keywords": data.keywords,
+        "provider": data.provider ?? {
+          "@type": "Organization",
+          "name": "Geppetto",
+          "url": baseUrl
+        },
+        "audience": data.audience,
+        "result": data.result,
+        "metrics": data.metrics,
+        ...data
+      }
+    case 'collection':
+      return {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": data.title || "Geppetto Resources",
+        "description": data.description || "Manufacturing knowledge hub",
+        "url": data.url || baseUrl,
+        "inLanguage": data.inLanguage,
+        "isPartOf": data.isPartOf,
+        "about": data.about,
+        "hasPart": (data.items || []).map((item: any) => ({
+          "@type": item.type || "Article",
+          "name": item.name,
+          "headline": item.headline || item.name,
+          "description": item.description,
+          "url": item.url,
+          "datePublished": item.datePublished,
+          "author": item.author
+        })),
+        ...data
+      }
     default:
       return data
   }
@@ -193,4 +247,4 @@ function generateStructuredData(type: string, data: Record<string, any>) {
 const structuredData = generateStructuredData(type, data)
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+<script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />

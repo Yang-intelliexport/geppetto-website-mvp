@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import {
+  legalContent,
+  type LegalBlock,
+  type LegalPageContent,
+  type LegalSection,
+  type Locale
+} from '../../data/i18n/legal';
+
+const locale = (Astro.currentLocale ?? 'en') as Locale;
+const page: LegalPageContent = legalContent[locale].privacy;
+---
+
+<BaseLayout title={page.metaTitle} description={page.metaDescription}>
+  <div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <div class="text-4xl mb-2">{page.heroIcon}</div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">{page.heroTitle}</h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          {page.heroSubtitle}
+        </p>
+        <p class="text-sm text-gray-500 mt-4">{page.lastUpdated}</p>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm p-8 space-y-10">
+        {page.sections.map((section: LegalSection) => (
+          <section>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">{section.title}</h2>
+            <div class="space-y-6">
+              {section.blocks.map((block: LegalBlock) => {
+                if (block.type === 'list') {
+                  return (
+                    <div>
+                      {block.title && (
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">{block.title}</h3>
+                      )}
+                      <ul class="space-y-1 text-gray-700 ml-4 list-disc">
+                        {block.items.map((item: string) => (
+                          <li>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                }
+
+                if (block.type === 'paragraph') {
+                  return (
+                    <div>
+                      {block.title && (
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">{block.title}</h3>
+                      )}
+                      <p class="text-gray-700">{block.text}</p>
+                    </div>
+                  );
+                }
+
+                if (block.type === 'note') {
+                  return (
+                    <div
+                      class={`rounded-lg p-4 ${
+                        block.tone === 'warning'
+                          ? 'bg-red-50 text-red-900'
+                          : 'bg-blue-50 text-blue-900'
+                      }`}
+                    >
+                      <p class="font-medium">{block.text}</p>
+                    </div>
+                  );
+                }
+
+                if (block.type === 'contact') {
+                  return (
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                      <div class="space-y-2 text-gray-700">
+                        {block.items.map((item: { label: string; value: string }) => (
+                          <p>
+                            <strong>{item.label}:</strong> {item.value}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                }
+
+                return null;
+              })}
+            </div>
+          </section>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

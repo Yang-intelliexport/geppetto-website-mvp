@@ -45,8 +45,8 @@ export interface FileValidationRule {
   required?: boolean;
   maxSize?: number;
   maxCount?: number;
-  allowedTypes?: Record<string, string[]>;
-  custom?: (file: File) => boolean | string;
+  allowedTypes?: Record<string, readonly string[]>;
+  custom?: (files: File[]) => boolean | string;
 }
 
 // 报价表单验证规则

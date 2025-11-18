@@ -1,13 +1,19 @@
 ---
-import { languages, getLanguageFromUrl, getLocalizedPath, removeLanguagePrefix, type Language } from '../../utils/i18n';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { languages, type Language } from '../../utils/i18n';
 
-const currentLang = getLanguageFromUrl(Astro.url);
-const currentPath = removeLanguagePrefix(Astro.url.pathname);
+const currentLang = (Astro.currentLocale ?? 'en') as Language;
+const trimmedPath = Astro.url.pathname.replace(/^\/(en|zh)/, '');
+const currentPath = trimmedPath === '' || trimmedPath === '/' ? '' : trimmedPath.replace(/^\/+/, '');
+const instanceId = `language-switcher-${Math.random().toString(36).slice(2, 9)}`;
+const buttonId = `${instanceId}-button`;
+const dropdownId = `${instanceId}-dropdown`;
+const chevronId = `${instanceId}-chevron`;
 ---
 
-<div class="language-switcher relative inline-block">
+<div id={instanceId} class="language-switcher relative inline-block">
   <button 
-    id="language-button" 
+    id={buttonId} 
     class="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors duration-200"
     aria-expanded="false"
     aria-haspopup="true"
@@ -18,18 +24,18 @@ const currentPath = removeLanguagePrefix(Astro.url.pathname);
     <span class="font-medium text-gray-700">
       {languages[currentLang]}
     </span>
-    <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" id="language-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" id={chevronId} fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
     </svg>
   </button>
 
   <div 
-    id="language-dropdown" 
+    id={dropdownId} 
     class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 hidden"
   >
     {Object.entries(languages).map(([langCode, langName]) => {
       const lang = langCode as Language;
-      const href = getLocalizedPath(currentPath, lang);
+      const href = getRelativeLocaleUrl(lang, currentPath);
       const isActive = lang === currentLang;
       
       return (
@@ -74,48 +80,60 @@ const currentPath = removeLanguagePrefix(Astro.url.pathname);
   </div>
 </div>
 
-<script>
-  // Language switcher functionality
-  document.addEventListener('DOMContentLoaded', () => {
-    const button = document.getElementById('language-button');
-    const dropdown = document.getElementById('language-dropdown');
-    const chevron = document.getElementById('language-chevron');
+<script is:inline define:vars={{ buttonId, dropdownId, chevronId }}>
+  const setupLanguageSwitcher = () => {
+    const button = document.getElementById(buttonId);
+    const dropdown = document.getElementById(dropdownId);
+    const chevron = document.getElementById(chevronId);
 
-    if (button && dropdown && chevron) {
-      button.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = !dropdown.classList.contains('hidden');
-        
-        if (isOpen) {
-          dropdown.classList.add('hidden');
-          chevron.style.transform = 'rotate(0deg)';
-          button.setAttribute('aria-expanded', 'false');
-        } else {
-          dropdown.classList.remove('hidden');
-          chevron.style.transform = 'rotate(180deg)';
-          button.setAttribute('aria-expanded', 'true');
-        }
-      });
+    if (!button || !dropdown || !chevron) return;
 
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!button.contains(e.target as Node) && !dropdown.contains(e.target as Node)) {
-          dropdown.classList.add('hidden');
-          chevron.style.transform = 'rotate(0deg)';
-          button.setAttribute('aria-expanded', 'false');
-        }
-      });
+    const toggleDropdown = (force) => {
+      const shouldOpen = typeof force === 'boolean' ? force : dropdown.classList.contains('hidden');
+      if (shouldOpen) {
+        dropdown.classList.remove('hidden');
+        chevron.style.transform = 'rotate(180deg)';
+        button.setAttribute('aria-expanded', 'true');
+      } else {
+        dropdown.classList.add('hidden');
+        chevron.style.transform = 'rotate(0deg)';
+        button.setAttribute('aria-expanded', 'false');
+      }
+    };
 
-      // Close dropdown on escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          dropdown.classList.add('hidden');
-          chevron.style.transform = 'rotate(0deg)';
-          button.setAttribute('aria-expanded', 'false');
-        }
-      });
-    }
-  });
+    const handleButtonClick = (event) => {
+      event.stopPropagation();
+      const isHidden = dropdown.classList.contains('hidden');
+      toggleDropdown(isHidden);
+    };
+
+    const handleDocumentClick = (event) => {
+      const target = event.target;
+      if (!dropdown.contains(target) && !button.contains(target)) {
+        toggleDropdown(false);
+      }
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        toggleDropdown(false);
+        button.focus();
+      }
+    };
+
+    const controller = new AbortController();
+    button.addEventListener('click', handleButtonClick, { signal: controller.signal });
+    document.addEventListener('click', handleDocumentClick, { signal: controller.signal });
+    document.addEventListener('keydown', handleKeyDown, { signal: controller.signal });
+
+    window.addEventListener('astro:before-swap', () => controller.abort(), { once: true });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupLanguageSwitcher, { once: true });
+  } else {
+    setupLanguageSwitcher();
+  }
 </script>
 
 <style>

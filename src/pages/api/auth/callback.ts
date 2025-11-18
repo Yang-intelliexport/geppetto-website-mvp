@@ -9,7 +9,7 @@ export const GET: APIRoute = async (context) => {
   const userAgent = request.headers.get('user-agent') || 'unknown';
   const referer = request.headers.get('referer') || 'direct';
   
-  console.log(`🎯 [${timestamp}] ===== AUTH CALLBACK STARTED =====`);
+  console.log(`\n\n🚨🚨🚨 [${timestamp}] ===== AUTH CALLBACK STARTED ===== 🚨🚨🚨`);
   console.log(`📨 [Callback] Request details:`, {
     url: url.toString(),
     userAgent: userAgent.substring(0, 100),
@@ -22,7 +22,21 @@ export const GET: APIRoute = async (context) => {
 
   // 提取URL参数
   const code = url.searchParams.get("code");
-  const next = url.searchParams.get("next") || "/zh/create-quote";
+  let next = url.searchParams.get("next") || "/zh";
+  
+  // 如果没有next参数，尝试从用户数据中获取
+  if (next === "/zh") {
+    try {
+      const supabase = createClient(context);
+      const { data } = await supabase.auth.getUser();
+      const redirectTo = data.user?.user_metadata?.redirectTo;
+      if (redirectTo) {
+        next = redirectTo;
+      }
+    } catch (error) {
+      console.debug('Could not get redirect from user metadata:', error);
+    }
+  }
   const error_description = url.searchParams.get("error_description");
   const error_code = url.searchParams.get("error");
   const access_token = url.searchParams.get("access_token");
@@ -139,7 +153,7 @@ export const GET: APIRoute = async (context) => {
     });
     
     // 成功重定向到目标页面
-    console.log(`[${timestamp}] Redirecting to: ${next}`);
+    console.log(`\n🎉🎉🎉 [${timestamp}] SUCCESS! Redirecting to: ${next} 🎉🎉🎉\n`);
     return redirect(next);
     
   } catch (error: any) {

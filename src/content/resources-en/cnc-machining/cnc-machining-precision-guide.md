@@ -10,6 +10,9 @@ category: "cnc-machining"
 readingTime: 8
 difficulty: "intermediate"
 seo:
+  title: "CNC Precision Guide: Tolerances & Accuracy Factors | Geppetto"
+  metaDescription: "Understand every factor that drives CNC machining accuracy and learn how to hit custom tolerance targets with expert guidance."
+  canonicalUrl: "https://www.geppetto.studio/en/resources/cnc-machining-precision-guide"
   keywords: ["CNC precision machining", "manufacturing accuracy", "machining tolerances", "quality control", "CNC optimization"]
 tableOfContents: true
 featured: true
@@ -140,6 +143,8 @@ Comprehensive inspection ensures quality:
 - **Performance-critical validation** confirming parts meet operational demands
 
 *Our comprehensive quality verification process ensures you receive detailed quality documentation with every project, supporting both your internal quality requirements and customer presentations.*
+
+**Want to see these precision capabilities applied to your project?** Our [transparent 8-hour quoting system](/resources-en/pricing-transparency/8-hour-detailed-quote-technical-secrets) provides detailed cost analysis for your specific precision requirements, helping you understand exactly what tight tolerances will cost before you commit.
 
 ## Common Precision Challenges
 

@@ -1,0 +1,56 @@
+---
+import { getEntry } from 'astro:content';
+import ResourceLayout from '../../../layouts/ResourceLayout.astro';
+import type { ResourcesLocale } from '../../../data/i18n/resources';
+import { resourceCollections } from '../../../data/i18n/resources';
+
+const locale = (Astro.currentLocale ?? 'en') as ResourcesLocale;
+const { slug } = Astro.params;
+
+if (!slug) {
+  return new Response('Article not found', { status: 404 });
+}
+
+const collectionName = resourceCollections[locale];
+let entry = await getEntry(collectionName as 'resources' | 'resources-en', slug);
+
+if (!entry) {
+  const fallback = collectionName === 'resources' ? 'resources-en' : 'resources';
+  entry = await getEntry(fallback as 'resources' | 'resources-en', slug);
+}
+
+if (!entry) {
+  return new Response('Article not found', { status: 404 });
+}
+
+const { Content } = await entry.render();
+const data = entry.data;
+
+const seo = {
+  metaTitle: data.seo?.metaTitle || data.title,
+  metaDescription: data.seo?.metaDescription || data.description,
+  keywords: data.seo?.keywords ?? [],
+  canonicalUrl: `${import.meta.env.PUBLIC_SITE_URL || 'https://www.geppetto.studio'}/${locale}/resources/${slug}`,
+  noindex: data.seo?.noindex ?? false
+};
+---
+
+<ResourceLayout
+  title={data.title}
+  description={data.description}
+  publishDate={new Date(data.publishDate)}
+  updatedDate={data.updatedDate ? new Date(data.updatedDate) : undefined}
+  author={data.author}
+  image={data.image}
+  imageAlt={data.imageAlt}
+  tags={data.tags ?? []}
+  category={data.category}
+  readingTime={data.readingTime ?? 5}
+  difficulty={data.difficulty ?? 'intermediate'}
+  seo={seo}
+  relatedPosts={data.relatedPosts ?? []}
+  tableOfContents={data.tableOfContents ?? true}
+  featured={data.featured ?? false}
+>
+  <Content />
+</ResourceLayout>

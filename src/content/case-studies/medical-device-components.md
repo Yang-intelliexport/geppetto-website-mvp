@@ -4,6 +4,25 @@ company: "技术验证项目"
 industry: "精密制造"
 challenge: "钛合金精密组件加工，高精度要求，表面粗糙度Ra0.4，传统供应商交期长成本高"
 solution: "Geppetto采用AI优化钛合金加工参数，精密执行配合质量控制，全程质量监督"
+order: 3
+icon: "🏥"
+note: "• QA全链路"
+summary: "Ti-6Al-4V 医疗级组件需 Ra0.4 表面与可追溯 QC，Geppetto 72 小时启动生产并交付 FDA 准备就绪的文档。"
+seo:
+  title: "Medical Device Manufacturing: Precision Titanium Implants | Geppetto"
+  metaDescription: "ISO 13485 compliant production of medical-grade Titanium components. Custom CNC milling ensures biocompatibility and superior surface quality."
+bullets:
+  - "AI 优化钛合金切削参数，防止刀具磨损与变形"
+  - "ISO 10993 + GMP 追溯资料一次交付"
+  - "表面粗糙度达 Ra0.3，CMM 全检 100% 合格"
+  - "成本对比医疗级供应商下降 30-35%"
+metrics:
+  - label: "表面粗糙度"
+    value: "Ra0.3"
+  - label: "合规通过率"
+    value: "100%"
+resultTitle: "项目成果"
+resultDescription: "注册材料按期提交，迭代速度提升 3 倍。"
 results:
   precision: "项目定制精度 (达到设计要求)"
   cost_saving: "预计成本降低30-35%"

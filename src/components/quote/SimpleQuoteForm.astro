@@ -83,6 +83,11 @@ const text = {
       emailRequired: '请输入邮箱地址',
       emailInvalid: '请输入有效的邮箱地址'
     },
+    errors: {
+      general: '提交失败，请稍后再试。',
+      network: '网络请求失败，请检查网络连接后重试。',
+      server: '服务器暂时无法处理请求，请稍后再试。'
+    },
     
     // 成功消息
     success: {
@@ -93,7 +98,8 @@ const text = {
         '我们的AI系统正在分析您的CAD文件',
         '2分钟内您将收到初步市场参考报价',
         '工作时间内工程师团队将审核并可能提供优化建议'
-      ]
+      ],
+      closeLabel: '了解了'
     }
   },
   en: {
@@ -164,6 +170,11 @@ const text = {
       emailRequired: 'Please enter email address',
       emailInvalid: 'Please enter a valid email address'
     },
+    errors: {
+      general: 'Submission failed. Please try again later.',
+      network: 'Network request failed. Please check your connection and retry.',
+      server: 'Server is unavailable right now. Please try again in a moment.'
+    },
     
     success: {
       title: 'Submission Successful!',
@@ -173,7 +184,8 @@ const text = {
         'Our AI system is analyzing your CAD files',
         'You will receive initial market reference quote within 2 minutes',
         'Our engineering team will review and may provide optimization suggestions within 24 hours'
-      ]
+      ],
+      closeLabel: 'Got it'
     }
   }
 };
@@ -442,18 +454,20 @@ const currentText = text[language];
       </div>
       
       <button 
-        onclick="closeSuccessModal()"
+        id="simple-quote-success-close"
         class="w-full bg-[#7F00FF] text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
       >
-        了解了
+        {currentText.success.closeLabel}
       </button>
     </div>
   </div>
 </div>
 
-<script define:vars={{ currentText, language }}>
-  document.addEventListener('DOMContentLoaded', () => {
+<script is:inline define:vars={{ currentText, language }}>
+  const initSimpleQuoteForm = () => {
     const form = document.getElementById('simple-quote-form');
+    if (!form) return;
+
     const fileUploadZone = document.getElementById('file-upload-zone');
     const fileInput = document.getElementById('cad-files');
     const fileList = document.getElementById('file-list');
@@ -463,49 +477,35 @@ const currentText = text[language];
     const loadingIcon = document.getElementById('loading-icon');
     const errorMessage = document.getElementById('error-message');
     const successModal = document.getElementById('success-modal');
+    const successCloseButton = document.getElementById('simple-quote-success-close');
 
-    let selectedFiles = [];
+    const selectedFiles = [];
 
-    // 文件上传区域点击事件
-    fileUploadZone.addEventListener('click', () => {
-      fileInput.click();
-    });
-
-    // 文件拖拽功能
-    fileUploadZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      fileUploadZone.classList.add('border-[#7F00FF]', 'bg-purple-50');
-    });
-
-    fileUploadZone.addEventListener('dragleave', () => {
+    const resetDropState = () => {
+      if (!fileUploadZone) return;
       fileUploadZone.classList.remove('border-[#7F00FF]', 'bg-purple-50');
-    });
+    };
 
-    fileUploadZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      fileUploadZone.classList.remove('border-[#7F00FF]', 'bg-purple-50');
-      
-      const files = Array.from(e.dataTransfer.files);
-      handleFiles(files);
-    });
+    const setError = (message) => {
+      if (!errorMessage) return;
+      errorMessage.textContent = message;
+      errorMessage.classList.remove('hidden');
+      errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    };
 
-    // 文件选择事件
-    fileInput.addEventListener('change', (e) => {
-      const files = Array.from(e.target.files);
-      handleFiles(files);
-    });
+    const clearError = () => {
+      if (errorMessage) {
+        errorMessage.classList.add('hidden');
+      }
+    };
 
-    // 处理文件选择
-    function handleFiles(files) {
-      selectedFiles = files;
-      displayFiles();
-    }
+    const displayFiles = () => {
+      if (!fileList || !uploadContent) return;
 
-    // 显示已选择的文件
-    function displayFiles() {
       if (selectedFiles.length === 0) {
         fileList.classList.add('hidden');
         uploadContent.classList.remove('hidden');
+        fileList.innerHTML = '';
         return;
       }
 
@@ -516,7 +516,6 @@ const currentText = text[language];
       selectedFiles.forEach((file, index) => {
         const fileItem = document.createElement('div');
         fileItem.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg';
-        
         fileItem.innerHTML = `
           <div class="flex items-center">
             <svg class="w-5 h-5 text-[#7F00FF] mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -529,112 +528,56 @@ const currentText = text[language];
           </div>
           <button 
             type="button" 
-            onclick="removeFile(${index})"
-            class="text-red-500 hover:text-red-700 ml-2"
+            class="text-red-500 hover:text-red-700 ml-2 remove-file-btn"
+            data-remove-index="${index}"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
             </svg>
           </button>
         `;
-        
         fileList.appendChild(fileItem);
       });
-    }
+    };
 
-    // 移除文件
-    window.removeFile = (index) => {
-      selectedFiles.splice(index, 1);
+    const handleFiles = (files) => {
+      selectedFiles.length = 0;
+      files.forEach((file) => selectedFiles.push(file));
       displayFiles();
     };
 
-    // 表单提交
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      // 清除之前的错误信息
-      errorMessage.classList.add('hidden');
-      
-      // 验证表单
-      if (!validateForm()) {
-        return;
-      }
-      
-      // 显示加载状态
-      setLoading(true);
-      
-      try {
-        // 构建FormData
-        const formData = new FormData();
-        
-        // 添加文件
-        selectedFiles.forEach((file, index) => {
-          formData.append(`file${index}`, file);
-        });
-        
-        // 添加其他字段
-        formData.append('material', form.material.value);
-        formData.append('quantity', form.quantity.value);
-        formData.append('email', form.email.value);
-        formData.append('surfaceFinish', form.surfaceFinish.value);
-        formData.append('language', language);
-        
-        // 提交到报价API
-        const response = await fetch('/api/submit-quote', {
-          method: 'POST',
-          body: formData
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-          showSuccess();
-        } else {
-          showError(result.error || '提交失败，请重试');
-        }
-        
-      } catch (error) {
-        showError('网络错误，请重试');
-      } finally {
-        setLoading(false);
-      }
-    });
-
-    // 表单验证
-    function validateForm() {
-      // 文件验证
+    const validateForm = () => {
       if (selectedFiles.length === 0) {
-        showError(currentText.validation.fileRequired);
+        setError(currentText.validation.fileRequired);
         return false;
       }
-      
-      // 材料验证
-      if (!form.material.value) {
-        showError(currentText.validation.materialRequired);
-        return false;
-      }
-      
-      // 数量验证
-      if (!form.quantity.value || parseInt(form.quantity.value) <= 0) {
-        showError(currentText.validation.quantityRequired);
-        return false;
-      }
-      
-      // 邮箱验证
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!form.email.value) {
-        showError(currentText.validation.emailRequired);
-        return false;
-      } else if (!emailRegex.test(form.email.value)) {
-        showError(currentText.validation.emailInvalid);
-        return false;
-      }
-      
-      return true;
-    }
 
-    // 设置加载状态
-    function setLoading(loading) {
+      if (!form.material.value) {
+        setError(currentText.validation.materialRequired);
+        return false;
+      }
+
+      if (!form.quantity.value || parseInt(form.quantity.value, 10) <= 0) {
+        setError(currentText.validation.quantityRequired);
+        return false;
+      }
+
+      const emailValue = form.email.value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailValue) {
+        setError(currentText.validation.emailRequired);
+        return false;
+      }
+      if (!emailRegex.test(emailValue)) {
+        setError(currentText.validation.emailInvalid);
+        return false;
+      }
+
+      return true;
+    };
+
+    const setLoading = (loading) => {
+      if (!submitButton || !buttonText || !loadingIcon) return;
       submitButton.disabled = loading;
       if (loading) {
         buttonText.textContent = currentText.processing;
@@ -643,30 +586,107 @@ const currentText = text[language];
         buttonText.textContent = currentText.submitButton;
         loadingIcon.classList.add('hidden');
       }
-    }
+    };
 
-    // 显示错误信息
-    function showError(message) {
-      errorMessage.textContent = message;
-      errorMessage.classList.remove('hidden');
-      errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    // 显示成功信息
-    function showSuccess() {
+    const showSuccess = () => {
+      if (!successModal) return;
       successModal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
-    }
+    };
 
-    // 关闭成功模态框
-    window.closeSuccessModal = () => {
+    const closeSuccessModal = () => {
+      if (!successModal) return;
       successModal.classList.add('hidden');
       document.body.style.overflow = 'auto';
-      
-      // 重置表单
       form.reset();
-      selectedFiles = [];
+      selectedFiles.length = 0;
       displayFiles();
     };
-  });
+
+    if (successCloseButton) {
+      successCloseButton.addEventListener('click', closeSuccessModal);
+    }
+
+    if (fileUploadZone && fileInput) {
+      fileUploadZone.addEventListener('click', () => fileInput.click());
+      fileUploadZone.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        fileUploadZone.classList.add('border-[#7F00FF]', 'bg-purple-50');
+      });
+      fileUploadZone.addEventListener('dragleave', resetDropState);
+      fileUploadZone.addEventListener('drop', (event) => {
+        event.preventDefault();
+        resetDropState();
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        handleFiles(droppedFiles);
+      });
+    }
+
+    if (fileInput) {
+      fileInput.addEventListener('change', (event) => {
+        const chosenFiles = Array.from(event.target?.files || []);
+        handleFiles(chosenFiles);
+      });
+    }
+
+    if (fileList) {
+      fileList.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        const button = target.closest('.remove-file-btn');
+        if (!(button instanceof HTMLElement)) return;
+        const removeIndex = Number(button.dataset.removeIndex);
+        if (Number.isNaN(removeIndex)) return;
+        selectedFiles.splice(removeIndex, 1);
+        displayFiles();
+      });
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearError();
+
+      if (!validateForm()) {
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const payload = new FormData();
+        selectedFiles.forEach((file, index) => {
+          payload.append(`file${index}`, file);
+        });
+        payload.append('material', form.material.value);
+        payload.append('quantity', form.quantity.value);
+        payload.append('email', form.email.value);
+        payload.append('surfaceFinish', form.surfaceFinish.value);
+        payload.append('language', language);
+
+        const response = await fetch('/api/functions/submit-quote', {
+          method: 'POST',
+          body: payload
+        });
+
+        const result = await response.json().catch(() => null);
+
+        if (response.ok && result?.success) {
+          showSuccess();
+        } else {
+          setError(result?.error || currentText.errors.server);
+        }
+      } catch (error) {
+        console.error('Quote submission failed:', error);
+        setError(currentText.errors.network);
+      } finally {
+        setLoading(false);
+      }
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSimpleQuoteForm, { once: true });
+  } else {
+    initSimpleQuoteForm();
+  }
 </script>

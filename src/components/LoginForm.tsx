@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createClient } from '../lib/supabase/client';
+import { loginFormTexts } from '../utils/i18n-components';
 
 interface LoginFormProps {
   redirectUrl?: string;
@@ -13,34 +14,7 @@ export default function LoginForm({ redirectUrl = '/', currentLang = 'zh' }: Log
   const [email, setEmail] = useState('');
 
   const supabase = createClient();
-
-  // 多语言文本
-  const texts = {
-    zh: {
-      emailLabel: '邮箱地址',
-      emailPlaceholder: 'your.email@company.com',
-      sendButton: '发送登录链接',
-      sending: '发送中...',
-      emailRequired: '请输入邮箱地址',
-      successMessage: '登录链接已发送到您的邮箱！请检查您的邮件（包括垃圾邮件文件夹）。',
-      errorMessage: '发送失败，请稍后重试',
-      securityNote: '我们使用安全的无密码登录方式',
-      instruction: '点击邮件中的链接即可安全登录'
-    },
-    en: {
-      emailLabel: 'Email Address',
-      emailPlaceholder: 'your.email@company.com',
-      sendButton: 'Send Login Link',
-      sending: 'Sending...',
-      emailRequired: 'Please enter your email address',
-      successMessage: 'Login link sent to your email! Please check your inbox (including spam folder).',
-      errorMessage: 'Failed to send. Please try again later.',
-      securityNote: 'We use secure passwordless authentication',
-      instruction: 'Click the link in the email to log in securely'
-    }
-  };
-
-  const t = texts[currentLang];
+  const t = loginFormTexts[currentLang];
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -59,20 +33,44 @@ export default function LoginForm({ redirectUrl = '/', currentLang = 'zh' }: Log
     setMessageType('');
 
     try {
-      // 使用环境变量确保域名一致性
-      const siteUrl = import.meta.env.PUBLIC_SITE_URL || window.location.origin;
+      // 以实际访问域名作为回调基础，避免本地/preview 环境跳到生产
+      const siteUrl = typeof window !== 'undefined'
+        ? window.location.origin
+        : (import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321');
       // 构建包含next参数的callback URL，指向当前页面或者指定的redirectUrl
       const currentPath = window.location.pathname;
-      const nextUrl = redirectUrl === '/' ? currentPath : redirectUrl;
+      let nextUrl = redirectUrl || currentPath;
+      
+      // 如果从登录页来的，默认跳转到首页
+      if (nextUrl === '/zh/login' || nextUrl === '/en/login') {
+        nextUrl = currentPath.startsWith('/zh') ? '/zh' : '/en';
+      }
+      
+      // 确保URL格式正确
+      if (!nextUrl.startsWith('/')) {
+        nextUrl = '/' + nextUrl;
+      }
+      
       const callbackUrl = `${siteUrl}/api/auth/callback?next=${encodeURIComponent(nextUrl)}`;
+      
+      console.log('🔗 [LoginForm] Callback URL constructed:', {
+        siteUrl,
+        currentPath,
+        redirectUrl,
+        nextUrl,
+        callbackUrl
+      });
       
       // Magic link sending - production ready
       
-      // 使用Supabase内置魔法链接功能
+      // 强制使用我们的回调端点
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
         options: {
-          emailRedirectTo: callbackUrl
+          emailRedirectTo: `${siteUrl}/api/auth/callback`,
+          data: {
+            redirectTo: nextUrl
+          }
         }
       });
 
@@ -86,8 +84,10 @@ export default function LoginForm({ redirectUrl = '/', currentLang = 'zh' }: Log
       }
       
       console.log('✅ [LoginForm] Magic link sent successfully');
+      console.log('🎯 [LoginForm] Setting success message:', t.successMessage);
       setMessage(t.successMessage);
       setMessageType('success');
+      console.log('🎯 [LoginForm] Message state updated');
     } catch (error: any) {
       console.error('❌ [LoginForm] Magic link error:', {
         message: error.message,
@@ -95,13 +95,22 @@ export default function LoginForm({ redirectUrl = '/', currentLang = 'zh' }: Log
         details: error,
         timestamp: new Date().toISOString()
       });
+      console.log('🎯 [LoginForm] Setting error message:', error.message || t.errorMessage);
       setMessage(error.message || t.errorMessage);
       setMessageType('error');
+      console.log('🎯 [LoginForm] Error message state updated');
     } finally {
       setLoading(false);
       console.log('🏁 [LoginForm] Submit process completed');
     }
   };
+
+  console.log('🎨 [LoginForm] Rendering with state:', {
+    loading,
+    message,
+    messageType,
+    email
+  });
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
@@ -136,6 +145,17 @@ export default function LoginForm({ redirectUrl = '/', currentLang = 'zh' }: Log
               : 'bg-red-50 text-red-800 border border-red-200'
           }`}>
             {message}
+            {import.meta.env.DEV && (
+              <div className="mt-2 text-xs text-gray-500">
+                Debug: type={messageType}, len={message.length}
+              </div>
+            )}
+          </div>
+        )}
+        
+        {import.meta.env.DEV && (
+          <div className="p-2 bg-gray-100 text-xs text-gray-600 rounded">
+            Debug: message="{message}" | type={messageType} | loading={loading}
           </div>
         )}
       </form>

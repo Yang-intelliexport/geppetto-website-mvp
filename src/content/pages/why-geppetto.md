@@ -15,7 +15,7 @@ hero:
   cta:
     primary:
       text: "体验Geppetto专家审核报价承诺"
-      href: "/instant-quote"
+      href: "/zh/create-quote"
     secondary:
       text: "深入了解技术优势"
       href: "#advantages"
@@ -23,7 +23,7 @@ hero:
 advantages:
   - id: "smart-quote-detail"
     title: "Geppetto专家审核报价承诺"
-    description: "AI秒级分析，专家团队4-8工作小时内完成技术复核与精确报价"
+    description: "AI在0-2小时内完成初步分析，专家团队4-8工作小时内完成技术复核与精确报价"
     icon: "AI"
     color: "purple"
     stats: "4-8小时 vs 传统3-7天"
@@ -165,7 +165,7 @@ navigation:
     url: "/"
   next:
     title: "AI检测+专家报价"
-    url: "/instant-quote"
+    url: "/zh/create-quote"
 ---
 
 # 为何选择Geppetto？
@@ -185,7 +185,7 @@ navigation:
 
 #### Geppetto创新解决方案
 
-1. **Geppetto专家审核报价承诺** - AI秒级分析，专家4-8小时确认，极速响应
+1. **Geppetto专家审核报价承诺** - AI 0-2小时预审，专家4-8小时确认，极速响应
 2. **单件起做 无MOQ** - AI驱动效率革命，1件也有批量经济性
 3. **工作时间极速交付** - 智能调度优化，支持快速产品迭代
 4. **project-specific精度保证** - AI算法确保一致性，超越行业标准
@@ -206,11 +206,11 @@ navigation:
 
 ### 核心技术优势
 
-#### 1. AI检测+专家报价系统 - 秒级vs天级的效率革命
+#### 1. AI检测+专家报价系统 - 小时级 vs 天级的效率革命
 
 **技术实现原理:**
 - **传统模式:** 人工分析图纸 → 经验估算 → 3-7天报价周期
-- **Geppetto模式:** AI分析图纸 → 自动规划走刀 → 秒级工时预估 → 8小时详细报价
+- **Geppetto模式:** AI分析图纸 → 自动规划走刀 → 小时级工时预估 → 8小时详细报价
 
 **核心技术优势:**
 - 图纸自动解析：AI识别几何特征和加工要求
@@ -221,7 +221,7 @@ navigation:
 **竞争对比:**
 - **Xometry**: 传统人工报价，3-5天周期
 - **Protolabs**: 半自动化报价，工作时间周期
-- **Geppetto**: AI全自动报价，秒级完成
+- **Geppetto**: AI自动化成本模型，8小时内完成可执行报价
 
 #### 2. 成本结构革命 - 1/2到1/3价格如何实现
 

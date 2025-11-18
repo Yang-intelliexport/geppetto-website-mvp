@@ -4,6 +4,25 @@ company: "技术验证项目"
 industry: "精密制造"
 challenge: "复杂曲面结构件加工，高精度要求，单件重量1.2kg，材料利用率低，加工成本高昂"
 solution: "Geppetto AI分析复杂曲面生成多轴联动路径，优化材料使用，结合精密加工与质量监控"
+order: 2
+icon: "✈️"
+note: "• 72小时多轴"
+summary: "850×650×45mm 拓扑优化支架，2.5mm 薄壁 + 150+ 螺纹孔，在 72 小时内完成多轴加工与交付。"
+seo:
+  title: "Aerospace Structural Parts: 5-Axis CNC Machining | Geppetto"
+  metaDescription: "Precision manufacturing of complex aerospace structural components using Aluminum 7075. Achieved strict +/-0.005mm tolerances."
+bullets:
+  - "AI CAM 将编程周期从 30 天缩短至数小时"
+  - "材料利用率从 12% 提升至 30%+"
+  - "加工、质检、日志全量输出接入客户数字孪生"
+  - "满足风洞实验前的72小时快速交付"
+metrics:
+  - label: "周期"
+    value: "72小时"
+  - label: "材料节省"
+    value: "30-40%"
+resultTitle: "项目成果"
+resultDescription: "提前验证可制造性，项目关键里程碑一次通过。"
 results:
   precision: "项目定制精度 (达到设计要求)"
   cost_saving: "预计成本降低30-40%"

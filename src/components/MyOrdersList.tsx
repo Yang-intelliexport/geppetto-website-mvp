@@ -352,7 +352,7 @@ export default function MyOrdersList({ initialEmail = '', authResult = null, cur
               </svg>
               <h3 className="text-lg font-medium text-gray-900 mb-2">{t.noOrdersTitle}</h3>
               <p className="text-gray-600 mb-4">{t.noOrdersDesc}</p>
-              <a href={`/${currentLang}/ai-quote`} className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">
+              <a href={`/${currentLang}/create-quote`} className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">
                 {t.getQuoteButton}
               </a>
             </div>

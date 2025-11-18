@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TransparentPromise from '../../components/sections/TransparentPromise.astro';
+import QuoteFormContainer from '../../components/quote/QuoteFormContainer.astro';
+import { createQuoteContent, type Locale } from '../../data/i18n/createQuote';
+
+const locale = (Astro.currentLocale ?? 'en') as Locale;
+const content = createQuoteContent[locale];
+const hero = content.hero;
+---
+
+<BaseLayout title={content.seo.title} description={content.seo.description} keywords={content.seo.keywords}>
+  <script type="application/ld+json" is:inline>
+    {JSON.stringify(content.structuredData.data, null, 2)}
+  </script>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-purple-700 via-blue-700 to-purple-900 text-white">
+    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top,_#ffffff33,_transparent_60%)]"></div>
+    <div class="relative max-w-6xl mx-auto px-6 py-24">
+      <p class="uppercase tracking-[0.3em] text-sm text-purple-200 mb-6">{locale === 'zh' ? '报价请求' : 'Quote Request'}</p>
+      <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
+        {hero.title.prefix}
+        <span class="text-yellow-300"> {hero.title.highlight} </span>
+        {hero.title.suffix}
+      </h1>
+      <p class="text-xl text-blue-100 max-w-3xl">{hero.subtitle}</p>
+      <div class="mt-10 flex flex-col sm:flex-row gap-4">
+        <a href={`/${locale}/contact`} class="inline-flex items-center justify-center rounded-xl bg-white/10 px-6 py-3 text-base font-semibold text-white hover:bg-white/20 transition">
+          {locale === 'zh' ? '与工程师沟通' : 'Talk to Engineers'}
+        </a>
+        <a href={`/${locale}/resources`} class="inline-flex items-center justify-center rounded-xl border border-white/40 px-6 py-3 text-base font-semibold text-white hover:bg-white/10 transition">
+          {locale === 'zh' ? '查看制造指南' : 'Browse Guides'}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature highlights -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {content.features.map((feature) => (
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition">
+            <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 text-xl mb-4">★</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">{feature.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries -->
+  <section class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <p class="text-sm uppercase tracking-[0.3em] text-purple-500 mb-3">
+          {locale === 'zh' ? '适用行业场景' : 'Industries We Serve'}
+        </p>
+        <h2 class="text-3xl font-bold text-gray-900">
+          {locale === 'zh' ? '覆盖机器人、医疗、航空等核心领域' : 'Built for robotics, medical and aerospace teams'}
+        </h2>
+      </div>
+      <div class="grid gap-6 md:grid-cols-3">
+        {content.industries.map((industry) => (
+          <div class="border border-gray-100 rounded-3xl p-6 shadow-sm hover:shadow-lg transition">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">{industry.title}</h3>
+            <p class="text-sm text-gray-600 mb-4">{industry.description}</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              {industry.keywords.map((keyword) => (
+                <span class="px-3 py-1 text-xs rounded-full bg-purple-50 text-purple-700">
+                  {keyword}
+                </span>
+              ))}
+            </div>
+            <a href={industry.link.href} class="inline-flex items-center text-sm font-semibold text-purple-600 hover:text-purple-800">
+              {industry.link.label}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <TransparentPromise language={locale} />
+
+  <!-- Quote creation flow -->
+  <section class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-700 rounded-3xl p-8 md:p-12 text-white shadow-xl">
+        <div class="mb-10">
+          <p class="text-sm uppercase tracking-[0.3em] text-white/70 mb-3">{locale === 'zh' ? '提交报价' : 'Submit Quote'}</p>
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">
+            {locale === 'zh' ? '三步完成数字化报价请求' : 'Complete Your Quote in Three Steps'}
+          </h2>
+          <p class="text-white/80 text-lg max-w-3xl">
+            {locale === 'zh'
+              ? '验证邮箱、上传 CAD、告诉我们关键需求。所有信息都会通过企业级安全机制存储，并由 AI + 工程师共同审核。'
+              : 'Verify your email, upload CAD, and describe key requirements. All files are protected by enterprise-grade security and reviewed by AI plus senior engineers.'}
+          </p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 md:p-10 shadow-xl text-gray-900">
+          <QuoteFormContainer language={locale} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Capabilities & tolerance -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid gap-10 lg:grid-cols-2">
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6">{content.process.title}</h3>
+          <ul class="space-y-3 text-gray-700">
+            {content.process.items.map((item) => (
+              <li class="flex items-start gap-3">
+                <span class="mt-1 h-2 w-2 rounded-full bg-purple-500"></span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6">{content.tolerance.title}</h3>
+          <ul class="space-y-3 text-gray-700">
+            {content.tolerance.items.map((item) => (
+              <li class="flex items-start gap-3">
+                <span class="mt-1 h-2 w-2 rounded-full bg-blue-500"></span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQs -->
+  <section class="py-20 bg-white">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <p class="text-sm uppercase tracking-[0.3em] text-purple-500 mb-3">{locale === 'zh' ? '常见问题' : 'FAQ'}</p>
+        <h2 class="text-3xl font-bold text-gray-900">
+          {locale === 'zh' ? '关于报价流程的常见问题' : 'Frequently Asked Questions'}
+        </h2>
+      </div>
+      <div class="space-y-4">
+        {content.faqs.map((faq) => (
+          <details class="group bg-gray-50 rounded-2xl p-6">
+            <summary class="flex items-center justify-between cursor-pointer text-lg font-semibold text-gray-900">
+              {faq.question}
+              <span class="text-purple-600 transition group-open:rotate-180">⌄</span>
+            </summary>
+            <p class="mt-4 text-gray-700 leading-relaxed">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Resource cross-links -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <p class="text-sm uppercase tracking-[0.3em] text-purple-500 mb-3">
+          {locale === 'zh' ? '更多资源' : 'Deepen Your Evaluation'}
+        </p>
+        <h2 class="text-3xl font-bold text-gray-900">
+          {locale === 'zh' ? '案例、知识库与定价模型一站掌握' : 'Cases, resources and pricing in one place'}
+        </h2>
+      </div>
+      <div class="grid gap-6 md:grid-cols-3">
+        {content.linkBlocks.map((block) => (
+          <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">{block.title}</h3>
+            <p class="text-sm text-gray-600 mb-6 flex-1">{block.description}</p>
+            <a href={block.href} class="inline-flex items-center text-sm font-semibold text-purple-600 hover:text-purple-800">
+              {block.cta}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-sm uppercase tracking-[0.3em] text-purple-300 mb-3">{locale === 'zh' ? '联系我们' : 'Contact'}</p>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">{content.cta.title}</h2>
+      <p class="text-lg text-gray-200 mb-8">{content.cta.subtitle}</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href={`mailto:${content.cta.email}`} class="px-8 py-3 rounded-xl bg-white text-gray-900 font-semibold hover:bg-purple-100 transition">
+          {content.cta.emailLabel}
+        </a>
+        <a href={`tel:${content.cta.phone}`} class="px-8 py-3 rounded-xl border border-white/40 font-semibold hover:bg-white/10 transition">
+          {content.cta.phoneLabel}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

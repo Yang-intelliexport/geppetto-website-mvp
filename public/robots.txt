@@ -1,24 +1,7 @@
 # Geppetto AI Manufacturing Platform
-# 允许所有搜索引擎访问
-
+# 默认允许所有公开页面索引
 User-agent: *
 Allow: /
-
-# 高优先级页面
-Allow: /en/
-Allow: /zh/
-Allow: /en/ai-quote
-Allow: /zh/ai-quote
-Allow: /en/startup-manufacturing
-Allow: /zh/startup-manufacturing
-Allow: /en/transparent-pricing
-Allow: /zh/transparent-pricing
-Allow: /en/small-batch-manufacturing
-Allow: /zh/small-batch-manufacturing
-Allow: /en/services
-Allow: /zh/services
-Allow: /en/case-studies
-Allow: /zh/case-studies
 
 # 限制访问的页面
 Disallow: /api/
@@ -27,6 +10,14 @@ Disallow: /*.json$
 Disallow: /temp/
 Disallow: /drafts/
 Disallow: /_astro/
+Disallow: /en/quote-view
+Disallow: /zh/quote-view
+Disallow: /en/order/
+Disallow: /zh/order/
+Disallow: /en/track-order
+Disallow: /zh/track-order
+Disallow: /en/ai-quote
+Disallow: /zh/ai-quote
 
 # 延迟爬取间隔 (秒)
 Crawl-delay: 1

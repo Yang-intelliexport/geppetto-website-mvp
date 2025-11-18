@@ -1,0 +1,306 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import type { Locale } from '../../../../data/i18n/createQuote';
+import { orderPaymentContent } from '../../../../data/i18n/orderPayment';
+import { paymentPageContent } from '../../../../data/i18n/payment';
+import { getQuoteDetails } from '../../../../utils/supabase.server';
+
+type QuoteStatus = 'new' | 'pending' | 'quoted' | 'processing' | 'paid' | 'manufacturing' | 'shipping' | 'complete' | 'cancelled' | 'payment_pending';
+
+type QuoteRecord = {
+  id: string | number;
+  user_id: string | null;
+  status: QuoteStatus;
+  total_amount?: number | null;
+  currency?: string | null;
+  material?: string | null;
+  quantity?: number | null;
+  customer_notes?: string | null;
+  created_at: string;
+  stripe_payment_intent_id?: string | null;
+  quote_breakdown_items?: unknown[] | null;
+  quote_files?: unknown[] | null;
+  quote_messages?: unknown[] | null;
+  profile?: {
+    id: string;
+    email?: string | null;
+    contact_name?: string | null;
+    company_name?: string | null;
+    phone_number?: string | null;
+  } | null;
+};
+
+const locale = (Astro.currentLocale ?? 'en') as Locale;
+const content = orderPaymentContent[locale];
+const paymentContent = paymentPageContent[locale];
+const orderIdParam = Astro.params.id;
+
+if (!orderIdParam) {
+  return new Response('Missing order ID', { status: 400 });
+}
+
+let quote: QuoteRecord | null = null;
+
+try {
+  quote = (await getQuoteDetails(Astro, orderIdParam)) as QuoteRecord | null;
+} catch (error) {
+  console.error('Failed to load order payment info:', error);
+  return new Response('Unable to load order payment info', { status: 500 });
+}
+
+if (!quote) {
+  return new Response('Order not found', { status: 404 });
+}
+
+const orderId = String(quote.id);
+const numberLocale = locale === 'zh' ? 'zh-CN' : 'en-US';
+const amount = Number(quote.total_amount ?? 0);
+const currency = (quote.currency ?? (locale === 'zh' ? 'CNY' : 'USD')).toUpperCase();
+const formattedAmount =
+  amount > 0
+    ? new Intl.NumberFormat(numberLocale, { style: 'currency', currency }).format(amount)
+    : locale === 'zh'
+      ? '待报价'
+      : 'Pending';
+
+const statusLabels: Record<QuoteStatus, { zh: string; en: string }> = {
+  new: { zh: '新建', en: 'New' },
+  pending: { zh: '待处理', en: 'Pending' },
+  payment_pending: { zh: '等待付款', en: 'Payment Pending' },
+  quoted: { zh: '已报价', en: 'Quoted' },
+  processing: { zh: '处理中', en: 'Processing' },
+  paid: { zh: '已支付', en: 'Paid' },
+  manufacturing: { zh: '生产中', en: 'Manufacturing' },
+  shipping: { zh: '运输中', en: 'Shipping' },
+  complete: { zh: '已完成', en: 'Complete' },
+  cancelled: { zh: '已取消', en: 'Cancelled' }
+};
+
+const statusLabel = statusLabels[quote.status]?.[locale] ?? quote.status;
+const canPay = ['quoted', 'payment_pending', 'pending'].includes(quote.status) && amount > 0;
+
+type PaymentMethod = (typeof paymentContent.methods)[number];
+const methods: PaymentMethod[] = paymentContent.methods;
+
+const ui = locale === 'zh'
+  ? {
+      referenceLabel: '订单编号',
+      statusLabel: '支付状态',
+      nextStep: '完成支付后即可立即排产。',
+      stepsTitle: '支付步骤',
+      methodsTitle: '可选支付方式',
+      contactTitle: '需要帮助？',
+      payCta: '立即支付',
+      actions: [
+        { label: '查看报价详情', href: `/zh/quote/${orderId}` },
+        { label: '订单追踪', href: `/zh/track-order` }
+      ]
+    }
+  : {
+      referenceLabel: 'Order Reference',
+      statusLabel: 'Payment Status',
+      nextStep: 'Production scheduling starts once payment is confirmed.',
+      stepsTitle: 'How to Pay',
+      methodsTitle: 'Payment Methods',
+      contactTitle: 'Need Help?',
+      payCta: 'Pay Now',
+      actions: [
+        { label: 'View Quote Details', href: `/en/quote/${orderId}` },
+        { label: 'Track Order', href: `/en/track-order` }
+      ]
+    };
+---
+
+<BaseLayout title={content.seo.title} description={content.seo.description} noIndex={true}>
+  <section class="bg-gradient-to-br from-purple-700 via-blue-700 to-purple-900 text-white py-16">
+    <div class="max-w-5xl mx-auto px-6">
+      <p class="text-sm uppercase tracking-[0.3em] text-purple-200 mb-4">{ui.statusLabel}</p>
+      <h1 class="text-4xl font-bold mb-4">{content.hero.title}</h1>
+      <p class="text-lg text-blue-100">{content.hero.subtitle}</p>
+
+      <div class="mt-10 grid gap-4 md:grid-cols-3">
+        <div class="rounded-2xl bg-white/10 p-4">
+          <p class="text-xs uppercase tracking-[0.3em] text-purple-200 mb-2">{ui.referenceLabel}</p>
+          <p class="text-2xl font-semibold">{orderId}</p>
+        </div>
+        <div class="rounded-2xl bg-white/10 p-4">
+          <p class="text-xs uppercase tracking-[0.3em] text-purple-200 mb-2">{ui.statusLabel}</p>
+          <p class="text-2xl font-semibold">{statusLabel}</p>
+        </div>
+        <div class="rounded-2xl bg-white/10 p-4">
+          <p class="text-xs uppercase tracking-[0.3em] text-purple-200 mb-2">Next</p>
+          <p class="text-sm text-blue-100">{ui.nextStep}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-6 grid gap-8 md:grid-cols-3">
+      <div class="md:col-span-2">
+        <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">{locale === 'zh' ? '订单摘要' : 'Order Summary'}</h2>
+          <div class="grid gap-6 md:grid-cols-2">
+            <div>
+              <p class="text-sm text-gray-500">{locale === 'zh' ? '客户' : 'Customer'}</p>
+              <p class="text-lg font-semibold text-gray-900">{quote.profile?.contact_name ?? '—'}</p>
+              <p class="text-sm text-gray-500">{quote.profile?.email ?? '—'}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">{locale === 'zh' ? '产品' : 'Product'}</p>
+              <p class="text-lg font-semibold text-gray-900">{quote.customer_notes ?? '—'}</p>
+              <p class="text-sm text-gray-500">
+                {quote.material ?? '—'} · {locale === 'zh' ? '数量' : 'Qty'} {quote.quantity ?? '—'}
+              </p>
+            </div>
+          </div>
+          <div class="mt-6 rounded-2xl bg-gray-900 text-white p-5 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-[0.3em] text-indigo-200">{locale === 'zh' ? '应付金额' : 'Amount Due'}</p>
+              <p class="text-3xl font-bold">{formattedAmount}</p>
+            </div>
+            {canPay && (
+              <button id="order-payment-btn" class="mt-4 md:mt-0 inline-flex items-center justify-center rounded-2xl bg-yellow-300 text-gray-900 font-semibold px-6 py-3 hover:bg-yellow-200 transition" data-default-label={`${ui.payCta} ${formattedAmount}`}>
+                {ui.payCta} {formattedAmount !== '待报价' && formattedAmount !== 'Pending' ? formattedAmount : ''}
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div class="bg-gray-50 rounded-3xl p-8 shadow-sm border border-gray-100">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">{ui.stepsTitle}</h2>
+          <div class="space-y-4">
+            {content.steps.map((step, index) => (
+              <div class="flex gap-4">
+                <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 font-semibold flex items-center justify-center">
+                  {index + 1}
+                </div>
+                <div>
+                  <p class="text-lg font-semibold text-gray-900">{step.title}</p>
+                  <p class="text-sm text-gray-600">{step.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="mt-8 bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">{ui.methodsTitle}</h3>
+          <div class="grid gap-4 md:grid-cols-2">
+            {methods.map((method) => (
+              <div class="border border-gray-200 rounded-2xl p-4 hover:border-purple-400 transition">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-xl">{method.icon}</div>
+                  <div>
+                    <p class="text-base font-semibold text-gray-900">{method.title}</p>
+                    <p class="text-xs text-gray-500 uppercase tracking-[0.3em]">{method.subtitle}</p>
+                  </div>
+                </div>
+                <p class="text-sm text-gray-600">{method.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <aside class="space-y-6">
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">{ui.contactTitle}</h3>
+          <p class="text-sm text-gray-600 mb-4">{content.hero.subtitle}</p>
+          <div class="space-y-3">
+            {ui.actions.map((action) => (
+              <a href={action.href} class="block w-full text-center rounded-2xl border border-gray-200 py-3 font-semibold text-gray-800 hover:bg-gray-50 transition">
+                {action.label}
+              </a>
+            ))}
+          </div>
+        </div>
+        <div class="bg-gray-900 text-white rounded-3xl p-6 shadow-lg">
+          <h3 class="text-xl font-bold mb-4">{content.security.title}</h3>
+          <ul class="space-y-3 text-sm text-gray-200">
+            {content.security.items.map((item) => (
+              <li class="flex items-start gap-2">
+                <span class="mt-1 h-2 w-2 rounded-full bg-yellow-300"></span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          <a href={`mailto:${content.security.contact}`} class="inline-flex items-center mt-6 text-sm font-semibold text-yellow-300 hover:text-yellow-200">
+            {content.security.contact} →
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  {canPay && (
+    <script
+      is:inline
+      define:vars={{
+        quoteId: quote.id,
+        creatingText: locale === 'zh' ? '正在创建支付链接…' : 'Creating payment session…',
+        failureAlert: locale === 'zh' ? '支付创建失败：' : 'Payment creation failed: ',
+        defaultLabel: `${ui.payCta} ${formattedAmount !== '待报价' && formattedAmount !== 'Pending' ? formattedAmount : ''}`,
+        locale
+      }}
+    >
+      (() => {
+        const setupPaymentButtonInline = (config) => {
+          const requestSession = async () => {
+            const response = await fetch('/api/functions/create-payment-session', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ quoteId: String(config.quoteId), locale: config.locale ?? 'en' })
+            });
+            const result = await response.json();
+            if (!response.ok || !result?.success || !result?.url) {
+              throw new Error(result?.error || 'Failed to create payment session');
+            }
+            return result;
+          };
+
+          const bind = () => {
+            const button = document.getElementById(config.buttonId);
+            if (!button || button.dataset.paymentHandlerAttached === 'true') {
+              return;
+            }
+            button.dataset.paymentHandlerAttached = 'true';
+            const originalLabel =
+              config.defaultLabel || button.dataset.defaultLabel || button.textContent || '';
+            if (!button.dataset.defaultLabel) {
+              button.dataset.defaultLabel = originalLabel;
+            }
+
+            button.addEventListener('click', async () => {
+              try {
+                button.disabled = true;
+                button.textContent = config.creatingText;
+                const { url } = await requestSession();
+                window.location.href = url;
+              } catch (error) {
+                console.error('Payment creation failed:', error);
+                alert(config.failureAlert + (error?.message ?? ''));
+                button.disabled = false;
+                button.textContent = originalLabel;
+              }
+            });
+          };
+
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bind, { once: true });
+          } else {
+            bind();
+          }
+        };
+
+        setupPaymentButtonInline({
+          buttonId: 'order-payment-btn',
+          quoteId,
+          creatingText,
+          failureAlert,
+          defaultLabel,
+          locale
+        });
+      })();
+    </script>
+  )}
+</BaseLayout>

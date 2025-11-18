@@ -1,0 +1,109 @@
+---
+interface Props {
+  language?: 'zh' | 'en'
+}
+
+const { language = 'zh' } = Astro.props
+
+const copy = {
+  zh: {
+    title: '透明制造承诺',
+    subtitle: '每一份报价都由AI预审+专家复核，完整拆解材料、加工、质量与运营成本。',
+    highlights: [
+      {
+        title: '8小时专家审核',
+        description: '上传CAD后2小时内完成AI可行性分析，8小时内输出专家复核且附建议。'
+      },
+      {
+        title: '可验证成本分解',
+        description: '材料、加工、表面处理、运营保障逐项展示，让财务、创始人都能直接评估。'
+      },
+      {
+        title: '72小时生产节奏',
+        description: '确认后立即锁定产能，标准件72小时内完成生产+物流，实时同步进度节点。'
+      }
+    ],
+    timelineTitle: '从上传到出货的透明节点',
+    timeline: [
+      { label: '0-2小时', detail: 'AI智能检测 & 制造可行性诊断' },
+      { label: '2-8小时', detail: '专家成本拆解 & 报价审核' },
+      { label: '72小时内', detail: '生产执行 + 质量验证 + 发货准备' }
+    ],
+    assurance: '零隐藏费用 · 中文技术支持 · 创业团队现金流友好'
+  },
+  en: {
+    title: 'Transparent Breakdown Promise',
+    subtitle: 'Every quote ships with AI pre-check, expert validation, and an itemized cost structure.',
+    highlights: [
+      {
+        title: '8-Hour Expert Review',
+        description: 'AI feasibility check within 2 hours, followed by detailed engineer review and recommendations before you approve budgets.'
+      },
+      {
+        title: 'Auditable Cost Breakdown',
+        description: 'Material, machining, finishing, and operations are itemized so founders and finance teams know exactly what they pay for.'
+      },
+      {
+        title: '72-Hour Production Rhythm',
+        description: 'Capacity is reserved the moment you approve, with standard parts produced and shipped in 72 hours and milestones shared in real time.'
+      }
+    ],
+    timelineTitle: 'Transparent milestones from upload to shipment',
+    timeline: [
+      { label: '0-2h', detail: 'AI feasibility scan & DFM feedback' },
+      { label: '2-8h', detail: 'Expert breakdown + quote delivery' },
+      { label: '<72h', detail: 'Production, QA, and logistics prep' }
+    ],
+    assurance: 'Zero hidden fees · Bilingual engineers · Startup cash-flow friendly'
+  }
+}
+
+const content = copy[language]
+---
+
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <p class="text-sm font-semibold tracking-widest text-purple-600 uppercase mb-3">
+        {language === 'zh' ? '透明承诺' : 'Transparency'}
+      </p>
+      <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+        {content.title}
+      </h2>
+      <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+        {content.subtitle}
+      </p>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-3 mb-12">
+      {content.highlights.map((item) => (
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow duration-200">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600/10 to-blue-600/10 flex items-center justify-center mb-4">
+            <span class="text-xl text-purple-600">✦</span>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
+          <p class="text-gray-700 text-sm leading-relaxed">
+            {item.description}
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+        <h3 class="text-2xl font-semibold text-gray-900">
+          {content.timelineTitle}
+        </h3>
+        <p class="text-sm text-gray-500 mt-3 md:mt-0">{content.assurance}</p>
+      </div>
+      <div class="grid gap-6 md:grid-cols-3">
+        {content.timeline.map((stage) => (
+          <div class="rounded-xl border border-gray-100 p-6">
+            <div class="text-2xl font-bold text-gray-900 mb-2">{stage.label}</div>
+            <p class="text-sm text-gray-600 leading-relaxed">{stage.detail}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

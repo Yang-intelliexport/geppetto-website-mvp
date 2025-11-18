@@ -1,0 +1,448 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { Locale } from '../../data/i18n/contact';
+import { orderTrackingContent, type OrderTrackingContent } from '../../data/i18n/orderTracking';
+
+const locale = (Astro.currentLocale ?? 'en') as Locale;
+const content: OrderTrackingContent = orderTrackingContent[locale];
+
+type TrackerUiText = {
+  searchPlaceholder: string;
+  buttonLabel: string;
+  loading: string;
+  beforeSearch: string;
+  empty: string;
+  error: string;
+  resultsTitle: string;
+  orderIdLabel: string;
+  statusLabel: string;
+  emailLabel: string;
+  materialLabel: string;
+  quantityLabel: string;
+  deliveryLabel: string;
+  updatedLabel: string;
+  notesLabel: string;
+  engineerNotesLabel: string;
+  amountLabel: string;
+  payCta: string;
+  noAmount: string;
+  orderTypeQuote: string;
+  orderTypeOrder: string;
+  queryHintPrefix: string;
+  queryHints: string[];
+};
+
+const uiCopy: Record<Locale, TrackerUiText> = {
+  zh: {
+    searchPlaceholder: '输入邮箱、订单编号或8位短码（如 A1B2C3D4）',
+    buttonLabel: '立即查询',
+    loading: '正在查询，请稍候…',
+    beforeSearch: '输入邮箱或订单编号即可获取实时状态与工程师备注。',
+    empty: '未找到匹配的订单，请核对邮箱或编号。',
+    error: '查询失败，请稍后重试或联系支持团队。',
+    resultsTitle: '查询结果',
+    orderIdLabel: '订单编号',
+    statusLabel: '当前状态',
+    emailLabel: '提交邮箱',
+    materialLabel: '材料',
+    quantityLabel: '数量',
+    deliveryLabel: '预计交付',
+    updatedLabel: '更新时间',
+    notesLabel: '客户备注',
+    engineerNotesLabel: '工程师备注',
+    amountLabel: '报价金额',
+    payCta: '前往支付',
+    noAmount: '待报价',
+    orderTypeQuote: '报价',
+    orderTypeOrder: '订单',
+    queryHintPrefix: '可以尝试：',
+    queryHints: ['demo@test.com', 'A1B2C3D4', 'order_test_11111']
+  },
+  en: {
+    searchPlaceholder: 'Enter email, order ID, or 8-char short code (e.g. A1B2C3D4)',
+    buttonLabel: 'Check Status',
+    loading: 'Looking up your orders…',
+    beforeSearch: 'Use your email or order ID to see real-time progress and engineer notes.',
+    empty: 'No matching orders were found. Please double-check your email or ID.',
+    error: 'Unable to fetch orders. Please try again or contact support.',
+    resultsTitle: 'Results',
+    orderIdLabel: 'Order ID',
+    statusLabel: 'Current Status',
+    emailLabel: 'Email',
+    materialLabel: 'Material',
+    quantityLabel: 'Quantity',
+    deliveryLabel: 'Estimated Delivery',
+    updatedLabel: 'Last Updated',
+    notesLabel: 'Customer Notes',
+    engineerNotesLabel: 'Engineer Notes',
+    amountLabel: 'Quote Total',
+    payCta: 'Go to Payment',
+    noAmount: 'Pending',
+    orderTypeQuote: 'Quote',
+    orderTypeOrder: 'Order',
+    queryHintPrefix: 'Try:',
+    queryHints: ['demo@test.com', 'A1B2C3D4', 'order_test_11111']
+  }
+} as const;
+
+const uiText = uiCopy[locale];
+---
+
+<BaseLayout title={content.metaTitle} description={content.metaDescription} keywords={content.keywords} noIndex={true}>
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-purple-700 via-blue-700 to-purple-900 text-white py-24">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <p class="text-sm uppercase tracking-[0.3em] text-purple-200 mb-6">
+        {locale === 'zh' ? 'Status Center' : 'Status Center'}
+      </p>
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">{content.heroTitle}</h1>
+      <p class="text-xl text-blue-100">{content.heroSubtitle}</p>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6 grid gap-6 md:grid-cols-3">
+      {content.features.map((feature) => (
+        <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
+          <div class="text-3xl mb-4">{feature.icon}</div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
+          <p class="text-gray-600 leading-relaxed">{feature.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Tracker -->
+  <section class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-6 grid gap-10 lg:grid-cols-3">
+      <div class="lg:col-span-2 space-y-6">
+        <div class="bg-gray-900 text-white rounded-3xl p-8 shadow-xl">
+          <h2 class="text-3xl font-bold mb-4">{locale === 'zh' ? '实时订单追踪' : 'Real-Time Tracking'}</h2>
+          <p class="text-gray-300 mb-8">{uiText.beforeSearch}</p>
+          <form id="track-order-form" class="space-y-4">
+            <div class="flex flex-col sm:flex-row gap-4">
+              <input
+                type="text"
+                name="query"
+                required
+                class="flex-1 rounded-2xl border border-white/30 bg-white/10 px-5 py-4 text-base placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                placeholder={uiText.searchPlaceholder}
+              />
+              <button
+                type="submit"
+                class="rounded-2xl bg-yellow-300 text-gray-900 font-semibold px-6 py-4 flex items-center justify-center hover:bg-yellow-200 transition disabled:opacity-60"
+              >
+                {uiText.buttonLabel}
+              </button>
+            </div>
+            <input type="hidden" name="language" value={locale} />
+          </form>
+          <p id="track-order-status" class="mt-4 text-sm text-indigo-200">{uiText.beforeSearch}</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm min-h-[240px]" id="track-order-results">
+          <div class="text-center text-gray-500">
+            <p class="mb-4">{uiText.queryHintPrefix}</p>
+            <div class="flex flex-wrap justify-center gap-3">
+              {uiText.queryHints.map((hint) => (
+                <button
+                  class="px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm hover:bg-gray-200 transition"
+                  type="button"
+                  data-track-order-hint={hint}
+                >
+                  {hint}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 border border-gray-100 rounded-3xl p-6 h-fit">
+        <h3 class="text-2xl font-semibold text-gray-900 mb-4">{content.help.title}</h3>
+        <p class="text-gray-600 mb-4">{content.help.instructionsTitle}</p>
+        <ul class="space-y-3 mb-6">
+          {content.help.instructions.map((instruction) => (
+            <li class="flex items-start gap-3 text-gray-700 text-sm leading-relaxed">
+              <span class="mt-1 h-2 w-2 rounded-full bg-purple-500"></span>
+              <span>{instruction}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="text-gray-500 text-sm mb-3">{content.help.fallback}</p>
+        <a href={`mailto:${content.help.contactEmail}`} class="text-purple-600 font-semibold">
+          {content.help.contactLabel}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Status guide -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-gray-900 mb-10 text-center">{content.statusGuideTitle}</h2>
+      <div class="grid gap-8 md:grid-cols-2">
+        {content.statusSections.map((section) => (
+          <div class="bg-white border border-gray-100 rounded-3xl p-8 shadow-sm">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-semibold text-gray-900">{section.title}</h3>
+              {section.subtitle && <span class="text-sm text-gray-500">{section.subtitle}</span>}
+            </div>
+            <div class="space-y-4">
+              {section.steps.map((step) => (
+                <div class="flex items-start gap-4">
+                  <div class="text-2xl">{step.icon}</div>
+                  <div>
+                    <p class="text-lg font-semibold text-gray-900">{step.title}</p>
+                    <p class="text-gray-600 text-sm">{step.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div id="track-order-config" data-config={JSON.stringify({ locale, text: uiText })} hidden></div>
+  <script is:inline>
+    const configEl = document.getElementById('track-order-config');
+    const config = configEl ? JSON.parse(configEl.dataset.config || '{}') : null;
+
+    if (config) {
+      const form = document.getElementById('track-order-form');
+      const statusEl = document.getElementById('track-order-status');
+      const resultsEl = document.getElementById('track-order-results');
+      const hintButtons = document.querySelectorAll('[data-track-order-hint]');
+
+      const escapeHtml = (value = '') =>
+        String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+
+      const formatDate = (value) => {
+        if (!value) return '';
+        try {
+          return new Date(value).toLocaleString(config.locale === 'zh' ? 'zh-CN' : 'en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        } catch {
+          return value;
+        }
+      };
+
+      const renderOrders = (orders = []) => {
+        if (!orders.length) {
+          return `<div class="text-center text-gray-500 py-8">${escapeHtml(config.text.empty)}</div>`;
+        }
+
+        return orders
+          .map((order) => {
+            const shortId = order.shortId || String(order.id || '').slice(0, 8);
+            const quantity = typeof order.quantity === 'number' ? `${order.quantity}` : '—';
+            const delivery = order.estimatedDeliveryDays
+              ? `${order.estimatedDeliveryDays} ${config.locale === 'zh' ? '天' : 'days'}`
+              : '—';
+            const amountValue =
+              typeof order.quoteTotal === 'number'
+                ? order.quoteTotal
+                : typeof order.total_amount === 'number'
+                  ? order.total_amount
+                  : null;
+            const currency = (order.currency || (config.locale === 'zh' ? 'CNY' : 'USD')).toUpperCase();
+            const amount =
+              amountValue !== null
+                ? amountValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                : null;
+            const updated = order.updatedAt || order.updated_at || order.createdAt;
+            const typeLabel = order.type === 'order' ? config.text.orderTypeOrder : config.text.orderTypeQuote;
+            const showPayCta =
+              (order.type === 'quote' && order.status === 'quoted') ||
+              (order.type === 'order' && order.status === 'payment-confirmed');
+            const paymentUrl = order.paymentUrl || (order.id ? `/${config.locale}/order/${encodeURIComponent(order.id)}/payment` : null);
+
+            return `
+              <div class="border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p class="text-xs uppercase text-gray-500 tracking-widest">${escapeHtml(config.text.orderIdLabel)}</p>
+                    <p class="font-mono text-lg text-gray-900">#${escapeHtml(shortId || '')}</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700">${escapeHtml(typeLabel)}</span>
+                    <span class="px-3 py-1 text-xs rounded-full bg-purple-100 text-purple-700">${escapeHtml(order.statusLabel || order.status || '')}</span>
+                  </div>
+                </div>
+                <dl class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <dt class="text-gray-500">${escapeHtml(config.text.emailLabel)}</dt>
+                    <dd class="font-medium text-gray-900">${escapeHtml(order.email || '')}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-gray-500">${escapeHtml(config.text.materialLabel)}</dt>
+                    <dd class="font-medium text-gray-900">${escapeHtml(order.materialLabel || order.material || '—')}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-gray-500">${escapeHtml(config.text.quantityLabel)}</dt>
+                    <dd class="font-medium text-gray-900">${escapeHtml(quantity)}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-gray-500">${escapeHtml(config.text.deliveryLabel)}</dt>
+                    <dd class="font-medium text-gray-900">${escapeHtml(delivery)}</dd>
+                  </div>
+                  <div>
+                    <dt class="text-gray-500">${escapeHtml(config.text.updatedLabel)}</dt>
+                    <dd class="font-medium text-gray-900">${escapeHtml(formatDate(updated))}</dd>
+                  </div>
+                </dl>
+                ${order.customerNotes ? `<div class="text-sm text-gray-600"><strong>${escapeHtml(config.text.notesLabel)}:</strong> ${escapeHtml(order.customerNotes)}</div>` : ''}
+                ${order.engineerNotes ? `<div class="text-sm text-gray-600"><strong>${escapeHtml(config.text.engineerNotesLabel)}:</strong> ${escapeHtml(order.engineerNotes)}</div>` : ''}
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-gray-50 rounded-xl p-4">
+                  <div>
+                    <p class="text-xs uppercase text-gray-500 tracking-widest">${escapeHtml(config.text.amountLabel)}</p>
+                    <p class="text-xl font-semibold text-gray-900">
+                      ${amount !== null ? `$${amount} ${escapeHtml(currency)}` : escapeHtml(config.text.noAmount)}
+                    </p>
+                  </div>
+                  ${showPayCta && paymentUrl
+                    ? `<a href="${paymentUrl}" class="inline-flex items-center px-4 py-2 text-sm font-semibold bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">${escapeHtml(config.text.payCta)}</a>`
+                    : ''}
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+      };
+
+      const setStatus = (message, isError = false) => {
+        if (!statusEl) return;
+        statusEl.textContent = message;
+        statusEl.classList.toggle('text-red-300', isError);
+        statusEl.classList.toggle('text-indigo-200', !isError);
+      };
+
+      hintButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const hintValue = button.getAttribute('data-track-order-hint');
+          const input = form?.querySelector('input[name="query"]');
+          if (input && hintValue) {
+            input.value = hintValue;
+            if (typeof form.requestSubmit === 'function') {
+              form.requestSubmit();
+            } else {
+              form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+            }
+          }
+        });
+      });
+
+      const submitQuery = async ({ statusMessage } = {}) => {
+        if (!form) return;
+        const submitButton = form.querySelector('button[type="submit"]');
+        const formData = new FormData(form);
+
+        submitButton && (submitButton.disabled = true);
+        setStatus(statusMessage ?? config.text.loading);
+        console.debug('[track-order] submitting query', Object.fromEntries(formData.entries()));
+
+        try {
+          const response = await fetch('/api/functions/track-order', {
+            method: 'POST',
+            body: formData
+          });
+          const result = await response.json();
+          console.debug('[track-order] response', result);
+
+          if (!response.ok || !result.success) {
+            throw new Error(result.error || 'Request failed');
+          }
+
+          setStatus(result.message || config.text.resultsTitle);
+          resultsEl.innerHTML = renderOrders(result.data?.orders || []);
+          if (resultsEl) {
+            resultsEl.dataset.loaded = 'true';
+          }
+        } catch (error) {
+          console.error('Track order error', error);
+          setStatus(config.text.error, true);
+        } finally {
+          submitButton && (submitButton.disabled = false);
+        }
+      };
+
+      form?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        submitQuery();
+      });
+
+      const waitForSupabaseClient = () =>
+        new Promise((resolve) => {
+          if (typeof window !== 'undefined' && window.supabaseClient) {
+            console.debug('[track-order] supabase client ready immediately');
+            return resolve(window.supabaseClient);
+          }
+          let attempts = 0;
+          const timer = setInterval(() => {
+            attempts += 1;
+            if (typeof window !== 'undefined' && window.supabaseClient) {
+              clearInterval(timer);
+              console.debug('[track-order] supabase client ready after waiting');
+              resolve(window.supabaseClient);
+            } else if (attempts > 20) {
+              clearInterval(timer);
+              console.warn('[track-order] supabase client not available after waiting');
+              resolve(null);
+            }
+          }, 300);
+        });
+
+      const autoLoadOrdersForSession = async () => {
+        const supabase = await waitForSupabaseClient();
+        if (!supabase) return;
+
+        try {
+          const { data } = await supabase.auth.getSession();
+          const email = data?.session?.user?.email;
+          if (!email) return;
+          console.debug('[track-order] detected session email', email);
+
+          const input = form?.querySelector('input[name="query"]');
+          if (!input) return;
+
+          const normalizedEmail = email.trim();
+          if (!normalizedEmail) return;
+
+          const alreadyLoaded = resultsEl?.dataset.loaded === 'true';
+          if (alreadyLoaded && input.value.trim() === normalizedEmail) {
+            console.debug('[track-order] orders already loaded for this email');
+            return;
+          }
+
+          if (input.value.trim() !== normalizedEmail) {
+            input.value = normalizedEmail;
+          }
+
+          const autoMessage =
+            config.locale === 'zh'
+              ? '已检测到登录状态，正在加载您的订单...'
+              : 'Loading your orders automatically...';
+
+          await submitQuery({ statusMessage: autoMessage });
+        } catch (error) {
+          console.debug('[track-order] auto fetch skipped', error);
+        }
+      };
+
+      autoLoadOrdersForSession();
+    }
+  </script>
+</BaseLayout>

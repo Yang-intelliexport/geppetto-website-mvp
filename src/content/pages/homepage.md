@@ -1,20 +1,20 @@
 ---
 title: "CNC Quote | 智能弹性 Precision Manufacturing | Geppetto"
-description: "Get instant CNC quotes with AI analysis in seconds, expert validation in 4-8 hours. Custom precision requirements, 72H production + shipping, no MOQ limits. Global precision manufacturing leader."
-keywords: ["CNC quote", "manufacturing quote", "instant CNC quote", "precision manufacturing", "rapid manufacturing", "online CNC", "rush order", "high precision"]
+description: "Get transparent CNC quotes with AI-assisted analysis in 0-2 hours and expert validation in 4-8 hours. Custom precision requirements, 72H production + shipping, no MOQ limits."
+keywords: ["CNC quote", "manufacturing quote", "transparent CNC quote", "precision manufacturing", "rapid manufacturing", "online CNC", "rush order", "high precision"]
 
 seo:
-  title: "CNC Quote | Instant Manufacturing Quote | 智能弹性 Precision | Geppetto"
-  description: "Get instant CNC quotes with AI analysis in seconds, expert validation in 4-8 hours. Custom precision requirements, 72H production + shipping, no MOQ limits. Global precision manufacturing service."
-  keywords: ["CNC quote", "manufacturing quote", "instant CNC quote", "precision manufacturing", "rapid manufacturing", "online CNC", "rush order", "high precision", "plastic machining", "steel machining"]
+  title: "CNC Quote | Transparent Manufacturing Quote | 智能弹性 Precision | Geppetto"
+  description: "AI-assisted analysis delivers a preliminary view in 0-2 hours, experts complete validation within 4-8 hours. 72H production + shipping, no MOQ limits, and custom precision requirements."
+  keywords: ["CNC quote", "manufacturing quote", "transparent CNC quote", "precision manufacturing", "rapid manufacturing", "online CNC", "rush order", "high precision", "plastic machining", "steel machining"]
 
 hero:
   title: "AI + Expert CNC Manufacturing"
   subtitle: "Dual Assurance Manufacturing Revolution"
-  description: "AI-assisted expert analysis + Expert validation in 4-8 hours = Zero pricing surprises.\nCustom precision requirements • 72H production + shipping • No MOQ limits • 50-70% cost savings"
+  description: "AI-assisted expert analysis + expert validation in 4-8 hours = zero pricing surprises.\nCustom precision requirements • 72H production + shipping • No MOQ limits • 50-70% cost savings"
   cta:
     primary:
-      text: "Get Instant CNC Quote"
+      text: "Get Expert Quote in 8 Hours"
       href: "/cnc-quote"
     secondary:
       text: "Learn Our Advantages"
@@ -22,14 +22,14 @@ hero:
 
 advantages:
   - id: "smart-quote"
-    title: "Instant CNC Quote Promise"
-    description: "AI analysis in seconds, expert technical validation within 4-8 hours with precise quotes"
+    title: "Transparent CNC Quote Promise"
+    description: "AI-assisted analysis in 0-2 hours, expert technical validation within 4-8 hours with precise quotes"
     icon: "AI"
     stats: "4-8 hours vs traditional 3-7 days"
     color: "purple"
     details: |
       ### Technical Implementation
-      1. AI intelligent analysis (seconds to start, 2-5 minutes complete)
+      1. AI intelligent analysis (0-2 hours to complete preliminary diagnosis)
       2. Expert technical validation (2-8 working hours)
       3. Precise quote output
 
@@ -65,8 +65,8 @@ testimonials:
       quality_rate: "100%"
 
 features:
-  - title: "quality systems & ISO Certified"
-    description: "Full aerospace and quality management system certifications"
+  - title: "Quality Systems In Progress"
+    description: "Building ISO 9001/AS9100 aligned processes (certification in progress)"
     icon: "✓"
   - title: "500+ Success Stories"
     description: "Serving robotics, electronics, automotive, and aerospace industries"
@@ -86,15 +86,15 @@ We're not just stacking AI technologies - we're fundamentally restructuring trad
 
 Geppetto combines AI technology with deep manufacturing expertise to solve the four major pain points of traditional manufacturing:
 
-1. **Long Quote Cycles** → **Instant CNC Quote Promise**
+1. **Long Quote Cycles** → **8-Hour Expert Quote Promise**
 2. **Strict MOQ Limits** → **No MOQ - Single Part Manufacturing**  
-3. **Unpredictable Delivery** → **24-Hour Rush Order Delivery**
+3. **Unpredictable Delivery** → **72H Production + Shipping Rhythm**
 4. **Inconsistent Quality** → **project-specific High Precision Guarantee**
 
 ### AI + Expert Dual Assurance
 
 We adopt an innovative "AI Analysis + Expert Technical Validation" model:
-- AI handles instant analysis and initial solution generation
+- AI handles 0-2 hour preliminary analysis and initial solution generation
 - Experts ensure technical feasibility and quality assurance
 - Perfect balance between efficiency and professionalism
 

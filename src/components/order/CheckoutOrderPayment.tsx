@@ -3,7 +3,6 @@ import { useStore } from '@nanostores/react';
 import { userStore, sessionStore, authLoadingStore } from '../../stores/sessionStore';
 import { createClient } from '../../lib/supabase/client';
 import { createPaymentSession } from '../../utils/supabase';
-import type { User } from '@supabase/supabase-js';
 
 interface CheckoutOrderPaymentProps {
   orderId: string;
@@ -216,7 +215,7 @@ export default function CheckoutOrderPayment({ orderId, language = 'zh' }: Check
       console.log('🔄 创建支付会话，订单ID:', quote.id);
       
       // 调用现有的 createPaymentSession 函数
-      const paymentData = await createPaymentSession(String(quote.id));
+      const paymentData = await createPaymentSession(String(quote.id), { locale: language });
       
       console.log('📋 支付数据返回:', paymentData);
       

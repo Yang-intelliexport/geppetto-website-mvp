@@ -398,49 +398,26 @@ export function subscribeToQuoteMessages(quoteId, callback) {
  * @param {string} quoteId - 报价ID
  * @returns {Promise} 支付URL
  */
-export async function createPaymentSession(quoteId) {
+export async function createPaymentSession(quoteId, options = {}) {
   try {
-    console.log('💳 创建支付会话 (V1.1):', quoteId);
-    console.log('🔗 Supabase项目URL:', supabase.supabaseUrl);
-    console.log('🌐 准备调用Edge Function: stripe-payment');
-    
-    // 添加调用前的详细日志
-    const requestPayload = { quote_id: quoteId };
-    console.log('📤 Edge Function请求参数:', requestPayload);
-    
-    // 记录调用开始时间
-    const callStartTime = Date.now();
-    console.log('⏰ Edge Function调用开始时间:', new Date(callStartTime).toISOString());
-    
-    // 正确的架构：调用现有的Supabase Edge Function
-    const { data, error } = await supabase.functions.invoke('stripe-payment', {
-      body: requestPayload
+    const locale =
+      options.locale ||
+      (typeof window !== 'undefined' && window.location.pathname.startsWith('/zh') ? 'zh' : 'en');
+    const response = await fetch('/api/functions/create-payment-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ quoteId: String(quoteId), locale })
     });
 
-    // 记录调用结束时间和耗时
-    const callEndTime = Date.now();
-    const duration = callEndTime - callStartTime;
-    console.log('⏰ Edge Function调用结束时间:', new Date(callEndTime).toISOString());
-    console.log('⏱️ Edge Function调用耗时:', duration + 'ms');
-
-    if (error) {
-      console.error('❌ 创建支付会话失败 - 详细错误信息:', {
-        errorMessage: error.message,
-        errorCode: error.code,
-        errorDetails: error.details,
-        errorHint: error.hint,
-        fullError: error,
-        duration: duration + 'ms'
-      });
-      throw new Error(`创建支付失败: ${error.message}`);
+    const result = await response.json();
+    if (!response.ok || !result?.success || !result?.url) {
+      const message = result?.error || 'Failed to create payment session';
+      console.error('❌ 创建支付会话失败:', message, result);
+      throw new Error(message);
     }
 
-    console.log('✅ 支付会话创建成功 (V1.1):', {
-      data,
-      duration: duration + 'ms',
-      responseTime: new Date().toISOString()
-    });
-    return data;
+    console.log('✅ 支付会话创建成功:', result);
+    return result;
   } catch (error) {
     console.error('❌ 创建支付会话错误 - 捕获到异常:', {
       errorType: error.constructor.name,

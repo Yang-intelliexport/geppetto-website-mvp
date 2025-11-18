@@ -1,406 +1,337 @@
-/**
- * Track Order API - Mock Implementation
- * 提供订单追踪功能，包含支付按钮测试数据
- */
+import type { APIRoute } from 'astro';
+import { createClient } from '../../../lib/supabase/server';
+import { supabaseAdmin } from '../../../lib/supabase';
 
-import type { APIRoute } from 'astro'
-import type { ApiResponse } from '../../../config/api'
+type Language = 'zh' | 'en';
 
-// Mock数据 - 展示完整的报价到订单流程
-const MOCK_ORDERS = [
-  // 已报价 - 等待支付（报价阶段最后一步）
-  {
-    id: 'quote_test_12345',
-    shortId: 'A1B2C3D4',
-    type: 'quote', // 报价类型
-    status: 'quoted',
-    statusLabel: '已报价',
-    email: 'demo@test.com',
-    createdAt: '2025-01-01T10:00:00Z',
-    updatedAt: '2025-01-01T15:30:00Z',
-    material: 'aluminum-6061',
-    materialLabel: '6061铝合金（最常用）',
-    quantity: 50,
-    quoteTotal: 1299.99,
-    unitPrice: 25.99,
-    estimatedDeliveryDays: 7,
-    processingDays: 1,
-    customerNotes: '需要高精度加工，表面阳极氧化处理',
-    engineerNotes: '已完成技术评估，报价包含阳极氧化和精密加工费用。生产周期7天。',
-    originalFileUrl: '/mock-files/demo-part.step',
-    // 价格明细breakdown
-    priceBreakdown: {
-      engineeringSetup: 65.00,      // 一次性工程与设置费
-      materialCost: 45.20,          // 材料费 (6061-T6铝合金)
-      manufacturingService: 129.30, // 加工与品控服务
-      shipping: 8.00,               // 国际运费
-      unitProductionCost: 174.50    // 单件生产成本 (材料+加工)
-    }
+type QuoteRow = {
+  id: string;
+  user_id: string | null;
+  status: string;
+  material?: string | null;
+  quantity?: number | null;
+  total_amount?: number | null;
+  currency?: string | null;
+  customer_notes?: string | null;
+  cad_file_path?: string | null;
+  stripe_payment_intent_id?: string | null;
+  created_at: string;
+  updated_at?: string | null;
+};
+
+type ProfileRecord = {
+  id: string;
+  email?: string | null;
+  contact_name?: string | null;
+  company_name?: string | null;
+  phone_number?: string | null;
+};
+
+type ApiResponse = {
+  success: boolean;
+  data?: Record<string, unknown>;
+  error?: string;
+  message?: string;
+  requestId?: string;
+  meta?: Record<string, unknown>;
+};
+
+const SELECT_COLUMNS = `
+  id,
+  user_id,
+  status,
+  material,
+  quantity,
+  total_amount,
+  currency,
+  customer_notes,
+  cad_file_path,
+  stripe_payment_intent_id,
+  created_at,
+  updated_at
+`;
+
+const STATUS_LABELS = {
+  en: {
+    new: 'New',
+    pending: 'Pending',
+    quoted: 'Quoted',
+    processing: 'Processing',
+    paid: 'Paid',
+    manufacturing: 'Manufacturing',
+    shipping: 'Shipping',
+    complete: 'Complete',
+    cancelled: 'Cancelled',
+    'payment_pending': 'Payment Pending',
+    'payment-confirmed': 'Payment Confirmed',
+    'ai-reviewing': 'AI Reviewing',
+    'expert-reviewing': 'Expert Review',
+    'quality-check': 'Quality Check',
+    packaging: 'Packaging'
   },
-  
-  // 专家审核中 - 报价阶段
-  {
-    id: 'quote_test_67890',
-    shortId: 'B5C6D7E8',
-    type: 'quote',
-    status: 'expert-reviewing',
-    statusLabel: '专家审核',
-    email: 'demo@test.com',
-    createdAt: '2025-01-01T14:20:00Z',
-    updatedAt: '2025-01-01T16:00:00Z',
-    material: 'stainless-304',
-    materialLabel: '304不锈钢（耐腐蚀）',
-    quantity: 20,
-    processingDays: 0,
-    customerNotes: '用于食品级设备，需要食品级认证',
-    originalFileUrl: '/mock-files/food-grade-part.step'
-  },
-  
-  // AI评估中 - 报价阶段初期
-  {
-    id: 'quote_test_33333',
-    shortId: 'C3D4E5F6',
-    type: 'quote',
-    status: 'ai-reviewing',
-    statusLabel: 'AI评估',
-    email: 'demo@test.com',
-    createdAt: '2025-01-01T16:45:00Z',
-    updatedAt: '2025-01-01T17:00:00Z',
-    material: 'brass-c360',
-    materialLabel: '黄铜（导电性好）',
-    quantity: 100,
-    processingDays: 0,
-    customerNotes: '电子连接器用，要求高导电性',
-    originalFileUrl: '/mock-files/connector-part.step'
-  },
-  
-  // 制造中订单 - 订单阶段（已支付后）
-  {
-    id: 'order_test_11111',
-    shortId: 'F9G8H7I6',
-    type: 'order', // 订单类型
-    status: 'manufacturing',
-    statusLabel: '制造中',
-    email: 'demo@test.com',
-    createdAt: '2024-12-25T09:00:00Z',
-    paidAt: '2024-12-26T10:00:00Z',
-    updatedAt: '2024-12-28T10:30:00Z',
-    material: 'titanium-grade2',
-    materialLabel: '钛合金（航空级）',
-    quantity: 5,
-    quoteTotal: 2599.99,
-    unitPrice: 519.99,
-    estimatedDeliveryDays: 14,
-    processingDays: 6,
-    customerNotes: '航空应用，需要材料认证书',
-    engineerNotes: '使用航空级钛合金，正在制造中，预计1月5日完成制造。',
-    originalFileUrl: '/mock-files/aerospace-component.step',
-    // 价格明细breakdown
-    priceBreakdown: {
-      engineeringSetup: 260.00,     // 一次性工程与设置费
-      materialCost: 442.50,         // 材料费 (钛合金)
-      manufacturingService: 1897.49, // 加工与品控服务
-      shipping: 35.00,              // 国际运费
-      unitProductionCost: 2339.99   // 单件生产成本 (材料+加工)
-    }
-  },
-  
-  // 质量检测中订单
-  {
-    id: 'order_test_22222',
-    shortId: 'G7H8I9J0',
-    type: 'order',
-    status: 'quality-check',
-    statusLabel: '质量检测',
-    email: 'demo@test.com',
-    createdAt: '2024-12-20T09:00:00Z',
-    paidAt: '2024-12-21T10:00:00Z',
-    updatedAt: '2024-12-30T14:30:00Z',
-    material: 'aluminum-7075',
-    materialLabel: '7075铝合金（高强度）',
-    quantity: 10,
-    quoteTotal: 899.99,
-    unitPrice: 89.99,
-    estimatedDeliveryDays: 10,
-    processingDays: 11,
-    customerNotes: '高强度要求，用于无人机零件',
-    engineerNotes: '制造完成，正在进行最终质量检测，确保符合航空标准。',
-    originalFileUrl: '/mock-files/drone-part.step'
-  },
-  
-  // 支付确认订单 - 刚支付完成
-  {
-    id: 'order_test_44444',
-    shortId: 'H1I2J3K4',
-    type: 'order',
-    status: 'payment-confirmed',
-    statusLabel: '支付成功',
-    email: 'demo@test.com',
-    createdAt: '2024-12-31T16:30:00Z',
-    paidAt: '2025-01-01T09:15:00Z',
-    updatedAt: '2025-01-01T09:15:00Z',
-    material: 'aluminum-6061',
-    materialLabel: '6061铝合金（最常用）',
-    quantity: 25,
-    quoteTotal: 649.99,
-    unitPrice: 25.99,
-    estimatedDeliveryDays: 8,
-    processingDays: 0,
-    customerNotes: '标准精度即可，用于原型测试',
-    engineerNotes: '支付确认，订单已进入生产队列，即将开始制造。',
-    originalFileUrl: '/mock-files/prototype-part.step',
-    // 价格明细breakdown
-    priceBreakdown: {
-      engineeringSetup: 65.00,      // 一次性工程与设置费
-      materialCost: 148.75,         // 材料费 (6061铝合金)
-      manufacturingService: 436.24, // 加工与品控服务
-      shipping: 12.00,              // 国际运费
-      unitProductionCost: 584.99    // 单件生产成本 (材料+加工)
-    }
-  },
-  
-  // 打包中订单
-  {
-    id: 'order_test_55555',
-    shortId: 'I9J0K1L2',
-    type: 'order',
-    status: 'packaging',
-    statusLabel: '打包中',
-    email: 'demo@test.com',
-    createdAt: '2024-12-15T10:00:00Z',
-    paidAt: '2024-12-16T11:00:00Z',
-    updatedAt: '2024-12-31T16:45:00Z',
-    material: 'stainless-304',
-    materialLabel: '304不锈钢（耐腐蚀）',
-    quantity: 15,
-    quoteTotal: 1199.99,
-    unitPrice: 79.99,
-    estimatedDeliveryDays: 12,
-    processingDays: 17,
-    customerNotes: '医疗设备用，需要无菌包装',
-    engineerNotes: '制造和质检完成，正在进行无菌打包处理。',
-    originalFileUrl: '/mock-files/medical-part.step'
-  },
-  
-  // 另一个邮箱的测试数据 - 报价类型
-  {
-    id: 'quote_test_66666',
-    shortId: 'J3K4L5M6',
-    type: 'quote',
-    status: 'quoted',
-    statusLabel: '已报价',
-    email: 'test@geppetto.studio',
-    createdAt: '2025-01-01T08:15:00Z',
-    updatedAt: '2025-01-01T14:45:00Z',
-    material: 'brass-c360',
-    materialLabel: '黄铜（导电性好）',
-    quantity: 100,
-    quoteTotal: 899.99,
-    unitPrice: 8.99,
-    estimatedDeliveryDays: 5,
-    processingDays: 1,
-    customerNotes: '电子元件用，需要高导电性',
-    engineerNotes: '选用C360黄铜，导电性能优秀，适合电子应用。报价有效期7天。',
-    originalFileUrl: '/mock-files/electronic-part.step',
-    // 价格明细breakdown
-    priceBreakdown: {
-      engineeringSetup: 90.00,      // 一次性工程与设置费
-      materialCost: 180.00,         // 材料费 (黄铜)
-      manufacturingService: 629.99, // 加工与品控服务
-      shipping: 15.00,              // 国际运费
-      unitProductionCost: 809.99    // 单件生产成本 (材料+加工)
-    }
+  zh: {
+    new: '新建',
+    pending: '待处理',
+    quoted: '已报价',
+    processing: '处理中',
+    paid: '已支付',
+    manufacturing: '生产中',
+    shipping: '运输中',
+    complete: '已完成',
+    cancelled: '已取消',
+    'payment_pending': '等待付款',
+    'payment-confirmed': '支付成功',
+    'ai-reviewing': 'AI评估',
+    'expert-reviewing': '专家审核',
+    'quality-check': '质量检测',
+    packaging: '打包中'
   }
-]
+} as const;
 
-// 根据查询条件搜索订单
-function searchOrders(query: string): typeof MOCK_ORDERS {
-  const searchQuery = query.toLowerCase().trim()
-  
-  return MOCK_ORDERS.filter(order => {
-    // 支持邮箱、订单号、短ID匹配
-    return (
-      order.email.toLowerCase().includes(searchQuery) ||
-      order.id.toLowerCase().includes(searchQuery) ||
-      order.shortId.toLowerCase() === searchQuery.toUpperCase() ||
-      searchQuery.includes(order.shortId.toLowerCase())
-    )
-  })
+const MATERIAL_LABELS = {
+  en: {
+    aluminum: 'Aluminum',
+    'aluminum-6061': '6061 Aluminum',
+    'aluminum-7075': '7075 Aluminum',
+    steel: 'Carbon Steel',
+    stainless_steel: 'Stainless Steel',
+    'stainless-304': '304 Stainless Steel',
+    'stainless-316': '316 Stainless Steel',
+    brass: 'Brass',
+    'brass-c360': 'Brass C360',
+    titanium: 'Titanium',
+    'titanium-grade2': 'Titanium Grade 2',
+    plastic: 'Plastic',
+    other: 'Other Material'
+  },
+  zh: {
+    aluminum: '铝合金',
+    'aluminum-6061': '6061铝合金',
+    'aluminum-7075': '7075铝合金',
+    steel: '碳钢',
+    stainless_steel: '不锈钢',
+    'stainless-304': '304不锈钢',
+    'stainless-316': '316不锈钢',
+    brass: '黄铜',
+    'brass-c360': 'C360黄铜',
+    titanium: '钛合金',
+    'titanium-grade2': 'Grade 2钛合金',
+    plastic: '塑料',
+    other: '其他材料'
+  }
+} as const;
+
+const ORDER_STATUSES = new Set(['paid', 'complete']);
+
+const parseLanguage = (value: string | null): Language => (value === 'en' ? 'en' : 'zh');
+const looksLikeEmail = (value: string) => value.includes('@') && value.includes('.');
+const isUUID = (value: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+
+const formatShortId = (row: QuoteRow) => {
+  const source = String(row.id ?? '');
+  return source.slice(-8).toUpperCase();
+};
+
+const localizeMaterial = (material: string | null | undefined, language: Language) => {
+  if (!material) return language === 'zh' ? '未指定材料' : 'Material TBD';
+  const labels = MATERIAL_LABELS[language];
+  return labels[material as keyof typeof labels] ?? material;
+};
+
+const localizeStatus = (status: string, language: Language) => {
+  const labels = STATUS_LABELS[language];
+  return labels[status as keyof typeof labels] ?? status;
+};
+
+const buildSelect = (supabase: ReturnType<typeof createClient> | NonNullable<typeof supabaseAdmin>) =>
+  supabase
+    .from('quotes')
+    .select(SELECT_COLUMNS)
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+const executeQuery = async (
+  queryBuilder: ReturnType<typeof buildSelect>,
+) => {
+  const { data, error } = await queryBuilder;
+  if (error) {
+    console.error('Track order query failed:', error);
+    return [];
+  }
+  return data ?? [];
+};
+
+const log = (...args: any[]) => {
+  if (import.meta.env?.DEV) {
+    console.debug('[track-order/api]', ...args);
+  }
+};
+
+async function fetchQuotesByUserIds(
+  supabaseClient: ReturnType<typeof createClient> | NonNullable<typeof supabaseAdmin>,
+  userIds: string[],
+) {
+  if (!userIds.length) return [];
+  log('fetchQuotesByUserIds', userIds);
+  return executeQuery(buildSelect(supabaseClient).in('user_id', userIds));
 }
 
-// 生成材料本地化标签
-function getMaterialLabel(material: string, language: string): string {
-  const materials = {
-    zh: {
-      'aluminum-6061': '6061铝合金（最常用）',
-      'aluminum-7075': '7075铝合金（高强度）',
-      'stainless-304': '304不锈钢（耐腐蚀）',
-      'stainless-316': '316不锈钢（医疗级）',
-      'brass-c360': '黄铜（导电性好）',
-      'copper-c110': '紫铜（导热性好）',
-      'carbon-steel': '碳钢（经济实用）',
-      'titanium-grade2': '钛合金（航空级）'
-    },
-    en: {
-      'aluminum-6061': '6061 Aluminum (Most Common)',
-      'aluminum-7075': '7075 Aluminum (High Strength)',
-      'stainless-304': '304 Stainless Steel (Corrosion Resistant)',
-      'stainless-316': '316 Stainless Steel (Medical Grade)',
-      'brass-c360': 'Brass C360 (Conductive)',
-      'copper-c110': 'Copper C110 (Thermal Conductive)',
-      'carbon-steel': 'Carbon Steel (Economic)',
-      'titanium-grade2': 'Titanium Grade 2 (Aerospace)'
+async function fetchQuotesByQuery(
+  supabaseClient: ReturnType<typeof createClient> | NonNullable<typeof supabaseAdmin>,
+  profilesClient: ReturnType<typeof createClient> | NonNullable<typeof supabaseAdmin>,
+  query: string,
+) {
+  const trimmed = query.trim();
+  if (!trimmed) return [];
+
+  if (looksLikeEmail(trimmed)) {
+    log('searching profiles for email', trimmed);
+    const { data: profiles, error } = await profilesClient
+      .from('profiles')
+      .select('id')
+      .ilike('email', `%${trimmed}%`)
+      .limit(10);
+    if (error) {
+      console.error('[track-order/API] profile query failed', error);
+    } else if (profiles?.length) {
+      const ids = profiles.map((profile) => profile.id);
+      log('profile matches found', ids);
+      const rows = await fetchQuotesByUserIds(supabaseClient, ids);
+      if (rows.length) return rows;
     }
   }
-  
-  return materials[language]?.[material] || material
-}
 
-// 生成状态本地化标签
-function getStatusLabel(status: string, language: string): string {
-  const statusLabels = {
-    zh: {
-      // 报价阶段
-      pending: '待处理',
-      'ai-reviewing': 'AI评估',
-      'expert-reviewing': '专家审核', 
-      quoted: '已报价',
-      
-      // 订单阶段
-      'payment-confirmed': '支付成功',
-      manufacturing: '制造中',
-      'quality-check': '质量检测',
-      packaging: '打包中',
-      shipping: '物流配送',
-      delivered: '已交付',
-      
-      // 兼容旧状态
-      reviewing: '审核中',
-      ordered: '已下单',
-      archived: '已完成'
-    },
-    en: {
-      // Quote phase
-      pending: 'Pending',
-      'ai-reviewing': 'AI Review',
-      'expert-reviewing': 'Expert Review',
-      quoted: 'Quoted',
-      
-      // Order phase
-      'payment-confirmed': 'Payment Confirmed',
-      manufacturing: 'Manufacturing',
-      'quality-check': 'Quality Check',
-      packaging: 'Packaging',
-      shipping: 'Shipping',
-      delivered: 'Delivered',
-      
-      // Legacy compatibility
-      reviewing: 'Reviewing',
-      ordered: 'Ordered', 
-      archived: 'Completed'
-    }
+  if (isUUID(trimmed)) {
+    const rows = await executeQuery(buildSelect(supabaseClient).eq('id', trimmed));
+    if (rows.length) return rows;
   }
-  
-  return statusLabels[language]?.[status] || status
+
+  const normalized = trimmed.replace(/[^a-z0-9]/gi, '').toLowerCase();
+  if (normalized.length >= 4) {
+    log('searching quotes by short id fragment', normalized);
+    const rows = await executeQuery(buildSelect(supabaseClient));
+    const filtered = rows.filter((row) =>
+      (row.id || '').replace(/[^a-z0-9]/gi, '').toLowerCase().includes(normalized),
+    );
+    if (filtered.length) return filtered;
+  }
+
+  return [];
 }
 
-export const POST: APIRoute = async ({ request }) => {
-  const startTime = Date.now()
-  
-  try {
-    const formData = await request.formData()
-    const query = formData.get('query')?.toString()
-    const language = formData.get('language')?.toString() || 'zh'
-    
-    // 验证输入
-    if (!query) {
-      return new Response(JSON.stringify({
+const mapQuoteToOrder = (
+  row: QuoteRow,
+  language: Language,
+  profileMap: Map<string, ProfileRecord>,
+) => {
+  const amount = row.total_amount ?? null;
+  const currency = (row.currency ?? (language === 'zh' ? 'CNY' : 'USD')).toUpperCase();
+  const type = ORDER_STATUSES.has(row.status) ? 'order' : 'quote';
+  const profile = row.user_id ? profileMap.get(row.user_id) : undefined;
+
+  return {
+    id: row.id,
+    shortId: formatShortId(row),
+    type,
+    status: row.status,
+    statusLabel: localizeStatus(row.status, language),
+    email: profile?.email ?? null,
+    contactName: profile?.contact_name ?? null,
+    material: row.material,
+    materialLabel: localizeMaterial(row.material, language),
+    quantity: row.quantity ?? null,
+    quoteTotal: amount,
+    currency,
+    estimatedDeliveryDays: null,
+    customerNotes: row.customer_notes ?? null,
+    engineerNotes: null,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at ?? row.created_at,
+    paymentUrl: row.status === 'paid' ? null : `/${language}/order/${encodeURIComponent(row.id)}/payment`
+  };
+};
+
+export const POST: APIRoute = async (context) => {
+  const formData = await context.request.formData();
+  const rawQuery = formData.get('query')?.toString() ?? '';
+  const query = rawQuery.trim();
+  const language = parseLanguage(formData.get('language')?.toString() ?? null);
+
+  const requestClient = createClient(context);
+  const supabase = supabaseAdmin ?? requestClient;
+
+  const { data: userResult } = await requestClient.auth.getUser();
+  const sessionUserId = userResult?.user?.id ?? null;
+  const useSessionFallback = !query && sessionUserId;
+
+  if (!useSessionFallback && !query) {
+    return new Response(
+      JSON.stringify({
         success: false,
-        error: language === 'zh' ? '请输入查询条件' : 'Please enter search query',
+        error: language === 'zh' ? '请输入查询条件' : 'Please provide a search query',
         requestId: `track_${Date.now()}`
-      }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      })
-    }
-    
-    // 模拟查询延迟（让用户看到loading状态）
-    await new Promise(resolve => setTimeout(resolve, 800))
-    
-    // 搜索订单
-    const matchingOrders = searchOrders(query)
-    
-    // 本地化处理
-    const localizedOrders = matchingOrders.map(order => ({
-      ...order,
-      materialLabel: getMaterialLabel(order.material, language),
-      statusLabel: getStatusLabel(order.status, language)
-    }))
-    
-    const processingTime = Date.now() - startTime
-    
-    // 返回结果
-    const response: ApiResponse = {
-      success: true,
-      data: {
-        orders: localizedOrders,
-        total: localizedOrders.length,
-        query: query
-      },
-      message: localizedOrders.length > 0 
-        ? (language === 'zh' ? `找到 ${localizedOrders.length} 个订单` : `Found ${localizedOrders.length} order(s)`)
-        : (language === 'zh' ? '未找到匹配的订单' : 'No matching orders found'),
-      requestId: `track_${Date.now()}`,
-      meta: {
-        processingTime,
-        processedAt: new Date().toISOString()
-      }
-    }
-    
-    return new Response(JSON.stringify(response), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache, no-store, must-revalidate'
-      }
-    })
-    
-  } catch (error) {
-    console.error('Track order API error:', error)
-    
-    const errorResponse: ApiResponse = {
-      success: false,
-      error: 'Internal server error',
-      message: 'Failed to track orders',
-      requestId: `track_error_${Date.now()}`,
-      meta: {
-        processingTime: Date.now() - startTime,
-        processedAt: new Date().toISOString()
-      }
-    }
-    
-    return new Response(JSON.stringify(errorResponse), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    })
+      }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    );
   }
-}
 
-// 支持GET请求用于健康检查
-export const GET: APIRoute = async () => {
-  return new Response(JSON.stringify({
+  let quotes: QuoteRow[] = [];
+  if (useSessionFallback && sessionUserId) {
+    quotes = await executeQuery(buildSelect(supabase).eq('user_id', sessionUserId));
+  } else {
+    quotes = await fetchQuotesByQuery(supabase, supabase, query);
+  }
+
+  let orders: ReturnType<typeof mapQuoteToOrder>[] = [];
+  if (quotes.length) {
+    const userIds = Array.from(
+      new Set(quotes.map((row) => row.user_id).filter((value): value is string => Boolean(value)))
+    );
+    let profileMap = new Map<string, ProfileRecord>();
+    if (userIds.length) {
+      const { data: profiles, error } = await supabase
+        .from('profiles')
+        .select('id,email,contact_name,company_name,phone_number')
+        .in('id', userIds);
+      if (error) {
+        console.error('Track order profile fetch failed:', error);
+      } else if (profiles) {
+        profileMap = new Map(profiles.map((profile) => [profile.id, profile]));
+      }
+    }
+    orders = quotes.map((row) => mapQuoteToOrder(row, language, profileMap));
+  }
+
+  const response: ApiResponse = {
     success: true,
-    message: 'Track Order API is healthy',
-    mockDataAvailable: true,
-    testQueries: [
-      'demo@test.com - 有3个不同状态的订单，包含支付按钮测试',
-      'test@geppetto.studio - 有1个待支付订单',
-      'A1B2C3D4 - 直接订单号查询（支付测试）',
-      'B5C6D7E8 - 审核中订单',
-      'F9G8H7I6 - 生产中订单'
-    ]
-  }), {
+    data: { orders },
+    message: orders.length
+      ? language === 'zh'
+        ? `找到 ${orders.length} 条记录`
+        : `Found ${orders.length} record(s)`
+      : language === 'zh'
+        ? '未找到匹配的订单'
+        : 'No matching orders found',
+    requestId: `track_${Date.now()}`,
+    meta: {
+      count: orders.length,
+      query
+    }
+  };
+
+  return new Response(JSON.stringify(response), {
     status: 200,
     headers: { 'Content-Type': 'application/json' }
-  })
-}
+  });
+};
+
+export const GET: APIRoute = async () => {
+  return new Response(
+    JSON.stringify({
+      success: true,
+      message: 'Track Order API ready',
+      requires: 'POST form-data { query, language }'
+    }),
+    { status: 200, headers: { 'Content-Type': 'application/json' } }
+  );
+};

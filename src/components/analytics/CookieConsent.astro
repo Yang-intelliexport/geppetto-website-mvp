@@ -1,8 +1,9 @@
 ---
-import { getLanguageFromUrl } from '../../utils/i18n'
+import type { Language } from '../../utils/i18n'
 
-const currentLang = getLanguageFromUrl(Astro.url)
+const currentLang = (Astro.currentLocale ?? 'en') as Language
 const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
+const privacyLink = `/${currentLang}/privacy`
 ---
 
 {consentEnabled && (
@@ -13,12 +14,12 @@ const consentEnabled = import.meta.env.PUBLIC_COOKIE_CONSENT_ENABLED === 'true'
           {currentLang === 'zh' ? (
             <>
               我们使用cookie来改善您的浏览体验并分析网站流量。继续使用我们的网站即表示您同意我们的
-              <a href="/privacy" class="text-purple-400 hover:text-purple-300 underline">隐私政策</a>。
+              <a href={privacyLink} class="text-purple-400 hover:text-purple-300 underline">隐私政策</a>。
             </>
           ) : (
             <>
               We use cookies to improve your browsing experience and analyze website traffic. By continuing to use our website, you agree to our 
-              <a href="/privacy" class="text-purple-400 hover:text-purple-300 underline">Privacy Policy</a>.
+              <a href={privacyLink} class="text-purple-400 hover:text-purple-300 underline">Privacy Policy</a>.
             </>
           )}
         </p>

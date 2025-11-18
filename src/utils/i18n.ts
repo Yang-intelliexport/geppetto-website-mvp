@@ -8,41 +8,6 @@ export type Language = keyof typeof languages;
 
 export const defaultLanguage: Language = 'en';
 
-// URL structure: /en/... for English, /zh/... for Chinese
-export function getLanguageFromUrl(url: URL): Language {
-  const pathname = url.pathname;
-  const langCode = pathname.split('/')[1];
-  
-  if (langCode && langCode in languages) {
-    return langCode as Language;
-  }
-  
-  return defaultLanguage;
-}
-
-// Get localized path
-export function getLocalizedPath(path: string, lang: Language): string {
-  if (lang === defaultLanguage) {
-    return path === '/' ? '/en' : `/en${path}`;
-  }
-  return path === '/' ? `/${lang}` : `/${lang}${path}`;
-}
-
-// Remove language prefix from path
-export function removeLanguagePrefix(path: string): string {
-  const segments = path.split('/');
-  if (segments[1] && segments[1] in languages) {
-    return '/' + segments.slice(2).join('/') || '/';
-  }
-  return path;
-}
-
-// Check if path has language prefix
-export function hasLanguagePrefix(path: string): boolean {
-  const segments = path.split('/');
-  return Boolean(segments[1] && segments[1] in languages);
-}
-
 // Translations
 export const translations = {
   en: {
@@ -66,14 +31,14 @@ export const translations = {
     
     // Home page
     'home.title': 'CNC Quote | 智能弹性 Precision Manufacturing | Geppetto',
-    'home.description': 'Get instant CNC quotes with AI analysis in seconds, expert validation in 4-8 hours. Custom precision, 72H production + shipping, no MOQ limits. Global precision manufacturing leader.',
-    'home.hero.title': 'Get Instant CNC Quotes',
+    'home.description': 'Get transparent CNC quotes with AI-assisted analysis in 0-2 hours and expert validation in 4-8 hours. Custom precision, 72H production + shipping, no MOQ limits.',
+    'home.hero.title': 'Get Expert Quote in 8 Hours',
     'home.hero.subtitle': '🚀 Smart Flexible Factory Revolution',
-    'home.hero.description': 'AI analysis in seconds, expert validation in 4-8 hours with precise quotes.\nCustom precision • 72H production + shipping • No MOQ limits • 50-70% cost savings',
+    'home.hero.description': 'AI-assisted analysis delivers a preliminary view in 0-2 hours, with expert validation in 4-8 hours.\nCustom precision • 72H production + shipping • No MOQ limits • 50-70% cost savings',
     
     // Advantages
-    'advantages.smartQuote.title': 'Instant CNC Quote Promise',
-    'advantages.smartQuote.description': 'AI analysis in seconds, expert technical validation within 4-8 hours with precise quotes',
+    'advantages.smartQuote.title': 'Transparent CNC Quote Promise',
+    'advantages.smartQuote.description': 'AI-assisted analysis plus expert technical validation within 4-8 hours with precise quotes',
     'advantages.fastDelivery.title': '72H Production + Shipping',
     'advantages.fastDelivery.description': 'AI-optimized production scheduling and intelligent process planning for industry-leading delivery speed',
     'advantages.noMOQ.title': 'No MOQ - Single Part Manufacturing',
@@ -120,14 +85,14 @@ export const translations = {
     
     // Home page
     'home.title': 'Geppetto - AI驱动的精密制造革命',
-    'home.description': '体验Geppetto专家审核报价承诺：AI秒级分析，专家团队4-8工作小时内完成技术复核与精确报价。按需定制精度，72小时生产+运输，无MOQ限制。',
+    'home.description': '体验Geppetto专家审核报价承诺：AI在0-2小时内完成初步诊断，专家团队4-8工作小时内交付透明报价。按需定制精度，72小时生产+运输，无MOQ限制。',
     'home.hero.title': '体验 Geppetto专家审核报价承诺',
     'home.hero.subtitle': '🚀 AI驱动制造革命',
-    'home.hero.description': 'AI秒级分析，专家团队4-8工作小时内完成技术复核与精确报价。\n按需定制精度 • 72小时生产+运输 • 无MOQ限制 • 成本节省50-70%',
+    'home.hero.description': 'AI在0-2小时内完成初步诊断，专家团队4-8工作小时内完成技术复核与透明报价。\n按需定制精度 • 72小时生产+运输 • 无MOQ限制 • 成本节省50-70%',
     
     // Advantages
     'advantages.smartQuote.title': 'Geppetto专家审核报价承诺',
-    'advantages.smartQuote.description': 'AI秒级分析，专家团队4-8工作小时内完成技术复核与精确报价',
+    'advantages.smartQuote.description': 'AI预审后，专家团队在4-8工作小时内完成技术复核与透明报价',
     'advantages.fastDelivery.title': '72小时生产+运输',
     'advantages.fastDelivery.description': 'AI优化生产调度，智能工艺规划，实现行业领先的交付速度',
     'advantages.noMOQ.title': '单件起做 无MOQ限制',
@@ -170,16 +135,4 @@ export function t(key: string, lang: Language): string {
   }
   
   return value;
-}
-
-// Get i18n helper function
-export function getI18n(url: URL) {
-  const currentLang = getLanguageFromUrl(url);
-  const translate = (key: string) => t(key, currentLang);
-  
-  return {
-    currentLang,
-    t: translate,
-    translations: getTranslations(currentLang)
-  };
 }

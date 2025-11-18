@@ -1,0 +1,268 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StructuredData from '../../components/seo/StructuredData.astro';
+import TransparentPromise from '../../components/sections/TransparentPromise.astro';
+import { caseStudiesContent, type Locale } from '../../data/i18n/caseStudies';
+import { getCollection } from 'astro:content';
+
+const locale = (Astro.currentLocale ?? 'en') as Locale;
+const content = caseStudiesContent[locale];
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://www.geppetto.studio';
+const primaryCollection = locale === 'zh' ? 'case-studies' : 'case-studies-en';
+const fallbackCollection = primaryCollection === 'case-studies' ? 'case-studies-en' : 'case-studies';
+const primaryEntries = await getCollection(primaryCollection as 'case-studies' | 'case-studies-en');
+const fallbackEntries = await getCollection(fallbackCollection as 'case-studies' | 'case-studies-en');
+const localizedEntries = primaryEntries.length > 0 ? primaryEntries : fallbackEntries;
+
+const derivedCards = localizedEntries
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
+  .map((entry) => ({
+    slug: entry.slug,
+    icon: entry.data.icon || '📁',
+    category: entry.data.industry,
+    note: entry.data.note,
+    title: entry.data.title,
+    subtitle: entry.data.company,
+    description: entry.data.summary || entry.data.challenge,
+    bullets: entry.data.bullets ?? [],
+    metrics: entry.data.metrics ?? [],
+    resultTitle: entry.data.resultTitle ?? (locale === 'zh' ? '项目成果' : 'Result'),
+    resultDescription: entry.data.resultDescription ?? entry.data.solution
+  }));
+
+const caseCards = derivedCards.length > 0 ? derivedCards : (content.caseCards ?? []);
+
+const caseStudyStructuredData = caseCards.map((card) => ({
+  type: 'caseStudy' as const,
+  data: {
+    name: card.title,
+    description: card.description,
+    industry: card.category,
+    keywords: card.bullets,
+    provider: {
+      "@type": "Organization",
+      "name": "Geppetto",
+      "url": siteUrl
+    },
+    audience: locale === 'zh' ? '制造企业/硬件团队' : 'Hardware teams & manufacturers',
+    result: card.resultDescription,
+    metrics: card.metrics.map((metric) => `${metric.label}: ${metric.value}`),
+    url: `${siteUrl}/${locale}/case-studies/${card.slug}`
+  }
+}));
+---
+
+<BaseLayout 
+  title={content.metaTitle}
+  description={content.metaDescription}
+  structuredData={{
+    type: 'webpage',
+    data: content.structuredData
+  }}
+>
+  {caseStudyStructuredData.map((item) => (
+    <StructuredData type={item.type} data={item.data} />
+  ))}
+  <!-- Hero Section -->
+  <section class={`py-20 ${locale === 'zh' ? 'bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white' : 'bg-gradient-to-r from-purple-600 to-blue-500 text-white'}`}>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">
+        {content.heroTitle}
+      </h1>
+      <p class="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">
+        {content.heroSubtitle}
+      </p>
+    </div>
+  </section>
+
+  <TransparentPromise language={locale} />
+
+  <!-- Stats -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">
+          {locale === 'zh' ? '核心成果指标' : 'Proven Results Across Industries'}
+        </h2>
+        <p class="text-xl text-gray-600">
+          {locale === 'zh'
+            ? '数据驱动的制造成功经验'
+            : 'Real metrics from 100+ successful manufacturing partnerships'}
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+        {content.stats.map((stat) => (
+          <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-6">
+            <div class="text-4xl font-bold text-purple-600 mb-2">{stat.value}</div>
+            <div class="text-gray-700 font-medium">{stat.label}</div>
+            <div class="text-sm text-gray-500 mt-1 whitespace-pre-line">{stat.description}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Case Cards -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          {locale === 'zh' ? '精选成功案例' : '🌟 Featured Success Stories'}
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          {locale === 'zh'
+            ? 'AI+柔性制造如何助力客户突破制造限制'
+            : 'How our flexible manufacturing transformed their business outcomes'}
+        </p>
+      </div>
+
+      <div class={`grid grid-cols-1 ${caseCards.length > 2 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-8`}>
+        {caseCards.map((card) => (
+          <div class="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
+            <div class="bg-gradient-to-br from-blue-500 to-purple-600 h-32 flex items-center justify-center text-5xl text-white">
+              {card.icon}
+            </div>
+            <div class="p-6">
+              <div class="flex items-center mb-3">
+                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">{card.category}</span>
+                {card.note && <span class="text-gray-500 text-sm ml-2">{card.note}</span>}
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 mb-1">
+                {card.title}
+              </h3>
+              {card.subtitle && (
+                <p class="text-sm text-gray-500 mb-3">{card.subtitle}</p>
+              )}
+              <p class="text-gray-600 mb-4">
+                {card.description}
+              </p>
+              <div class="space-y-2 text-sm text-gray-600 mb-4">
+                {card.bullets.map((bullet) => (
+                  <div>• {bullet}</div>
+                ))}
+              </div>
+              <div class="grid grid-cols-2 gap-3 mb-4">
+                {card.metrics.map((metric) => (
+                  <div class="bg-green-50 rounded-lg p-3 text-center">
+                    <div class="text-xs text-gray-500">{metric.label}</div>
+                    <div class="text-lg font-semibold text-green-600">{metric.value}</div>
+                  </div>
+                ))}
+              </div>
+              <div class="bg-blue-50 p-3 rounded-lg mb-4">
+                <div class="text-blue-800 font-medium text-sm">{card.resultTitle}</div>
+                <div class="text-blue-700 text-sm">{card.resultDescription}</div>
+              </div>
+              <a
+                href={`/${locale}/case-studies/${card.slug}`}
+                data-case-link={card.slug}
+                class="inline-flex items-center text-purple-600 font-semibold text-sm hover:text-purple-700 transition"
+              >
+                {locale === 'zh' ? '查看案例详情 →' : 'View full case →'}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {content.details && content.details.length > 0 && (
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">
+          {locale === 'zh' ? '行业深度洞察' : '📊 Detailed Success Analysis'}
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {content.details.map((detail) => (
+            <div class="bg-gray-50 rounded-2xl p-6 shadow-sm">
+              <h4 class="text-xl font-bold text-gray-900 mb-2">{detail.title}</h4>
+              <p class="text-sm text-gray-600 mb-4">{detail.subtitle}</p>
+              <div class="space-y-2 mb-4">
+                {detail.highlights.map((point) => (
+                  <div class="flex items-start space-x-2">
+                    <span class="text-purple-500">•</span>
+                    <span class="text-sm text-gray-700">{point}</span>
+                  </div>
+                ))}
+              </div>
+              {detail.quote && (
+                <div class="bg-white rounded-lg p-3 text-sm text-gray-600 italic border border-purple-100">
+                  “{detail.quote.text}”
+                  <div class="text-xs text-gray-500 mt-2">— {detail.quote.attribution}</div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {content.testimonials && content.testimonials.length > 0 && (
+    <section class="py-16 bg-gradient-to-r from-blue-600 to-purple-700 text-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {content.testimonials.map((testimonial) => (
+          <div class="mb-8">
+            <p class="text-xl italic mb-4">"{testimonial.quote}"</p>
+            <div class="text-sm opacity-80">{testimonial.author} • {testimonial.context}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gradient-to-r from-blue-600 to-purple-700 text-white">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+        {content.cta.title}
+      </h2>
+      <p class="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+        {content.cta.subtitle}
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href={content.cta.primary.href}
+          class="inline-flex items-center justify-center px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200 shadow-lg"
+        >
+          {content.cta.primary.text}
+        </a>
+        <a 
+          href={content.cta.secondary.href}
+          class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-purple-600 transition-colors duration-200"
+        >
+          {content.cta.secondary.text}
+        </a>
+      </div>
+      
+      <div class="mt-8 text-purple-100 text-sm">
+        {content.cta.note}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline define:vars={{ locale }}>
+  const attachCaseStudyTracking = () => {
+    const links = document.querySelectorAll('[data-case-link]');
+    links.forEach((link) => {
+      if (link.dataset.caseTrackingBound) return;
+      link.dataset.caseTrackingBound = 'true';
+      link.addEventListener('click', () => {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'case_study_click',
+          locale,
+          slug: link.dataset.caseLink
+        });
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', attachCaseStudyTracking, { once: false });
+  attachCaseStudyTracking();
+</script>

@@ -2,48 +2,93 @@
 import '../styles/global.css'
 import '../styles/mobile.css'
 import LanguageSwitcher from '../components/ui/LanguageSwitcher.astro'
+import UserMenu from '../components/ui/UserMenu.tsx'
 import StructuredData from '../components/seo/StructuredData.astro'
 import GoogleAnalytics from '../components/analytics/GoogleAnalytics.astro'
 import CookieConsent from '../components/analytics/CookieConsent.astro'
 import GlobalModal from '../components/modals/GlobalModal.astro'
 import GlobalToast from '../components/modals/GlobalToast.astro'
 import AuthManager from '../components/AuthManager.tsx'
-import { getLanguageFromUrl, getTranslations, t } from '../utils/i18n'
-import { ViewTransitions } from 'astro:transitions'
+import { getAbsoluteLocaleUrl } from 'astro:i18n'
+import { t, type Language } from '../utils/i18n'
+import { createClient as createServerSupabaseClient } from '../lib/supabase/astro'
+
+type StructuredDataType = 'organization' | 'service' | 'article' | 'faq' | 'product' | 'breadcrumb' | 'webpage' | 'caseStudy' | 'collection';
 
 export interface Props {
   title: string
   description?: string
   keywords?: string[]
   ogImage?: string
-  structuredData?: { type: string; data: Record<string, any> }
+  structuredData?: { type: StructuredDataType; data: Record<string, any> }
   canonicalURL?: string
   language?: string
   currentLang?: string
+  noIndex?: boolean
 }
 
-const currentLang = getLanguageFromUrl(Astro.url)
-const translations = getTranslations(currentLang)
+const currentLang = (Astro.currentLocale ?? 'en') as Language
 
 const { 
   title,
   description,
   keywords = [],
-  ogImage = '/images/og-default.jpg',
-  structuredData
+  ogImage = '/images/manufacturing/machining-process-1.jpg',
+  structuredData,
+  canonicalURL,
+  noIndex = false
 } = Astro.props
 
 // Set language-specific defaults if not provided
 const defaultTitle = currentLang === 'zh' 
-  ? 'Geppetto - AI驱动的精密制造革命'
-  : 'CNC Quote | 智能弹性 Precision Manufacturing | Geppetto'
+  ? 'Geppetto - 透明制造 · 8小时专家报价'
+  : 'Geppetto | Transparent Manufacturing & 8-Hour Expert Quotes'
 
 const defaultDescription = currentLang === 'zh'
-  ? 'AI辅助专家报价，72小时生产+运输，按需定制精度，无MOQ限制。体验Geppetto专家报价承诺，革命性的制造服务。'
-  : 'Get instant CNC quotes with AI analysis in seconds, expert validation in 4-8 hours. Custom precision, 72H production + shipping, no MOQ limits.'
+  ? 'AI预审+专家复核，8小时交付透明报价；标准件72小时生产+运输，零MOQ，服务初创与中小批量团队。'
+  : 'AI pre-check plus expert validation deliver detailed quotes in 8 hours, with standard parts produced and shipped within 72 hours and no MOQ for startup teams.'
 
 const finalTitle = title || defaultTitle
 const finalDescription = description || defaultDescription
+const normalizedPath = Astro.url.pathname.replace(/^\/(en|zh)/, '') || '/'
+const relativePath = normalizedPath === '/' ? '' : normalizedPath.replace(/^\/+/, '')
+const canonicalHref = canonicalURL ?? getAbsoluteLocaleUrl(currentLang, relativePath)
+const alternateEn = getAbsoluteLocaleUrl('en', relativePath)
+const alternateZh = getAbsoluteLocaleUrl('zh', relativePath)
+const currentPathWithQuery = `${Astro.url.pathname}${Astro.url.search}`
+
+let initialUserEmail: string | null = null
+try {
+  // 详细调试服务器端认证状态检查
+  console.debug('[BaseLayout] 🔍 Checking server-side auth state:', {
+    url: Astro.url.toString(),
+    cookies: Astro.request.headers.get('cookie') ? 'present' : 'none',
+    cookieHeader: Astro.request.headers.get('cookie')?.substring(0, 100) + '...' || 'none',
+    timestamp: new Date().toISOString()
+  })
+  
+  const supabaseServerClient = createServerSupabaseClient(Astro)
+  const { data, error } = await supabaseServerClient.auth.getSession()
+  
+  console.debug('[BaseLayout] 📊 Server session check result:', {
+    hasSession: !!data.session,
+    hasUser: !!data.session?.user,
+    userEmail: data.session?.user?.email || 'none',
+    userId: data.session?.user?.id || 'none',
+    expiresAt: data.session?.expires_at || 'none',
+    error: error ? error.message : 'none',
+    timestamp: new Date().toISOString()
+  })
+  
+  initialUserEmail = data.session?.user?.email ?? null
+} catch (err: any) {
+  console.error('❌ [BaseLayout] Failed to fetch session:', {
+    error: err?.message,
+    stack: err?.stack,
+    timestamp: new Date().toISOString()
+  })
+  initialUserEmail = null
+}
 ---
 
 <!DOCTYPE html>
@@ -58,22 +103,25 @@ const finalDescription = description || defaultDescription
   <title>{finalTitle}</title>
   <meta name="description" content={finalDescription} />
   <meta name="keywords" content={keywords.join(', ')} />
+  {canonicalHref && <link rel="canonical" href={canonicalHref} />}
+  {noIndex && <meta name="robots" content="noindex,nofollow" />}
   
   <!-- Language alternates -->
-  <link rel="alternate" hreflang="en" href={`${Astro.site}en${Astro.url.pathname.replace(/^\/(en|zh)/, '') || '/'}`} />
-  <link rel="alternate" hreflang="zh" href={`${Astro.site}zh${Astro.url.pathname.replace(/^\/(en|zh)/, '') || '/'}`} />
-  <link rel="alternate" hreflang="x-default" href={`${Astro.site}en${Astro.url.pathname.replace(/^\/(en|zh)/, '') || '/'}`} />
+  <link rel="alternate" hreflang="en" href={alternateEn} />
+  <link rel="alternate" hreflang="zh" href={alternateZh} />
+  <link rel="alternate" hreflang="x-default" href={alternateEn} />
   
   <!-- Open Graph -->
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
+  <meta property="og:title" content={finalTitle} />
+  <meta property="og:description" content={finalDescription} />
   <meta property="og:image" content={ogImage} />
   <meta property="og:type" content="website" />
+  {canonicalHref && <meta property="og:url" content={canonicalHref} />}
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
+  <meta name="twitter:title" content={finalTitle} />
+  <meta name="twitter:description" content={finalDescription} />
   <meta name="twitter:image" content={ogImage} />
   
   <!-- Styles import -->
@@ -96,11 +144,35 @@ const finalDescription = description || defaultDescription
     />
   )}
   
+  <script is:inline define:vars={{ initialUserEmail }}>
+    if (typeof window !== 'undefined') {
+      console.debug('[BaseLayout] initialUserEmail:', initialUserEmail || null);
+      
+      // Global modalStore implementation
+      window.modalStore = {
+        showToast: function(message, type = 'info', duration = 3000) {
+          console.log(`🍞 Toast: [${type}] ${message}`);
+        },
+        clearAllToasts: function() {
+          console.log('🧹 Clearing all toasts');
+        },
+        showSuccess: function(title, message, options = {}) {
+          alert(`✅ ${title}\n\n${message}`);
+          if (options.onConfirm) options.onConfirm();
+        },
+        showError: function(title, message, options = {}) {
+          alert(`❌ ${title}\n\n${message}`);
+          if (options.onConfirm) options.onConfirm();
+        },
+        closeModal: function() {
+          console.log('🚪 Modal closed');
+        }
+      };
+    }
+  </script>
+  
   <!-- Google Analytics -->
   <GoogleAnalytics />
-  
-  <!-- View Transitions for smooth page transitions -->
-  <ViewTransitions />
 </head>
 
 <body class="font-inter bg-white text-gray-900 antialiased">
@@ -132,6 +204,7 @@ const finalDescription = description || defaultDescription
           <a href={`/${currentLang}/contact`} class="text-[#111827] hover:text-[#7F00FF] transition-colors">{t('nav.contact', currentLang)}</a>
           <a href={`/${currentLang}/resources`} class="text-[#111827] hover:text-[#7F00FF] transition-colors">{currentLang === 'zh' ? '资源' : 'Resources'}</a>
           <LanguageSwitcher />
+          <UserMenu currentLang={currentLang} currentPath={currentPathWithQuery} initialUserEmail={initialUserEmail} client:load />
           <a href={`/${currentLang}/create-quote`} class="bg-[#7F00FF] text-white px-6 py-3 rounded-lg hover:bg-[#6B00CC] transition-colors font-semibold">
             {t('nav.quote', currentLang)}
           </a>
@@ -140,6 +213,7 @@ const finalDescription = description || defaultDescription
         <!-- Mobile menu button -->
         <div class="md:hidden flex items-center space-x-2">
           <LanguageSwitcher />
+          <UserMenu currentLang={currentLang} currentPath={currentPathWithQuery} client:load />
           <button 
             type="button" 
             class="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-colors" 
@@ -171,6 +245,9 @@ const finalDescription = description || defaultDescription
           <a href={`/${currentLang}/resources`} class="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium">
             {currentLang === 'zh' ? '资源' : 'Resources'}
           </a>
+          <div class="px-4 pt-2">
+            <UserMenu currentLang={currentLang} currentPath={currentPathWithQuery} initialUserEmail={initialUserEmail} client:load />
+          </div>
           <div class="px-2 pt-4">
             <a href={`/${currentLang}/create-quote`} class="block bg-gradient-to-r from-[#7F00FF] to-[#00BFFF] text-white px-6 py-3 rounded-xl text-center font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200">
               {t('nav.quote', currentLang)}
@@ -219,7 +296,7 @@ const finalDescription = description || defaultDescription
             <li><a href={`/${currentLang}/why-geppetto`} class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '为何选择Geppetto' : 'Why Geppetto'}</a></li>
             <li><a href={`/${currentLang}/services`} class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '服务能力' : 'Services'}</a></li>
             <li><a href={`/${currentLang}/track-order`} class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '订单追踪' : 'Track Order'}</a></li>
-            <li><a href="/no-moq" class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '无MOQ制造' : 'No MOQ Manufacturing'}</a></li>
+            <li><a href={`/${currentLang}/no-moq`} class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '无MOQ制造' : 'No MOQ Manufacturing'}</a></li>
             <li><a href={`/${currentLang}/create-quote`} class="text-gray-300 hover:text-white">{currentLang === 'zh' ? '获取报价' : 'Get Quote'}</a></li>
           </ul>
         </div>
@@ -242,8 +319,8 @@ const finalDescription = description || defaultDescription
             '&copy; 2024 奇塑科技(深圳)有限公司. 保留所有权利.' : 
             '&copy; 2024 Geppetto Technologies Ltd. All rights reserved.'
           } | 
-          <a href="/privacy" class="hover:text-white">{currentLang === 'zh' ? '隐私政策' : 'Privacy Policy'}</a> | 
-          <a href="/terms" class="hover:text-white">{currentLang === 'zh' ? '服务条款' : 'Terms of Service'}</a>
+          <a href={`/${currentLang}/privacy`} class="hover:text-white">{currentLang === 'zh' ? '隐私政策' : 'Privacy Policy'}</a> | 
+          <a href={`/${currentLang}/terms`} class="hover:text-white">{currentLang === 'zh' ? '服务条款' : 'Terms of Service'}</a>
         </p>
       </div>
     </div>

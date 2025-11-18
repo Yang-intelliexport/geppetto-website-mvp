@@ -46,11 +46,13 @@
 </style>
 
 <script>
-  import { toastList, removeToast } from '../../stores/modalStore.js'
+  // @ts-nocheck
+  // Import modalStore functions (will be loaded via external script)
+  const modalStore = (window && (window as any).modalStore) ? (window as any).modalStore : {};
+  const toastList = modalStore.toastList || { subscribe: () => {}, get: () => [] };
+  const removeToast = modalStore.removeToast || (() => {});
 
-  const container = document.getElementById('toast-container')
-
-  // Toast样式配置
+  /** @type {Record<'success' | 'error' | 'warning' | 'info', { bgClass: string; iconColor: string; icon: string }>} */
   const toastConfig = {
     success: {
       bgClass: 'bg-white border-green-500',
@@ -80,42 +82,61 @@
         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
       </svg>`
     }
-  }
+  };
 
-  // 订阅toast列表变化
-  toastList.subscribe((toasts) => {
-    updateToastContainer(toasts)
-  })
+  const container = document.getElementById('toast-container');
 
-  // 更新toast容器
+  const unsubscribe = toastList.subscribe((toasts) => {
+    updateToastContainer(toasts);
+  });
+
+  window.addEventListener('astro:before-swap', () => {
+    unsubscribe();
+  }, { once: true });
+
+  /**
+   * @param {Array<{id: string; message: string; type: keyof typeof toastConfig}>} toasts
+   */
   function updateToastContainer(toasts) {
-    // 获取当前显示的toast IDs
-    const currentToastIds = Array.from(container.children).map(el => el.dataset.toastId)
-    const newToastIds = toasts.map(toast => toast.id)
-
-    // 移除不再存在的toast
-    currentToastIds.forEach(id => {
-      if (!newToastIds.includes(id)) {
-        removeToastElement(id)
+    if (!(container instanceof HTMLElement)) {
+      console.warn('[GlobalToast] Toast container not found');
+      return;
+    }
+    const currentToastIds = Array.from(container.children).map((el) => {
+      if (el instanceof HTMLElement) {
+        return el.dataset.toastId || '';
       }
-    })
+      return '';
+    });
+    const newToastIds = toasts.map((toast) => toast.id);
 
-    // 添加新的toast
-    toasts.forEach(toast => {
+    currentToastIds.forEach((id) => {
+      if (id && !newToastIds.includes(id)) {
+        removeToastElement(id);
+      }
+    });
+
+    toasts.forEach((toast) => {
       if (!currentToastIds.includes(toast.id)) {
-        createToastElement(toast)
+        createToastElement(toast);
       }
-    })
+    });
   }
 
-  // 创建toast元素
+  /**
+   * @param {{id: string; message: string; type: keyof typeof toastConfig}} toast
+   */
   function createToastElement(toast) {
-    const { id, message, type } = toast
-    const config = toastConfig[type] || toastConfig.info
+    if (!(container instanceof HTMLElement)) {
+      console.warn('[GlobalToast] Toast container not found');
+      return;
+    }
+    const { id, message, type } = toast;
+    const config = toastConfig[type] || toastConfig.info;
 
-    const toastEl = document.createElement('div')
-    toastEl.dataset.toastId = id
-    toastEl.className = `toast-item max-w-sm w-full ${config.bgClass} rounded-lg shadow-lg border-2 p-4`
+    const toastEl = document.createElement('div');
+    toastEl.dataset.toastId = id;
+    toastEl.className = `toast-item max-w-sm w-full ${config.bgClass} rounded-lg shadow-lg border-2 p-4`;
 
     toastEl.innerHTML = `
       <div class="flex items-start">
@@ -135,27 +156,32 @@
           </button>
         </div>
       </div>
-    `
+    `;
 
-    // 添加关闭按钮事件
-    const closeBtn = toastEl.querySelector('.close-btn')
-    closeBtn.addEventListener('click', () => {
-      removeToast(id)
-    })
+    const closeBtn = toastEl.querySelector('.close-btn');
+    closeBtn?.addEventListener('click', () => {
+      removeToast(id);
+    });
 
-    container.appendChild(toastEl)
+    container.appendChild(toastEl);
   }
 
-  // 移除toast元素（带动画）
+  /**
+   * @param {string} id
+   */
   function removeToastElement(id) {
-    const toastEl = container.querySelector(`[data-toast-id="${id}"]`)
-    if (toastEl) {
-      toastEl.classList.add('removing')
+    if (!(container instanceof HTMLElement)) {
+      console.warn('[GlobalToast] Toast container not found');
+      return;
+    }
+    const toastEl = container.querySelector(`[data-toast-id="${id}"]`);
+    if (toastEl instanceof HTMLElement) {
+      toastEl.classList.add('removing');
       setTimeout(() => {
         if (toastEl.parentNode) {
-          toastEl.remove()
+          toastEl.remove();
         }
-      }, 300)
+      }, 300);
     }
   }
 </script>

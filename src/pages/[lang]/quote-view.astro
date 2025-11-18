@@ -1,0 +1,370 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { Locale, QuoteViewContent } from '../../data/i18n/quoteView';
+import { quoteViewContent } from '../../data/i18n/quoteView';
+import { getQuoteDetails } from '../../utils/supabase.server';
+
+type QuoteStatus =
+  | 'new'
+  | 'pending'
+  | 'quoted'
+  | 'processing'
+  | 'paid'
+  | 'manufacturing'
+  | 'shipping'
+  | 'complete'
+  | 'cancelled'
+  | 'payment_pending'
+  | 'payment-confirmed'
+  | 'ai-reviewing'
+  | 'expert-reviewing'
+  | 'quality-check'
+  | 'packaging'
+  | string;
+
+type QuoteBreakdownItem = {
+  item_name?: string | null;
+  total_price?: number | null;
+};
+
+type QuoteFile = {
+  id: string;
+  original_filename?: string | null;
+  file_size?: number | null;
+  file_path?: string | null;
+  created_at?: string | null;
+};
+
+type QuoteDetails = {
+  id: string;
+  token?: string | null;
+  status: QuoteStatus;
+  contact_name?: string | null;
+  email?: string | null;
+  product_name?: string | null;
+  material?: string | null;
+  quantity?: number | null;
+  total_price?: number | null;
+  total_amount?: number | null;
+  currency?: string | null;
+  delivery_time_days?: number | null;
+  created_at: string;
+  updated_at?: string | null;
+  expires_at?: string | null;
+  special_requirements?: string | null;
+  internal_notes?: string | null;
+  quote_breakdown_items?: QuoteBreakdownItem[] | null;
+  quote_files?: QuoteFile[] | null;
+};
+
+const STATUS_LABELS = {
+  en: {
+    new: 'New',
+    pending: 'Pending',
+    quoted: 'Quoted',
+    processing: 'Processing',
+    paid: 'Paid',
+    manufacturing: 'Manufacturing',
+    shipping: 'Shipping',
+    complete: 'Complete',
+    cancelled: 'Cancelled',
+    'payment_pending': 'Payment Pending',
+    'payment-confirmed': 'Payment Confirmed',
+    'ai-reviewing': 'AI Reviewing',
+    'expert-reviewing': 'Expert Review',
+    'quality-check': 'Quality Check',
+    packaging: 'Packaging'
+  },
+  zh: {
+    new: '新建',
+    pending: '待处理',
+    quoted: '已报价',
+    processing: '处理中',
+    paid: '已支付',
+    manufacturing: '生产中',
+    shipping: '运输中',
+    complete: '已完成',
+    cancelled: '已取消',
+    'payment_pending': '等待付款',
+    'payment-confirmed': '支付成功',
+    'ai-reviewing': 'AI评估',
+    'expert-reviewing': '专家审核',
+    'quality-check': '质量检测',
+    packaging: '打包中'
+  }
+} as const;
+
+const MATERIAL_LABELS = {
+  en: {
+    aluminum: 'Aluminum',
+    'aluminum-6061': '6061 Aluminum',
+    'aluminum-7075': '7075 Aluminum',
+    steel: 'Carbon Steel',
+    stainless_steel: 'Stainless Steel',
+    'stainless-304': '304 Stainless Steel',
+    'stainless-316': '316 Stainless Steel',
+    brass: 'Brass',
+    'brass-c360': 'Brass C360',
+    titanium: 'Titanium',
+    'titanium-grade2': 'Titanium Grade 2',
+    plastic: 'Plastic',
+    other: 'Other Material'
+  },
+  zh: {
+    aluminum: '铝合金',
+    'aluminum-6061': '6061铝合金',
+    'aluminum-7075': '7075铝合金',
+    steel: '碳钢',
+    stainless_steel: '不锈钢',
+    'stainless-304': '304不锈钢',
+    'stainless-316': '316不锈钢',
+    brass: '黄铜',
+    'brass-c360': 'C360黄铜',
+    titanium: '钛合金',
+    'titanium-grade2': 'Grade 2钛合金',
+    plastic: '塑料',
+    other: '其他材料'
+  }
+} as const;
+
+const locale = (Astro.currentLocale ?? 'en') as Locale;
+const content: QuoteViewContent = quoteViewContent[locale];
+const tokenParam =
+  Astro.url.searchParams.get('token') ??
+  Astro.url.searchParams.get('quote') ??
+  Astro.url.searchParams.get('id');
+
+if (!tokenParam) {
+  return new Response(locale === 'zh' ? '请在 URL 中提供 quote token（?token=）' : 'Quote token required via ?token=', {
+    status: 400
+  });
+}
+
+let quote: QuoteDetails | null = null;
+
+try {
+  quote = (await getQuoteDetails(Astro, tokenParam)) as QuoteDetails | null;
+} catch (error) {
+  console.error('Failed to load quote view:', error);
+  return new Response(locale === 'zh' ? '无法加载报价，请稍后再试。' : 'Unable to load quote.', {
+    status: 500
+  });
+}
+
+if (!quote) {
+  return new Response(locale === 'zh' ? '未找到对应的报价。' : 'Quote not found.', { status: 404 });
+}
+
+const numberLocale = locale === 'zh' ? 'zh-CN' : 'en-US';
+const currency = (quote.currency ?? (locale === 'zh' ? 'CNY' : 'USD')).toUpperCase();
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat(numberLocale, { style: 'currency', currency }).format(value);
+
+const statusDictionary = STATUS_LABELS[locale];
+const statusLabel =
+  statusDictionary[quote.status as keyof typeof statusDictionary] ?? quote.status;
+const createdAt = new Date(quote.created_at).toLocaleString(numberLocale, {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit'
+});
+const validUntil = quote.expires_at
+  ? new Date(quote.expires_at).toLocaleString(numberLocale, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  : null;
+
+const materialDictionary = MATERIAL_LABELS[locale];
+const materialKey = (quote.material ?? 'other') as keyof typeof materialDictionary;
+const materialLabel =
+  materialDictionary[materialKey] ??
+  quote.material ??
+  (locale === 'zh' ? '未指定材料' : 'Material TBD');
+
+const totalAmount = quote.total_amount ?? quote.total_price ?? 0;
+const priceBreakdown = (quote.quote_breakdown_items ?? []).filter(
+  (item): item is QuoteBreakdownItem & { total_price: number } => typeof item.total_price === 'number'
+);
+const hasBreakdown = priceBreakdown.length > 0;
+const quoteFiles = quote.quote_files ?? [];
+const paymentUrl = `/${locale}/order/${encodeURIComponent(quote.token ?? quote.id)}/payment`;
+const detailUrl = `/${locale}/quote/${encodeURIComponent(quote.token ?? quote.id)}`;
+
+const formatBytes = (size = 0) => {
+  if (size >= 1024 * 1024) return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  if (size >= 1024) return `${(size / 1024).toFixed(1)} KB`;
+  return `${size} B`;
+};
+
+const shippingOptions = content.mockQuote.manufacturing.shippingOptions;
+const guarantees = content.mockQuote.guarantees;
+---
+
+<BaseLayout title={content.seo.title} description={content.seo.description} keywords={content.seo.keywords} noIndex={true}>
+  <section class="bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 text-white py-16">
+    <div class="max-w-6xl mx-auto px-6 grid gap-10 lg:grid-cols-2">
+      <div>
+        <p class="text-sm uppercase tracking-[0.3em] text-purple-200 mb-4">Quote #{quote.token ?? quote.id}</p>
+        <h1 class="text-4xl font-bold mb-4">{content.heroTitle}</h1>
+        <div class="space-y-3 text-sm text-blue-100">
+          <p><strong class="text-white">{content.metaLabels.generated}:</strong> {createdAt}</p>
+          {validUntil && <p><strong class="text-white">{content.metaLabels.valid}:</strong> {validUntil}</p>}
+          <p><strong class="text-white">{content.metaLabels.status}:</strong> {statusLabel}</p>
+        </div>
+      </div>
+      <div class="bg-white/10 rounded-3xl p-6 lg:p-8 backdrop-blur-md space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="rounded-2xl border border-white/20 p-4 text-center">
+            <p class="text-xs uppercase tracking-[0.3em] text-purple-200 mb-2">{content.summaryBadges.totalTitle}</p>
+            <p class="text-2xl font-bold text-white">{formatCurrency(totalAmount)}</p>
+          </div>
+          <div class="rounded-2xl border border-white/20 p-4 text-center">
+            <p class="text-xs uppercase tracking-[0.3em] text-purple-200 mb-2">
+              {locale === 'zh' ? '生产周期' : 'Lead Time'}
+            </p>
+            <p class="text-2xl font-bold text-white">
+              {quote.delivery_time_days ? `${quote.delivery_time_days} ${locale === 'zh' ? '天' : 'days'}` : '—'}
+            </p>
+          </div>
+          <div class="rounded-2xl border border-white/20 p-4 text-center">
+            <p class="text-xs uppercase tracking-[0.3em] text-purple-200 mb-2">{content.summaryBadges.precisionTitle}</p>
+            <p class="text-2xl font-bold text-white">
+              {quote.special_requirements ? (quote.special_requirements.slice(0, 20) + '…') : (locale === 'zh' ? '标准精度' : 'Standard')}
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <a href={paymentUrl} class="flex-1 text-center bg-yellow-300 text-gray-900 font-semibold py-3 rounded-2xl hover:bg-yellow-200 transition">
+            {locale === 'zh' ? '前往支付' : 'Go to Payment'}
+          </a>
+          <a href={detailUrl} class="flex-1 text-center border border-white/40 text-white font-semibold py-3 rounded-2xl hover:bg-white/10 transition">
+            {locale === 'zh' ? '查看详细页面' : 'View Full Quote'}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6 grid gap-6 lg:grid-cols-3">
+      <div class="lg:col-span-2 space-y-8">
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">{content.priceBreakdownTitle}</h2>
+          {hasBreakdown ? (
+            <div class="space-y-4">
+              {priceBreakdown.map((item) => (
+                <div class="flex items-center justify-between">
+                  <div class="text-gray-700">{item.item_name ?? content.breakdownLabels.manufacturing}</div>
+                  <div class="text-lg font-semibold text-gray-900">
+                    {typeof item.total_price === 'number' ? formatCurrency(item.total_price) : '—'}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p class="text-sm text-gray-500">{locale === 'zh' ? '暂未生成成本拆解，可联系工程师获取详细信息。' : 'Cost breakdown not available yet. Please contact the engineering team for details.'}</p>
+          )}
+          <div class="mt-6 rounded-2xl bg-gray-900 text-white p-4 flex items-center justify-between">
+            <span class="text-sm uppercase tracking-[0.3em] text-indigo-200">{content.summaryBadges.totalTitle}</span>
+            <span class="text-2xl font-bold">{formatCurrency(totalAmount)}</span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-6">
+          <div class="grid gap-4 md:grid-cols-2">
+            <div>
+              <p class="text-gray-500 text-sm">{locale === 'zh' ? '客户' : 'Customer'}</p>
+              <p class="text-lg font-semibold text-gray-900">{quote.contact_name ?? '—'}</p>
+              <p class="text-sm text-gray-500">{quote.email ?? '—'}</p>
+            </div>
+            <div>
+              <p class="text-gray-500 text-sm">{locale === 'zh' ? '产品信息' : 'Product'}</p>
+              <p class="text-lg font-semibold text-gray-900">{quote.product_name ?? '—'}</p>
+              <p class="text-sm text-gray-500">
+                {materialLabel} · {locale === 'zh' ? '数量' : 'Qty'} {quote.quantity ?? '—'}
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold text-gray-900 mb-4">{locale === 'zh' ? '上传文件' : 'Uploaded Files'}</h3>
+            {quoteFiles.length ? (
+              <div class="space-y-3">
+                {quoteFiles.map((file) => (
+                  <div class="rounded-2xl border border-gray-100 p-4 flex items-center justify-between">
+                    <div>
+                      <p class="text-gray-900 font-semibold">{file.original_filename ?? 'Unnamed File'}</p>
+                      <p class="text-sm text-gray-500">
+                        {locale === 'zh' ? '上传时间' : 'Uploaded'}:{' '}
+                        {file.created_at
+                          ? new Date(file.created_at).toLocaleString(numberLocale)
+                          : '—'}
+                      </p>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-sm text-gray-500">{locale === 'zh' ? '文件大小' : 'Size'}</p>
+                      <p class="text-lg font-semibold text-gray-900">{formatBytes(file.file_size ?? 0)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p class="text-sm text-gray-500">{locale === 'zh' ? '暂无文件记录。' : 'No files uploaded yet.'}</p>
+            )}
+          </div>
+
+          {quote.special_requirements && (
+            <div class="bg-gray-50 rounded-2xl p-6">
+              <h4 class="font-semibold text-gray-900 mb-2">{locale === 'zh' ? '客户备注' : 'Customer Notes'}</h4>
+              <p class="text-gray-700 text-sm">{quote.special_requirements}</p>
+            </div>
+          )}
+
+          {quote.internal_notes && (
+            <div class="bg-blue-50 rounded-2xl p-6">
+              <h4 class="font-semibold text-blue-900 mb-2">{locale === 'zh' ? '工程师备注' : 'Engineer Notes'}</h4>
+              <p class="text-blue-900 text-sm">{quote.internal_notes}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <aside class="space-y-6">
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold text-gray-900">{content.shippingTitle}</h3>
+            <span class="text-sm text-gray-500">{content.shippingSubtitle}</span>
+          </div>
+          <div class="space-y-4">
+            {shippingOptions.map((option) => (
+              <div class="rounded-xl border border-gray-100 p-4">
+                <p class="font-semibold text-gray-900">{option.method}</p>
+                <p class="text-sm text-gray-500">{option.time}</p>
+                <p class="text-lg font-bold text-gray-900 mt-2">{formatCurrency(option.cost)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="bg-purple-600 text-white rounded-3xl p-6 shadow-lg space-y-4">
+          <h3 class="text-2xl font-bold">{content.guaranteeTitle}</h3>
+          <ul class="space-y-2 text-sm text-purple-100">
+            <li>• {guarantees.productionGuarantee}</li>
+            <li>• {guarantees.productionCompensation}</li>
+            <li>• {guarantees.qualityAssurance}</li>
+            <li>• {guarantees.priceAccuracy}</li>
+          </ul>
+          <a href={paymentUrl} class="inline-flex items-center justify-center rounded-2xl bg-white text-purple-600 font-semibold px-5 py-3 w-full hover:bg-gray-100 transition">
+            {locale === 'zh' ? '立即支付启动生产' : 'Pay & Start Production'}
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

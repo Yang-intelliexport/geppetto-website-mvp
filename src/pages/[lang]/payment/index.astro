@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { paymentPageContent } from '../../../data/i18n/payment';
+import type { Locale } from '../../../data/i18n/createQuote';
+
+const locale = (Astro.currentLocale ?? 'en') as Locale;
+const content = paymentPageContent[locale];
+---
+
+<BaseLayout title={content.seo.title} description={content.seo.description}>
+  <div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+          <span class="text-2xl">💳</span>
+        </div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">{content.hero.title}</h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">{content.hero.subtitle}</p>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm p-8 mb-10">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-6">{locale === 'zh' ? '支付方式' : 'Payment Methods'}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {content.methods.map((method) => (
+            <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-purple-500 transition-colors">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center text-xl">
+                  {method.icon}
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900">{method.title}</h3>
+                  <p class="text-sm text-gray-600">{method.subtitle}</p>
+                </div>
+              </div>
+              <p class="text-sm text-gray-600">{method.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="bg-blue-50 rounded-2xl p-8 mb-8">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
+          <svg class="w-6 h-6 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M2.166 5A11.954 11.954 0 0110 1.944 11.954 11.954 0 0117.834 5c.11.65.166 1.32.166 2 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2z" clip-rule="evenodd"></path>
+          </svg>
+          {content.securityTitle}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {content.securityItems.map((item) => (
+            <div class="flex items-start space-x-3">
+              <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+              <p class="text-gray-700 text-sm">{item}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">{content.supportTitle}</h2>
+        <div class="space-y-2 text-gray-700 text-sm">
+          {content.supportItems.map((item) => (
+            <p>{item}</p>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

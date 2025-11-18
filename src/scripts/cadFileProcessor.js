@@ -233,7 +233,7 @@ class CADFileProcessor {
   /**
    * 模拟几何特征分析
    */
-  simulateGeometryAnalysis(file) {
+  simulateGeometryAnalysis(_file) {
     const baseVolume = Math.random() * 1000 + 100; // cm³
     const complexity = Math.random() * 0.8 + 0.2; // 复杂度系数
     

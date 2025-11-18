@@ -4,6 +4,25 @@ company: "深圳智能机器人科技有限公司"
 industry: "机器人制造"
 challenge: "关节轴承座需严格精度要求，传统供应商良品率仅85%，交期14天无法满足新品研发节奏"
 solution: "采用Geppetto AI辅助制造模式，AI分析优化加工路径，配合精密工艺监督，实现高精度稳定输出"
+order: 1
+icon: "🤖"
+note: "• 48小时交付"
+summary: "关节轴承座需 ±0.01mm 精度与 Ra0.8 表面，Geppetto 48 小时完成单件迭代并保持透明成本。"
+seo:
+  title: "Robotics Components: High-Precision Gear & Joint Parts | Geppetto"
+  metaDescription: "Custom manufacturing for advanced robotics automation. Rapid prototyping to volume production of steel joints with tight tolerances."
+bullets:
+  - "AI 自动生成 5 轴刀路并预测加工时间"
+  - "学徒执行+师傅监管，表面质量达到 Ra0.6"
+  - "透明成本拆解覆盖加工 / 质检 / 物流"
+  - "总成本较传统供应商下降 47%"
+metrics:
+  - label: "交付速度"
+    value: "48小时"
+  - label: "迭代支持"
+    value: "10+轮"
+resultTitle: "项目成果"
+resultDescription: "研发周期缩短 50%，顺利通过融资评审。"
 results:
   precision: "精度超越要求25%"
   cost_saving: "单件成本降低35%"
@@ -104,10 +123,10 @@ Geppetto: AI一次生成 → 参数精确 → 一次成功
 ## 交付效率
 
 ### 极速响应
-- **报价时间**: 从3天缩短到3秒
-- **生产周期**: 从14天压缩到工作时间
-- **样件制作**: 当天完成，次日交付
-- **批量生产**: 48小时内启动
+- **报价时间**: 从3天缩短到8小时内
+- **生产周期**: 从14天压缩到72小时生产+运输
+- **样件制作**: 72小时内完成并交付
+- **批量生产**: 72小时内启动
 
 ### 柔性制造
 - **小批量友好**: 1件起做，无MOQ限制

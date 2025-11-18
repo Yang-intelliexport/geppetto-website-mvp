@@ -11,6 +11,9 @@ category: "automation-ai"
 readingTime: 22
 difficulty: "advanced"
 seo:
+  title: "Manufacturing Automation Guide: AI & ROI Analysis | Geppetto"
+  metaDescription: "Learn how AI-enhanced expert services deliver transparent pricing, responsive manufacturing, and measurable automation ROI."
+  canonicalUrl: "https://www.geppetto.studio/en/resources/advanced-manufacturing-automation-guide"
   keywords: ["manufacturing automation", "AI-powered CNC", "smart manufacturing", "transparent manufacturing", "flexible manufacturing", "expert manufacturing services", "automated quality control", "manufacturing partnerships", "transparent pricing manufacturing", "responsive manufacturing", "Industry 4.0"]
 tableOfContents: true
 featured: true

@@ -12,7 +12,8 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:components": "vitest run src/__tests__/components/"
+    "test:components": "vitest run src/__tests__/components/",
+    "postinstall": "npx partytown copylib public/~partytown"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

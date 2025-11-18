@@ -11,6 +11,8 @@ category: "industry-insights"
 readingTime: 25
 difficulty: "intermediate"
 seo:
+  metaDescription: "解析透明化智能制造、AI赋能与柔性生产如何重塑制造业，为企业数字化转型提供战略洞察。"
+  canonicalUrl: "https://www.geppetto.studio/zh/resources/zhizao-ye-qushi-yu-chuangxin"
   keywords: ["制造业趋势", "智能制造", "透明化制造", "透明制造", "工业4.0", "数字化转型", "制造业创新", "AI制造", "柔性生产", "未来制造", "个性化制造", "绿色制造", "制造业变革", "智能工厂", "AI赋能制造", "可持续制造", "制造服务化", "MaaS制造", "柔性制造系统", "透明定价"]
   noindex: false
 relatedPosts: []

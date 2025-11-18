@@ -20,7 +20,10 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
     // 如果不在加载中且用户未登录，且设置了跳转URL，则跳转到登录页
     if (!loading && !user && redirectTo) {
       const currentPath = window.location.pathname;
-      const loginUrl = redirectTo || `/login?redirect=${encodeURIComponent(currentPath)}`;
+      const localeMatch = currentPath.match(/^\/(en|zh)(\/|$)/);
+      const localePrefix = localeMatch ? localeMatch[1] : 'en';
+      const fallbackLogin = `/${localePrefix}/login?redirect=${encodeURIComponent(currentPath)}`;
+      const loginUrl = redirectTo || fallbackLogin;
       window.location.href = loginUrl;
     }
   }, [user, loading, redirectTo]);

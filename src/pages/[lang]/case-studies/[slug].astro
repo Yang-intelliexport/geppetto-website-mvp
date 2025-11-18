@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import StructuredData from '../../../components/seo/StructuredData.astro';
+import { getEntry } from 'astro:content';
+import { caseStudiesContent, type Locale } from '../../../data/i18n/caseStudies';
+
+const locale = (Astro.currentLocale ?? 'en') as Locale;
+const { slug } = Astro.params;
+
+if (!slug) {
+  return new Response('Case study not found', { status: 404 });
+}
+
+const primaryCollection = locale === 'zh' ? 'case-studies' : 'case-studies-en';
+let entry = await getEntry(primaryCollection as 'case-studies' | 'case-studies-en', slug);
+let fallbackLocale: Locale | null = null;
+
+if (!entry) {
+  const fallbackCollection = primaryCollection === 'case-studies' ? 'case-studies-en' : 'case-studies';
+  entry = await getEntry(fallbackCollection as 'case-studies' | 'case-studies-en', slug);
+  if (entry) {
+    fallbackLocale = fallbackCollection === 'case-studies' ? 'zh' : 'en';
+  }
+}
+
+if (!entry) {
+  return new Response('Case study not found', { status: 404 });
+}
+
+const { Content } = await entry.render();
+const data = entry.data;
+const caseSlug = entry.slug;
+const summaryDescription = data.challenge || data.solution;
+const pageCopy = caseStudiesContent[locale];
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://www.geppetto.studio';
+const detailUrl = Astro.url.href;
+
+const resultItems = Object.entries(data.results ?? {}).filter(([, value]) => Boolean(value));
+
+const structuredData = {
+  type: 'caseStudy' as const,
+  data: {
+    name: data.title,
+    description: summaryDescription,
+    industry: data.industry,
+    url: detailUrl,
+    provider: {
+      "@type": "Organization",
+      "name": "Geppetto",
+      "url": siteUrl
+    },
+    audience: locale === 'zh' ? '制造企业/硬件团队' : 'Hardware teams & manufacturers',
+    result: data.results?.quality_improvement || data.results?.precision,
+    metrics: resultItems.map(([key, value]) => `${key}: ${value as string}`)
+  }
+} as const;
+
+const breadcrumbData = {
+  items: [
+    { name: locale === 'zh' ? '首页' : 'Home', url: `${siteUrl}/${locale}` },
+    { name: locale === 'zh' ? '客户案例' : 'Case Studies', url: `${siteUrl}/${locale}/case-studies` },
+    { name: data.title, url: detailUrl }
+  ]
+};
+
+const localizedLabels: Record<string, { zh: string; en: string }> = {
+  precision: { zh: '精度表现', en: 'Precision' },
+  cost_saving: { zh: '成本节省', en: 'Cost Saving' },
+  delivery_time: { zh: '交付时间', en: 'Delivery' },
+  quality_improvement: { zh: '质量提升', en: 'Quality' }
+};
+---
+
+<BaseLayout
+  title={`${data.title} | ${pageCopy.heroTitle}`}
+  description={summaryDescription ?? pageCopy.heroSubtitle}
+  structuredData={structuredData}
+>
+  <StructuredData type="breadcrumb" data={breadcrumbData} />
+  <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-sm uppercase tracking-[0.3em] text-purple-200 mb-3">
+        {locale === 'zh' ? '客户案例' : 'Case Study'}
+      </p>
+      <h1 class="text-4xl font-bold mb-4">{data.title}</h1>
+      <div class="flex flex-wrap items-center gap-4 text-sm text-blue-100">
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-white/20 text-white">{data.industry}</span>
+        <span>{data.company}</span>
+      </div>
+      {fallbackLocale && (
+        <div class="mt-4 text-sm bg-white/15 border border-white/30 rounded-xl px-4 py-2 text-white">
+          {fallbackLocale === 'zh'
+            ? (locale === 'zh'
+                ? ''
+                : 'This case study is currently available in Chinese; showing zh version.')
+            : (locale === 'zh'
+                ? '该案例暂未提供中文详情，以下为英文内容。'
+                : '')}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="py-12 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <div class="bg-gray-50 rounded-2xl p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-3">{locale === 'zh' ? '核心挑战' : 'Key Challenges'}</h2>
+          <p class="text-gray-600 whitespace-pre-line">{data.challenge}</p>
+        </div>
+        <div class="bg-gray-50 rounded-2xl p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-3">{locale === 'zh' ? '解决方案' : 'Solution'}</h2>
+          <p class="text-gray-600 whitespace-pre-line">{data.solution}</p>
+        </div>
+      </div>
+
+      {resultItems.length > 0 && (
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+          {resultItems.map(([key, value]) => (
+            <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-4 text-center border border-purple-100">
+              <div class="text-xs uppercase text-purple-500 tracking-wide mb-2">
+                {localizedLabels[key]?.[locale] ?? key}
+              </div>
+              <div class="text-2xl font-bold text-gray-900">{value as string}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {data.disclaimer && (
+        <div class="mb-8 rounded-xl border border-dashed border-gray-300 px-4 py-3 text-sm text-gray-600">
+          {data.disclaimer}
+        </div>
+      )}
+
+      <article class="prose prose-lg max-w-none prose-a:text-purple-600">
+        <Content />
+      </article>
+    </div>
+  </section>
+
+  <section class="py-12 bg-gray-50">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+        {locale === 'zh' ? '准备书写你的成功故事？' : 'Ready to start your success story?'}
+      </h2>
+      <p class="text-gray-600 mb-6">
+        {pageCopy.cta.subtitle}
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a
+          href={pageCopy.cta.primary.href}
+          class="inline-flex items-center justify-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition"
+        >
+          {pageCopy.cta.primary.text}
+        </a>
+        <a
+          href={pageCopy.cta.secondary.href}
+          class="inline-flex items-center justify-center px-6 py-3 border border-purple-600 text-purple-600 rounded-lg font-semibold hover:bg-purple-50 transition"
+        >
+          {pageCopy.cta.secondary.text}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline define:vars={{ locale, caseSlug }}>
+  if (typeof window !== 'undefined') {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'case_study_view',
+      locale,
+      slug: caseSlug
+    });
+  }
+</script>

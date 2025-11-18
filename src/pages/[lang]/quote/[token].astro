@@ -1,0 +1,440 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import MessageThread from '../../../components/MessageThread.tsx';
+import { getQuoteDetails, getCurrentSession } from '../../../utils/supabase.server';
+import type { Locale } from '../../../data/i18n/createQuote';
+
+type QuoteStatus = 'new' | 'pending' | 'quoted' | 'processing' | 'paid' | 'manufacturing' | 'shipping' | 'complete' | 'cancelled';
+
+type QuoteBreakdownItem = {
+  item_name: string;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+};
+
+type QuoteMessage = {
+  id?: string | number;
+  quote_id?: string;
+  sender_id?: string | null;
+  message_content?: string;
+  created_at?: string;
+};
+
+type QuoteDetails = {
+  id: string;
+  token: string;
+  email: string;
+  contact_name: string;
+  status: QuoteStatus;
+  material: string;
+  product_name?: string;
+  quantity: number;
+  delivery_time_days?: number;
+  created_at: string;
+  total_amount?: number;
+  special_requirements?: string;
+  custom_requirements?: string;
+  surface_finish?: string;
+  quote_breakdown_items?: QuoteBreakdownItem[];
+  quote_messages?: QuoteMessage[];
+};
+
+type ThreadMessage = {
+  id: string;
+  quote_id: string;
+  sender_id: string;
+  message_content: string;
+  created_at: string;
+};
+
+type SessionInfo = {
+  user?: { id?: string; email?: string };
+} | null;
+
+type Strings = {
+  pageTitle: (quote: QuoteDetails) => string;
+  metaDescription: (quote: QuoteDetails) => string;
+  createdLabel: string;
+  sections: {
+    status: string;
+    product: string;
+    breakdown: string;
+    special: string;
+    communication: string;
+  };
+  labels: {
+    product: string;
+    material: string;
+    quantity: string;
+    delivery: string;
+    surface: string;
+  };
+  table: {
+    item: string;
+    qty: string;
+    unit: string;
+    total: string;
+    empty: string;
+  };
+  payment: {
+    quickLabel: string;
+    creating: string;
+    failure: string;
+    view: string;
+    alt: string;
+  };
+  conversation: {
+    title: string;
+    description: string;
+    loginPrompt: string;
+    loginButton: string;
+  };
+  statuses: Record<QuoteStatus, string>;
+  materials: Record<string, string>;
+  currencySymbol: string;
+};
+
+const translations: Record<Locale, Strings> = {
+  en: {
+    pageTitle: (quote) => `Quote Details #${quote.token}`,
+    metaDescription: (quote) => `Review manufacturing quote ${quote.token} including status ${quote.status} and payment options.`,
+    createdLabel: 'Created',
+    sections: {
+      status: 'Quote Status',
+      product: 'Product Information',
+      breakdown: 'Quote Breakdown',
+      special: 'Special Requirements',
+      communication: 'Communication'
+    },
+    labels: {
+      product: 'Product Name',
+      material: 'Material',
+      quantity: 'Quantity',
+      delivery: 'Estimated Delivery',
+      surface: 'Surface Finish'
+    },
+    table: {
+      item: 'Item', qty: 'Qty', unit: 'Unit Price', total: 'Total', empty: 'Quote total calculated. Contact support for detail.'
+    },
+    payment: {
+      quickLabel: 'Quick Pay',
+      creating: 'Creating payment session…',
+      failure: 'Payment creation failed: ',
+      view: 'View Detailed Payment Page',
+      alt: '中文支付页面'
+    },
+    conversation: {
+      title: 'Collaborate with Specialists',
+      description: 'All engineering notes and chat history stay with this quote.',
+      loginPrompt: 'Login to chat with our team',
+      loginButton: 'Login'
+    },
+    statuses: {
+      new: 'New', pending: 'Pending', quoted: 'Quoted', processing: 'Processing', paid: 'Paid', manufacturing: 'Manufacturing', shipping: 'Shipping', complete: 'Complete', cancelled: 'Cancelled'
+    },
+    materials: {
+      aluminum: 'Aluminum', steel: 'Carbon Steel', stainless_steel: 'Stainless Steel', brass: 'Brass', titanium: 'Titanium', plastic: 'Plastic', other: 'Other'
+    },
+    currencySymbol: '$'
+  },
+  zh: {
+    pageTitle: (quote) => `报价详情 #${quote.token}`,
+    metaDescription: (quote) => `查看报价 ${quote.token} 的当前状态（${quote.status}），了解付款与生产信息。`,
+    createdLabel: '创建时间',
+    sections: {
+      status: '报价状态',
+      product: '产品信息',
+      breakdown: '报价拆解',
+      special: '特殊要求',
+      communication: '沟通记录'
+    },
+    labels: {
+      product: '产品名称',
+      material: '材料',
+      quantity: '数量',
+      delivery: '预计交付',
+      surface: '表面处理'
+    },
+    table: {
+      item: '项目', qty: '数量', unit: '单价', total: '总价', empty: '报价总额已生成，如需明细请联系工程师。'
+    },
+    payment: {
+      quickLabel: '快速支付',
+      creating: '正在创建支付链接…',
+      failure: '支付创建失败：',
+      view: '查看支付详情',
+      alt: 'English Payment Page'
+    },
+    conversation: {
+      title: '与工程师团队协作',
+      description: '所有备注和沟通记录都会被保存。',
+      loginPrompt: '登录后即可与工程师沟通',
+      loginButton: '登录'
+    },
+    statuses: {
+      new: '新建', pending: '待处理', quoted: '已报价', processing: '处理中', paid: '已支付', manufacturing: '生产中', shipping: '运输中', complete: '已完成', cancelled: '已取消'
+    },
+    materials: {
+      aluminum: '铝合金', steel: '碳钢', stainless_steel: '不锈钢', brass: '黄铜', titanium: '钛合金', plastic: '塑料', other: '其他'
+    },
+    currencySymbol: '¥'
+  }
+};
+
+const locale = (Astro.currentLocale ?? 'en') as Locale;
+const t = translations[locale];
+const alternateLocale: Locale = locale === 'en' ? 'zh' : 'en';
+const { token } = Astro.params;
+
+if (!token) {
+  return new Response('Invalid quote token', { status: 400 });
+}
+
+let quote: QuoteDetails | null = null;
+let session: SessionInfo = null;
+let userName = 'Guest';
+let conversations: QuoteMessage[] = [];
+let statusInfo = { label: t.statuses.new, color: 'bg-blue-100 text-blue-800' };
+let materialDisplay = '';
+
+try {
+  quote = (await getQuoteDetails(Astro, token)) as QuoteDetails | null;
+  if (!quote) {
+    return new Response('Quote not found', { status: 404 });
+  }
+
+  session = await getCurrentSession(Astro);
+  if (session?.user) {
+    if (session.user.email === quote.email) {
+      userName = quote.contact_name;
+    } else {
+      return Astro.redirect(`/${locale}/login?redirect=${encodeURIComponent(Astro.url.pathname)}`);
+    }
+  }
+
+  conversations = quote.quote_messages || [];
+  statusInfo = {
+    label: t.statuses[quote.status] ?? t.statuses.new,
+    color:
+      quote.status === 'quoted' ? 'bg-green-100 text-green-800' :
+      quote.status === 'paid' ? 'bg-purple-100 text-purple-800' :
+      quote.status === 'manufacturing' ? 'bg-indigo-100 text-indigo-800' :
+      quote.status === 'shipping' ? 'bg-yellow-100 text-yellow-800' :
+      quote.status === 'complete' ? 'bg-green-100 text-green-800' :
+      quote.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+      'bg-blue-100 text-blue-800'
+  };
+  materialDisplay = t.materials[quote.material] ?? quote.material;
+} catch (error) {
+  console.error('Failed to fetch quote details:', error);
+  return new Response('Internal server error', { status: 500 });
+}
+
+const breakdown = quote.quote_breakdown_items ?? [];
+const showBreakdown = Boolean(quote.total_amount) || breakdown.length > 0;
+const threadMessages: ThreadMessage[] = conversations.map((message, idx) => ({
+  id: String(message.id ?? `${quote!.id}-msg-${idx}`),
+  quote_id: message.quote_id ?? quote!.id,
+  sender_id: message.sender_id ?? '',
+  message_content: message.message_content ?? '',
+  created_at: message.created_at ?? quote!.created_at
+}));
+
+const formatAmount = (value?: number) => (value == null ? '' : `${t.currencySymbol}${value.toFixed(2)}`);
+const quickPayLabel = quote.total_amount ? `${t.payment.quickLabel} ${formatAmount(quote.total_amount)}` : t.payment.quickLabel;
+const paymentHref = `/${locale}/order/${quote.id}/payment`;
+const altPaymentHref = `/${alternateLocale}/order/${quote.id}/payment`;
+---
+
+<BaseLayout title={t.pageTitle(quote)} description={t.metaDescription(quote)}>
+  <div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">{t.pageTitle(quote)}</h1>
+        <p class="mt-2 text-gray-600">{t.createdLabel}: {new Date(quote.created_at).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US')}</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-6">
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h2 class="text-xl font-semibold text-gray-900">{t.sections.status}</h2>
+              <span class={`px-3 py-1 rounded-full text-sm font-medium ${statusInfo.color}`}>{statusInfo.label}</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-500">{t.labels.product}</label>
+                <p class="mt-1 text-sm text-gray-900">{quote.product_name}</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-500">{t.labels.material}</label>
+                <p class="mt-1 text-sm text-gray-900">{materialDisplay}</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-500">{t.labels.quantity}</label>
+                <p class="mt-1 text-sm text-gray-900">{quote.quantity}</p>
+              </div>
+              {quote.delivery_time_days && (
+                <div>
+                  <label class="block text-sm font-medium text-gray-500">{t.labels.delivery}</label>
+                  <p class="mt-1 text-sm text-gray-900">{quote.delivery_time_days} {locale === 'zh' ? '天' : 'days'}</p>
+                </div>
+              )}
+            </div>
+
+            {(quote.special_requirements || quote.custom_requirements || quote.surface_finish) && (
+              <div class="mt-4 space-y-2 text-sm text-gray-900">
+                {quote.surface_finish && (
+                  <p><span class="font-medium">{t.labels.surface}:</span> {quote.surface_finish}</p>
+                )}
+                {quote.special_requirements && (
+                  <p><span class="font-medium">{t.sections.special}:</span> {quote.special_requirements}</p>
+                )}
+                {quote.custom_requirements && (
+                  <p>{quote.custom_requirements}</p>
+                )}
+              </div>
+            )}
+          </div>
+
+          {showBreakdown && (
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <h2 class="text-xl font-semibold text-gray-900 mb-4">{t.sections.breakdown}</h2>
+              {breakdown.length > 0 ? (
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead>
+                      <tr class="border-b border-gray-200">
+                        <th class="text-left py-2 font-semibold text-gray-900">{t.table.item}</th>
+                        <th class="text-center py-2 font-semibold text-gray-900">{t.table.qty}</th>
+                        <th class="text-right py-2 font-semibold text-gray-900">{t.table.unit}</th>
+                        <th class="text-right py-2 font-semibold text-gray-900">{t.table.total}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {breakdown.map((item) => (
+                        <tr class="border-b border-gray-100">
+                          <td class="py-2">{item.item_name}</td>
+                          <td class="py-2 text-center">{item.quantity}</td>
+                          <td class="py-2 text-right">{formatAmount(item.unit_price)}</td>
+                          <td class="py-2 text-right font-semibold">{formatAmount(item.total_price)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div class="p-4 bg-gray-50 rounded-md text-sm text-gray-600">{t.table.empty}</div>
+              )}
+
+              {quote.status === 'quoted' && quote.total_amount && (
+                <div class="mt-6 space-y-3">
+                  <button id="payment-btn" class="w-full bg-gradient-to-r from-purple-600 to-blue-500 text-white font-semibold py-3 px-6 rounded-md hover:from-purple-700 hover:to-blue-600 transition-colors disabled:opacity-50" data-default-label={quickPayLabel}>
+                    {quickPayLabel}
+                  </button>
+                  <a href={paymentHref} class="block w-full text-center bg-white border border-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-md hover:bg-gray-50 transition-colors">
+                    {t.payment.view}
+                  </a>
+                  <a href={altPaymentHref} class="block w-full text-center text-sm text-gray-500 hover:text-gray-700">
+                    {t.payment.alt}
+                  </a>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">{t.conversation.title}</h2>
+            <p class="text-sm text-gray-600 mb-4">{t.conversation.description}</p>
+            {session?.user ? (
+              <MessageThread
+                client:load
+                quoteId={quote.id}
+                initialMessages={threadMessages}
+                userId={session.user.id ?? ''}
+                userName={userName}
+                currentLang={locale}
+              />
+            ) : (
+              <div class="text-center py-8">
+                <p class="text-gray-600 text-sm mb-4">{t.conversation.loginPrompt}</p>
+                <a href={`/${locale}/login?redirect=${encodeURIComponent(Astro.url.pathname)}`} class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">
+                  {t.conversation.loginButton}
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+{quote.status === 'quoted' && quote.total_amount && (
+  <script
+    is:inline
+    define:vars={{ quoteId: quote.id, creatingText: t.payment.creating, failureAlert: t.payment.failure, locale }}
+  >
+    (() => {
+      const setupPaymentButtonInline = (config) => {
+        const requestSession = async () => {
+          const response = await fetch('/api/functions/create-payment-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ quoteId: String(config.quoteId), locale: config.locale ?? 'en' })
+          });
+          const result = await response.json();
+          if (!response.ok || !result?.success || !result?.url) {
+            throw new Error(result?.error || 'Failed to create payment session');
+          }
+          return result;
+        };
+
+        const bind = () => {
+          const button = document.getElementById(config.buttonId);
+          if (!button || button.dataset.paymentHandlerAttached === 'true') {
+            return;
+          }
+          button.dataset.paymentHandlerAttached = 'true';
+          const originalLabel =
+            config.defaultLabel || button.dataset.defaultLabel || button.textContent || '';
+          if (!button.dataset.defaultLabel) {
+            button.dataset.defaultLabel = originalLabel;
+          }
+
+          button.addEventListener('click', async () => {
+            try {
+              button.disabled = true;
+              button.textContent = config.creatingText;
+              const { url } = await requestSession();
+              window.location.href = url;
+            } catch (error) {
+              console.error('Payment creation failed:', error);
+              alert(config.failureAlert + (error?.message ?? ''));
+              button.disabled = false;
+              button.textContent = originalLabel;
+            }
+          });
+        };
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', bind, { once: true });
+        } else {
+          bind();
+        }
+      };
+
+      setupPaymentButtonInline({
+        buttonId: 'payment-btn',
+        quoteId,
+        creatingText,
+        failureAlert,
+        locale
+      });
+    })();
+  </script>
+)}

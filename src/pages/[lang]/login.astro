@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LoginForm from '../../components/LoginForm.tsx';
+import type { Language } from '../../utils/i18n';
+
+const locale = (Astro.currentLocale ?? 'en') as Language;
+const redirectUrl = Astro.url.searchParams.get('redirect') || `/${locale}/create-quote`;
+const errorType = Astro.url.searchParams.get('error');
+
+const copy = {
+  en: {
+    badge: 'Secure Login',
+    title: 'Access Your Workspace',
+    description: 'Sign in with your work email to track quotes, upload CAD securely, and collaborate with Geppetto engineers.',
+    adminTitle: 'Admin Login',
+    adminDescription: 'Restricted access for Geppetto internal team members.',
+    helperTitle: 'How the magic link works',
+    helperBody: 'Enter your email and we will send a secure, one-time link. Click it within 10 minutes to finish signing in—no password needed.',
+    support: 'Need assistance? Email hello@geppetto.studio',
+    dismiss: 'Dismiss',
+    errors: {
+      unauthorized: 'You do not have access permission. Please log in with an authorized email address.',
+      session_expired: 'Your session expired. Please log in again to continue.'
+    }
+  },
+  zh: {
+    badge: '安全登录',
+    title: '进入您的制造工作台',
+    description: '使用邮箱登录即可查看报价进度、安全上传 CAD，并与 Geppetto 工程师协作。',
+    adminTitle: '管理员登录',
+    adminDescription: '此区域仅限 Geppetto 内部团队访问。',
+    helperTitle: '魔法链接如何工作？',
+    helperBody: '填写邮箱后我们会发送一次性安全链接，10 分钟内点击即可完成登录，无需密码。',
+    support: '需要帮助？请联系 hello@geppetto.studio',
+    dismiss: '我知道了',
+    errors: {
+      unauthorized: '您没有访问权限，请使用授权邮箱登录。',
+      session_expired: '登录状态已过期，请重新登录。'
+    }
+  }
+} as const;
+
+const t = copy[locale];
+const isAdminLogin = redirectUrl.includes('/admin');
+const pageTitle = isAdminLogin ? t.adminTitle : t.title;
+const pageDescription = isAdminLogin ? t.adminDescription : t.description;
+const errorMessage = errorType ? t.errors[errorType as keyof typeof t.errors] ?? '' : '';
+---
+
+<BaseLayout 
+  title={`${pageTitle} | Geppetto`}
+  description={pageDescription}
+  noIndex={true}
+>
+  <section class="relative min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 py-16 px-4">
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-purple-200 rounded-full blur-3xl opacity-40"></div>
+      <div class="absolute bottom-0 left-0 w-72 h-72 bg-blue-200 rounded-full blur-3xl opacity-30"></div>
+    </div>
+
+    <div class="relative max-w-4xl mx-auto">
+      <div class="bg-white/90 backdrop-blur rounded-3xl shadow-xl border border-white/70 p-8 md:p-12">
+        <div class="text-center mb-10">
+          <span class="inline-flex items-center px-4 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">
+            {t.badge}
+          </span>
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4">{pageTitle}</h1>
+          <p class="text-gray-600 mt-3 max-w-2xl mx-auto">{pageDescription}</p>
+        </div>
+
+        {errorMessage && (
+          <div class="mb-6 rounded-2xl border border-red-200 bg-red-50 text-red-700 px-4 py-3 text-sm">
+            {errorMessage}
+          </div>
+        )}
+
+        <LoginForm client:load redirectUrl={redirectUrl} currentLang={locale} />
+
+        <div class="mt-8 rounded-2xl bg-gray-50 border border-gray-100 p-5 text-sm text-gray-700">
+          <div class="flex gap-3">
+            <div class="shrink-0 mt-1">
+              <svg class="w-5 h-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 11-0 20 10 10 0 010-20z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="font-semibold">{t.helperTitle}</p>
+              <p class="mt-1 leading-relaxed">{t.helperBody}</p>
+              <p class="mt-3 text-xs text-gray-500">{t.support}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

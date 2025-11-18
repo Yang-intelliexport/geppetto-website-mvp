@@ -179,7 +179,7 @@ export async function handleAuthCallback(urlParams) {
  * @returns {string} 会话ID
  */
 function generateSessionId() {
-  return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  return `session_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
 }
 
 /**

@@ -11,6 +11,8 @@ category: "manufacturing-guides"
 readingTime: 12
 difficulty: "advanced"
 seo:
+  metaDescription: "面向工程团队的5轴复杂曲面加工指南，涵盖刀路规划、工艺参数与质量验证要点。"
+  canonicalUrl: "https://www.geppetto.studio/zh/resources/5zhou-fuza-qumian-jiagong-zhinan"
   keywords: ["5轴CNC加工", "复杂曲面编程", "精密零件加工", "多轴制造", "曲面CNC"]
   noindex: false
 relatedPosts: []

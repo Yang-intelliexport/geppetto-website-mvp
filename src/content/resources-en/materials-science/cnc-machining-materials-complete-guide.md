@@ -11,6 +11,9 @@ category: "materials-science"
 readingTime: 15
 difficulty: "intermediate"
 seo:
+  title: "CNC Material Selection Guide: Aluminum, Steel & Titanium | Geppetto"
+  metaDescription: "Compare aluminum, steel, titanium, and plastics for CNC machining with practical property tables and sourcing guidance."
+  canonicalUrl: "https://www.geppetto.studio/en/resources/cnc-machining-materials-complete-guide"
   keywords: ["CNC machining materials", "aluminum machining", "titanium CNC", "steel machining", "plastic machining", "material selection"]
 tableOfContents: true
 featured: true

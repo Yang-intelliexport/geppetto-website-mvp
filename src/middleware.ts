@@ -51,20 +51,7 @@ const hasLocalePrefix = (pathname: string) => {
   return SUPPORTED_LOCALES.some((locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
 };
 
-const autoLocaleRedirect = defineMiddleware(async (context, next) => {
-  const pathname = context.url.pathname;
-
-  if (hasLocalePrefix(pathname) || shouldBypassLocale(pathname)) {
-    return next();
-  }
-
-  const preferred = getPreferredLocale(context.request.headers.get('accept-language'));
-  const normalizedPath = pathname === '/' ? '' : pathname.replace(/^\/+/, '');
-  const suffix = normalizedPath ? `/${normalizedPath}` : '';
-  const target = `/${preferred}${suffix}`;
-
-  return context.redirect(target, 302);
-});
+// 移除自定义locale重定向，使用Astro内置i18n路由
 
 const supabaseSession = defineMiddleware(async (context, next) => {
   // 为所有请求刷新Supabase session（Supabase SSR要求）
@@ -94,7 +81,6 @@ const adminGuard = defineMiddleware(async (context, next) => {
 
 export const onRequest = sequence(
   primaryHostRedirect,
-  autoLocaleRedirect,
   supabaseSession,
   adminGuard
 );

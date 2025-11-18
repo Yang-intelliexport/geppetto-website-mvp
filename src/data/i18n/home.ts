@@ -96,8 +96,8 @@ export const homeContent: Record<Locale, HomeContent> = {
       description:
         'Intelligent analysis + expert validation • Transparent pricing • 72-hour production + logistics\n±0.1mm standard precision • Zero MOQ • No hidden fees guarantee',
       cta: {
-        primary: { text: 'Get Expert Quote in 8 Hours', href: '/create-quote' },
-        secondary: { text: 'See Why Teams Switch to Geppetto', href: '/why-geppetto' }
+        primary: { text: 'Get Expert Quote in 8 Hours', href: '/en/create-quote' },
+        secondary: { text: 'See Why Teams Switch to Geppetto', href: '/en/why-geppetto' }
       },
       features: [
         { title: 'Transparent Manufacturing', description: 'AI verification + expert review keep every cost visible.', icon: '💎' },
@@ -166,8 +166,8 @@ export const homeContent: Record<Locale, HomeContent> = {
       subtitle: '透明制造专家，终结制造报价混乱',
       description: '智能分析+专家验证 • 透明定价体系 • 72小时快速交付\n标准精度±0.1mm • 零起订量 • 无隐藏费用承诺',
       cta: {
-        primary: { text: '8小时专家报价', href: '/create-quote' },
-        secondary: { text: '了解我们的不同', href: '/why-geppetto' }
+        primary: { text: '8小时专家报价', href: '/zh/create-quote' },
+        secondary: { text: '了解我们的不同', href: '/zh/why-geppetto' }
       },
       features: [
         { title: '透明制造', description: '智能验证+专家审核，成本结构一目了然。', icon: '💡' },

@@ -1,5 +1,26 @@
 ---
-// Trust indicators component for global market
+interface Props {
+  language?: 'zh' | 'en'
+}
+
+const { language = 'en' } = Astro.props
+
+const text = {
+  zh: {
+    trustBadges: {
+      title: '🏆 权威认证与合作伙伴',
+      subtitle: '国际标准认证，全球物流网络，安全支付保障'
+    }
+  },
+  en: {
+    trustBadges: {
+      title: '🏆 Certified & Trusted Partners',
+      subtitle: 'International standards, global logistics, secure payments'
+    }
+  }
+}
+
+const currentText = text[language]
 ---
 
 <section class="py-16 bg-white border-t border-gray-200">
@@ -187,11 +208,114 @@
       
       <div class="mt-6 text-center">
         <a 
-          href="/en/case-studies" 
+          href={`/${language}/case-studies`}
           class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200"
         >
-          📊 View All Success Stories
+          📊 {language === 'zh' ? '查看所有成功案例' : 'View All Success Stories'}
         </a>
+      </div>
+    </div>
+
+    <!-- 🏆 Trust Badges Section -->
+    <div class="mt-16 border-t border-gray-200 pt-12">
+      <div class="text-center mb-8">
+        <h3 class="text-xl font-bold text-gray-900 mb-2">{currentText.trustBadges.title}</h3>
+        <p class="text-gray-600">{currentText.trustBadges.subtitle}</p>
+      </div>
+
+      <!-- Trust Badges Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 items-center justify-items-center opacity-70 hover:opacity-100 transition-opacity duration-300">
+        
+        <!-- ISO 9001 Badge -->
+        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832L14 10.202a1 1 0 000-1.732L9.555 7.168z"/>
+              </svg>
+            </div>
+            <div class="text-xs font-semibold text-gray-700">ISO 9001</div>
+            <div class="text-xs text-gray-500">Quality</div>
+          </div>
+        </div>
+
+        <!-- DHL Badge -->
+        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-2">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1z"/>
+              </svg>
+            </div>
+            <div class="text-xs font-semibold text-gray-700">DHL</div>
+            <div class="text-xs text-gray-500">Express</div>
+          </div>
+        </div>
+
+        <!-- FedEx Badge -->
+        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-2">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M5 5a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2V5zM5 13a2 2 0 012-2h6a2 2 0 012 2v2a2 2 0 01-2 2H7a2 2 0 01-2-2v-2z"/>
+              </svg>
+            </div>
+            <div class="text-xs font-semibold text-gray-700">FedEx</div>
+            <div class="text-xs text-gray-500">Global</div>
+          </div>
+        </div>
+
+        <!-- PayPal Badge -->
+        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zM14 6a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h6zM4 14a2 2 0 002 2h8a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2z"/>
+              </svg>
+            </div>
+            <div class="text-xs font-semibold text-gray-700">PayPal</div>
+            <div class="text-xs text-gray-500">Secure</div>
+          </div>
+        </div>
+
+        <!-- Stripe Badge -->
+        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-2">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 15.324 3.744a1 1 0 011.838.512L16.002 8l1.16 3.744a1 1 0 01-1.838.512L14.146 8.8l-1.179 3.456a1 1 0 01-1.838-.512L12.288 8l-1.16-3.744A1 1 0 0112 2z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div class="text-xs font-semibold text-gray-700">Stripe</div>
+            <div class="text-xs text-gray-500">Payment</div>
+          </div>
+        </div>
+
+        <!-- SSL Badge -->
+        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div class="text-xs font-semibold text-gray-700">256-bit</div>
+            <div class="text-xs text-gray-500">SSL</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Trust Elements -->
+      <div class="mt-8 text-center text-sm text-gray-500">
+        <div class="inline-flex items-center space-x-6">
+          <span>🛡️ Enterprise Security</span>
+          <span>•</span>
+          <span>🌍 Global Shipping</span>
+          <span>•</span> 
+          <span>💳 Secure Payments</span>
+          <span>•</span>
+          <span>📞 24/7 Support</span>
+        </div>
       </div>
     </div>
   </div>

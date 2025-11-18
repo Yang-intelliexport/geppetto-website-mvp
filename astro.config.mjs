@@ -23,12 +23,11 @@ export default defineConfig({
     locales: ['en', 'zh'],
     routing: {
       prefixDefaultLocale: true,
-      redirectToDefaultLocale: false
+      redirectToDefaultLocale: true
     }
   },
 
   redirects: {
-    '/': '/en',
     '/ai-quote': '/en/create-quote',
     '/zh/ai-quote': '/zh/create-quote',
     '/instant-quote': '/en/create-quote',

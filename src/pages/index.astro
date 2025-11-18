@@ -1,8 +1,0 @@
----
-// 根索引页面 - Astro i18n需要此页面来处理根路径重定向
-// 当prefixDefaultLocale: true 且 redirectToDefaultLocale: true时必需
-import { getRelativeLocaleUrl } from 'astro:i18n'
-
-// 重定向到默认语言
-return Astro.redirect(getRelativeLocaleUrl('en', ''))
----

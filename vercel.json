@@ -1,0 +1,31 @@
+{
+  "trailingSlash": false,
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/en",
+      "statusCode": 307
+    },
+    {
+      "source": "/ai-quote",
+      "destination": "/en/create-quote",
+      "statusCode": 301
+    },
+    {
+      "source": "/zh/ai-quote",
+      "destination": "/zh/create-quote",
+      "statusCode": 301
+    },
+    {
+      "source": "/instant-quote",
+      "destination": "/en/create-quote",
+      "statusCode": 301
+    },
+    {
+      "source": "/login",
+      "destination": "/en/login",
+      "statusCode": 301
+    }
+  ]
+}

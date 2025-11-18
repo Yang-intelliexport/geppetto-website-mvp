@@ -24,16 +24,11 @@ export default defineConfig({
     locales: ['en', 'zh'],
     routing: {
       prefixDefaultLocale: true,
-      redirectToDefaultLocale: true
+      redirectToDefaultLocale: false
     }
   },
 
-  redirects: {
-    '/ai-quote': '/en/create-quote',
-    '/zh/ai-quote': '/zh/create-quote',
-    '/instant-quote': '/en/create-quote',
-    '/login': '/en/login'
-  },
+  // 移除重定向配置，交由vercel.json统一处理，避免双重重定向冲突
 
   integrations: [
     react(),

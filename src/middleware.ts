@@ -28,7 +28,14 @@ const shouldBypassLocale = (pathname: string) => {
     || pathname.startsWith('/assets');
 };
 
+// 暂时禁用主机重定向，避免与Vercel域名设置冲突
 const primaryHostRedirect = defineMiddleware(async (context, next) => {
+  // 生产环境禁用自定义主机重定向，交由Vercel处理
+  if (!IS_DEV) {
+    return next();
+  }
+  
+  // 开发环境保留原逻辑
   const host = context.request.headers.get('host');
   if (!host) {
     return next();

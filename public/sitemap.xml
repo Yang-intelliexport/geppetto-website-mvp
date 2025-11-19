@@ -153,7 +153,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/contact" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/contact" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/contact" />
-    <changefreq>quarterly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
@@ -162,7 +162,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/contact" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/contact" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/contact" />
-    <changefreq>quarterly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
@@ -172,7 +172,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/faq" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/faq" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/faq" />
-    <changefreq>quarterly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
@@ -181,7 +181,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://geppetto.studio/en/faq" />
     <xhtml:link rel="alternate" hreflang="zh" href="https://geppetto.studio/zh/faq" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://geppetto.studio/en/faq" />
-    <changefreq>quarterly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 </urlset>

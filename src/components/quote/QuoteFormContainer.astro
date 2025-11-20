@@ -93,7 +93,20 @@ const t = text[language];
   <!-- Header -->
   <div class="text-center mb-8">
     <h2 class="text-3xl font-bold text-gray-900 mb-2">{t.title}</h2>
-    <p class="text-gray-600">{t.subtitle}</p>
+    <p class="text-gray-600 mb-4">{t.subtitle}</p>
+    
+    <!-- NDA Declaration -->
+    <div class="inline-flex items-center p-3 bg-green-50 border border-green-200 rounded-lg text-sm">
+      <svg class="w-4 h-4 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+      </svg>
+      <span class="text-green-700">
+        {language === 'zh' 
+          ? '🔒 您的知识产权是安全的。我们乐意在发送图纸前签署保密协议。' 
+          : '🔒 Your IP is safe with us. We are happy to sign NDA before drawings are sent.'
+        }
+      </span>
+    </div>
   </div>
 
   <div id="draft-restore-banner" class="hidden mb-6 rounded-xl border border-amber-200 bg-amber-50 text-amber-900">

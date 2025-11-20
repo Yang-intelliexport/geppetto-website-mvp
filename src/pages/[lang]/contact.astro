@@ -60,9 +60,27 @@ const hiddenLanguage = locale;
           
           <!-- Contact Form -->
           <div class="bg-white rounded-3xl shadow-2xl p-8">
-            <h2 class="text-3xl font-bold text-gray-800 mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">
               {locale === 'zh' ? '📝 获取专业咨询' : '📝 Get Professional Consultation'}
             </h2>
+            
+            <!-- NDA Declaration -->
+            <div class="mb-8 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div class="flex items-center mb-2">
+                <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-sm font-semibold text-green-800">
+                  {locale === 'zh' ? '🔒 知识产权保护' : '🔒 IP Protection'}
+                </span>
+              </div>
+              <p class="text-sm text-green-700">
+                {locale === 'zh' 
+                  ? '您的知识产权是安全的。我们乐意在发送图纸前签署保密协议。' 
+                  : 'Your IP is safe with us. We are happy to sign NDA before drawings are sent.'
+                }
+              </p>
+            </div>
             <form id={formId} class="space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {content.form.fields

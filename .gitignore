@@ -37,3 +37,11 @@ pnpm-debug.log*
 # backup files
 *.bundle
 *.backup
+
+# Business sensitive files - DO NOT COMMIT
+CNC_外贸报价单模板.csv
+CNC_报价单_制作指南.md
+报价单_Excel格式说明.md
+*报价单*
+*quotation*
+*pricing*

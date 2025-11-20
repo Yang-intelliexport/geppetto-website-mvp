@@ -293,6 +293,25 @@ try {
               'Geppetto Tech - AI-powered precision manufacturing service provider. Delivering intelligent quotes, 72H production + shipping, and revolutionary manufacturing experience with custom precision.'
             }
           </p>
+          
+          <!-- NDA Declaration in Footer -->
+          <div class="mb-4 p-3 bg-green-900/30 border border-green-700/50 rounded-lg max-w-md">
+            <div class="flex items-center mb-2">
+              <svg class="w-4 h-4 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-sm font-medium text-green-400">
+                {currentLang === 'zh' ? '🔒 知识产权保护' : '🔒 IP Protection'}
+              </span>
+            </div>
+            <p class="text-xs text-green-300">
+              {currentLang === 'zh' 
+                ? '您的知识产权是安全的。我们乐意在发送图纸前签署保密协议。' 
+                : 'Your IP is safe with us. We are happy to sign NDA before drawings are sent.'
+              }
+            </p>
+          </div>
+          
           <div class="flex space-x-4">
             <a href="tel:+8613511091304" class="text-[#7F00FF] hover:text-[#00BFFF]">+86 13511091304</a>
             <a href="mailto:hello@geppetto.studio" class="text-[#7F00FF] hover:text-[#00BFFF]">hello@geppetto.studio</a>
